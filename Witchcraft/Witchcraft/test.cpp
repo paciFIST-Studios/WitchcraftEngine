@@ -1,2 +1,19 @@
+#include <windows.h>
 
-void main(void){}
+
+void apples(void);
+
+int CALLBACK WinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR     lpCmdLine,
+	int       nShowCmd
+)
+{
+	apples();
+}
+
+
+void apples(void)
+{
+}

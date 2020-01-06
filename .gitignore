@@ -1,0 +1,6 @@
+
+*.tlog
+Witchcraft/.vs
+Witchcraft/Debug
+
+*.idb

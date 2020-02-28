@@ -1,16 +1,19 @@
-#include <windows.h>
 
-#include  "logging\error_log_manager.h"
+
+#include "utility\utility.h"
+#include "logging\error_log_manager.h"
+
 
 const std::string ErrorLogFileName = "witchcraft_error_log.txt";
 
 int main(int argc, char** argv[])
 {
-	OutputDebugString("\n\nEntry Point for program\n\n");
+	utility::WriteConsole("\n\nTEST\n\n");
 
+	
 	cErrorLogManager * log = cErrorLogManager::GetErrorManager();
 	log->createErrorLog(ErrorLogFileName);
-
+	
 	try
 	{
 		THROW_EXCEPTION(666, "Ellie loves satan");
@@ -24,7 +27,7 @@ int main(int argc, char** argv[])
 		log->m_LogBuffer << "\n\n*************************************";
 		log->flushBuffer();
 	}
-
+	
 	log->closeFile();
 	
 }

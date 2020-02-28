@@ -19,16 +19,22 @@
     <Filter Include="Source Files\logging">
       <UniqueIdentifier>{e63e3b38-fedf-4785-8c58-3dab96bd80b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{266fa35c-4ef9-47cc-b0a0-ecfa70dcfdab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="engine\tests_engine.cc">
+      <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="entry_point.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="logging\error_log_manager.cpp">
+    <ClCompile Include="logging\error_log_manager.cc">
       <Filter>Source Files\logging</Filter>
+    </ClCompile>
+    <ClCompile Include="entry_point.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +47,14 @@
     <ClInclude Include="logging\error_log_manager.h">
       <Filter>Source Files\logging</Filter>
     </ClInclude>
-    <ClInclude Include="logging\utility.h">
-      <Filter>Source Files\logging</Filter>
+    <ClInclude Include="unit_testing_switch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\utility.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\MACROS.h">
+      <Filter>Source Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

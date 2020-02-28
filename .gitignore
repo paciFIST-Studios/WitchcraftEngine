@@ -6,3 +6,6 @@ Witchcraft/Debug
 *.idb
 Witchcraft/Witchcraft/Debug/*
 Witchcraft/Witchcraft/witchcraft_error_log.txt
+_LoveEngine-master.zip
+*.iobj
+*.ipdb

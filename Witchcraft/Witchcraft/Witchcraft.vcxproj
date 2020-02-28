@@ -116,12 +116,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="entry_point.cpp" />
-    <ClCompile Include="error_log_manager.cpp" />
+    <ClCompile Include="logging\error_log_manager.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.h" />
-    <ClInclude Include="error_log_manager.h" />
+    <ClInclude Include="engine\engine.h" />
+    <ClInclude Include="logging\assert_with_message.h" />
+    <ClInclude Include="logging\error_log_manager.h" />
+    <ClInclude Include="logging\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

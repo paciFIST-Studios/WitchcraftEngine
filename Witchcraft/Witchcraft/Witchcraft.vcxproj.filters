@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{54463763-f3f9-4886-a98b-2011dadefa80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logging">
+      <UniqueIdentifier>{e63e3b38-fedf-4785-8c58-3dab96bd80b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -21,16 +27,22 @@
     <ClCompile Include="entry_point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="error_log_manager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="logging\error_log_manager.cpp">
+      <Filter>Source Files\logging</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="error_log_manager.h">
+    <ClInclude Include="logging\assert_with_message.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="engine.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="engine\engine.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\error_log_manager.h">
+      <Filter>Source Files\logging</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\utility.h">
+      <Filter>Source Files\logging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

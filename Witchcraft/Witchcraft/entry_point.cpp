@@ -1,6 +1,6 @@
 #include <windows.h>
 
-#include "error_log_manager.h"
+#include  "logging\error_log_manager.h"
 
 const std::string ErrorLogFileName = "witchcraft_error_log.txt";
 

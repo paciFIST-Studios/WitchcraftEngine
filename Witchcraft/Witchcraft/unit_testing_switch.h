@@ -7,6 +7,6 @@
 
 	// Common includes for unit tests
 	#include <string>
-	#include "engine\logger\logger.h"
+	#include "logging\error_log_manager.h"
 
 #endif // RUN_UNIT_TESTS

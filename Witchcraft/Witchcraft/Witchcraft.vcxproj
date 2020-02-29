@@ -118,6 +118,7 @@
     <ClCompile Include="engine\tests_engine.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
+    <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="test.cc" />
   </ItemGroup>
   <ItemGroup>

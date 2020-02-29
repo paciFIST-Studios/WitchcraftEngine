@@ -36,6 +36,9 @@
     <ClCompile Include="test.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="logging\tests_error_log_manager.cc">
+      <Filter>Source Files\logging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logging\assert_with_message.h">

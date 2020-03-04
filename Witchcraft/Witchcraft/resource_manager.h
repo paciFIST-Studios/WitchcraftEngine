@@ -21,6 +21,8 @@ typedef enum {
 
 // ----------------------------------------
 
+#define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
+
 // The cResource class represents a resource object, which is managed by a resource manager
 // to be inhereted from, by other objects
 class cResource : public cEngineObject
@@ -31,13 +33,13 @@ public:
 	unsigned int m_ResourceID;
 	unsigned int m_Scope;
 	std::string m_FileName;
-	RESOURECE_TYPE m_Type;
+	RESOURCE_TYPE m_Type;
 
 	// to overload
 	virtual ~cResource() {}
 	virtual void load() {}
 	virtual void unload() {}
-
+	
 	inline cResource()
 	{
 		m_ResourceID = m_Scope = 0;

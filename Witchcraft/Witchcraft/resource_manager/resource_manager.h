@@ -13,51 +13,11 @@
 
 #include "../engine/exception.h"
 #include "../engine/engine.h"
+#include "resource.h"
+
 #include "../utility/utility.h"
 
-
-typedef enum {
-	  RESOURCE_NULL = 0
-	, RESOURCE_GRAPHIC = 1
-	, RESOURCE_MOVIE = 2
-	, RESOURCE_AUDIO = 3
-	, RESOURCE_TEXT = 4
-} RESOURCE_TYPE;
-
 #define GLOBAL_SCOPE 0
-
-
-// ----------------------------------------
-
-#define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
-
-// The cResource class represents a resource object, which is managed by a resource manager
-// to be inhereted from, by other objects
-class cResource : public cEngineObject
-{
-private:
-protected:
-public:
-	unsigned int _resource_id;
-	unsigned int _scope;
-	std::string _file_name;
-	RESOURCE_TYPE _type;
-
-	// to overload
-	virtual ~cResource() {}
-	virtual void load() {}
-	virtual void unload() {}
-	
-	inline cResource()
-	{
-		_resource_id = _scope = 0;
-		_type = RESOURCE_NULL;
-	}
-
-};
-
-
-// ----------------------------------------
 
 // resource manager, to manage the resource objects
 class cResourceManager : public cEngineObject
@@ -88,6 +48,8 @@ public:
 	// sets the current scope.  Depends on current scene
 	void set_current_scope(unsigned int Scope);
 
+	inline int get_current_scope() { return _current_scope; }
+
 	const unsigned int get_resource_count(){return _resource_count;}
 	
 
@@ -98,7 +60,6 @@ public:
 		std::list<std::string> config_files = {
 			std::string("witchcraft.cfg")
 		};
-
 		
 		for (auto cfg_itr = config_files.begin(); cfg_itr != config_files.end(); cfg_itr++)
 		{

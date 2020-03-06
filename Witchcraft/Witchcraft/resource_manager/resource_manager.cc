@@ -2,6 +2,9 @@
 
 cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 {
+	if (_resource_count == 0)
+		return nullptr;
+
 	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
 
 	// search scopes for correct scope
@@ -26,6 +29,9 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 
 void cResourceManager::clear_all()
 {
+	if (_resource_count == 0)
+		return;
+
 	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
 
 	// look through scopes
@@ -54,6 +60,9 @@ void cResourceManager::clear_all()
 
 bool cResourceManager::load_from_xml_file(std::string Filename)
 {
+	if (utility::file_exists(Filename) == false)
+		return false;
+
 	XML::file<> config_file(Filename.c_str());
 	XML::xml_document<> doc;
 	doc.parse<0>(config_file.data());
@@ -133,6 +142,9 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 // WARN: Must be called for each scene change
 void cResourceManager::set_current_scope(unsigned int Scope)
 {
+	if (_resource_count == 0)
+		return;
+
 	// unload old scope, but not global
 	if (_current_scope != 0)
 	{

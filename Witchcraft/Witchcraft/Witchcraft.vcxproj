@@ -124,6 +124,7 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
+    <ClCompile Include="resource_manager\tests_resource_manager.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
     <ClCompile Include="utility\tests_utility.cc" />
@@ -133,6 +134,7 @@
     <ClInclude Include="engine\exception.h" />
     <ClInclude Include="logging\assert_with_message.h" />
     <ClInclude Include="logging\error_log_manager.h" />
+    <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="unit_testing_switch.h" />
     <ClInclude Include="utility\MACROS.h" />

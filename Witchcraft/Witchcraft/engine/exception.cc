@@ -1,27 +1,27 @@
 #include "exception.h"
 
 cException::cException(int ErrorNum, std::string ErrorDesc, std::string SrcFileName, int LineNum)
+	: _error_id(ErrorNum)
+	, _error_description(ErrorDesc)
+	, _source_file_name(SrcFileName)
+	, _line_number(LineNum)
 {
-	m_ErrorNum = ErrorNum;
-	m_ErrorDesc = ErrorDesc;
-	m_SrcFileName = SrcFileName;
-	m_LineNum = LineNum;
 
 	// write properties to a "human readable" string
 	std::stringstream ErrorStr;
 
-	ErrorStr << "ErrorNum: " << m_ErrorNum
-		<< "\nErrorDesc: " << m_ErrorDesc
-		<< "\nSrcFileName: " << m_SrcFileName
-		<< "\nLineNumber: " << m_LineNum
+	ErrorStr << "ErrorNum: " << _error_id
+		<< "\nErrorDesc: " << _error_description
+		<< "\nSrcFileName: " << _source_file_name
+		<< "\nLineNumber: " << _line_number
 		<< "/n";
 
-	m_ReadableMessage = ErrorStr.str();
+	_readable_message = ErrorStr.str();
 }
 
 char const * cException::what()
 {
-	return m_ErrorDesc.c_str();
+	return _error_description.c_str();
 }
 
 

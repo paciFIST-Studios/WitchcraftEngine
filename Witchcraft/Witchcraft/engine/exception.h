@@ -18,11 +18,11 @@ private:
 protected:
 public:
 
-	int m_ErrorNum;
-	std::string m_ErrorDesc;
-	std::string m_SrcFileName;
-	int m_LineNum;
-	std::string m_ReadableMessage;
+	int _error_id;
+	std::string _error_description;
+	std::string _source_file_name;
+	int _line_number;
+	std::string _readable_message;
 
 	// overrice std::exception::what
 	const char* what();

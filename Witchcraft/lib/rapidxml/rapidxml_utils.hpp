@@ -37,7 +37,8 @@ namespace rapidxml
             
             // Determine stream size
             stream.seekg(0, ios::end);
-            size_t size = stream.tellg();
+			// 20200306 EB - added static cast
+            size_t size = static_cast<size_t>(stream.tellg()); 
             stream.seekg(0);   
             
             // Load data and add terminating 0

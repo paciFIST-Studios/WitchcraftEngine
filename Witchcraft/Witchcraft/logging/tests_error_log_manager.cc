@@ -10,7 +10,6 @@
 		#include "error_log_manager.h"
 
 		#include "../utility/utility.h"
-		
 
 		const std::string ERROR_LOG_FILE_PATH = "delete_me_test_file.del";
 		const std::string ERROR_LOG_CONTENT = "*********************\n* ERROR LOG:\n*********************\n*\n* error log test\n*********************";
@@ -40,6 +39,8 @@
 		{
 			remove_previous_testing_files();
 
+			REQUIRE(utility::file_exists(ERROR_LOG_FILE_PATH) == false);
+
 			cErrorLogManager * log = cErrorLogManager::get_error_manager();
 			log->create_error_log(ERROR_LOG_FILE_PATH);
 			log->close_file();
@@ -56,6 +57,8 @@
 		TEST_CASE("ErrorLogManager: Flush() must be called to write data to file")
 		{
 			remove_previous_testing_files();
+
+			REQUIRE(utility::file_exists(ERROR_LOG_FILE_PATH) == false);
 
 			cErrorLogManager * log = cErrorLogManager::get_error_manager();
 			log->create_error_log(ERROR_LOG_FILE_PATH);
@@ -76,6 +79,8 @@
 		{
 			remove_previous_testing_files();
 
+			REQUIRE(utility::file_exists(ERROR_LOG_FILE_PATH) == false);
+
 			cErrorLogManager * log = cErrorLogManager::get_error_manager();
 			log->create_error_log(ERROR_LOG_FILE_PATH);
 			log->_log_buffer << ERROR_LOG_CONTENT;
@@ -88,7 +93,6 @@
 
 			log = nullptr;
 		}
-
 
 	#endif // RUN_UNIT_TESTS
 

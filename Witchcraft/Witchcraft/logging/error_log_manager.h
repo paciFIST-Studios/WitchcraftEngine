@@ -8,7 +8,6 @@
 	#include <string>
 	#include <time.h>
 	
-
 	#include "../engine/engine.h"
 	#include "../engine/exception.h"
 	

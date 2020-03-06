@@ -12,7 +12,7 @@
 	// so instead we're going to use namespaces
 	namespace utility
 	{
-		static std::string readFileToString(std::string const & path)
+		static std::string read_file_to_string(std::string const & path)
 		{
 			// https://stackoverflow.com/questions/116038/how-do-i-read-an-entire-file-into-a-stdstring-in-c
 			std::ifstream infile(path.c_str(), std::ios::in | std::ios::binary | std::ios::ate);			
@@ -32,13 +32,13 @@
 			return std::string(bytes.data(), static_cast<unsigned int>(file_size));
 		}
 
-		static bool fileExists(std::string const & path)
+		static bool file_exists(std::string const & path)
 		{
 			struct stat buffer;
 			return (stat(path.c_str(), &buffer) == 0);
 		}
 
-		static void WriteToConsole(std::string message)
+		static void write_to_console(std::string message)
 		{
 			std::cout << message;
 

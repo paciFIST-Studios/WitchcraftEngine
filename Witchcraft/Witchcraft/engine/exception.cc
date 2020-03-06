@@ -6,14 +6,13 @@ cException::cException(int ErrorNum, std::string ErrorDesc, std::string SrcFileN
 	, _source_file_name(SrcFileName)
 	, _line_number(LineNum)
 {
-
 	// write properties to a "human readable" string
 	std::stringstream ErrorStr;
 
 	ErrorStr << "ErrorNum: " << _error_id
-		<< "\nErrorDesc: " << _error_description
+		<< "\nErrorDesc: "   << _error_description
 		<< "\nSrcFileName: " << _source_file_name
-		<< "\nLineNumber: " << _line_number
+		<< "\nLineNumber: "  << _line_number
 		<< "/n";
 
 	_readable_message = ErrorStr.str();

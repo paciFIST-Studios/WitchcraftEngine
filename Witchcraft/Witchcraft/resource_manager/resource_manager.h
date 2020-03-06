@@ -38,10 +38,10 @@ class cResource : public cEngineObject
 private:
 protected:
 public:
-	unsigned int m_ResourceID;
-	unsigned int m_Scope;
-	std::string m_FileName;
-	RESOURCE_TYPE m_Type;
+	unsigned int _resource_id;
+	unsigned int _scope;
+	std::string _file_name;
+	RESOURCE_TYPE _type;
 
 	// to overload
 	virtual ~cResource() {}
@@ -50,8 +50,8 @@ public:
 	
 	inline cResource()
 	{
-		m_ResourceID = m_Scope = 0;
-		m_Type = RESOURCE_NULL;
+		_resource_id = _scope = 0;
+		_type = RESOURCE_NULL;
 	}
 
 };
@@ -66,34 +66,34 @@ private:
 protected:
 
 	// current scope
-	unsigned int m_CurrentScope;
+	unsigned int _current_scope;
 
 	// total resources managed
-	unsigned int m_ResourceCount;
+	unsigned int _resource_count;
 
 public:
 
 	// map<scope, resource_list>
-	std::map<unsigned int, std::list<cResource*>> m_Resources;
+	std::map<unsigned int, std::list<cResource*>> _resource_map;
 
 	// find resource by id.  retun null if not found
-	cResource* findResourceByID(unsigned int UID);
+	cResource* find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
-	void clearAll();
+	void clear_all();
 
 	// loads resources from xml
-	bool loadFromXMLFile(std::string Filename);
+	bool load_from_xml_file(std::string Filename);
 
 	// sets the current scope.  Depends on current scene
-	void setCurrentScope(unsigned int Scope);
+	void set_current_scope(unsigned int Scope);
 
-	const unsigned int getResourceCount(){return m_ResourceCount;}
+	const unsigned int get_resource_count(){return _resource_count;}
 	
 
-	bool createConfigFiles()
+	bool create_config_files()
 	{
-		std::cout << "createConfigFiles()\n";
+		std::cout << "create_config_files()\n";
 
 		std::list<std::string> config_files = {
 			std::string("witchcraft.cfg")
@@ -122,7 +122,7 @@ public:
 		return true;
 	}
 
-	//bool parseConfigFiles()
+	//bool parse_config_files()
 	//{
 	//	// due to how rapidxml works, we start by loading all of this stuff into memory
 	//
@@ -142,12 +142,12 @@ public:
 	//		}
 	//
 	//		cResource * resource = nullptr;
-	//		resource->m_Scope = GLOBAL_SCOPE;
-	//		resource->m_Type = RESOURCE_TYPE::RESOURCE_TEXT;
-	//		resource->m_FileName = *file_itr;
+	//		resource->_scope = GLOBAL_SCOPE;
+	//		resource->_type = RESOURCE_TYPE::RESOURCE_TEXT;
+	//		resource->_file_name = *file_itr;
 	//
 	//
-	//		m_Resources[GLOBAL_SCOPE];
+	//		_resource_map[GLOBAL_SCOPE];
 	//	}
 	//
 	//	return true;
@@ -155,9 +155,9 @@ public:
 	//
 	inline cResourceManager() 
 	{
-		m_CurrentScope = m_ResourceCount = 0;
+		_current_scope = _resource_count = 0;
 		
-		createConfigFiles();
+		create_config_files();
 	}
 
 };

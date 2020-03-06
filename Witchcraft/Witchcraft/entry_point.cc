@@ -28,8 +28,8 @@ int main(int argc, char** argv[])
 	std::cin >> c;
 
 
-	//cErrorLogManager * log = cErrorLogManager::GetErrorManager();
-	//log->createErrorLog(ErrorLogFileName);
+	//cErrorLogManager * log = cErrorLogManager::get_error_manager();
+	//log->create_error_log(ErrorLogFileName);
 	//
 	//try
 	//{
@@ -38,13 +38,13 @@ int main(int argc, char** argv[])
 	//catch (cException & e)
 	//{
 	//	MessageBoxA(NULL, e.what(), "", MB_OK);
-	//	log->m_LogBuffer << "\n\n*************** ERROR ***************\n";
-	//	log->flushBuffer();
-	//	log->logException(e);
-	//	log->m_LogBuffer << "\n\n*************************************";
-	//	log->flushBuffer();
+	//	log->_log_buffer << "\n\n*************** ERROR ***************\n";
+	//	log->flush_buffer();
+	//	log->log_exception(e);
+	//	log->_log_buffer << "\n\n*************************************";
+	//	log->flush_buffer();
 	//}
 	//
-	//log->closeFile();
+	//log->close_file();
 	
 }

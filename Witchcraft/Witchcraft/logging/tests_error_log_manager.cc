@@ -15,7 +15,7 @@
 		const std::string ERROR_LOG_FILE_PATH = "delete_me_test_file.del";
 		const std::string ERROR_LOG_CONTENT = "*********************\n* ERROR LOG:\n*********************\n*\n* error log test\n*********************";
 
-		static void removePreviousTestingFiles()
+		static void remove_previous_testing_files()
 		{
 			if (utility::fileExists(ERROR_LOG_FILE_PATH))
 			{
@@ -38,11 +38,11 @@
 		// we certify that the error logger can create log files.
 		TEST_CASE("ErrorLogManager: Creates Error Log File")
 		{
-			removePreviousTestingFiles();
+			remove_previous_testing_files();
 
-			cErrorLogManager * log = cErrorLogManager::GetErrorManager();
-			log->createErrorLog(ERROR_LOG_FILE_PATH);
-			log->closeFile();
+			cErrorLogManager * log = cErrorLogManager::get_error_manager();
+			log->create_error_log(ERROR_LOG_FILE_PATH);
+			log->close_file();
 
 			REQUIRE(utility::fileExists(ERROR_LOG_FILE_PATH));
 
@@ -55,12 +55,12 @@
 		// On success, we certify that the error logger does NOT flush automatically
 		TEST_CASE("ErrorLogManager: Flush() must be called to write data to file")
 		{
-			removePreviousTestingFiles();
+			remove_previous_testing_files();
 
-			cErrorLogManager * log = cErrorLogManager::GetErrorManager();
-			log->createErrorLog(ERROR_LOG_FILE_PATH);
-			log->m_LogBuffer << ERROR_LOG_CONTENT;
-			log->closeFile();
+			cErrorLogManager * log = cErrorLogManager::get_error_manager();
+			log->create_error_log(ERROR_LOG_FILE_PATH);
+			log->_log_buffer << ERROR_LOG_CONTENT;
+			log->close_file();
 
 			std::string file_content = utility::readFileToString(ERROR_LOG_FILE_PATH);
 
@@ -74,13 +74,13 @@
 		// On success, we certify that the error logger can write to a log file correctly
 		TEST_CASE("ErrorLogManager: Writes to Error Log File")
 		{
-			removePreviousTestingFiles();
+			remove_previous_testing_files();
 
-			cErrorLogManager * log = cErrorLogManager::GetErrorManager();
-			log->createErrorLog(ERROR_LOG_FILE_PATH);
-			log->m_LogBuffer << ERROR_LOG_CONTENT;
-			log->flushBuffer();
-			log->closeFile();
+			cErrorLogManager * log = cErrorLogManager::get_error_manager();
+			log->create_error_log(ERROR_LOG_FILE_PATH);
+			log->_log_buffer << ERROR_LOG_CONTENT;
+			log->flush_buffer();
+			log->close_file();
 
 			std::string file_content = utility::readFileToString(ERROR_LOG_FILE_PATH);
 

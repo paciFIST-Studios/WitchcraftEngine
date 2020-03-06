@@ -22,7 +22,7 @@
 	
 	public:
 		//returns pointer to singleton
-		static cErrorLogManager * GetErrorManager();
+		static cErrorLogManager * get_error_manager();
 	
 	protected:
 		// ctor, encapsulated
@@ -31,25 +31,25 @@
 		virtual ~cErrorLogManager() {}
 	
 		// static instance
-		static cErrorLogManager m_ErrorLogManager;
+		static cErrorLogManager _error_log_manager;
 	
 	public:
 		//Log file, file buffer
-		std::stringstream m_LogBuffer;
+		std::stringstream _log_buffer;
 	
-		void createErrorLog(std::string Filename);
+		void create_error_log(std::string Filename);
 	
 		//Commit contents to file
-		void flushBuffer();
+		void flush_buffer();
 	
-		void closeFile();
+		void close_file();
 	
-		void logException(cException e);
+		void log_exception(cException e);
 	
-		std::string getTimeStamp();
+		std::string get_timestamp();
 	
 		// handle to log file itself
-		std::ofstream m_LogFile;		
+		std::ofstream _log_file;		
 	};
 
 #endif // !ERRORLOGMANAGER_H

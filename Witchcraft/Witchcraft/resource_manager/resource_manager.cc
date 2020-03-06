@@ -1,11 +1,11 @@
 #include "resource_manager.h"
 
-cResource * cResourceManager::findResourceByID(unsigned int UID)
+cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 {
 	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
 
 	// search scopes for correct scope
-	for (element_itr = m_Resources.begin(); element_itr != m_Resources.end(); element_itr++)
+	for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
 	{
 		if (!(*element_itr).second.empty())
 		{
@@ -15,7 +15,7 @@ cResource * cResourceManager::findResourceByID(unsigned int UID)
 			for (list_itr = (*element_itr).second.begin(); list_itr != (*element_itr).second.end(); list_itr++)
 			{
 				// check for id match
-				if ((*list_itr)->m_ResourceID == UID)
+				if ((*list_itr)->_resource_id == UID)
 					return (*list_itr);
 			}
 		}
@@ -24,12 +24,12 @@ cResource * cResourceManager::findResourceByID(unsigned int UID)
 	return nullptr;
 }
 
-void cResourceManager::clearAll()
+void cResourceManager::clear_all()
 {
 	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
 
 	// look through scopes
-	for (element_itr = m_Resources.begin(); element_itr != m_Resources.end(); element_itr++)
+	for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
 	{
 		if (!(*element_itr).second.empty())
 		{
@@ -47,12 +47,12 @@ void cResourceManager::clearAll()
 		}
 	}
 
-	m_Resources.clear();
+	_resource_map.clear();
 }
 
 
 
-bool cResourceManager::loadFromXMLFile(std::string Filename)
+bool cResourceManager::load_from_xml_file(std::string Filename)
 {
 	XML::file<> config_file(Filename.c_str());
 	XML::xml_document<> doc;
@@ -68,7 +68,10 @@ bool cResourceManager::loadFromXMLFile(std::string Filename)
 		{
 			cResource * resource = nullptr;
 
-			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); childAttribute; childAttribute = childAttribute->next_attribute())
+			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); 
+				childAttribute; 
+				childAttribute = childAttribute->next_attribute()
+			)
 			{
 				std::string attributeName = childAttribute->name();
 				std::string attributeValue = childAttribute->value();
@@ -99,15 +102,15 @@ bool cResourceManager::loadFromXMLFile(std::string Filename)
 				{
 					if (attributeName == "UID")
 					{
-						resource->m_ResourceID = atoi(attributeValue.c_str());
+						resource->_resource_id = atoi(attributeValue.c_str());
 					}
 					if (attributeName == "filename")
 					{
-						resource->m_FileName = attributeValue;
+						resource->_file_name = attributeValue;
 					}
 					if (attributeName == "scenescope")
 					{
-						resource->m_Scope = atoi(attributeValue.c_str());
+						resource->_scope = atoi(attributeValue.c_str());
 					}
 				}
 			}
@@ -115,8 +118,8 @@ bool cResourceManager::loadFromXMLFile(std::string Filename)
 			if (resource)
 			{
 				// resource added here
-				m_Resources[resource->m_Scope].push_back(resource);
-				m_ResourceCount++;
+				_resource_map[resource->_scope].push_back(resource);
+				_resource_count++;
 			}
 		}
 
@@ -128,15 +131,15 @@ bool cResourceManager::loadFromXMLFile(std::string Filename)
 
 
 // WARN: Must be called for each scene change
-void cResourceManager::setCurrentScope(unsigned int Scope)
+void cResourceManager::set_current_scope(unsigned int Scope)
 {
 	// unload old scope, but not global
-	if (m_CurrentScope != 0)
+	if (_current_scope != 0)
 	{
 		std::list<cResource*>::iterator list_itr;
 
-		for (list_itr = m_Resources[m_CurrentScope].begin();
-			list_itr != m_Resources[m_CurrentScope].end(); 
+		for (list_itr = _resource_map[_current_scope].begin();
+			list_itr != _resource_map[_current_scope].end();
 			list_itr++)
 		{
 			// note: also calling delete here would kill our cResource obj
@@ -146,13 +149,13 @@ void cResourceManager::setCurrentScope(unsigned int Scope)
 		}
 	}
 
-	m_CurrentScope = Scope;
+	_current_scope = Scope;
 
 	// load new scope
 	std::list<cResource*>::iterator list_itr;
 
-	for (list_itr = m_Resources[m_CurrentScope].begin();
-		list_itr != m_Resources[m_CurrentScope].end();
+	for (list_itr = _resource_map[_current_scope].begin();
+		list_itr != _resource_map[_current_scope].end();
 		list_itr++)
 	{
 		(*list_itr)->load();

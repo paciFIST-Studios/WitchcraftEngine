@@ -12,9 +12,6 @@
 	#include "../engine/engine.h"
 	#include "../engine/exception.h"
 	
-	
-
-	
 	// purpose: handle and log all exceptions, when they occur, and
 	// output to human readable text log
 	class cErrorLogManager : public cEngine

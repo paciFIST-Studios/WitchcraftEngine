@@ -157,7 +157,7 @@ public:
 	{
 		_current_scope = _resource_count = 0;
 		
-		create_config_files();
+		//create_config_files();
 	}
 
 };

@@ -102,7 +102,7 @@ public:
 		
 		for (auto cfg_itr = config_files.begin(); cfg_itr != config_files.end(); cfg_itr++)
 		{
-			if (utility::fileExists(*cfg_itr))
+			if (utility::file_exists(*cfg_itr))
 			{
 				std::cout << "\tskipping file: " << *cfg_itr << "\n";
 				continue;
@@ -113,7 +113,7 @@ public:
 			cfg_file << "\0";
 			cfg_file.close();
 
-			if (utility::fileExists(*cfg_itr))
+			if (utility::file_exists(*cfg_itr))
 			{
 				std::cout << "\tfile created: " << *cfg_itr << "\n";
 			}

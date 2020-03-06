@@ -17,7 +17,7 @@
 
 		static void remove_previous_testing_files()
 		{
-			if (utility::fileExists(ERROR_LOG_FILE_PATH))
+			if (utility::file_exists(ERROR_LOG_FILE_PATH))
 			{
 				int delete_result = remove(ERROR_LOG_FILE_PATH.c_str());
 
@@ -26,7 +26,7 @@
 					FAIL("Could not satisfy testing pre-condition: Old test data could not be deleted");
 				}
 
-				if (utility::fileExists(ERROR_LOG_FILE_PATH))
+				if (utility::file_exists(ERROR_LOG_FILE_PATH))
 				{
 					FAIL("Could not satisfy testing pre-condition: Old test data could not be deleted");
 				}
@@ -44,7 +44,7 @@
 			log->create_error_log(ERROR_LOG_FILE_PATH);
 			log->close_file();
 
-			REQUIRE(utility::fileExists(ERROR_LOG_FILE_PATH));
+			REQUIRE(utility::file_exists(ERROR_LOG_FILE_PATH));
 
 			log = nullptr;
 		}
@@ -62,7 +62,7 @@
 			log->_log_buffer << ERROR_LOG_CONTENT;
 			log->close_file();
 
-			std::string file_content = utility::readFileToString(ERROR_LOG_FILE_PATH);
+			std::string file_content = utility::read_file_to_string(ERROR_LOG_FILE_PATH);
 
 			REQUIRE(file_content.compare("") == 0); // true
 			REQUIRE(file_content.compare(ERROR_LOG_CONTENT) != 0); // false
@@ -82,7 +82,7 @@
 			log->flush_buffer();
 			log->close_file();
 
-			std::string file_content = utility::readFileToString(ERROR_LOG_FILE_PATH);
+			std::string file_content = utility::read_file_to_string(ERROR_LOG_FILE_PATH);
 
 			REQUIRE(file_content.compare(ERROR_LOG_CONTENT));
 

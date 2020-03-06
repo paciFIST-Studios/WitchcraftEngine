@@ -50,84 +50,79 @@ void cResourceManager::clearAll()
 	m_Resources.clear();
 }
 
+
+
 bool cResourceManager::loadFromXMLFile(std::string Filename)
 {
-	TiXmlDocument doc(Filename.c_str());
+	XML::file<> config_file(Filename.c_str());
+	XML::xml_document<> doc;
+	doc.parse<0>(config_file.data());
 
-	if (doc.LoadFile())
+	// find top node
+	XML::xml_node<> * ResourceTree = doc.first_node("resources");
+
+	if (ResourceTree)
 	{
-		// find top node
-		TiXmlNode * ResourceTree = doc.FirstChild("resources");
-
-		if (ResourceTree)
+		// enumerate objects
+		for (XML::xml_node<> * child = ResourceTree->first_node(); child; child = child->next_sibling())
 		{
-			// enumerate objects
-			for (TiXmlNode * child = ResourceTree->FirstChild(); child; child = child->NextSibling())
+			cResource * resource = nullptr;
+
+			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); childAttribute; childAttribute = childAttribute->next_attribute())
 			{
-				TiXmlElement * Element = child->ToElement();
+				std::string attributeName = childAttribute->name();
+				std::string attributeValue = childAttribute->value();
 
-				if (Element)
+				// check resourece type
+				if (attributeName == "type")
 				{
-					cResource * Resource = nullptr;
+					// We will allow resource managers to implement their own decendant
+					// versions of cResource.  Those managers will create the resource,
+					// and then give us a cResource pointer back, and this scope will need
+					// to add the cResource pointer to the resourece list.
 
-					for (TiXmlAttribute * ElementAttribute = Element->FirstAttribute();	ElementAttribute; ElementAttribute = ElementAttribute->Next())
+					if (attributeValue == "graphic")
 					{
-						// examine resource object
-						std::string AttributeName = ElementAttribute->Name();
-						std::string AttributeValue = ElementAttribute->Value();
-
-						// check resourece type
-						if (AttributeName == "type")
-						{
-							// We will allow resource managers to implement their own decendant
-							// versions of cResource.  Those managers will create the resource,
-							// and then give us a cResource pointer back, and this scope will need
-							// to add the cResource pointer to the resourece list.
-
-							if (AttributeValue == "graphic")
-							{
-								// Resourece = g_RenderManager->loadResourceFromXML(Element);
-							}
-							if (AttributeValue == "audio")
-							{
-								// Resource = g_AudioManager->loadResourceFromXML(Element);
-							}
-							if (AttributeValue == "text")
-							{
-								//Resource = g_ConfigManager->loadResourceFromXML(Element);
-							}
-						}
-
-						if (Resource)
-						{
-							if (AttributeName == "UID")
-							{
-								Resource->m_ResourceID = atoi(AttributeValue.c_str());
-							}
-							if (AttributeName == "filename")
-							{
-								Resource->m_FileName = AttributeValue;
-							}
-							if (AttributeName == "scenescope")
-							{
-								Resource->m_Scope = atoi(AttributeValue.c_str());
-							}
-						}							
+						// Resourece = g_RenderManager->loadResourceFromXML(Element);
 					}
-
-					if (Resource)
+					if (attributeValue == "audio")
 					{
-						// resource added here
-						m_Resources[Resource->m_Scope].push_back(Resource);
-						m_ResourceCount++;
+						// Resource = g_AudioManager->loadResourceFromXML(Element);
+					}
+					if (attributeValue == "text")
+					{
+						//Resource = g_ConfigManager->loadResourceFromXML(Element);
+					}
+				}
+
+				if (resource)
+				{
+					if (attributeName == "UID")
+					{
+						resource->m_ResourceID = atoi(attributeValue.c_str());
+					}
+					if (attributeName == "filename")
+					{
+						resource->m_FileName = attributeValue;
+					}
+					if (attributeName == "scenescope")
+					{
+						resource->m_Scope = atoi(attributeValue.c_str());
 					}
 				}
 			}
 
-			return true;
+			if (resource)
+			{
+				// resource added here
+				m_Resources[resource->m_Scope].push_back(resource);
+				m_ResourceCount++;
+			}
 		}
-	}
 
+		return true;
+	}
+	
 	return false;
 }
 

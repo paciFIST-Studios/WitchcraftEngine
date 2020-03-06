@@ -6,9 +6,15 @@
 #include <map>
 #include <string>
 
-#include "tinyxml\tinyxml.h"
+#include "../lib/rapidxml/rapidxml.hpp"
+#include "../lib/rapidxml/rapidxml_utils.hpp"
+#define XML rapidxml
 
+
+#include "exception.h"
 #include "engine\engine.h"
+#include "utility\utility.h"
+
 
 typedef enum {
 	  RESOURCE_NULL = 0
@@ -17,6 +23,8 @@ typedef enum {
 	, RESOURCE_AUDIO = 3
 	, RESOURCE_TEXT = 4
 } RESOURCE_TYPE;
+
+#define GLOBAL_SCOPE 0
 
 
 // ----------------------------------------
@@ -82,9 +90,74 @@ public:
 
 	const unsigned int getResourceCount(){return m_ResourceCount;}
 	
+
+	bool createConfigFiles()
+	{
+		std::cout << "createConfigFiles()\n";
+
+		std::list<std::string> config_files = {
+			std::string("witchcraft.cfg")
+		};
+
+		
+		for (auto cfg_itr = config_files.begin(); cfg_itr != config_files.end(); cfg_itr++)
+		{
+			if (utility::fileExists(*cfg_itr))
+			{
+				std::cout << "\tskipping file: " << *cfg_itr << "\n";
+				continue;
+			}
+				
+			std::ofstream cfg_file;
+			cfg_file.open(*cfg_itr);
+			cfg_file << "\0";
+			cfg_file.close();
+
+			if (utility::fileExists(*cfg_itr))
+			{
+				std::cout << "\tfile created: " << *cfg_itr << "\n";
+			}
+		}
+		
+		return true;
+	}
+
+	//bool parseConfigFiles()
+	//{
+	//	// due to how rapidxml works, we start by loading all of this stuff into memory
+	//
+	//	std::list<char const *> filenames = {
+	//		"config.xml"
+	//	};
+	//
+	//	for (auto file_itr = filenames.begin(); file_itr != filenames.end(); file_itr++)
+	//	{
+	//		try
+	//		{
+	//			XML::file<> config_file(*file_itr);
+	//		}
+	//		catch(cException ex)
+	//		{
+	//			return false;
+	//		}
+	//
+	//		cResource * resource = nullptr;
+	//		resource->m_Scope = GLOBAL_SCOPE;
+	//		resource->m_Type = RESOURCE_TYPE::RESOURCE_TEXT;
+	//		resource->m_FileName = *file_itr;
+	//
+	//
+	//		m_Resources[GLOBAL_SCOPE];
+	//	}
+	//
+	//	return true;
+	//}
+	//
 	inline cResourceManager() 
 	{
 		m_CurrentScope = m_ResourceCount = 0;
+		
+		createConfigFiles();
 	}
 
 };

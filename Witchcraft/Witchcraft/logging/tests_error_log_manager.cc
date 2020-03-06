@@ -12,7 +12,7 @@
 		#include "../utility/utility.h"
 		
 
-		const std::string ERROR_LOG_FILE_PATH = "delete_me_test_file.txt";
+		const std::string ERROR_LOG_FILE_PATH = "delete_me_test_file.del";
 		const std::string ERROR_LOG_CONTENT = "*********************\n* ERROR LOG:\n*********************\n*\n* error log test\n*********************";
 
 		static void removePreviousTestingFiles()

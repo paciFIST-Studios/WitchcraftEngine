@@ -6,14 +6,14 @@
 #include <map>
 #include <string>
 
-#include "../lib/rapidxml/rapidxml.hpp"
-#include "../lib/rapidxml/rapidxml_utils.hpp"
+#include "../../../lib/rapidxml/rapidxml.hpp"
+#include "../../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
 
-#include "exception.h"
-#include "engine\engine.h"
-#include "utility\utility.h"
+#include "../exception.h"
+#include "../engine.h"
+#include "../../utility/utility.h"
 
 
 typedef enum {

@@ -25,6 +25,9 @@
     <Filter Include="lib">
       <UniqueIdentifier>{10cef554-8bc0-43de-bd40-b0972c26f247}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\engine\resource_manager">
+      <UniqueIdentifier>{85d5a3b8-6e93-4a94-a000-e4aa425a97bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -39,11 +42,11 @@
     <ClCompile Include="logging\tests_error_log_manager.cc">
       <Filter>Source Files\logging</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager.cpp">
+    <ClCompile Include="engine\exception.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="exception.cpp">
-      <Filter>Source Files\engine</Filter>
+    <ClCompile Include="engine\resource_manager\resource_manager.cpp">
+      <Filter>Source Files\engine\resource_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,11 +68,11 @@
     <ClInclude Include="utility\MACROS.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager.h">
+    <ClInclude Include="engine\exception.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="exception.h">
-      <Filter>Source Files\engine</Filter>
+    <ClInclude Include="engine\resource_manager\resource_manager.h">
+      <Filter>Source Files\engine\resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

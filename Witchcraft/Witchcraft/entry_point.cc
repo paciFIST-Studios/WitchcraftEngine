@@ -11,16 +11,22 @@
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
+#include "engine\resource_manager\resource_manager.h"
 
-const std::string ErrorLogFileName = "witchcraft_error_log.txt";
+
+const std::string ErrorLogFileName = "witchcraft_errors.log";
 
 int main(int argc, char** argv[])
 {
 	Catch::Session session;
 	int numberOfFailures = session.run();
 
+	
+	cResourceManager *rm = &cResourceManager();
+	
 	char c;
 	std::cin >> c;
+
 
 	//cErrorLogManager * log = cErrorLogManager::GetErrorManager();
 	//log->createErrorLog(ErrorLogFileName);

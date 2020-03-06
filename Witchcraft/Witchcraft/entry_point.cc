@@ -11,7 +11,7 @@
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
-#include "engine\resource_manager\resource_manager.h"
+#include "resource_manager\resource_manager.h"
 
 
 const std::string ErrorLogFileName = "witchcraft_errors.log";

@@ -25,8 +25,8 @@
     <Filter Include="lib">
       <UniqueIdentifier>{10cef554-8bc0-43de-bd40-b0972c26f247}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\engine\resource_manager">
-      <UniqueIdentifier>{85d5a3b8-6e93-4a94-a000-e4aa425a97bf}</UniqueIdentifier>
+    <Filter Include="Source Files\resource_manager">
+      <UniqueIdentifier>{c9ea82f3-fc55-41c0-b7c7-0be12c38f249}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,8 +45,8 @@
     <ClCompile Include="engine\exception.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="engine\resource_manager\resource_manager.cpp">
-      <Filter>Source Files\engine\resource_manager</Filter>
+    <ClCompile Include="resource_manager\resource_manager.cpp">
+      <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +71,8 @@
     <ClInclude Include="engine\exception.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="engine\resource_manager\resource_manager.h">
-      <Filter>Source Files\engine\resource_manager</Filter>
+    <ClInclude Include="resource_manager\resource_manager.h">
+      <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

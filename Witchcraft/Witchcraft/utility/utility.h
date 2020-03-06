@@ -38,18 +38,18 @@
 			return (stat(path.c_str(), &buffer) == 0);
 		}
 
-		static void write_to_console(std::string message)
-		{
-			std::cout << message;
-
-			// This preprocessor macro is used to send the debug string
-			// to VS's output window.  The message already goes to stdout
-			// We use the macro to make sure this code isn't even in the
-			// release build
-			#ifdef _DEBUG
-				OutputDebugString(message.c_str());
-			#endif
-		}
+		//static void write_to_console(std::string message)
+		//{
+		//	std::cout << message;
+		//
+		//	// This preprocessor macro is used to send the debug string
+		//	// to VS's output window.  The message already goes to stdout
+		//	// We use the macro to make sure this code isn't even in the
+		//	// release build
+		//	#ifdef _DEBUG
+		//		OutputDebugString(message.c_str());
+		//	#endif
+		//}
 	}
 
 #endif

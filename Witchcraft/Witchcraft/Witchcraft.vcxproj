@@ -119,12 +119,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="engine\exception.cpp" />
+    <ClCompile Include="engine\exception.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
-    <ClCompile Include="resource_manager\resource_manager.cpp" />
+    <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="test.cc" />
+    <ClCompile Include="tests_exception.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />

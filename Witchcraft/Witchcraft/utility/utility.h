@@ -25,11 +25,11 @@
 				return std::string();
 			
 			infile.seekg(0, std::ios::beg);
-			std::vector<char> bytes(file_size);
+			std::vector<char> bytes(static_cast<unsigned int>(file_size));
 			infile.read(bytes.data(), file_size);
 			infile.close();
 
-			return std::string(bytes.data(), file_size);
+			return std::string(bytes.data(), static_cast<unsigned int>(file_size));
 		}
 
 		static bool fileExists(std::string const & path)

@@ -9,5 +9,6 @@ Witchcraft/Witchcraft/witchcraft_error_log.txt
 _LoveEngine-master.zip
 *.iobj
 *.ipdb
+*.aps
 
 Witchcraft/lib/rapidxml/rapidxml-1.13/*

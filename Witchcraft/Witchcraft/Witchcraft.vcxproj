@@ -126,6 +126,7 @@
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
+    <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />

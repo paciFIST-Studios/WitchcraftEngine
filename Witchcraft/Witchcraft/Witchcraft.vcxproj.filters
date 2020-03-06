@@ -51,6 +51,9 @@
     <ClCompile Include="tests_exception.cc">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="utility\tests_utility.cc">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logging\assert_with_message.h">

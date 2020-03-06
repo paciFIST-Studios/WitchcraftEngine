@@ -123,8 +123,4 @@ public:
 
 };
 
-
-
-
-
 #endif // RESOURCE_MANAGER_H

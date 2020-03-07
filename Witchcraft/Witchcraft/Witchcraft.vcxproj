@@ -77,6 +77,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,6 +101,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>K:\_Git\WitchcraftEngine\Witchcraft\Witchcraft\tinyxml\Releasetinyxml;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -115,16 +119,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="engine\tests_engine.cc" />
+    <ClCompile Include="engine\exception.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
+    <ClCompile Include="resource_manager\resource_manager.cc" />
+    <ClCompile Include="resource_manager\tests_resource_manager.cc" />
     <ClCompile Include="test.cc" />
+    <ClCompile Include="tests_exception.cc" />
+    <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />
+    <ClInclude Include="engine\exception.h" />
     <ClInclude Include="logging\assert_with_message.h" />
     <ClInclude Include="logging\error_log_manager.h" />
+    <ClInclude Include="resource_manager\resource.h" />
+    <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="unit_testing_switch.h" />
     <ClInclude Include="utility\MACROS.h" />
     <ClInclude Include="utility\utility.h" />

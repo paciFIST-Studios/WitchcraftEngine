@@ -22,11 +22,14 @@
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{266fa35c-4ef9-47cc-b0a0-ecfa70dcfdab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{10cef554-8bc0-43de-bd40-b0972c26f247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource_manager">
+      <UniqueIdentifier>{c9ea82f3-fc55-41c0-b7c7-0be12c38f249}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="engine\tests_engine.cc">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
     <ClCompile Include="logging\error_log_manager.cc">
       <Filter>Source Files\logging</Filter>
     </ClCompile>
@@ -38,6 +41,21 @@
     </ClCompile>
     <ClCompile Include="logging\tests_error_log_manager.cc">
       <Filter>Source Files\logging</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\exception.cc">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager\resource_manager.cc">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="tests_exception.cc">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="utility\tests_utility.cc">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager\tests_resource_manager.cc">
+      <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="utility\MACROS.h">
       <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\exception.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager\resource_manager.h">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager\resource.h">
+      <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

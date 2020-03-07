@@ -1,7 +1,6 @@
 #ifndef ERRORLOGMANAGER_H
 #define ERRORLOGMANAGER_H
 	
-	#include <exception>
 	#include <fstream>
 	#include <iostream>
 	#include <iomanip>
@@ -10,33 +9,7 @@
 	#include <time.h>
 	
 	#include "../engine/engine.h"
-	
-	
-	// This is going to be our throw macro, to throw a cException class
-	#ifndef THROW_EXCEPTION
-		#define THROW_EXCEPTION(ErrorNum, ErrorDesc) throw cException(ErrorNum, ErrorDesc, __FILE__, __LINE__);
-	#endif
-	
-	
-	// purpose: encapsulate a runtime error
-	class cException : public std::exception
-	{
-	private:
-	protected:
-	public:
-	
-		int m_ErrorNum;
-		std::string m_ErrorDesc;
-		std::string m_SrcFileName;
-		int m_LineNum;
-		std::string m_ReadableMessage;
-	
-		// overrice std::exception::what
-		const char* what();
-	
-		cException(int ErrorNum, std::string ErrorDesc, std::string SrcFilename, int LineNumber);
-		~cException() throw() {}
-	};
+	#include "../engine/exception.h"
 	
 	// purpose: handle and log all exceptions, when they occur, and
 	// output to human readable text log
@@ -45,7 +18,7 @@
 	
 	public:
 		//returns pointer to singleton
-		static cErrorLogManager * GetErrorManager();
+		static cErrorLogManager * get_error_manager();
 	
 	protected:
 		// ctor, encapsulated
@@ -54,25 +27,25 @@
 		virtual ~cErrorLogManager() {}
 	
 		// static instance
-		static cErrorLogManager m_ErrorLogManager;
+		static cErrorLogManager _error_log_manager;
 	
 	public:
 		//Log file, file buffer
-		std::stringstream m_LogBuffer;
+		std::stringstream _log_buffer;
 	
-		void createErrorLog(std::string Filename);
+		void create_error_log(std::string Filename);
 	
 		//Commit contents to file
-		void flushBuffer();
+		void flush_buffer();
 	
-		void closeFile();
+		void close_file();
 	
-		void logException(cException e);
+		void log_exception(cException e);
 	
-		std::string getTimeStamp();
+		std::string get_timestamp();
 	
 		// handle to log file itself
-		std::ofstream m_LogFile;		
+		std::ofstream _log_file;		
 	};
 
 #endif // !ERRORLOGMANAGER_H

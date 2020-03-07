@@ -36,7 +36,6 @@
 			REQUIRE(rm->get_current_scope() == 0);
 		}
 
-	
 	#endif // RUN_UNIT_TESTS
 
 #endif // !TEST_RESOURCE_MANAGER_CC

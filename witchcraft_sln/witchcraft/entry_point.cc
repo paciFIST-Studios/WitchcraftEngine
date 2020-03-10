@@ -29,18 +29,30 @@ int main(int argc, char** argv[])
 	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
 
-	cSDL2RenderManager * renderManager = &cSDL2RenderManager();
+	cSDL2RenderManager * render_manager = &cSDL2RenderManager();
 
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init";
 
-	bool init_success = renderManager->init();
+	std::string title = "Witchcraft";
+	bool use_fullscreen = false;
+
+	bool init_success = render_manager->init(0, 0, 800, 800, use_fullscreen, title.c_str());
 	if (init_success)
 	{
 		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Success";
+
+		// For testing, we're setting the background to a color
+		int r = 70;
+		int g = 0;
+		int b = 70;
+
+		render_manager->set_surface_RGB(r, g, b, nullptr);
 	}
 	else
 	{
 		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Fail";
+		render_manager->shutdown();
+		return EXIT_FAILURE;
 	}
 
 	SDL_Event window_event;
@@ -61,15 +73,8 @@ int main(int argc, char** argv[])
 		}
 	}
 
-	// main loop here?
 
-
-	renderManager->shutdown();
+	render_manager->shutdown();
 
 	std::cout << "\n[Witchcraft]: END";
-
-
-	char c;
-	std::cin >> c;
-
 }

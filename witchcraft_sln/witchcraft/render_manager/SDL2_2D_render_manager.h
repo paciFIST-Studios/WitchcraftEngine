@@ -20,6 +20,7 @@
 #include "../../lib/rapidxml/rapidxml.hpp"
 
 // witchcraft
+#include "../utility/utility.h"
 #include "../resource_manager/resource.h"
 #include "SDL_2D_render_object.h"
 #include "2D_render_manager.h"
@@ -48,6 +49,8 @@ public:
 	static cSDL2RenderManager * get_SDL2D_render_manager();
 	SDL_Window * _sdl_window;
 	SDL_Renderer * _sdl_renderer;
+
+	SDL_Surface * _sdl_screen_surface;
 	
 
 	std::stringstream _video_info;
@@ -58,12 +61,12 @@ public:
 		, unsigned int Width = 0
 		, unsigned int Height = 0
 		, bool fullScreen = false
-		, char * WindowTitle = 0
+		, char const * WindowTitle = 0
 	);
 
 	void shutdown();
 
-	void show_video_info();
+	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 
 	void free();
 	bool update();
@@ -72,5 +75,7 @@ public:
 	void render_all_objects();
 	std::list<cSDL2DRenderObject*> _render_objects;
 };
+
+
 
 #endif // SDL2_2D_RENDER_MANAGER_H

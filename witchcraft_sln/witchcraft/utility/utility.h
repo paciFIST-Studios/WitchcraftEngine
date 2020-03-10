@@ -3,7 +3,7 @@
 
 	#include <Windows.h>
 
-	#include <iostream>
+	#include <fstream>
 	#include <sys/stat.h>
 	#include <string>
 	#include <vector>
@@ -50,6 +50,19 @@
 		//		OutputDebugString(message.c_str());
 		//	#endif
 		//}
+
+		
+		template<typename t>
+		static t clamp_value_to_uint8(t val)
+		{
+			if (val < 0)
+				return 0;
+			else if (val > 255)
+				return 255;
+			else
+				return val;
+		}
+
 	}
 
 #endif

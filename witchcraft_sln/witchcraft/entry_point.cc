@@ -21,12 +21,12 @@ int main(int argc, char** argv[])
 	Catch::Session session;
 	int numberOfFailures = session.run();
 
-	cResourceManager * rm = &cResourceManager();
+	//cResourceManager * rm = &cResourceManager();
 
 	const std::string TEST_FILE = "witchcraft.cfg";
 
-	rm->create_config_files();
-	rm->load_from_xml_file(TEST_FILE);
+	//rm->create_config_files();
+	//rm->load_from_xml_file(TEST_FILE);
 	
 	char c;
 	std::cin >> c;

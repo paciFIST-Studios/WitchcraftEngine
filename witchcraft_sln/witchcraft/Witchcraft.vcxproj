@@ -76,10 +76,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\WitchcraftEngine\Witchcraft\lib\SDL2\SDL2-2.0.10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>K:\_Git\WitchcraftEngine\Witchcraft\lib\SDL2\SDL2-2.0.10\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -137,10 +137,10 @@
     <ClInclude Include="logging\assert_with_message.h" />
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="render_manager\2D_render_manager.h" />
+    <ClInclude Include="render_manager\2D_sprite_object.h" />
     <ClInclude Include="render_manager\SDL2_2D_render_manager.h" />
     <ClInclude Include="render_manager\SDL2_render_resource.h" />
     <ClInclude Include="render_manager\SDL_2D_render_object.h" />
-    <ClInclude Include="render_manager\sprite_object.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="unit_testing_switch.h" />

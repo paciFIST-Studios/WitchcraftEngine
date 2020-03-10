@@ -1,11 +1,12 @@
-#ifndef 2D_RENDER_MANAGER_H
-#define 2D_RENDER_MANAGER_H
+#ifndef TWO_D_RENDER_MANAGER_H
+#define TWO_D_RENDER_MANAGER_H
 
 
 
 class c2DRenderManager
 {
-
+public:
+	int id;
 };
 
-#endif // !2D_RENDER_MANAGER_H
+#endif // !TWO_D_RENDER_MANAGER_H

@@ -1,5 +1,5 @@
-#ifndef SDL2_RENDER_MANAGER_H
-#define SDL2_RENDER_MANAGER_H
+#ifndef SDL2_RENDER_RESOURCE_H
+#define SDL2_RENDER_RESOURCE_H
 
 #include <Windows.h>
 
@@ -23,4 +23,4 @@ public:
 	void unload();
 };
 
-#endif // SDL2_RENDER_MANAGER_H
+#endif // SDL2_RENDER_RESOURCE_H

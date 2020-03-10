@@ -7,7 +7,7 @@
 
 // Encapsulates some animation, sprite anims are 
 // to be packed into a single texture;
-class cSpriteObject : public cSDLRenderObject
+class cSpriteObject : public cSDL2DRenderObject
 {
 private:
 protected:

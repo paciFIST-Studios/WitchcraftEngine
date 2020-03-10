@@ -1,9 +1,8 @@
-#ifndef SDL_RENDER_OBJECT_H
-#define SDL_RENDER_OBJECT_H
+#ifndef SDL_2D_RENDER_OBJECT_H
+#define SDL_2D_RENDER_OBJECT_H
 
 
 #include <SDL_rect.h>
-#include <SDL_Image>
 
 #include "../render_manager/SDL2_render_resource.h"
 #include "../engine/engine.h"
@@ -12,7 +11,7 @@
 // in a 2d scene. It contains position, scale, & rotation, and these
 // chearacteristics will allow the render manager to perform culling.
 // It is possible many objects reference this instance (object pooling) 
-class cSDLRenderObject : public cEngineObject
+class cSDL2DRenderObject : public cEngineObject
 {
 private:
 protected:
@@ -27,13 +26,13 @@ public:
 	SDL_Color _color_key;
 	bool _color_key_is_enabled;
 
-	cSDLRenderObject();
+	cSDL2DRenderObject();
 
 	void set_resoruce_object(cRenderResource * RenderResource);
 
 	virtual void update();
 };
 
-#endif // !SDL_RENDER_OBJECT_H
+#endif // !SDL_2D_RENDER_OBJECT_H
 
 

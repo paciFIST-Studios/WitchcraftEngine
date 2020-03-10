@@ -17,9 +17,9 @@ private:
 protected:
 public:
 	cRenderResource * _render_resource;
-	SDL_Rect _render_rect;
-	float _pos_x;
-	float _pos_y;
+	SDL_Rect _render_rectangle;
+	float _position_x;
+	float _position_y;
 
 	bool _is_visible;
 
@@ -28,9 +28,9 @@ public:
 
 	cSDL2DRenderObject();
 
-	void set_resoruce_object(cRenderResource * RenderResource);
+	void set_resource_object(cRenderResource * RenderResource);
 
-	virtual void update();
+	virtual void update() {};
 };
 
 #endif // !SDL_2D_RENDER_OBJECT_H

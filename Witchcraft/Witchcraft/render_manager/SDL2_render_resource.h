@@ -5,8 +5,7 @@
 
 #include <SDL.h>
 
-//#include "2D_render_manager.h"
-#include "../resource_manager/resource_manager.h"
+#include "../resource_manager/resource.h"
 
 // Represents a graphics resource, and is maintained 
 // by its resource manager
@@ -15,7 +14,7 @@ class cRenderResource : public cResource
 private:
 protected:
 public:
-	SDL_Surface * _surface;
+	SDL_Surface * _sdl_surface;
 
 	cRenderResource();
 	~cRenderResource();

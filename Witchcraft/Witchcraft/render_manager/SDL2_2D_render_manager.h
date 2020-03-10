@@ -1,26 +1,30 @@
 #ifndef SDL2_2D_RENDER_MANAGER_H
 #define SDL2_2D_RENDER_MANAGER_H
 
+// stdlib
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <math.h>
+#include <string>
+#include <sstream>
+#include <time.h>
+
+// sdl
 #include <SDL.h>
 #include <SDL_surface.h>
 
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <time.h>
-#include <iomanip>
-#include <math.h>
-
+// rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
 
+// witchcraft
 #include "../resource_manager/resource.h"
-
 #include "SDL_2D_render_object.h"
 #include "2D_render_manager.h"
 
 
 // Depends on:
-//	cSpriteObject
+//	c2DSpriteObject
 //	c2DRenderManager
 //	cSDL2DRenderObject
 //	cRenderResource

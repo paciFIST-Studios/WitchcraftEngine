@@ -3,11 +3,14 @@
 
 #include <windows.h>
 
-#include "SDL_render_object.h"
+#include "SDL_2D_render_object.h"
 
 // Encapsulates some animation, sprite anims are 
 // to be packed into a single texture;
-class cSpriteObject : public cSDL2DRenderObject
+// NOTE: Even though 2D-Sprite is kinda a tautology,
+// we're still going to use it, b/c it will be more
+// accessible than just sprite (says I)
+class c2DSpriteObject : public cSDL2DRenderObject
 {
 private:
 protected:
@@ -15,8 +18,8 @@ protected:
 
 public:
 	unsigned int _total_animation_frames;
-	unsigned int _anim_frames_per_row;
-	unsigned int _anim_frames_per_column;
+	unsigned int _animation_frames_per_row;
+	unsigned int _animation_frames_per_column;
 	unsigned int _current_frame;
 	unsigned int _start_frame;
 
@@ -29,10 +32,7 @@ public:
 	void play();
 	void stop();
 	void set_frame_rect(unsigned int FrameNumber);
-	cSpriteObject();
-		
-
-
+	c2DSpriteObject();
 };
 
 #endif

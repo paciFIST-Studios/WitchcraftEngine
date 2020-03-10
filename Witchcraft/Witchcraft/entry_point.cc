@@ -23,13 +23,9 @@ int main(int argc, char** argv[])
 
 	cResourceManager * rm = &cResourceManager();
 
+	const std::string TEST_FILE = "witchcraft.cfg";
 
-	const std::string TEST_FILE = "test_delete_me.del";
-	const std::string TEST_FILE_DATA = "<resources><text>resource data</text></resources>";
-	std::ofstream outfile(TEST_FILE, std::ios::out | std::ios::binary | std::ios::trunc);
-	outfile << TEST_FILE_DATA;
-	outfile.close();
-
+	rm->create_config_files();
 	rm->load_from_xml_file(TEST_FILE);
 	
 	char c;

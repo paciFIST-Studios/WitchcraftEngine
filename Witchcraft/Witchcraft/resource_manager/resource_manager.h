@@ -17,7 +17,11 @@
 
 #include "../utility/utility.h"
 
-#define GLOBAL_SCOPE 0
+#define RESOURCE_GLOBAL_SCOPE 0
+
+
+// TODO: Create memory budgets for different scenes, systems, and data 
+
 
 // resource manager, to manage the resource objects
 class cResourceManager : public cEngineObject
@@ -40,7 +44,7 @@ public:
 	cResource* find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
-	void clear_all();
+	void empty_cache();
 
 	// loads resources from xml
 	bool load_from_xml_file(std::string Filename);
@@ -69,9 +73,11 @@ public:
 				continue;
 			}
 				
+			std::string config_data = "<resources><resource UID=\"0\" type=\"text\" filename=\"witchcraft.cfg\" scenescope=\"0\">Witchcraft</resource></resources>";
+
 			std::ofstream cfg_file;
 			cfg_file.open(*cfg_itr);
-			cfg_file << "\0";
+			cfg_file << config_data;
 			cfg_file.close();
 
 			if (utility::file_exists(*cfg_itr))
@@ -103,12 +109,12 @@ public:
 	//		}
 	//
 	//		cResource * resource = nullptr;
-	//		resource->_scope = GLOBAL_SCOPE;
+	//		resource->_scope = RESOURCE_GLOBAL_SCOPE;
 	//		resource->_type = RESOURCE_TYPE::RESOURCE_TEXT;
 	//		resource->_file_name = *file_itr;
 	//
 	//
-	//		_resource_map[GLOBAL_SCOPE];
+	//		_resource_map[RESOURCE_GLOBAL_SCOPE];
 	//	}
 	//
 	//	return true;

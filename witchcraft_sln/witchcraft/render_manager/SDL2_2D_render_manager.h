@@ -11,8 +11,10 @@
 #include <time.h>
 
 // sdl
+#define SDL_MAIN_HANDLED // NOTE: we MUST define this, in order to use a non-SDL main function (ie: insertion point)
 #include <SDL.h>
 #include <SDL_surface.h>
+#include <SDL_video.h>
 
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
@@ -38,19 +40,30 @@ class cSDL2RenderManager : public c2DRenderManager
 {
 private:
 protected:
-	cSDL2RenderManager();
+
 	static cSDL2RenderManager * _SDL2D_render_manager;
 public:
+	cSDL2RenderManager() {}
+
 	static cSDL2RenderManager * get_SDL2D_render_manager();
-	SDL_Surface * _render_window;
+	SDL_Window * _sdl_window;
+	SDL_Renderer * _sdl_renderer;
+	
+
 	std::stringstream _video_info;
 
 	bool init(
-		  unsigned int Width = 800
-		, unsigned int Height = 600
+		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
+		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
+		, unsigned int Width = 0
+		, unsigned int Height = 0
 		, bool fullScreen = false
 		, char * WindowTitle = 0
 	);
+
+	void shutdown();
+
+	void show_video_info();
 
 	void free();
 	bool update();

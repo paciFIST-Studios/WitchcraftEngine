@@ -12,43 +12,64 @@
 #include "logging\error_log_manager.h"
 
 #include "resource_manager\resource_manager.h"
-
+#include "render_manager/SDL2_2D_render_manager.h"
 
 const std::string ErrorLogFileName = "witchcraft_errors.log";
 
 int main(int argc, char** argv[])
 {
+	std::cout << "\n[Witchcraft]: BEGIN";
+	std::cout << "\n[Witchcraft]::[Unit Tests]: BEGIN\n\n";
+
 	Catch::Session session;
 	int numberOfFailures = session.run();
 
-	//cResourceManager * rm = &cResourceManager();
+	std::cout << "\n[Witchcraft]::[Unit Tests]: END";
 
-	const std::string TEST_FILE = "witchcraft.cfg";
+	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
+	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
 
-	//rm->create_config_files();
-	//rm->load_from_xml_file(TEST_FILE);
-	
+	cSDL2RenderManager * renderManager = &cSDL2RenderManager();
+
+	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init";
+
+	bool init_success = renderManager->init();
+	if (init_success)
+	{
+		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Success";
+	}
+	else
+	{
+		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Fail";
+	}
+
+	SDL_Event window_event;
+	while (true)
+	{
+		if (SDL_PollEvent(&window_event))
+		{
+			if (SDL_QUIT == window_event.type)
+				break;
+
+			if (window_event.type == SDL_KEYDOWN)
+			{
+				if (window_event.key.keysym.sym == SDLK_ESCAPE)
+					break;
+			}
+				
+				
+		}
+	}
+
+	// main loop here?
+
+
+	renderManager->shutdown();
+
+	std::cout << "\n[Witchcraft]: END";
+
+
 	char c;
 	std::cin >> c;
 
-
-	//cErrorLogManager * log = cErrorLogManager::get_error_manager();
-	//log->create_error_log(ErrorLogFileName);
-	//
-	//try
-	//{
-	//	THROW_EXCEPTION(666, "Ellie loves satan");
-	//}
-	//catch (cException & e)
-	//{
-	//	MessageBoxA(NULL, e.what(), "", MB_OK);
-	//	log->_log_buffer << "\n\n*************** ERROR ***************\n";
-	//	log->flush_buffer();
-	//	log->log_exception(e);
-	//	log->_log_buffer << "\n\n*************************************";
-	//	log->flush_buffer();
-	//}
-	//
-	//log->close_file();
-	
 }

@@ -57,6 +57,9 @@
     <ClCompile Include="resource_manager\tests_resource_manager.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\SDL2_2D_render_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logging\assert_with_message.h">

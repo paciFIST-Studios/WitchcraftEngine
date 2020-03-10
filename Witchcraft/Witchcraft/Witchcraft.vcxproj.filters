@@ -86,19 +86,19 @@
     <ClInclude Include="resource_manager\resource.h">
       <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\SDL_render_object.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\SDL2_render_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="render_manager\sprite_object.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\SDL2_render_manager.h">
+    <ClInclude Include="render_manager\2D_render_manager.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\2D_render_manager.h">
+    <ClInclude Include="render_manager\SDL2_2D_render_manager.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\SDL_2D_render_object.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>

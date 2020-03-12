@@ -18,6 +18,8 @@
 
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
+#include "../../lib/rapidxml/rapidxml_utils.hpp"
+#define XML rapidxml
 
 // witchcraft
 #include "../utility/utility.h"
@@ -71,7 +73,7 @@ public:
 	void free();
 	bool update();
 	void toggle_full_screen();
-	cResource * loadResourceFromXML(std::string xml);
+	cResource * load_resource_from_xml(XML::xml_node<> const * xml);
 	void render_all_objects();
 	std::list<cSDL2DRenderObject*> _render_objects;
 };

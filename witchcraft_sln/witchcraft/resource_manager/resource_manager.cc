@@ -96,15 +96,15 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 					if (attributeValue == "graphic")
 					{
-						// resource = _render_manager->loadResourceFromXML(child);
+						// resource = _render_manager->load_resource_from_xml(child);
 					}
 					if (attributeValue == "audio")
 					{
-						// resource = _audio_manager->loadResourceFromXML(child);
+						// resource = _audio_manager->load_resource_from_xml(child);
 					}
 					if (attributeValue == "text")
 					{
-						// resource = _config_manager->loadResourceFromXML(child);
+						// resource = _config_manager->load_resource_from_xml(child);
 					}
 				}
 

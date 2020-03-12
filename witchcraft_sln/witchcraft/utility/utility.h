@@ -38,6 +38,14 @@
 			return (stat(path.c_str(), &buffer) == 0);
 		}
 
+		static long file_size(std::string const & path)
+		{
+			// https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
+			struct stat stat_buf;
+			int rc = stat(path.c_str(), &stat_buf);
+			return rc == 0 ? stat_buf.st_size : -1;
+		}
+
 		//static void write_to_console(std::string message)
 		//{
 		//	std::cout << message;

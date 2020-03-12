@@ -17,7 +17,7 @@ private:
 protected:
 public:
 	cRenderResource * _render_resource;
-	SDL_Rect _render_rectangle;
+	SDL_Rect _render_rect;
 	float _position_x;
 	float _position_y;
 

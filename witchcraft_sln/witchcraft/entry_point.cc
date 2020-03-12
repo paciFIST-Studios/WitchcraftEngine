@@ -5,8 +5,16 @@
 	#include "catch.hpp"
 #endif // RUN_UNIT_TESTS
 
+// NOTE: MUST be defined before initializing SDL, if you're using your own main()
+// we do it before anything else in the program, to make sure it's "not possible"
+// to init SDL before this is defined
+#define SDL_MAIN_HANDLED
+
+
 #include <fstream>
 #include <iostream>
+
+
 
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"

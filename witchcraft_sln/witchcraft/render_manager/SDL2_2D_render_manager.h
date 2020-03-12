@@ -11,7 +11,6 @@
 #include <time.h>
 
 // sdl
-#define SDL_MAIN_HANDLED // NOTE: we MUST define this, in order to use a non-SDL main function (ie: insertion point)
 #include <SDL.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>

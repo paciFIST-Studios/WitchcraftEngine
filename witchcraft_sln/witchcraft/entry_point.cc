@@ -41,7 +41,7 @@ int main(int argc, char** argv[])
 
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
 
-	cSDL2RenderManager * render_manager = &cSDL2RenderManager();
+	cSDL2RenderManager * render_manager = new cSDL2RenderManager();
 
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init";
 

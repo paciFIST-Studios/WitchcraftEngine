@@ -35,6 +35,13 @@ int main(int argc, char** argv[])
 	std::cout << "\n[Witchcraft]::[Unit Tests]: END";
 
 	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
+
+
+	cResourceManager * resource_manager = new cResourceManager();
+	resource_manager->create_config_files();
+
+	resource_manager->load_from_xml_file("buddha.asset");
+
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
 
 	cSDL2RenderManager * render_manager = &cSDL2RenderManager();

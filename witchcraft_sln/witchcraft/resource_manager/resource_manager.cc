@@ -96,15 +96,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 					if (attributeValue == "graphic")
 					{
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-						// Resourece = g_RenderManager->loadResourceFromXML(Element);
-=======
 						resource = _render_manager->load_resource_from_xml(child);
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
-=======
-						// resource = _render_manager->load_resource_from_xml(child);
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
 					}
 					else if (attributeValue == "audio")
 					{

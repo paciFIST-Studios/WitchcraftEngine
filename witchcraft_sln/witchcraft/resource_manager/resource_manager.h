@@ -19,22 +19,12 @@
 
 #include "../utility/utility.h"
 
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-#define GLOBAL_SCOPE 0
-=======
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::list<cResource*>>
-=======
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 #define RESOURCE_GLOBAL_SCOPE 0
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 
 // resource manager, to manage the resource objects
 class cResourceManager : public cEngineObject
@@ -91,15 +81,6 @@ public:
 				std::cout << "\tskipping file: " << *cfg_itr << "\n";
 				continue;
 			}
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-				
-			std::string config_data = "<resources><resource UID=\"0\" type=\"text\" filename=\"witchcraft.cfg\" scenescope=\"0\">Witchcraft</resource></resources>";
-
-			std::ofstream cfg_file;
-			cfg_file.open(*cfg_itr);
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-			cfg_file << "\0";
-=======
 
 			std::string file_path = static_cast<std::string>(*cfg_itr);
 
@@ -116,10 +97,6 @@ public:
 			std::ofstream cfg_file;
 			cfg_file.open(file_path);
 			cfg_file << config_data;
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
-			cfg_file << config_data;
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 			cfg_file.close();
 
 			if (utility::file_exists(file_path))
@@ -130,48 +107,6 @@ public:
 		
 		return true;
 	}
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-
-	//bool parse_config_files()
-	//{
-	//	// due to how rapidxml works, we start by loading all of this stuff into memory
-	//
-	//	std::list<char const *> filenames = {
-	//		"config.xml"
-	//	};
-	//
-	//	for (auto file_itr = filenames.begin(); file_itr != filenames.end(); file_itr++)
-	//	{
-	//		try
-	//		{
-	//			XML::file<> config_file(*file_itr);
-	//		}
-	//		catch(cException ex)
-	//		{
-	//			return false;
-	//		}
-	//
-	//		cResource * resource = nullptr;
-	//		resource->_scope = RESOURCE_GLOBAL_SCOPE;
-	//		resource->_type = RESOURCE_TYPE::RESOURCE_TEXT;
-	//		resource->_file_name = *file_itr;
-	//
-	//
-	//		_resource_map[RESOURCE_GLOBAL_SCOPE];
-	//	}
-	//
-	//	return true;
-	//}
-	//
-	inline cResourceManager() 
-	{
-		_current_scope = _resource_count = 0;
-		
-		//create_config_files();
-	}
-
-=======
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 };
 
 #endif // RESOURCE_MANAGER_H

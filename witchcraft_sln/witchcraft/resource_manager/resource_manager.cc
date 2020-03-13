@@ -96,13 +96,21 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 					if (attributeValue == "graphic")
 					{
+<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
+<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
+						// Resourece = g_RenderManager->loadResourceFromXML(Element);
+=======
+						resource = _render_manager->load_resource_from_xml(child);
+>>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
+=======
 						// resource = _render_manager->load_resource_from_xml(child);
+>>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
 					}
-					if (attributeValue == "audio")
+					else if (attributeValue == "audio")
 					{
 						// resource = _audio_manager->load_resource_from_xml(child);
 					}
-					if (attributeValue == "text")
+					else if (attributeValue == "text")
 					{
 						// resource = _config_manager->load_resource_from_xml(child);
 					}
@@ -115,11 +123,11 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					{
 						resource->_resource_id = atoi(attributeValue.c_str());
 					}
-					if (attributeName == "filename")
+					else if (attributeName == "filename")
 					{
 						resource->_file_name = attributeValue;
 					}
-					if (attributeName == "scenescope")
+					else if (attributeName == "scenescope")
 					{
 						resource->_scope = atoi(attributeValue.c_str());
 					}
@@ -127,8 +135,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 			}
 
 			if (resource)
-			{
-				// resource added here
+			{	
 				_resource_map[resource->_scope].push_back(resource);
 				_resource_count++;
 			}
@@ -175,3 +182,7 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 	}
 }
 
+cResourceManager::cResourceManager() 
+	: _resource_count(0)
+	, _current_scope(RESOURCE_GLOBAL_SCOPE)
+{}

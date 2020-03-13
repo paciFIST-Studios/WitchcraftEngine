@@ -129,6 +129,7 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="render_manager\SDL2_2D_render_manager.cpp" />
+    <ClCompile Include="render_manager\SDL_2D_render_object.cpp" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\tests_resource_manager.cc" />
     <ClCompile Include="test.cc" />

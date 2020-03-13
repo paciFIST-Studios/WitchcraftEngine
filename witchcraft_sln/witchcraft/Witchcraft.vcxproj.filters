@@ -60,6 +60,9 @@
     <ClCompile Include="render_manager\SDL2_2D_render_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\SDL_2D_render_object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logging\assert_with_message.h">

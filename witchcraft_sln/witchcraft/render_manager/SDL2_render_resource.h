@@ -23,10 +23,18 @@ protected:
 
 public:
 	SDL_Surface * _sdl_surface;
+<<<<<<< Updated upstream
 
 	cRenderResource();
 	~cRenderResource();
 	void load();
+=======
+	SDL_Texture * _sdl_texture;
+
+	cRenderResource();
+	~cRenderResource();
+	void load(SDL_Renderer * renderer);
+>>>>>>> Stashed changes
 	void unload();
 
 	bool is_loaded() { return _is_loaded; }

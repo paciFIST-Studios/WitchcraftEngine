@@ -48,6 +48,7 @@ public:
 	cSDL2RenderManager() {}
 
 	static cSDL2RenderManager * get_SDL2D_render_manager();
+<<<<<<< Updated upstream
 	SDL_Window * _sdl_window;
 	SDL_Renderer * _sdl_renderer;
 
@@ -56,6 +57,18 @@ public:
 
 	std::stringstream _video_info;
 
+=======
+
+	// the program window
+	SDL_Window * _window;
+
+	// the render SDL uses
+	SDL_Renderer * _renderer;
+
+	// the information surface, which actually displays inside the window
+	SDL_Surface * _rendering_surface;
+	
+>>>>>>> Stashed changes
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED

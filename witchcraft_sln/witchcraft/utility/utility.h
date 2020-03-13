@@ -3,7 +3,7 @@
 
 	#include <Windows.h>
 
-	#include <iostream>
+	#include <fstream>
 	#include <sys/stat.h>
 	#include <string>
 	#include <vector>
@@ -38,6 +38,14 @@
 			return (stat(path.c_str(), &buffer) == 0);
 		}
 
+		static long file_size(std::string const & path)
+		{
+			// https://stackoverflow.com/questions/5840148/how-can-i-get-a-files-size-in-c
+			struct stat stat_buf;
+			int rc = stat(path.c_str(), &stat_buf);
+			return rc == 0 ? stat_buf.st_size : -1;
+		}
+
 		//static void write_to_console(std::string message)
 		//{
 		//	std::cout << message;
@@ -50,6 +58,19 @@
 		//		OutputDebugString(message.c_str());
 		//	#endif
 		//}
+
+		
+		template<typename t>
+		static t clamp_value_to_uint8(t val)
+		{
+			if (val < 0)
+				return 0;
+			else if (val > 255)
+				return 255;
+			else
+				return val;
+		}
+
 	}
 
 #endif

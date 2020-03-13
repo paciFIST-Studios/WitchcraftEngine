@@ -19,16 +19,22 @@
 
 #include "../utility/utility.h"
 
+<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
 <<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
 #define GLOBAL_SCOPE 0
 =======
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::list<cResource*>>
+=======
+>>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 #define RESOURCE_GLOBAL_SCOPE 0
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
+<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
 >>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
+=======
+>>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 
 // resource manager, to manage the resource objects
 class cResourceManager : public cEngineObject
@@ -55,7 +61,7 @@ public:
 	cResource* find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
-	void clear_all();
+	void empty_cache();
 
 	// loads resources from xml
 	bool load_from_xml_file(std::string Filename);
@@ -87,8 +93,11 @@ public:
 			}
 <<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
 				
+			std::string config_data = "<resources><resource UID=\"0\" type=\"text\" filename=\"witchcraft.cfg\" scenescope=\"0\">Witchcraft</resource></resources>";
+
 			std::ofstream cfg_file;
 			cfg_file.open(*cfg_itr);
+<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
 			cfg_file << "\0";
 =======
 
@@ -108,6 +117,9 @@ public:
 			cfg_file.open(file_path);
 			cfg_file << config_data;
 >>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
+=======
+			cfg_file << config_data;
+>>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
 			cfg_file.close();
 
 			if (utility::file_exists(file_path))
@@ -140,12 +152,12 @@ public:
 	//		}
 	//
 	//		cResource * resource = nullptr;
-	//		resource->_scope = GLOBAL_SCOPE;
+	//		resource->_scope = RESOURCE_GLOBAL_SCOPE;
 	//		resource->_type = RESOURCE_TYPE::RESOURCE_TEXT;
 	//		resource->_file_name = *file_itr;
 	//
 	//
-	//		_resource_map[GLOBAL_SCOPE];
+	//		_resource_map[RESOURCE_GLOBAL_SCOPE];
 	//	}
 	//
 	//	return true;

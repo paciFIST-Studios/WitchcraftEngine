@@ -16,3 +16,5 @@ Witchcraft/lib/rapidxml/rapidxml-1.13/*
 *.del
 *.db
 *.opendb
+<<<<<<< HEAD
+>>>>>>> render_manager_implementation

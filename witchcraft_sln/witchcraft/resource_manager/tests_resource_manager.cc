@@ -18,14 +18,14 @@
 			rm = &cResourceManager();
 
 			REQUIRE(rm->get_resource_count() == 0);
-			REQUIRE(rm->get_current_scope() == GLOBAL_SCOPE);
+			REQUIRE(rm->get_current_scope() == RESOURCE_GLOBAL_SCOPE);
 			
 			// find by id works before assets are added
 			REQUIRE_NOTHROW(rm->find_resource_by_id(0));
 			REQUIRE(rm->find_resource_by_id(0) == nullptr);
 
 			// clear all works before assets are added
-			REQUIRE_NOTHROW(rm->clear_all());
+			REQUIRE_NOTHROW(rm->empty_cache());
 
 			// load_from_xml_file works if a non-file path is specified
 			REQUIRE_NOTHROW(rm->load_from_xml_file("fake"));

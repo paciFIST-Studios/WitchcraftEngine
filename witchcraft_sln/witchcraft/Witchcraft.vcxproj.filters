@@ -22,11 +22,11 @@
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{266fa35c-4ef9-47cc-b0a0-ecfa70dcfdab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="lib">
-      <UniqueIdentifier>{10cef554-8bc0-43de-bd40-b0972c26f247}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource_manager">
       <UniqueIdentifier>{c9ea82f3-fc55-41c0-b7c7-0be12c38f249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render_manager">
+      <UniqueIdentifier>{d7cd527a-f0bc-4e45-97df-7aa977abf4ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +57,9 @@
     <ClCompile Include="resource_manager\tests_resource_manager.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\SDL2_2D_render_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="logging\assert_with_message.h">
@@ -85,6 +88,21 @@
     </ClInclude>
     <ClInclude Include="resource_manager\resource.h">
       <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\SDL2_render_resource.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\2D_render_manager.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\SDL2_2D_render_manager.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\SDL_2D_render_object.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\2D_sprite_object.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

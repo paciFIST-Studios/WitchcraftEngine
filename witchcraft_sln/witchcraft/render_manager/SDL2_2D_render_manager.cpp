@@ -13,12 +13,9 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 		return false;
 	}
 	
-<<<<<<< Updated upstream
-=======
 	// Flags are set with bitmasking
 	// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
 	// sdl chooses the renderer, use the 
->>>>>>> Stashed changes
 	int flags = 0;
 
 	if (fullScreen)
@@ -34,33 +31,19 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 		  Width
 		, Height
 		, static_cast<SDL_WindowFlags>(flags)
-<<<<<<< Updated upstream
-		, &_sdl_window
-		, &_sdl_renderer
-	);
-
-	if (_sdl_window == NULL)
-=======
 		, &_window
 		, &_renderer
 	);
 
 	if (_window == NULL)
->>>>>>> Stashed changes
 	{
 		std::cout << "\nSDL Window Creation FAILURE";
 		return false;
 	}
 
-<<<<<<< Updated upstream
-	SDL_SetWindowTitle(_sdl_window, WindowTitle);
-
-	_sdl_screen_surface = SDL_GetWindowSurface(_sdl_window);
-=======
 	SDL_SetWindowTitle(_window, WindowTitle);
 
 	_rendering_surface = SDL_GetWindowSurface(_window);
->>>>>>> Stashed changes
 
 	std::cout << "\nSDL Window Creation Success";
 	return true;
@@ -69,13 +52,10 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 void cSDL2RenderManager::shutdown()
 {
 	std::cout << "\nSDL Shutdown begin";
-<<<<<<< Updated upstream
-	SDL_DestroyWindow(_sdl_window);
-=======
+	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
->>>>>>> Stashed changes
 	SDL_Quit();
 	std::cout << "\nSDL Shutdown complete";
 }
@@ -86,10 +66,6 @@ void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigne
 	g = utility::clamp_value_to_uint8(g);
 	b = utility::clamp_value_to_uint8(b);
 
-<<<<<<< Updated upstream
-	SDL_FillRect(_sdl_screen_surface, rect, SDL_MapRGB(_sdl_screen_surface->format, r, g, b));
-	SDL_UpdateWindowSurface(_sdl_window);
-=======
 	SDL_FillRect(_rendering_surface, rect, SDL_MapRGB(_rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(_window);
 }
@@ -203,5 +179,4 @@ void cSDL2RenderManager::render_all_objects()
 		);
 	}
 
->>>>>>> Stashed changes
 }

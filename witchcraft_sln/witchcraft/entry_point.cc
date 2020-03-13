@@ -14,6 +14,11 @@
 #include <fstream>
 #include <iostream>
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> render_manager_implementation
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
@@ -34,11 +39,19 @@ int main(int argc, char** argv[])
 
 	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
 
+<<<<<<< HEAD
 	cResourceManager * resource_manager = new cResourceManager();
 	resource_manager->create_config_files();
 	
 	resource_manager->load_from_xml_file("buddha.asset");
 
+=======
+
+	cResourceManager * resource_manager = new cResourceManager();
+	resource_manager->create_config_files();
+
+	resource_manager->load_from_xml_file("buddha.asset");
+>>>>>>> render_manager_implementation
 
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
 
@@ -68,8 +81,11 @@ int main(int argc, char** argv[])
 		return EXIT_FAILURE;
 	}
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> render_manager_implementation
 	SDL_Event window_event;
 	while (true)
 	{
@@ -77,12 +93,17 @@ int main(int argc, char** argv[])
 		{
 			if (SDL_QUIT == window_event.type)
 				break;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> render_manager_implementation
 			if (window_event.type == SDL_KEYDOWN)
 			{
 				if (window_event.key.keysym.sym == SDLK_ESCAPE)
 					break;
 			}
+<<<<<<< HEAD
 
 			// check moar events
 		}
@@ -95,6 +116,14 @@ int main(int argc, char** argv[])
 		// do sound update
 	}
 
+=======
+				
+				
+		}
+	}
+
+
+>>>>>>> render_manager_implementation
 	render_manager->shutdown();
 
 	std::cout << "\n[Witchcraft]: END";

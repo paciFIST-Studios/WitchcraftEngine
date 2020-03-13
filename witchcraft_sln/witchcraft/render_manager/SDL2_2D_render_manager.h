@@ -44,6 +44,9 @@ private:
 protected:
 
 	static cSDL2RenderManager * _SDL2D_render_manager;
+
+	std::list<cSDL2DRenderObject*> _render_objects;
+
 public:
 	cSDL2RenderManager() {}
 
@@ -76,7 +79,7 @@ public:
 	void toggle_full_screen();
 	cResource * load_resource_from_xml(XML::xml_node<> const * xml);
 	void render_all_objects();
-	std::list<cSDL2DRenderObject*> _render_objects;
+
 };
 
 

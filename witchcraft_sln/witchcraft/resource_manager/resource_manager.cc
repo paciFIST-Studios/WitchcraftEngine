@@ -83,7 +83,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 				// check resourece type
 				if (attributeName == "type")
 				{
-					// We will allow resource managers to implement their own derived
+					// We will allow/force resource managers to implement their own derived
 					// versions of cResource.  Those managers will create the resource,
 					// and then give us a unique_ptr<cResource> pointer back, and this 
 					// scope will need to add the cResource pointer to the resource list.

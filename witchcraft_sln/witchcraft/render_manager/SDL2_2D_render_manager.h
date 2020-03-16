@@ -28,6 +28,8 @@
 #include "2D_render_manager.h"
 
 
+#define RENDER_OBJECT_VECTOR_TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
+
 // Depends on:
 //	c2DSpriteObject
 //	c2DRenderManager
@@ -44,9 +46,9 @@ class cSDL2RenderManager : public c2DRenderManager
 private:
 protected:
 
-	static cSDL2RenderManager * _SDL2D_render_manager;
+	static std::unique_ptr<cSDL2RenderManager> _SDL2D_render_manager;
 
-	std::list<cSDL2DRenderObject*> _render_objects;
+	RENDER_OBJECT_VECTOR_TYPE _render_objects;
 
 public:
 	cSDL2RenderManager() {}

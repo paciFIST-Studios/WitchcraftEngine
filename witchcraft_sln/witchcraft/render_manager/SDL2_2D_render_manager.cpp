@@ -80,8 +80,6 @@ bool cSDL2RenderManager::update()
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
-		//std::cout << "\nEvent: " << event.type;
-
 		// check messages
 		switch (event.type)
 		{
@@ -103,7 +101,6 @@ bool cSDL2RenderManager::update()
 	// clear screen
 	SDL_RenderClear(_renderer);
 	//std::cout << "\nRenderer Cleared!";
-
 
 	// paint new objects
 	render_all_objects();
@@ -158,27 +155,24 @@ void cSDL2RenderManager::render_all_objects()
 		return;
 	}
 
-	std::list<cSDL2DRenderObject*>::iterator list_iter;
-
-	// loop all objects and blit them
-	for (list_iter = _render_objects.begin(); list_iter != _render_objects.end(); list_iter++)
+	for (auto&& object : _render_objects)
 	{
-		if ((*list_iter)->_is_visible == false)
+		if (object->_is_visible == false)
 			continue;
 
 		std::ostringstream os;
-		os << "\n\tobject id: " << (*list_iter)->_id;
+		os << "\n\tobject id: " << object->_id;
 		ULOG(os.str());
 
-		(*list_iter)->update();
+		object->update();
 		SDL_Rect position;
-		position.x = int((*list_iter)->_position_x);
-		position.y = int((*list_iter)->_position_y);
+		position.x = int(object->_position_x);
+		position.y = int(object->_position_y);
 
 		SDL_RenderCopy(
 			  _renderer
-			, (*list_iter)->_render_resource->_sdl_texture
-			, &(*list_iter)->_render_rect
+			, object->_render_resource->_sdl_texture
+			, &object->_render_rect
 			, &position
 		);
 	}

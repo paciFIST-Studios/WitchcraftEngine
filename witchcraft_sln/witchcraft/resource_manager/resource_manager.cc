@@ -47,6 +47,8 @@ void cResourceManager::empty_cache()
 	}
 	
 	_resource_map.clear();
+	_resource_count = 0;
+	_current_scope = RESOURCE_GLOBAL_SCOPE;
 }
 
 
@@ -102,6 +104,11 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 			if (resource)
 			{	
+				// do not add duplicates of the same file
+				if (find_resource_by_id(resource->_resource_id))
+					// TODO: figure out duplicates w/o completely loading the file
+					return false;
+
 				// we must use std::move to change ownership of the unique_ptr
 				_resource_map[resource->_scope].push_back(std::move(resource));
 				_resource_count++;
@@ -116,15 +123,16 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 
 // WARN: Must be called for each scene change
-void cResourceManager::set_current_scope(unsigned int Scope)
+bool cResourceManager::set_current_scope(unsigned int Scope)
 {
+	// You cannot change scope, until a global resource is loaded
 	if (_resource_count == 0)
-		return;
+		return false;
 	
 	// unload old scope, but not global
 	if (_current_scope != 0)
 	{
-		for (auto&& element_unique_ptr : _resource_map[_current_scope])
+		for (auto& element_unique_ptr : _resource_map[_current_scope])
 		{
 			auto element = element_unique_ptr.get();
 			element->unload();
@@ -138,6 +146,8 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 		auto element = element_unique_ptr.get();
 		element->load();
 	}
+
+	return true;
 }
 
 

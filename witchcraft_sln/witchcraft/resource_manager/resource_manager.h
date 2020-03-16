@@ -57,7 +57,7 @@ public:
 	bool load_from_xml_file(std::string Filename);
 
 	// sets the current scope.  Depends on current scene
-	void set_current_scope(unsigned int Scope);
+	bool set_current_scope(unsigned int Scope);
 
 	// Simple getters
 	inline int get_current_scope() const { return _current_scope; }
@@ -67,7 +67,7 @@ public:
 
 	bool create_config_files()
 	{
-		ULOG("\ncreate_config_files()\n");
+		//ULOG("\ncreate_config_files()\n");
 
 		std::list<std::string> config_files = {
  			  std::string("witchcraft.cfg")
@@ -82,9 +82,9 @@ public:
 		{
 			if (utility::file_exists(*cfg_itr))
 			{
-				std::ostringstream os;
-				os << "\tskipping file: " << *cfg_itr << "\n";
-				ULOG(os.str());
+				//std::ostringstream os;
+				//os << "\tskipping file: " << *cfg_itr << "\n";
+				//ULOG(os.str());
 				continue;
 			}
 
@@ -93,23 +93,15 @@ public:
 			std::string config_data;
 			if (file_path == "asset/birds.asset")
 			{
-				config_data = "<resources><resource UID=\"1\" type=\"graphic\" filename=\"asset/birds.png\" scenescope=\"0\">Winter Birds</resource></resources>";
+				config_data = "<resources><resource UID=\"1\" type=\"graphic\" filename=\"asset/birds.png\" scenescope=\"1\">Winter Birds</resource></resources>";
 			}
 			else if (file_path == "asset/buddha.asset")
 			{
 				config_data = "<resources><resource UID=\"2\" type=\"graphic\" filename=\"asset/buddha.png\" scenescope=\"0\">Buddha</resource></resources>";
 			}
-			else if (file_path == "asset/neko.asset")
-			{
-				config_data = "<resources><resource UID=\"3\" type=\"graphic\" filename=\"asset/neko.png\" scenescope=\"0\">Neko</resource></resources>";
-			}
 			else if (file_path == "asset/person.asset")
 			{
-				config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"0\">Person</resource></resources>";
-			}
-			else if (file_path == "asset/whirlwind.asset")
-			{
-				config_data = "<resources><resource UID=\"5\" type=\"graphic\" filename=\"asset/whirlwind.png\" scenescope=\"0\">Whirlwind</resource></resources>";
+				config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"2\">Person</resource></resources>";
 			}
 			else if (file_path == "witchcraft.cfg")
 			{
@@ -123,9 +115,9 @@ public:
 
 			if (utility::file_exists(file_path))
 			{
-				std::ostringstream os;				
-				os << "\tfile created: " << file_path << "\n";
-				ULOG(os.str());
+				//std::ostringstream os;				
+				//os << "\tfile created: " << file_path << "\n";
+				//ULOG(os.str());
 			}
 		}
 		

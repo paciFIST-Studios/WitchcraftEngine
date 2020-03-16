@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <math.h>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <time.h>
@@ -77,7 +78,7 @@ public:
 	void free();
 	bool update();
 	void toggle_full_screen();
-	cResource * load_resource_from_xml(XML::xml_node<> const * xml);
+	std::unique_ptr<cResource> load_resource_from_xml(XML::xml_node<> const & xml);
 	void render_all_objects();
 
 };

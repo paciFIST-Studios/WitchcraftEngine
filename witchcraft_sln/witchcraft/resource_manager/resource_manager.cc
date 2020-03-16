@@ -18,29 +18,8 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 		}
 	}
 
+	// we went through all existing resource without finding a match
 	return nullptr;
-
-	//// search scopes for correct scope
-	//std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
-	//for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
-	//{
-	//	// until we run out
-	//	if (!(*element_itr).second.empty())
-	//	{
-	//
-	//		// search elements(resources) of this scope
-	//		std::list<cResource*>::iterator list_itr;
-	//		for (list_itr = (*element_itr).second.begin(); list_itr != (*element_itr).second.end(); list_itr++)
-	//		{
-	//			// check for id match
-	//			if ((*list_itr)->_resource_id == UID)
-	//				return (*list_itr);
-	//		}
-	//	}
-	//}
-	//
-	//// we went through all existing resource without finding a match
-	//return nullptr;
 }
 
 void cResourceManager::empty_cache()
@@ -48,11 +27,15 @@ void cResourceManager::empty_cache()
 	if (_resource_count == 0)
 		return;
 
+	// look through scene ids
 	for (auto resource_kvp : _resource_map)
 	{
+		// and the resource lists associated with each id
 		for (auto element : resource_kvp.second)
 		{
 			element->unload();
+
+			// TODO: replace with something that knows about std::unique_ptr<>
 			SAFE_DELETE(element);
 		}
 
@@ -60,29 +43,6 @@ void cResourceManager::empty_cache()
 	}
 
 	_resource_map.clear();
-
-	//std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
-	//
-	//// look through scopes
-	//for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
-	//{
-	//	if (!(*element_itr).second.empty())
-	//	{
-	//		std::list<cResource*>::iterator list_itr;
-	//
-	//		// search the resources for this specific scope
-	//		for (list_itr = (*element_itr).second.begin(); list_itr != (*element_itr).second.end(); list_itr++)
-	//		{
-	//			// delete resrouce object
-	//			(*list_itr)->unload();
-	//			SAFE_DELETE(*list_itr);
-	//		}
-	//
-	//		(*element_itr).second.clear();
-	//	}
-	//}
-	//
-	//_resource_map.clear();
 }
 
 
@@ -182,17 +142,6 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 		{
 			resource_element->unload();
 		}
-
-		//std::list<cResource*>::iterator list_itr;
-		//for (list_itr = _resource_map[_current_scope].begin();
-		//	list_itr != _resource_map[_current_scope].end();
-		//	list_itr++)
-		//{
-		//	// note: also calling delete here would kill our cResource obj
-		//	// and that would delete the metadata, which we would use to
-		//	// reload this asset, if the scene becomes active again.
-		//	(*list_itr)->unload();
-		//}
 	}
 
 	_current_scope = Scope;
@@ -201,15 +150,6 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 	{
 		resource_element->load();
 	}
-
-	//// load all resources for new scope
-	//std::list<cResource*>::iterator list_itr;
-	//for (list_itr = _resource_map[_current_scope].begin();
-	//	list_itr != _resource_map[_current_scope].end();
-	//	list_itr++)
-	//{
-	//	(*list_itr)->load();
-	//}
 }
 
 cResourceManager::cResourceManager() 

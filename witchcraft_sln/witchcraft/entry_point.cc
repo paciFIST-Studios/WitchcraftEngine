@@ -37,7 +37,12 @@ int main(int argc, char** argv[])
 
 	cResourceManager * resource_manager = new cResourceManager();
 	resource_manager->create_config_files();
-	resource_manager->load_from_xml_file("buddha.asset");
+	resource_manager->load_from_xml_file("asset/birds.asset");
+	resource_manager->load_from_xml_file("asset/buddha.asset");
+	resource_manager->load_from_xml_file("asset/neko.asset");
+	resource_manager->load_from_xml_file("asset/person.asset");
+	resource_manager->load_from_xml_file("asset/whirlwind.asset");
+
 
 	ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create");
 

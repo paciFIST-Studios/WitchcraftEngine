@@ -19,7 +19,7 @@
 
 #include "../utility/utility.h"
 
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource*>>>
+#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
 #define RESOURCE_GLOBAL_SCOPE 0
 
 
@@ -67,11 +67,15 @@ public:
 
 	bool create_config_files()
 	{
-		ULOG("create_config_files()\n");
+		ULOG("\ncreate_config_files()\n");
 
 		std::list<std::string> config_files = {
-			std::string("witchcraft.cfg")
-			, std::string("buddha.asset")
+ 			  std::string("witchcraft.cfg")
+			, std::string("asset/birds.asset")
+			, std::string("asset/buddha.asset")
+			, std::string("asset/neko.asset")
+			, std::string("asset/person.asset")
+			, std::string("asset/whirlwind.asset")
 		};
 		
 		for (auto cfg_itr = config_files.begin(); cfg_itr != config_files.end(); cfg_itr++)
@@ -87,9 +91,25 @@ public:
 			std::string file_path = static_cast<std::string>(*cfg_itr);
 
 			std::string config_data;
-			if (file_path == "buddha.asset")
+			if (file_path == "asset/birds.asset")
 			{
-				config_data = "<resources><resource UID=\"666\" type=\"graphic\" filename=\"buddha.png\" scenescope=\"0\">Buddha</resource></resources>";
+				config_data = "<resources><resource UID=\"1\" type=\"graphic\" filename=\"asset/birds.png\" scenescope=\"0\">Winter Birds</resource></resources>";
+			}
+			else if (file_path == "asset/buddha.asset")
+			{
+				config_data = "<resources><resource UID=\"2\" type=\"graphic\" filename=\"asset/buddha.png\" scenescope=\"0\">Buddha</resource></resources>";
+			}
+			else if (file_path == "asset/neko.asset")
+			{
+				config_data = "<resources><resource UID=\"3\" type=\"graphic\" filename=\"asset/neko.png\" scenescope=\"0\">Neko</resource></resources>";
+			}
+			else if (file_path == "asset/person.asset")
+			{
+				config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"0\">Person</resource></resources>";
+			}
+			else if (file_path == "asset/whirlwind.asset")
+			{
+				config_data = "<resources><resource UID=\"5\" type=\"graphic\" filename=\"asset/whirlwind.png\" scenescope=\"0\">Whirlwind</resource></resources>";
 			}
 			else if (file_path == "witchcraft.cfg")
 			{

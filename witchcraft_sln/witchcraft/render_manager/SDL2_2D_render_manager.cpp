@@ -116,15 +116,12 @@ bool cSDL2RenderManager::update()
 	return true;
 }
 
-cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * xml)
-{
-	if (xml == nullptr)
-		return nullptr;
-	
-	cResource * resource = new cResource();
+std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
+{	
+	auto resource = std::make_unique<cResource>();
 	resource->_type = RESOURCE_GRAPHIC;
 
-	for (XML::xml_attribute<> * element_attribute = xml->first_attribute();
+	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
 		element_attribute = element_attribute->next_attribute()
 	)
@@ -134,6 +131,8 @@ cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * x
 
 		if (attribute_name == "UID")
 		{
+			// atoi stands for ASCII-to-integer, and is used for
+			// parsing a string to an int
 			resource->_resource_id = atoi(attribute_value.c_str());
 		}
 		if (attribute_name == "filename")
@@ -146,7 +145,7 @@ cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * x
 		}
 	}
 
-	return resource;
+	return std::move(resource);
 }
 
 void cSDL2RenderManager::render_all_objects()

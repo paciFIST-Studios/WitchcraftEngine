@@ -12,7 +12,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 		// iterate through the vector associated w/ each id
 		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
-			auto element = *(element_unique_ptr.get());
+			auto element = element_unique_ptr.get();
 			if (element->_resource_id == UID)
 			{
 				return element;
@@ -23,6 +23,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 	// we went through all existing resource without finding a match
 	return nullptr;
 }
+
 
 void cResourceManager::empty_cache()
 {
@@ -35,7 +36,7 @@ void cResourceManager::empty_cache()
 		// and the resource lists associated with each id
 		for (auto&& element_unique_ptr : resource_kvp.second)
 		{
-			auto element = *(element_unique_ptr.get());
+			auto element = element_unique_ptr.get();
 			element->unload();
 
 			// reset destroys the held ptr, release changes ownership
@@ -47,7 +48,6 @@ void cResourceManager::empty_cache()
 	
 	_resource_map.clear();
 }
-
 
 
 bool cResourceManager::load_from_xml_file(std::string Filename)
@@ -67,7 +67,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 		// enumerate objects
 		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
 		{
-			cResource * resource = nullptr;
+			std::unique_ptr<cResource> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
 			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); 
@@ -83,12 +83,11 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 				{
 					// We will allow resource managers to implement their own derived
 					// versions of cResource.  Those managers will create the resource,
-					// and then give us a cResource pointer back, and this scope will need
-					// to add the cResource pointer to the resource list.
-
+					// and then give us a unique_ptr<cResource> pointer back, and this 
+					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						resource = _render_manager->load_resource_from_xml(child);
+						resource = _render_manager->load_resource_from_xml(*child);
 					}
 					else if (attributeValue == "audio")
 					{
@@ -99,28 +98,12 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 						// resource = _config_manager->load_resource_from_xml(child);
 					}
 				}
-
-				// skipped, unless loading completes in a prior step
-				if (resource)
-				{
-					if (attributeName == "UID")
-					{
-						resource->_resource_id = atoi(attributeValue.c_str());
-					}
-					else if (attributeName == "filename")
-					{
-						resource->_file_name = attributeValue;
-					}
-					else if (attributeName == "scenescope")
-					{
-						resource->_scope = atoi(attributeValue.c_str());
-					}
-				}
 			}
 
 			if (resource)
 			{	
-				_resource_map[resource->_scope].push_back(std::make_unique<cResource*>(resource));
+				// we must use std::move to change ownership of the unique_ptr
+				_resource_map[resource->_scope].push_back(std::move(resource));
 				_resource_count++;
 			}
 		}
@@ -143,7 +126,7 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 	{
 		for (auto&& element_unique_ptr : _resource_map[_current_scope])
 		{
-			auto element = *element_unique_ptr.get();
+			auto element = element_unique_ptr.get();
 			element->unload();
 		}
 	}
@@ -152,10 +135,11 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 	
 	for (auto&& element_unique_ptr : _resource_map[_current_scope])
 	{
-		auto element = *element_unique_ptr.get();
+		auto element = element_unique_ptr.get();
 		element->load();
 	}
 }
+
 
 cResourceManager::cResourceManager() 
 	: _resource_count(0)

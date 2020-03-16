@@ -1,23 +1,25 @@
 #include "resource_manager.h"
 
+// returns a NON-OWNING ptr
 cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 {
 	if (_resource_count == 0)
 		return nullptr;
-
+	
 	// iterate through all of the scene ids
-	for (auto resource_kvp : _resource_map)
+	for (auto&& resource_kvp : _resource_map)
 	{
-		// iterate through the list associated w/ each id
-		for (auto element : resource_kvp.second)
+		// iterate through the vector associated w/ each id
+		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
+			auto element = *(element_unique_ptr.get());
 			if (element->_resource_id == UID)
 			{
 				return element;
 			}
 		}
 	}
-
+	
 	// we went through all existing resource without finding a match
 	return nullptr;
 }
@@ -26,22 +28,23 @@ void cResourceManager::empty_cache()
 {
 	if (_resource_count == 0)
 		return;
-
+	
 	// look through scene ids
-	for (auto resource_kvp : _resource_map)
+	for (auto&& resource_kvp : _resource_map)
 	{
 		// and the resource lists associated with each id
-		for (auto element : resource_kvp.second)
+		for (auto&& element_unique_ptr : resource_kvp.second)
 		{
+			auto element = *(element_unique_ptr.get());
 			element->unload();
 
-			// TODO: replace with something that knows about std::unique_ptr<>
-			SAFE_DELETE(element);
+			// reset destroys the held ptr, release changes ownership
+			element_unique_ptr.reset();
 		}
-
+	
 		resource_kvp.second.clear();
 	}
-
+	
 	_resource_map.clear();
 }
 
@@ -117,7 +120,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 			if (resource)
 			{	
-				_resource_map[resource->_scope].push_back(resource);
+				_resource_map[resource->_scope].push_back(std::make_unique<cResource*>(resource));
 				_resource_count++;
 			}
 		}
@@ -134,21 +137,23 @@ void cResourceManager::set_current_scope(unsigned int Scope)
 {
 	if (_resource_count == 0)
 		return;
-
+	
 	// unload old scope, but not global
 	if (_current_scope != 0)
 	{
-		for (auto resource_element : _resource_map[_current_scope])
+		for (auto&& element_unique_ptr : _resource_map[_current_scope])
 		{
-			resource_element->unload();
+			auto element = *element_unique_ptr.get();
+			element->unload();
 		}
 	}
-
+	
 	_current_scope = Scope;
-
-	for (auto resource_element : _resource_map[_current_scope])
+	
+	for (auto&& element_unique_ptr : _resource_map[_current_scope])
 	{
-		resource_element->load();
+		auto element = *element_unique_ptr.get();
+		element->load();
 	}
 }
 

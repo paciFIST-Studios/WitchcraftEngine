@@ -80,9 +80,6 @@
     <ClInclude Include="utility\utility.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="utility\MACROS.h">
-      <Filter>Source Files\utility</Filter>
-    </ClInclude>
     <ClInclude Include="engine\exception.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>

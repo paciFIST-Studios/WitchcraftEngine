@@ -149,7 +149,6 @@
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="unit_testing_switch.h" />
-    <ClInclude Include="utility\MACROS.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,11 +3,14 @@
 
 bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
-	std::cout << "\nSDL Initialization start";
+	ULOG("\nSDL Initialization start");
 	// SDL_Init() returns 0 on success, and a negative number on error
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		std::cout << "\nSDL initialization failure\n" << "Error: " << SDL_GetError();
+		std::ostringstream os;
+		os << "\nSDL initialization failure\n" << "Error: " << SDL_GetError() << std::endl;
+		ULOG(os.str());
+
 		// log error: could not initialize SDL Video
 		// SDL_QUIT()
 		return false;
@@ -25,7 +28,7 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	flags = flags | SDL_WINDOW_SHOWN;
 
-	std::cout << "\nSDL Window Creation start";
+	ULOG("\nSDL Window Creation start");
 
 	SDL_CreateWindowAndRenderer(
 		  Width
@@ -37,7 +40,7 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	if (_window == NULL)
 	{
-		std::cout << "\nSDL Window Creation FAILURE";
+		ULOG("\nSDL Window Creation FAILURE");
 		return false;
 	}
 
@@ -45,19 +48,19 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	_rendering_surface = SDL_GetWindowSurface(_window);
 
-	std::cout << "\nSDL Window Creation Success";
+	ULOG("\nSDL Window Creation Success");
 	return true;
 }
 
 void cSDL2RenderManager::shutdown()
 {
-	std::cout << "\nSDL Shutdown begin";
+	ULOG("\nSDL Shutdown begin");
 	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
-	std::cout << "\nSDL Shutdown complete";
+	ULOG("\nSDL Shutdown complete");
 }
 
 void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
@@ -164,7 +167,9 @@ void cSDL2RenderManager::render_all_objects()
 		if ((*list_iter)->_is_visible == false)
 			continue;
 
-		std::cout << "\n\tobject id: " << (*list_iter)->_id;
+		std::ostringstream os;
+		os << "\n\tobject id: " << (*list_iter)->_id;
+		ULOG(os.str());
 
 		(*list_iter)->update();
 		SDL_Rect position;

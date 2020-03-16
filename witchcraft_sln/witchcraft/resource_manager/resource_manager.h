@@ -67,7 +67,7 @@ public:
 
 	bool create_config_files()
 	{
-		std::cout << "create_config_files()\n";
+		ULOG("create_config_files()\n");
 
 		std::list<std::string> config_files = {
 			std::string("witchcraft.cfg")
@@ -78,7 +78,9 @@ public:
 		{
 			if (utility::file_exists(*cfg_itr))
 			{
-				std::cout << "\tskipping file: " << *cfg_itr << "\n";
+				std::ostringstream os;
+				os << "\tskipping file: " << *cfg_itr << "\n";
+				ULOG(os.str());
 				continue;
 			}
 
@@ -101,7 +103,9 @@ public:
 
 			if (utility::file_exists(file_path))
 			{
-				std::cout << "\tfile created: " << file_path << "\n";
+				std::ostringstream os;				
+				os << "\tfile created: " << file_path << "\n";
+				ULOG(os.str());
 			}
 		}
 		

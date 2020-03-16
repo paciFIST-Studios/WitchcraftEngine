@@ -19,7 +19,7 @@
 
 #include "../utility/utility.h"
 
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::list<cResource*>>
+#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource*>>>
 #define RESOURCE_GLOBAL_SCOPE 0
 
 

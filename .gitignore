@@ -21,3 +21,4 @@ Witchcraft/lib/rapidxml/rapidxml-1.13/*
 *.ipch
 >>>>>>> render_manager_implementation
 *.asset
+asset/*

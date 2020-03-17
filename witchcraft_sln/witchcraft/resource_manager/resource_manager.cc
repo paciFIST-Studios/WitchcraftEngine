@@ -1,61 +1,55 @@
 #include "resource_manager.h"
 
+// returns a NON-OWNING ptr
 cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 {
 	if (_resource_count == 0)
 		return nullptr;
-
-	// search scopes for correct scope
-	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
-	for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
+	
+	// iterate through all of the scene ids
+	for (auto&& resource_kvp : _resource_map)
 	{
-		// until we run out
-		if (!(*element_itr).second.empty())
+		// iterate through the vector associated w/ each id
+		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
-			// search elements(resources) of this scope
-			std::list<cResource*>::iterator list_itr;
-			for (list_itr = (*element_itr).second.begin(); list_itr != (*element_itr).second.end(); list_itr++)
+			auto element = element_unique_ptr.get();
+			if (element->_resource_id == UID)
 			{
-				// check for id match
-				if ((*list_itr)->_resource_id == UID)
-					return (*list_itr);
+				return element;
 			}
 		}
 	}
-
+	
 	// we went through all existing resource without finding a match
 	return nullptr;
 }
+
 
 void cResourceManager::empty_cache()
 {
 	if (_resource_count == 0)
 		return;
-
-	std::map<unsigned int, std::list<cResource*>>::iterator element_itr;
 	
-	// look through scopes
-	for (element_itr = _resource_map.begin(); element_itr != _resource_map.end(); element_itr++)
+	// look through scene ids
+	for (auto&& resource_kvp : _resource_map)
 	{
-		if (!(*element_itr).second.empty())
+		// and the resource lists associated with each id
+		for (auto&& element_unique_ptr : resource_kvp.second)
 		{
-			std::list<cResource*>::iterator list_itr;
+			auto element = element_unique_ptr.get();
+			element->unload();
 
-			// search the resources for this specific scope
-			for (list_itr = (*element_itr).second.begin(); list_itr != (*element_itr).second.end(); list_itr++)
-			{
-				// delete resrouce object
-				(*list_itr)->unload();
-				SAFE_DELETE(*list_itr);
-			}
-
-			(*element_itr).second.clear();
+			// reset destroys the held ptr, release changes ownership
+			element_unique_ptr.reset();
 		}
+	
+		resource_kvp.second.clear();
 	}
-
+	
 	_resource_map.clear();
+	_resource_count = 0;
+	_current_scope = RESOURCE_GLOBAL_SCOPE;
 }
-
 
 
 bool cResourceManager::load_from_xml_file(std::string Filename)
@@ -75,7 +69,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 		// enumerate objects
 		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
 		{
-			cResource * resource = nullptr;
+			std::unique_ptr<cResource> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
 			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); 
@@ -89,22 +83,13 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 				// check resourece type
 				if (attributeName == "type")
 				{
-					// We will allow resource managers to implement their own derived
+					// We will allow/force resource managers to implement their own derived
 					// versions of cResource.  Those managers will create the resource,
-					// and then give us a cResource pointer back, and this scope will need
-					// to add the cResource pointer to the resource list.
-
+					// and then give us a unique_ptr<cResource> pointer back, and this 
+					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-						// Resourece = g_RenderManager->loadResourceFromXML(Element);
-=======
-						resource = _render_manager->load_resource_from_xml(child);
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
-=======
-						// resource = _render_manager->load_resource_from_xml(child);
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
+						resource = _render_manager->load_resource_from_xml(*child);
 					}
 					else if (attributeValue == "audio")
 					{
@@ -115,28 +100,17 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 						// resource = _config_manager->load_resource_from_xml(child);
 					}
 				}
-
-				// skipped, unless loading completes in a prior step
-				if (resource)
-				{
-					if (attributeName == "UID")
-					{
-						resource->_resource_id = atoi(attributeValue.c_str());
-					}
-					else if (attributeName == "filename")
-					{
-						resource->_file_name = attributeValue;
-					}
-					else if (attributeName == "scenescope")
-					{
-						resource->_scope = atoi(attributeValue.c_str());
-					}
-				}
 			}
 
 			if (resource)
 			{	
-				_resource_map[resource->_scope].push_back(resource);
+				// do not add duplicates of the same file
+				if (find_resource_by_id(resource->_resource_id))
+					// TODO: figure out duplicates w/o completely loading the file
+					return false;
+
+				// we must use std::move to change ownership of the unique_ptr
+				_resource_map[resource->_scope].push_back(std::move(resource));
 				_resource_count++;
 			}
 		}
@@ -149,38 +123,33 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 
 
 // WARN: Must be called for each scene change
-void cResourceManager::set_current_scope(unsigned int Scope)
+bool cResourceManager::set_current_scope(unsigned int Scope)
 {
+	// You cannot change scope, until a global resource is loaded
 	if (_resource_count == 0)
-		return;
-
+		return false;
+	
 	// unload old scope, but not global
 	if (_current_scope != 0)
 	{
-		std::list<cResource*>::iterator list_itr;
-
-		for (list_itr = _resource_map[_current_scope].begin();
-			list_itr != _resource_map[_current_scope].end();
-			list_itr++)
+		for (auto& element_unique_ptr : _resource_map[_current_scope])
 		{
-			// note: also calling delete here would kill our cResource obj
-			// and that would delete the metadata, which we would use to
-			// reload this asset, if the scene becomes active again.
-			(*list_itr)->unload();
+			auto element = element_unique_ptr.get();
+			element->unload();
 		}
 	}
-
+	
 	_current_scope = Scope;
-
-	// load all resources for new scope
-	std::list<cResource*>::iterator list_itr;
-	for (list_itr = _resource_map[_current_scope].begin();
-		list_itr != _resource_map[_current_scope].end();
-		list_itr++)
+	
+	for (auto&& element_unique_ptr : _resource_map[_current_scope])
 	{
-		(*list_itr)->load();
+		auto element = element_unique_ptr.get();
+		element->load();
 	}
+
+	return true;
 }
+
 
 cResourceManager::cResourceManager() 
 	: _resource_count(0)

@@ -29,7 +29,7 @@ public:
 
 	SDL_Texture * _sdl_texture;
 
-	void load(SDL_Renderer * renderer);
+	void load(SDL_Renderer const * renderer);
 	void unload();
 
 	bool is_loaded() { return _is_loaded; }

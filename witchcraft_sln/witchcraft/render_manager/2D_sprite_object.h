@@ -1,8 +1,7 @@
 #ifndef SPRITE_OBJECT_H
 #define SPRITE_OBJECT_H
 
-#include <windows.h>
-
+#include "../utility/utility.h"
 #include "SDL_2D_render_object.h"
 
 // Encapsulates some animation, sprite anims are 
@@ -33,6 +32,8 @@ public:
 	void stop();
 	void set_frame_rect(unsigned int FrameNumber);
 	c2DSpriteObject();
+
+	unsigned int get_time() { return 0; }
 };
 
 #endif

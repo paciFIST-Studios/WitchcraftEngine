@@ -64,7 +64,7 @@ public:
 	SDL_Window * _window;
 
 	// the render SDL uses
-	SDL_Renderer * _renderer;
+	SDL_Renderer * _current_renderer;
 
 	// the information surface, which actually displays inside the window
 	SDL_Surface * _rendering_surface;

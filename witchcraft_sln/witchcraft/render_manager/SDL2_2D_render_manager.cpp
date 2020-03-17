@@ -29,7 +29,7 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 		, Height
 		, static_cast<SDL_WindowFlags>(flags)
 		, &_window
-		, &_renderer
+		, &_current_renderer
 	);
 
 	if (_window == NULL)
@@ -51,7 +51,7 @@ void cSDL2RenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
-	SDL_DestroyRenderer(_renderer);
+	SDL_DestroyRenderer(_current_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
 	PLOGV << witchcraft::log_strings::sdl_stop;
@@ -92,9 +92,9 @@ bool cSDL2RenderManager::update()
 	} //end message
 
 	// clear screen
-	SDL_RenderClear(_renderer);
+	SDL_RenderClear(_current_renderer);
 	render_all_objects();
-	SDL_RenderPresent(_renderer);
+	SDL_RenderPresent(_current_renderer);
 
 	return true;
 }
@@ -149,7 +149,7 @@ void cSDL2RenderManager::render_all_objects()
 		position.y = int(object->_position_y);
 
 		SDL_RenderCopy(
-			  _renderer
+			  _current_renderer
 			, object->_render_resource->_texture
 			, &object->_render_rect
 			, &position

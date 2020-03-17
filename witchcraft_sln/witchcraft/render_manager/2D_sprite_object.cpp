@@ -20,7 +20,7 @@ void c2DSpriteObject::update()
 void c2DSpriteObject::play()
 {
 	// calculate frame dimension
-	auto * surface = _render_resource->_sdl_surface;
+	auto * surface = _render_resource->_surface;
 	_frame_width = surface->w / _animation_frames_per_row;
 	_frame_height = surface->h / _animation_frames_per_column;
 	_current_frame = _start_frame;

@@ -101,6 +101,7 @@ bool cSDL2RenderManager::update()
 
 std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
+	//std::unique_ptr<cResource> resource = std::make_unique<cRenderResource>();
 	auto resource = std::make_unique<cResource>();
 	resource->_type = RESOURCE_GRAPHIC;
 
@@ -149,7 +150,7 @@ void cSDL2RenderManager::render_all_objects()
 
 		SDL_RenderCopy(
 			  _renderer
-			, object->_render_resource->_sdl_texture
+			, object->_render_resource->_texture
 			, &object->_render_rect
 			, &position
 		);

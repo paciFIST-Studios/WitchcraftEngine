@@ -15,44 +15,59 @@
 #include <iostream>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> render_manager_implementation
+=======
+>>>>>>> master
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
 #include "resource_manager\resource_manager.h"
 #include "render_manager/SDL2_2D_render_manager.h"
+#include "utility/utility.h"
+
 
 const std::string ErrorLogFileName = "witchcraft_errors.log";
 
 int main(int argc, char** argv[])
 {
-	std::cout << "\n[Witchcraft]: BEGIN";
-	std::cout << "\n[Witchcraft]::[Unit Tests]: BEGIN\n\n";
+	ULOG("\n[Witchcraft]: BEGIN");
+	ULOG("\n[Witchcraft]::[Unit Tests]: BEGIN\n\n");
 
 	Catch::Session session;
 	int numberOfFailures = session.run();
 
+<<<<<<< HEAD
 	std::cout << "\n[Witchcraft]::[Unit Tests]: END";
 
 	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
 <<<<<<< HEAD
+=======
+	ULOG("[Witchcraft]::[Unit Tests]: END\n");
+	ULOG("\n[Witchcraft]::[Init]: BEGIN");
+>>>>>>> master
 
 	cResourceManager * resource_manager = new cResourceManager();
 	resource_manager->create_config_files();
-	
-	resource_manager->load_from_xml_file("buddha.asset");
+	resource_manager->load_from_xml_file("asset/birds.asset");
+	resource_manager->load_from_xml_file("asset/buddha.asset");
+	resource_manager->load_from_xml_file("asset/person.asset");
 
 
+<<<<<<< HEAD
 =======
 >>>>>>> render_manager_implementation
 	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
+=======
+	ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create");
+>>>>>>> master
 
-	cSDL2RenderManager * render_manager = &cSDL2RenderManager();
+	cSDL2RenderManager * render_manager = new cSDL2RenderManager();
 
-	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init";
+	ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init");
 
 	std::string title = "Witchcraft";
 	bool use_fullscreen = false;
@@ -60,7 +75,7 @@ int main(int argc, char** argv[])
 	bool init_success = render_manager->init(0, 0, 800, 800, use_fullscreen, title.c_str());
 	if (init_success)
 	{
-		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Success";
+		ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Success");
 
 		// For testing, we're setting the background to a color
 		int r = 70;
@@ -71,34 +86,45 @@ int main(int argc, char** argv[])
 	}
 	else
 	{
-		std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Fail";
+		ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Init Fail");
 		render_manager->shutdown();
 		return EXIT_FAILURE;
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
 >>>>>>> render_manager_implementation
+=======
+	bool gameplay_loop_is_running = true;
+>>>>>>> master
 	SDL_Event window_event;
-	while (true)
+	while (gameplay_loop_is_running)
 	{
 		if (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
 				break;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 =======
 
 >>>>>>> render_manager_implementation
+=======
+
+>>>>>>> master
 			if (window_event.type == SDL_KEYDOWN)
 			{
 				if (window_event.key.keysym.sym == SDLK_ESCAPE)
-					break;
+					gameplay_loop_is_running = false;
 			}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 
 			// check moar events
 		}
@@ -110,6 +136,7 @@ int main(int argc, char** argv[])
 
 		// do sound update
 	}
+<<<<<<< HEAD
 
 =======
 				
@@ -119,7 +146,10 @@ int main(int argc, char** argv[])
 
 
 >>>>>>> render_manager_implementation
+=======
+							
+>>>>>>> master
 	render_manager->shutdown();
 
-	std::cout << "\n[Witchcraft]: END";
+	ULOG("\n[Witchcraft]: END");
 }

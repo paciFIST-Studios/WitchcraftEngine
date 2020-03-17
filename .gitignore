@@ -17,4 +17,15 @@ Witchcraft/lib/rapidxml/rapidxml-1.13/*
 *.db
 *.opendb
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> render_manager_implementation
+=======
+=======
+*.ipch
+>>>>>>> render_manager_implementation
+*.asset
+asset_lib/*
+witchcraft_sln/witchcraft/asset/neko.png
+witchcraft_sln/witchcraft/asset/whirlwind.png
+16_Games/*
+>>>>>>> master

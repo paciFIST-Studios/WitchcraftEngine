@@ -3,22 +3,22 @@
 
 bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
-	std::cout << "\nSDL Initialization start";
+	ULOG("\nSDL Initialization start");
 	// SDL_Init() returns 0 on success, and a negative number on error
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		std::cout << "\nSDL initialization failure\n" << "Error: " << SDL_GetError();
+		std::ostringstream os;
+		os << "\nSDL initialization failure\n" << "Error: " << SDL_GetError() << std::endl;
+		ULOG(os.str());
+
 		// log error: could not initialize SDL Video
 		// SDL_QUIT()
 		return false;
 	}
 	
-<<<<<<< Updated upstream
-=======
 	// Flags are set with bitmasking
 	// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
 	// sdl chooses the renderer, use the 
->>>>>>> Stashed changes
 	int flags = 0;
 
 	if (fullScreen)
@@ -28,56 +28,39 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	flags = flags | SDL_WINDOW_SHOWN;
 
-	std::cout << "\nSDL Window Creation start";
+	ULOG("\nSDL Window Creation start");
 
 	SDL_CreateWindowAndRenderer(
 		  Width
 		, Height
 		, static_cast<SDL_WindowFlags>(flags)
-<<<<<<< Updated upstream
-		, &_sdl_window
-		, &_sdl_renderer
-	);
-
-	if (_sdl_window == NULL)
-=======
 		, &_window
 		, &_renderer
 	);
 
 	if (_window == NULL)
->>>>>>> Stashed changes
 	{
-		std::cout << "\nSDL Window Creation FAILURE";
+		ULOG("\nSDL Window Creation FAILURE");
 		return false;
 	}
 
-<<<<<<< Updated upstream
-	SDL_SetWindowTitle(_sdl_window, WindowTitle);
-
-	_sdl_screen_surface = SDL_GetWindowSurface(_sdl_window);
-=======
 	SDL_SetWindowTitle(_window, WindowTitle);
 
 	_rendering_surface = SDL_GetWindowSurface(_window);
->>>>>>> Stashed changes
 
-	std::cout << "\nSDL Window Creation Success";
+	ULOG("\nSDL Window Creation Success");
 	return true;
 }
 
 void cSDL2RenderManager::shutdown()
 {
-	std::cout << "\nSDL Shutdown begin";
-<<<<<<< Updated upstream
-	SDL_DestroyWindow(_sdl_window);
-=======
+	ULOG("\nSDL Shutdown begin");
+	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
->>>>>>> Stashed changes
 	SDL_Quit();
-	std::cout << "\nSDL Shutdown complete";
+	ULOG("\nSDL Shutdown complete");
 }
 
 void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
@@ -86,10 +69,6 @@ void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigne
 	g = utility::clamp_value_to_uint8(g);
 	b = utility::clamp_value_to_uint8(b);
 
-<<<<<<< Updated upstream
-	SDL_FillRect(_sdl_screen_surface, rect, SDL_MapRGB(_sdl_screen_surface->format, r, g, b));
-	SDL_UpdateWindowSurface(_sdl_window);
-=======
 	SDL_FillRect(_rendering_surface, rect, SDL_MapRGB(_rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(_window);
 }
@@ -101,8 +80,6 @@ bool cSDL2RenderManager::update()
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
-		//std::cout << "\nEvent: " << event.type;
-
 		// check messages
 		switch (event.type)
 		{
@@ -125,7 +102,6 @@ bool cSDL2RenderManager::update()
 	SDL_RenderClear(_renderer);
 	//std::cout << "\nRenderer Cleared!";
 
-
 	// paint new objects
 	render_all_objects();
 	//std::cout << "\nAll objects rendered!";
@@ -137,15 +113,12 @@ bool cSDL2RenderManager::update()
 	return true;
 }
 
-cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * xml)
-{
-	if (xml == nullptr)
-		return nullptr;
-	
-	cResource * resource = new cResource();
+std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
+{	
+	auto resource = std::make_unique<cResource>();
 	resource->_type = RESOURCE_GRAPHIC;
 
-	for (XML::xml_attribute<> * element_attribute = xml->first_attribute();
+	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
 		element_attribute = element_attribute->next_attribute()
 	)
@@ -155,6 +128,8 @@ cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * x
 
 		if (attribute_name == "UID")
 		{
+			// atoi stands for ASCII-to-integer, and is used for
+			// parsing a string to an int
 			resource->_resource_id = atoi(attribute_value.c_str());
 		}
 		if (attribute_name == "filename")
@@ -167,7 +142,7 @@ cResource * cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const * x
 		}
 	}
 
-	return resource;
+	return std::move(resource);
 }
 
 void cSDL2RenderManager::render_all_objects()
@@ -180,28 +155,26 @@ void cSDL2RenderManager::render_all_objects()
 		return;
 	}
 
-	std::list<cSDL2DRenderObject*>::iterator list_iter;
-
-	// loop all objects and blit them
-	for (list_iter = _render_objects.begin(); list_iter != _render_objects.end(); list_iter++)
+	for (auto&& object : _render_objects)
 	{
-		if ((*list_iter)->_is_visible == false)
+		if (object->_is_visible == false)
 			continue;
 
-		std::cout << "\n\tobject id: " << (*list_iter)->_id;
+		std::ostringstream os;
+		os << "\n\tobject id: " << object->_id;
+		ULOG(os.str());
 
-		(*list_iter)->update();
+		object->update();
 		SDL_Rect position;
-		position.x = int((*list_iter)->_position_x);
-		position.y = int((*list_iter)->_position_y);
+		position.x = int(object->_position_x);
+		position.y = int(object->_position_y);
 
 		SDL_RenderCopy(
 			  _renderer
-			, (*list_iter)->_render_resource->_sdl_texture
-			, &(*list_iter)->_render_rect
+			, object->_render_resource->_sdl_texture
+			, &object->_render_rect
 			, &position
 		);
 	}
 
->>>>>>> Stashed changes
 }

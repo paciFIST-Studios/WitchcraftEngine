@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <math.h>
+#include <memory>
 #include <string>
 #include <sstream>
 #include <time.h>
@@ -27,6 +28,8 @@
 #include "2D_render_manager.h"
 
 
+#define RENDER_OBJECT_VECTOR_TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
+
 // Depends on:
 //	c2DSpriteObject
 //	c2DRenderManager
@@ -43,21 +46,14 @@ class cSDL2RenderManager : public c2DRenderManager
 private:
 protected:
 
-	static cSDL2RenderManager * _SDL2D_render_manager;
+	static std::unique_ptr<cSDL2RenderManager> _SDL2D_render_manager;
+
+	RENDER_OBJECT_VECTOR_TYPE _render_objects;
+
 public:
 	cSDL2RenderManager() {}
 
 	static cSDL2RenderManager * get_SDL2D_render_manager();
-<<<<<<< Updated upstream
-	SDL_Window * _sdl_window;
-	SDL_Renderer * _sdl_renderer;
-
-	SDL_Surface * _sdl_screen_surface;
-	
-
-	std::stringstream _video_info;
-
-=======
 
 	// the program window
 	SDL_Window * _window;
@@ -68,7 +64,6 @@ public:
 	// the information surface, which actually displays inside the window
 	SDL_Surface * _rendering_surface;
 	
->>>>>>> Stashed changes
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
@@ -85,9 +80,9 @@ public:
 	void free();
 	bool update();
 	void toggle_full_screen();
-	cResource * load_resource_from_xml(XML::xml_node<> const * xml);
+	std::unique_ptr<cResource> load_resource_from_xml(XML::xml_node<> const & xml);
 	void render_all_objects();
-	std::list<cSDL2DRenderObject*> _render_objects;
+
 };
 
 

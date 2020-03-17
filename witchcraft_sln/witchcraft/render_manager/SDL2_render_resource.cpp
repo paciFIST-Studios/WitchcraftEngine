@@ -1,7 +1,9 @@
 #include "SDL2_render_resource.h"
 
-void cRenderResource::load(SDL_Renderer const & renderer)
+void cRenderResource::load()
 {
+	SDL_Renderer * renderer = nullptr;
+
 	unload();
 	
 	// load image to temp buffer

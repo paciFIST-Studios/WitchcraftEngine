@@ -28,7 +28,7 @@ public:
 	cRenderResource();
 	~cRenderResource();
 
-	void load(SDL_Renderer const & renderer);
+	void load();
 	void unload();
 
 	bool is_loaded() { return _is_loaded; }

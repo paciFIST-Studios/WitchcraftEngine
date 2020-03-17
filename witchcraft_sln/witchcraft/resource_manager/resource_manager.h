@@ -19,29 +19,12 @@
 
 #include "../utility/utility.h"
 
-<<<<<<< HEAD
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-#define GLOBAL_SCOPE 0
-=======
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::list<cResource*>>
-=======
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
->>>>>>> master
 #define RESOURCE_GLOBAL_SCOPE 0
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
-<<<<<<< HEAD
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
->>>>>>> master
 
 // resource manager, to manage the resource objects
 class cResourceManager : public cEngineObject
@@ -94,30 +77,16 @@ public:
 			, std::string("asset/person.asset")
 			, std::string("asset/whirlwind.asset")
 		};
-		
-		for (auto cfg_itr = config_files.begin(); cfg_itr != config_files.end(); cfg_itr++)
+
+		for (auto file_path : config_files)
 		{
-			if (utility::file_exists(*cfg_itr))
+			if (utility::file_exists(file_path))
 			{
 				//std::ostringstream os;
 				//os << "\tskipping file: " << *cfg_itr << "\n";
 				//ULOG(os.str());
 				continue;
-			}
-<<<<<<< HEAD
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-				
-			std::string config_data = "<resources><resource UID=\"0\" type=\"text\" filename=\"witchcraft.cfg\" scenescope=\"0\">Witchcraft</resource></resources>";
-
-			std::ofstream cfg_file;
-			cfg_file.open(*cfg_itr);
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.h
-			cfg_file << "\0";
-=======
-=======
->>>>>>> master
-
-			std::string file_path = static_cast<std::string>(*cfg_itr);
+			}			
 
 			std::string config_data;
 			if (file_path == "asset/birds.asset")
@@ -140,13 +109,6 @@ public:
 			std::ofstream cfg_file;
 			cfg_file.open(file_path);
 			cfg_file << config_data;
-<<<<<<< HEAD
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
-			cfg_file << config_data;
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.h
-=======
->>>>>>> master
 			cfg_file.close();
 
 			if (utility::file_exists(file_path))

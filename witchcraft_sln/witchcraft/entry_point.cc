@@ -14,14 +14,6 @@
 #include <fstream>
 #include <iostream>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-
->>>>>>> render_manager_implementation
-=======
->>>>>>> master
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
@@ -40,15 +32,8 @@ int main(int argc, char** argv[])
 	Catch::Session session;
 	int numberOfFailures = session.run();
 
-<<<<<<< HEAD
-	std::cout << "\n[Witchcraft]::[Unit Tests]: END";
-
-	std::cout << "\n[Witchcraft]::[Init]: BEGIN";
-<<<<<<< HEAD
-=======
 	ULOG("[Witchcraft]::[Unit Tests]: END\n");
 	ULOG("\n[Witchcraft]::[Init]: BEGIN");
->>>>>>> master
 
 	cResourceManager * resource_manager = new cResourceManager();
 	resource_manager->create_config_files();
@@ -56,14 +41,7 @@ int main(int argc, char** argv[])
 	resource_manager->load_from_xml_file("asset/buddha.asset");
 	resource_manager->load_from_xml_file("asset/person.asset");
 
-
-<<<<<<< HEAD
-=======
->>>>>>> render_manager_implementation
-	std::cout << "\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create";
-=======
 	ULOG("\n[Witchcraft]::[Init]::[SDL2 Render Manager]: Create");
->>>>>>> master
 
 	cSDL2RenderManager * render_manager = new cSDL2RenderManager();
 
@@ -91,15 +69,7 @@ int main(int argc, char** argv[])
 		return EXIT_FAILURE;
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-=======
->>>>>>> render_manager_implementation
-=======
 	bool gameplay_loop_is_running = true;
->>>>>>> master
 	SDL_Event window_event;
 	while (gameplay_loop_is_running)
 	{
@@ -107,24 +77,12 @@ int main(int argc, char** argv[])
 		{
 			if (SDL_QUIT == window_event.type)
 				break;
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> render_manager_implementation
-=======
-
->>>>>>> master
 			if (window_event.type == SDL_KEYDOWN)
 			{
 				if (window_event.key.keysym.sym == SDLK_ESCAPE)
 					gameplay_loop_is_running = false;
 			}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> master
 
 			// check moar events
 		}
@@ -136,19 +94,7 @@ int main(int argc, char** argv[])
 
 		// do sound update
 	}
-<<<<<<< HEAD
 
-=======
-				
-				
-		}
-	}
-
-
->>>>>>> render_manager_implementation
-=======
-							
->>>>>>> master
 	render_manager->shutdown();
 
 	ULOG("\n[Witchcraft]: END");

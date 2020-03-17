@@ -89,19 +89,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-<<<<<<< HEAD
-<<<<<<< HEAD:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-<<<<<<< Updated upstream:Witchcraft/Witchcraft/resource_manager/resource_manager.cc
-						// Resourece = g_RenderManager->loadResourceFromXML(Element);
-=======
-						resource = _render_manager->load_resource_from_xml(child);
->>>>>>> Stashed changes:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
-=======
-						// resource = _render_manager->load_resource_from_xml(child);
->>>>>>> render_manager_implementation:witchcraft_sln/witchcraft/resource_manager/resource_manager.cc
-=======
 						resource = _render_manager->load_resource_from_xml(*child);
->>>>>>> master
 					}
 					else if (attributeValue == "audio")
 					{

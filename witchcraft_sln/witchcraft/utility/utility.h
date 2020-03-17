@@ -10,8 +10,6 @@
 	#include <vector>
 
 
-	#define ULOG(a) { std::cout << a; }
-
 	// [NOTE] I read that putting the static methods in a class is "wrong" for C++,
 	// so instead we're going to use namespaces
 	namespace utility

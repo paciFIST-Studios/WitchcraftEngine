@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -149,6 +149,7 @@
     <ClInclude Include="render_manager\SDL_2D_render_object.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
+    <ClInclude Include="string_constants.h" />
     <ClInclude Include="unit_testing_switch.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>

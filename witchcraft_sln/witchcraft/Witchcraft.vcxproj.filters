@@ -107,5 +107,8 @@
     <ClInclude Include="render_manager\2D_sprite_object.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
+    <ClInclude Include="string_constants.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

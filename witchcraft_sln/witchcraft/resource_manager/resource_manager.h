@@ -11,6 +11,8 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
+#include <plog/Log.h>
+
 #include "../engine/exception.h"
 #include "../engine/engine.h"
 #include "resource.h"
@@ -67,8 +69,6 @@ public:
 
 	bool create_config_files()
 	{
-		//ULOG("\ncreate_config_files()\n");
-
 		std::list<std::string> config_files = {
  			  std::string("witchcraft.cfg")
 			, std::string("asset/birds.asset")
@@ -81,13 +81,8 @@ public:
 		for (auto file_path : config_files)
 		{
 			if (utility::file_exists(file_path))
-			{
-				//std::ostringstream os;
-				//os << "\tskipping file: " << *cfg_itr << "\n";
-				//ULOG(os.str());
 				continue;
-			}			
-
+		
 			std::string config_data;
 			if (file_path == "asset/birds.asset")
 			{
@@ -110,13 +105,7 @@ public:
 			cfg_file.open(file_path);
 			cfg_file << config_data;
 			cfg_file.close();
-
-			if (utility::file_exists(file_path))
-			{
-				//std::ostringstream os;				
-				//os << "\tfile created: " << file_path << "\n";
-				//ULOG(os.str());
-			}
+			PLOGV << "File created: " << file_path;
 		}
 		
 		return true;

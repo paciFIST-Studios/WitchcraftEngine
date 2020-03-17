@@ -21,8 +21,13 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
+// logging
+#include <plog/Log.h>
+
 // witchcraft
 #include "../utility/utility.h"
+#include "../string_constants.h"
+
 #include "../resource_manager/resource.h"
 #include "SDL_2D_render_object.h"
 #include "2D_render_manager.h"

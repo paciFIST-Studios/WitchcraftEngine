@@ -3,16 +3,11 @@
 
 bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
-	ULOG("\nSDL Initialization start");
+	PLOGV << witchcraft::log_strings::sdl_start;
 	// SDL_Init() returns 0 on success, and a negative number on error
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		std::ostringstream os;
-		os << "\nSDL initialization failure\n" << "Error: " << SDL_GetError() << std::endl;
-		ULOG(os.str());
-
-		// log error: could not initialize SDL Video
-		// SDL_QUIT()
+		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 	
@@ -28,8 +23,7 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	flags = flags | SDL_WINDOW_SHOWN;
 
-	ULOG("\nSDL Window Creation start");
-
+	PLOGD << witchcraft::log_strings::sdl_window_init;
 	SDL_CreateWindowAndRenderer(
 		  Width
 		, Height
@@ -40,27 +34,27 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	if (_window == NULL)
 	{
-		ULOG("\nSDL Window Creation FAILURE");
+		PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 
 	SDL_SetWindowTitle(_window, WindowTitle);
 
 	_rendering_surface = SDL_GetWindowSurface(_window);
+	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
-	ULOG("\nSDL Window Creation Success");
 	return true;
 }
 
 void cSDL2RenderManager::shutdown()
-{
-	ULOG("\nSDL Shutdown begin");
+{	
+	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
-	ULOG("\nSDL Shutdown complete");
+	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
 void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
@@ -75,8 +69,6 @@ void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigne
 
 bool cSDL2RenderManager::update()
 {
-	//std::cout << "\ncSDL2RenderManager::update()";
-
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -90,6 +82,7 @@ bool cSDL2RenderManager::update()
 				// [ESC]
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
+					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					return false;
 				}
 				// others
@@ -100,15 +93,8 @@ bool cSDL2RenderManager::update()
 
 	// clear screen
 	SDL_RenderClear(_renderer);
-	//std::cout << "\nRenderer Cleared!";
-
-	// paint new objects
 	render_all_objects();
-	//std::cout << "\nAll objects rendered!";
-
-	// swap buffer
 	SDL_RenderPresent(_renderer);
-	//std::cout << "\nBuffer Swapped!";
 
 	return true;
 }
@@ -142,27 +128,19 @@ std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_n
 		}
 	}
 
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << resource->_file_name;
 	return std::move(resource);
 }
 
 void cSDL2RenderManager::render_all_objects()
 {
-	//std::cout << "\nNow rendering:";
-
 	if (_render_objects.size() < 1)
-	{
-		//std::cout << "\nNo render objects in renderer!";
 		return;
-	}
 
 	for (auto&& object : _render_objects)
 	{
 		if (object->_is_visible == false)
 			continue;
-
-		std::ostringstream os;
-		os << "\n\tobject id: " << object->_id;
-		ULOG(os.str());
 
 		object->update();
 		SDL_Rect position;

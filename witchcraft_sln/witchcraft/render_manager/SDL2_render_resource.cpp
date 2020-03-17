@@ -5,7 +5,7 @@ void cRenderResource::load(SDL_Renderer const & renderer)
 	unload();
 	
 	// load image to temp buffer
-	SDL_Surface * temp_surface = IMG_Load(_file_name.c_str());
+	auto temp_surface = IMG_Load(_file_name.c_str());
 
 	if (tmp_surface)
 	{

@@ -68,9 +68,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="logging\assert_with_message.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="engine\engine.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>

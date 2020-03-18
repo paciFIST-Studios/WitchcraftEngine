@@ -140,7 +140,6 @@
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\exception.h" />
-    <ClInclude Include="logging\assert_with_message.h" />
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="render_manager\2D_sprite_object.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />

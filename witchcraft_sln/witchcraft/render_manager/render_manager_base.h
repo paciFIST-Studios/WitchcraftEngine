@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_MANAGER_H
-#define TWO_D_RENDER_MANAGER_H
+#ifndef RENDER_MANAGER_BASE_H
+#define RENDER_MANAGER_BASE_H
 
 
 
@@ -9,4 +9,4 @@ public:
 	int id;
 };
 
-#endif // !TWO_D_RENDER_MANAGER_H
+#endif // !RENDER_MANAGER_BASE_H

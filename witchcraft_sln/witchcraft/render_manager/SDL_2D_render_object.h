@@ -1,7 +1,6 @@
 #ifndef SDL_2D_RENDER_OBJECT_H
 #define SDL_2D_RENDER_OBJECT_H
 
-
 #include <SDL_rect.h>
 
 #include "../render_manager/SDL2_render_resource.h"
@@ -15,6 +14,8 @@ class cSDL2DRenderObject : public cEngineObject
 {
 private:
 protected:
+
+	// TODO: only a couple of these should actually be public
 public:
 	cRenderResource * _render_resource;
 	SDL_Rect _render_rect;
@@ -34,5 +35,3 @@ public:
 };
 
 #endif // !SDL_2D_RENDER_OBJECT_H
-
-

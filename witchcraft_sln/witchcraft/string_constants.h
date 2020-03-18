@@ -5,6 +5,12 @@
 
 namespace witchcraft
 {
+	namespace file_strings
+	{
+		std::string const engine_errorlog_file_name = "witchcraft.errorlog";
+		std::string const engine_log_file_name = "witchcraft.log";
+	}
+
 	namespace log_strings
 	{
 		std::string const engine_start = "witchcraft engine start";
@@ -33,10 +39,6 @@ namespace witchcraft
 
 		std::string const game_loop_start = "game loop start";
 		std::string const game_loop_stop = "game loop stop";
-
-
-
-
 	}
 }
 

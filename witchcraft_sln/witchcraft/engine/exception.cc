@@ -23,12 +23,12 @@ char const * cException::what()
 	return _error_description.c_str();
 }
 
-
-// try 
-// {
-// 	THROW_EXCEPTION(1, "Test Error");
-// }
-// catch (cException & e)
-// {
-// 	e.what();
-// }
+// example code
+//	try 
+//	{
+//		THROW_EXCEPTION(1, "Test Error");
+//	}
+//	catch (cException & e)
+//	{
+//		e.what();
+//	}

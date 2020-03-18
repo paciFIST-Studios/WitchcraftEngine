@@ -10,13 +10,13 @@
 // to init SDL before this is defined
 #define SDL_MAIN_HANDLED
 
-
 #include <fstream>
 #include <iostream>
 
 // our logging lib
 #include <plog/Log.h>
 
+// witchcraft
 #include "utility\utility.h"
 #include "logging\error_log_manager.h"
 
@@ -27,13 +27,9 @@
 #include "string_constants.h"
 
 
-const std::string LogFileName = "witchcraft.log";
-const std::string ErrorLogFileName = "witchcraft_errors.log";
-
-
 int main(int argc, char** argv[])
 {
-	plog::init(plog::verbose, LogFileName.c_str());
+	plog::init(plog::verbose, witchcraft::file_strings::engine_log_file_name.c_str());
 	PLOGI << witchcraft::log_strings::engine_start;
 
 	PLOGV << witchcraft::log_strings::engine_unit_tests_start;
@@ -55,8 +51,8 @@ int main(int argc, char** argv[])
 	std::string title = "Witchcraft";
 	bool use_fullscreen = false;
 
-	bool init_success = render_manager.init(0, 0, 800, 800, use_fullscreen, title.c_str());
-	if (init_success == false)
+	bool init_successful = render_manager.init(0, 0, 800, 800, use_fullscreen, title.c_str());
+	if (init_successful == false)
 	{
 		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError(); 
 		render_manager.shutdown();

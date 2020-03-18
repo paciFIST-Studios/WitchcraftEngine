@@ -1,8 +1,8 @@
 #ifndef TEST_RESOURCE_MANAGER_CC
 #define TEST_RESOURCE_MANAGER_CC
 
-// this header will be whitespace when the testing is switched off
-#include "../unit_testing_switch.h"
+	// this header defines RUN_UNIT_TESTS, if testing is on
+	#include "../unit_testing_switch.h"
 
 	#ifdef RUN_UNIT_TESTS
 		
@@ -162,4 +162,3 @@
 	#endif // RUN_UNIT_TESTS
 
 #endif // !TEST_RESOURCE_MANAGER_CC
-

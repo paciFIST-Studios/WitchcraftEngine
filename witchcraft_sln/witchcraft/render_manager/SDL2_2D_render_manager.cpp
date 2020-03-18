@@ -1,6 +1,5 @@
 #include "SDL2_2D_render_manager.h"
 
-
 bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
@@ -155,5 +154,4 @@ void cSDL2RenderManager::render_all_objects()
 			, &position
 		);
 	}
-
 }

@@ -10,7 +10,6 @@
 #define THROW_EXCEPTION(ErrorNum, ErrorDesc) throw cException(ErrorNum, ErrorDesc, __FILE__, __LINE__);
 #endif
 
-
 // purpose: encapsulate a runtime error
 class cException : public std::exception
 {
@@ -30,6 +29,5 @@ public:
 	cException(int ErrorNum, std::string ErrorDesc, std::string SrcFilename, int LineNumber);
 	~cException() throw() {}
 };
-
 
 #endif // EXCEPTION_H

@@ -33,8 +33,7 @@
 #include "SDL_2D_render_object.h"
 #include "render_manager_base.h"
 
-
-#define RENDER_OBJECT_VECTOR_TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
+#define RENDER_OBJECT_VECTOR__TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
 
 // Depends on:
 //	c2DSpriteObject
@@ -54,22 +53,22 @@ protected:
 
 	static std::unique_ptr<cSDL2RenderManager> _SDL2D_render_manager;
 
-	RENDER_OBJECT_VECTOR_TYPE _render_objects;
+	RENDER_OBJECT_VECTOR__TYPE _render_objects;
 
 public:
 	cSDL2RenderManager() {}
 
 	static cSDL2RenderManager * get_SDL2D_render_manager();
-
+	
 	// the program window
 	SDL_Window * _window;
 
 	// the render SDL uses
 	SDL_Renderer * _current_renderer;
 
-	// the information surface, which actually displays inside the window
+	// Surface is software, texture is hardware (GPU rendering)
 	SDL_Surface * _rendering_surface;
-	
+
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
@@ -90,7 +89,5 @@ public:
 	void render_all_objects();
 
 };
-
-
 
 #endif // SDL2_2D_RENDER_MANAGER_H

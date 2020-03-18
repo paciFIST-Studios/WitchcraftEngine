@@ -5,7 +5,6 @@
 
 #include "../engine/engine.h"
 
-
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 
 typedef enum {
@@ -15,7 +14,6 @@ typedef enum {
 	, RESOURCE_AUDIO = 3
 	, RESOURCE_TEXT = 4
 } RESOURCE_TYPE;
-
 
 // The cResource class represents a resource object, which is managed by a resource manager
 // to be inhereted from, by other objects
@@ -39,9 +37,6 @@ public:
 		_resource_id = _scope = 0;
 		_type = RESOURCE_NULL;
 	}
-
 };
 
 #endif // !RESOURCE_H
-
-

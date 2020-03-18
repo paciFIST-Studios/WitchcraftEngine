@@ -3,7 +3,7 @@
 
 
 
-class c2DRenderManager
+class cRenderManagerBase
 {
 public:
 	int id;

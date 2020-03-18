@@ -1,18 +1,12 @@
 #include "SDL2_2D_render_manager.h"
 
-
 bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
-	ULOG("\nSDL Initialization start");
+	PLOGV << witchcraft::log_strings::sdl_start;
 	// SDL_Init() returns 0 on success, and a negative number on error
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
-		std::ostringstream os;
-		os << "\nSDL initialization failure\n" << "Error: " << SDL_GetError() << std::endl;
-		ULOG(os.str());
-
-		// log error: could not initialize SDL Video
-		// SDL_QUIT()
+		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 	
@@ -28,39 +22,38 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 
 	flags = flags | SDL_WINDOW_SHOWN;
 
-	ULOG("\nSDL Window Creation start");
-
+	PLOGD << witchcraft::log_strings::sdl_window_init;
 	SDL_CreateWindowAndRenderer(
 		  Width
 		, Height
 		, static_cast<SDL_WindowFlags>(flags)
 		, &_window
-		, &_renderer
+		, &_current_renderer
 	);
 
 	if (_window == NULL)
 	{
-		ULOG("\nSDL Window Creation FAILURE");
+		PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 
 	SDL_SetWindowTitle(_window, WindowTitle);
 
 	_rendering_surface = SDL_GetWindowSurface(_window);
+	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
-	ULOG("\nSDL Window Creation Success");
 	return true;
 }
 
 void cSDL2RenderManager::shutdown()
-{
-	ULOG("\nSDL Shutdown begin");
+{	
+	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
-	SDL_DestroyRenderer(_renderer);
+	SDL_DestroyRenderer(_current_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
-	ULOG("\nSDL Shutdown complete");
+	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
 void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
@@ -75,8 +68,6 @@ void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigne
 
 bool cSDL2RenderManager::update()
 {
-	//std::cout << "\ncSDL2RenderManager::update()";
-
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -90,6 +81,7 @@ bool cSDL2RenderManager::update()
 				// [ESC]
 				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
+					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					return false;
 				}
 				// others
@@ -99,22 +91,16 @@ bool cSDL2RenderManager::update()
 	} //end message
 
 	// clear screen
-	SDL_RenderClear(_renderer);
-	//std::cout << "\nRenderer Cleared!";
-
-	// paint new objects
+	SDL_RenderClear(_current_renderer);
 	render_all_objects();
-	//std::cout << "\nAll objects rendered!";
-
-	// swap buffer
-	SDL_RenderPresent(_renderer);
-	//std::cout << "\nBuffer Swapped!";
+	SDL_RenderPresent(_current_renderer);
 
 	return true;
 }
 
 std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
+	//std::unique_ptr<cResource> resource = std::make_unique<cRenderResource>();
 	auto resource = std::make_unique<cResource>();
 	resource->_type = RESOURCE_GRAPHIC;
 
@@ -142,27 +128,19 @@ std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_n
 		}
 	}
 
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << resource->_file_name;
 	return std::move(resource);
 }
 
 void cSDL2RenderManager::render_all_objects()
 {
-	//std::cout << "\nNow rendering:";
-
 	if (_render_objects.size() < 1)
-	{
-		//std::cout << "\nNo render objects in renderer!";
 		return;
-	}
 
 	for (auto&& object : _render_objects)
 	{
 		if (object->_is_visible == false)
 			continue;
-
-		std::ostringstream os;
-		os << "\n\tobject id: " << object->_id;
-		ULOG(os.str());
 
 		object->update();
 		SDL_Rect position;
@@ -170,11 +148,10 @@ void cSDL2RenderManager::render_all_objects()
 		position.y = int(object->_position_y);
 
 		SDL_RenderCopy(
-			  _renderer
-			, object->_render_resource->_sdl_texture
+			  _current_renderer
+			, object->_render_resource->_texture
 			, &object->_render_rect
 			, &position
 		);
 	}
-
 }

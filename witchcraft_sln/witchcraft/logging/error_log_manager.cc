@@ -1,7 +1,6 @@
 #include "error_log_manager.h"
 
-// - Log Manager ----------------------------------------------------------------------------------
-
+// I have no idea what this even means
 cErrorLogManager cErrorLogManager::_error_log_manager;
 
 cErrorLogManager::cErrorLogManager(){}
@@ -13,15 +12,16 @@ cErrorLogManager * cErrorLogManager::get_error_manager()
 
 void cErrorLogManager::create_error_log(std::string filename)
 {
-	// take the current one, and rename it to a new timestamp, then launch an optional thread to copy that file to a specific place
+	// take the current one, and rename it to a new timestamp
+	// then launch an optional thread to copy that file to somewhere
 	_log_file.open(filename.c_str());
 }
 
 void cErrorLogManager::flush_buffer()
 {
-	_log_file << _log_buffer.str();
+	_log_file << _file_buffer.str();
 	_log_file.flush();
-	_log_buffer.str("");
+	_file_buffer.str("");
 }
 
 void cErrorLogManager::close_file()
@@ -31,7 +31,7 @@ void cErrorLogManager::close_file()
 
 void cErrorLogManager::log_exception(cException e)
 {
-	_log_buffer << get_timestamp() << "\n" << e.what();
+	_file_buffer << get_timestamp() << "\n" << e.what();
 	flush_buffer();
 }
 

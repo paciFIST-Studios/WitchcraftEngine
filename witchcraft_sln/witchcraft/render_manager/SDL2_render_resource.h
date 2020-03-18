@@ -22,14 +22,13 @@ protected:
 	bool _is_loaded;
 
 public:
-	SDL_Surface * _sdl_surface;
+	SDL_Surface * _surface;
+	SDL_Texture * _texture;
 
 	cRenderResource();
 	~cRenderResource();
 
-	SDL_Texture * _sdl_texture;
-
-	void load(SDL_Renderer const * renderer);
+	void load();
 	void unload();
 
 	bool is_loaded() { return _is_loaded; }

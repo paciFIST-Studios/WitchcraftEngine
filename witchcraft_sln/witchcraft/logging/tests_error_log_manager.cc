@@ -62,7 +62,7 @@
 
 			cErrorLogManager * log = cErrorLogManager::get_error_manager();
 			log->create_error_log(ERROR_LOG_FILE_PATH);
-			log->_log_buffer << ERROR_LOG_CONTENT;
+			log->_file_buffer << ERROR_LOG_CONTENT;
 			log->close_file();
 
 			std::string file_content = utility::read_file_to_string(ERROR_LOG_FILE_PATH);
@@ -83,7 +83,7 @@
 
 			cErrorLogManager * log = cErrorLogManager::get_error_manager();
 			log->create_error_log(ERROR_LOG_FILE_PATH);
-			log->_log_buffer << ERROR_LOG_CONTENT;
+			log->_file_buffer << ERROR_LOG_CONTENT;
 			log->flush_buffer();
 			log->close_file();
 
@@ -97,4 +97,3 @@
 	#endif // RUN_UNIT_TESTS
 
 #endif // !TEST_ERROR_LOG_MANAGER_CC
-

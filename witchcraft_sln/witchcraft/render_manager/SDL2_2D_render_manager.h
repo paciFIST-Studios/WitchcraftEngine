@@ -31,14 +31,14 @@
 #include "../resource_manager/resource.h"
 #include "SDL2_render_resource.h"
 #include "SDL_2D_render_object.h"
-#include "2D_render_manager.h"
+#include "render_manager_base.h"
 
 
 #define RENDER_OBJECT_VECTOR_TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
 
 // Depends on:
 //	c2DSpriteObject
-//	c2DRenderManager
+//	cRenderManagerBase
 //	cSDL2DRenderObject
 //	cRenderResource
 //
@@ -47,7 +47,7 @@
 //	2. initialize hardware
 //	3. create / load / unload graphics resource
 //	4. create / load / unload render graphics
-class cSDL2RenderManager : public c2DRenderManager
+class cSDL2RenderManager : public cRenderManagerBase
 {
 private:
 protected:

@@ -1,4 +1,9 @@
 #include "SDL2_render_resource.h"
+#include "SDL2_render_resource.h"
+
+cRenderResource::~cRenderResource()
+{
+}
 
 void cRenderResource::load()
 {

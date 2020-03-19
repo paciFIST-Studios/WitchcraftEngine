@@ -8,7 +8,7 @@
 		#include "../catch.hpp"
 		
 		#include "resource.h"
-			
+		
 		TEST_CASE("cResource::cResource(args)  When given default arguments, ctor constructs object with those values")
 		{
 			unsigned int resource_id = 666;
@@ -34,19 +34,19 @@
 
 			// file name
 			REQUIRE(typeid(file_name) == typeid(std::string));
-			REQUIRE(file_name.compare("un-init"));
+			REQUIRE(file_name.compare(resource->UNINIT_FILE_NAME));
 
 			// resource id
-			REQUIRE(typeid(resource_id) == typeid(unsigned int));
-			REQUIRE(resource_id == 0);
+			REQUIRE(typeid(resource_id) == typeid(resource->UNINIT_RESOURCE_ID));
+			REQUIRE(resource_id == resource->UNINIT_RESOURCE_ID);
 
 			// resource type
-			REQUIRE(typeid(resource_type) == typeid(RESOURCE_TYPE));
-			REQUIRE(resource_type == RESOURCE_TYPE::RESOURCE_NULL);
+			REQUIRE(typeid(resource_type) == typeid(resource->UNINIT_RESOURCE_TYPE));
+			REQUIRE(resource_type == resource->UNINIT_RESOURCE_TYPE);
 
 			// resource scope
-			REQUIRE(typeid(resource_scope) == typeid(unsigned int));
-			REQUIRE(resource_scope == 0);
+			REQUIRE(typeid(resource_scope) == typeid(resource->UNINIT_RESOURCE_SCOPE));
+			REQUIRE(resource_scope == resource->UNINIT_RESOURCE_SCOPE);
 
 			// fn
 			REQUIRE_NOTHROW(resource->load());

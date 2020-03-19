@@ -30,6 +30,11 @@ protected:
 
 public:
 
+	static unsigned int  const UNINIT_RESOURCE_ID	= 0;
+	static unsigned int  const UNINIT_RESOURCE_SCOPE = UINT32_MAX;
+	static constexpr char const * UNINIT_FILE_NAME = "UNINITIALIZED FILE NAME";
+	static RESOURCE_TYPE const UNINIT_RESOURCE_TYPE  = RESOURCE_TYPE::RESOURCE_NULL;
+	
 	unsigned int get_resource_id() 
 	{ 
 		return _resource_id; 
@@ -74,10 +79,12 @@ public:
 	}
 	   	 
 	cResource()
-		: _resource_id(0)
-		, _scope(0)
-		, _file_name("un-init")
-		, _type(RESOURCE_TYPE::RESOURCE_NULL)
+		// no args
+		// initializer list
+		: _resource_id(UNINIT_RESOURCE_ID)
+		, _scope(UNINIT_RESOURCE_SCOPE)
+		, _file_name(std::string(UNINIT_FILE_NAME))
+		, _type(UNINIT_RESOURCE_TYPE)
 	{}
 
 	cResource(

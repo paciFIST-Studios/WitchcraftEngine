@@ -100,10 +100,11 @@ bool cSDL2RenderManager::update()
 
 std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
-	//std::unique_ptr<cResource> resource = std::make_unique<cRenderResource>();
-	auto resource = std::make_unique<cResource>();
-	resource->_type = RESOURCE_GRAPHIC;
-
+	// some default values
+	unsigned int	resource_id		= cResource::UNINIT_RESOURCE_ID;
+	unsigned int	resource_scope	= cResource::UNINIT_RESOURCE_SCOPE;
+	std::string		file_name		= cResource::UNINIT_FILE_NAME;
+	
 	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
 		element_attribute = element_attribute->next_attribute()
@@ -116,19 +117,27 @@ std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_n
 		{
 			// atoi stands for ASCII-to-integer, and is used for
 			// parsing a string to an int
-			resource->_resource_id = atoi(attribute_value.c_str());
+			resource_id = atoi(attribute_value.c_str());
 		}
 		if (attribute_name == "filename")
 		{
-			resource->_file_name = attribute_value;
+			file_name = attribute_value;
 		}
 		if (attribute_name == "scenescope")
 		{
-			resource->_scope = atoi(attribute_value.c_str());
+			resource_scope = atoi(attribute_value.c_str());
 		}
 	}
 
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load << resource->_file_name;
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
+
+	// NOTE: We're making a cRenderResource, and then moving it to a cResource ptr
+	std::unique_ptr<cResource> resource = std::make_unique<cRenderResource>(
+			  resource_id
+			, resource_scope
+			, file_name
+		);
+
 	return std::move(resource);
 }
 

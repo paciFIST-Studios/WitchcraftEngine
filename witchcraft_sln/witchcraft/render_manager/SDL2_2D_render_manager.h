@@ -29,7 +29,7 @@
 #include "../string_constants.h"
 
 #include "../resource_manager/resource.h"
-#include "SDL2_render_resource.h"
+#include "render_resource.h"
 #include "SDL_2D_render_object.h"
 #include "render_manager_base.h"
 

@@ -21,9 +21,9 @@
 #include "logging\error_log_manager.h"
 
 #include "resource_manager\resource_manager.h"
-#include "render_manager/SDL2_2D_render_manager.h"
+#include "render_manager\2d_render_manager.h"
 
-#include "utility/utility.h"
+#include "utility\utility.h"
 #include "string_constants.h"
 
 
@@ -44,7 +44,7 @@ int main(int argc, char** argv[])
 	resource_manager.load_from_xml_file("asset/buddha.asset");
 	resource_manager.load_from_xml_file("asset/person.asset");
 
-	auto render_manager = cSDL2RenderManager();
+	auto render_manager = c2DRenderManager();
 	PLOGI << witchcraft::log_strings::render_manager_start;
 
 	std::string title = "Witchcraft";

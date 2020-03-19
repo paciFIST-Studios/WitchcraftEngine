@@ -14,10 +14,11 @@ class cRenderResource : public cResource
 private:
 protected:
 	bool _is_loaded;
+
+public:
 	SDL_Surface * _surface;
 	SDL_Texture * _texture;
 
-public:
 	// provided by cResource
 	~cRenderResource() override;
 	void load() override;

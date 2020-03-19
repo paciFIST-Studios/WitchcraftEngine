@@ -23,14 +23,40 @@ class cResource : public cEngineObject
 {
 private:
 protected:
-public:
 	unsigned int _resource_id;
 	unsigned int _scope;
 	std::string _file_name;
 	RESOURCE_TYPE _type;
 
+public:
+
+	static unsigned int  const UNINIT_RESOURCE_ID	= 0;
+	static unsigned int  const UNINIT_RESOURCE_SCOPE = UINT32_MAX;
+	static constexpr char const * UNINIT_FILE_NAME = "UNINITIALIZED FILE NAME";
+	static RESOURCE_TYPE const UNINIT_RESOURCE_TYPE  = RESOURCE_TYPE::RESOURCE_NULL;
+	
+	unsigned int get_resource_id() 
+	{ 
+		return _resource_id; 
+	}
+
+	unsigned int get_scope() 
+	{ 
+		return _scope; 
+	}
+
+	std::string get_file_name() 
+	{
+		return _file_name; 
+	}
+
+	RESOURCE_TYPE get_resource_type() 
+	{
+		return _type; 
+	}
+
 	// these are working in the fashion of an IResource interface
-	virtual ~cResource()  
+	virtual ~cResource()
 	{ 
 		PLOGV 
 			<< "resource id: " << _resource_id 
@@ -51,11 +77,28 @@ public:
 			<< "  file: " << _file_name
 			<< "  cResource::unload()";
 	}
+	   	 
+	cResource()
+		// no args
+		// initializer list
+		: _resource_id(UNINIT_RESOURCE_ID)
+		, _scope(UNINIT_RESOURCE_SCOPE)
+		, _file_name(std::string(UNINIT_FILE_NAME))
+		, _type(UNINIT_RESOURCE_TYPE)
+	{}
 
-	inline cResource() 
-		: _resource_id(0)
-		, _scope(0)
-		, _type(RESOURCE_NULL)
+	cResource(
+		// ctor arguments
+		  unsigned int ID
+		, unsigned int Scope
+		, std::string const & FileName
+		, RESOURCE_TYPE ResourceType)
+
+		// initializer list
+		: _resource_id(ID)
+		, _scope(Scope)
+		, _file_name(FileName)
+		, _type(ResourceType)
 	{}
 };
 

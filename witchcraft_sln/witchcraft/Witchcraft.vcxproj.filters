@@ -66,6 +66,15 @@
     <ClCompile Include="render_manager\SDL2_2D_render_manager.cpp">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="resource_manager\tests_resource.cc">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\tests_render_resource.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_resource.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">

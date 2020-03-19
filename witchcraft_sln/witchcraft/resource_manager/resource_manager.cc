@@ -13,7 +13,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
 			auto element = element_unique_ptr.get();
-			if (element->_resource_id == UID)
+			if (element->get_resource_id() == UID)
 			{
 				return element;
 			}
@@ -90,14 +90,17 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					if (attributeValue == "graphic")
 					{
 						resource = _render_manager->load_resource_from_xml(*child);
+						break;
 					}
 					else if (attributeValue == "audio")
 					{
 						// resource = _audio_manager->load_resource_from_xml(child);
+						// break;
 					}
 					else if (attributeValue == "text")
 					{
 						// resource = _config_manager->load_resource_from_xml(child);
+						// break;
 					}
 				}
 			}
@@ -105,12 +108,12 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 			if (resource)
 			{	
 				// do not add duplicates of the same file
-				if (find_resource_by_id(resource->_resource_id))
+				if (find_resource_by_id(resource->get_resource_id()))
 					// TODO: figure out duplicates w/o completely loading the file
 					return false;
 
 				// we must use std::move to change ownership of the unique_ptr
-				_resource_map[resource->_scope].push_back(std::move(resource));
+				_resource_map[resource->get_scope()].push_back(std::move(resource));
 				_resource_count++;
 			}
 		}

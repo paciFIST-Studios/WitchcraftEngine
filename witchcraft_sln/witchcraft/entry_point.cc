@@ -44,7 +44,6 @@ int main(int argc, char** argv[])
 	resource_manager.load_from_xml_file("asset/buddha.asset");
 	resource_manager.load_from_xml_file("asset/person.asset");
 
-
 	auto render_manager = cSDL2RenderManager();
 	PLOGI << witchcraft::log_strings::render_manager_start;
 

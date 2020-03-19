@@ -30,6 +30,7 @@
 			std::string const file_name = "buddha.png";
 			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
 
+			// the cRenderResource sets its own resource type
 			auto rr = cRenderResource(resource_id, resource_scope, file_name);
 
 			REQUIRE_NOTHROW(rr.get_file_name());

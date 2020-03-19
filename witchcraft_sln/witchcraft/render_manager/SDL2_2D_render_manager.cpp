@@ -119,11 +119,11 @@ std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_n
 			// parsing a string to an int
 			resource_id = atoi(attribute_value.c_str());
 		}
-		if (attribute_name == "filename")
+		else if (attribute_name == "filename")
 		{
 			file_name = attribute_value;
 		}
-		if (attribute_name == "scenescope")
+		else if (attribute_name == "scenescope")
 		{
 			resource_scope = atoi(attribute_value.c_str());
 		}

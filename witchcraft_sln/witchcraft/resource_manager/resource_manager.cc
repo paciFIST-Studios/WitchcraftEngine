@@ -90,14 +90,17 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					if (attributeValue == "graphic")
 					{
 						resource = _render_manager->load_resource_from_xml(*child);
+						break;
 					}
 					else if (attributeValue == "audio")
 					{
 						// resource = _audio_manager->load_resource_from_xml(child);
+						// break;
 					}
 					else if (attributeValue == "text")
 					{
 						// resource = _config_manager->load_resource_from_xml(child);
+						// break;
 					}
 				}
 			}

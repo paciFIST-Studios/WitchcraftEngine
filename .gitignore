@@ -1,34 +1,20 @@
-
 *.tlog
-Witchcraft/.vs
-Witchcraft/Debug
-
 *.idb
-Witchcraft/Witchcraft/Debug/*
-Witchcraft/Witchcraft/witchcraft_error_log.txt
 _LoveEngine-master.zip
 *.iobj
 *.ipdb
 *.aps
-
 Witchcraft/lib/rapidxml/rapidxml-1.13/*
 *.zip
 *.del
 *.db
 *.opendb
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> render_manager_implementation
-=======
-=======
 *.ipch
->>>>>>> render_manager_implementation
 *.asset
 asset_lib/*
 witchcraft_sln/witchcraft/asset/neko.png
 witchcraft_sln/witchcraft/asset/whirlwind.png
 16_Games/*
->>>>>>> master
 *.clip
 diablo_pitch.pdf
 witchcraft_sln/visible ram values.png

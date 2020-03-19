@@ -1,15 +1,11 @@
-#ifndef SDL2_RENDER_RESOURCE_H
-#define SDL2_RENDER_RESOURCE_H
-
-// system
-#include <Windows.h>
+#ifndef RENDER_RESOURCE_H
+#define RENDER_RESOURCE_H
 
 // SDL
 #include <SDL.h>
 #include <SDL_image.h>
 
 // witchcraft
-#include "../utility/utility.h"
 #include "../resource_manager/resource.h"
 
 // Render == "Graphical" == "Graphics"
@@ -18,21 +14,19 @@ class cRenderResource : public cResource
 private:
 protected:
 	bool _is_loaded;
-
-public:
 	SDL_Surface * _surface;
 	SDL_Texture * _texture;
 
+public:
 	// provided by cResource
 	~cRenderResource() override;
 	void load() override;
 	void unload() override;
 
-	inline cRenderResource() 
-		: _is_loaded(false)
-	{}
-
+	// not virtual
+	cRenderResource();
+	cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName);
 	bool is_loaded() { return _is_loaded; }
 };
 
-#endif // SDL2_RENDER_RESOURCE_H
+#endif // RENDER_RESOURCE_H

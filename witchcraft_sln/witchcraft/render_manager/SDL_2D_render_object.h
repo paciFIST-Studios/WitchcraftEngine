@@ -3,7 +3,7 @@
 
 #include <SDL_rect.h>
 
-#include "../render_manager/SDL2_render_resource.h"
+#include "../render_manager/render_resource.h"
 #include "../engine/engine.h"
 
 // 2D render object; each instance represents a unique renderable item

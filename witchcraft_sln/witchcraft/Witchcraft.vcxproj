@@ -143,8 +143,8 @@
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="render_manager\2D_sprite_object.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
+    <ClInclude Include="render_manager\render_resource.h" />
     <ClInclude Include="render_manager\SDL2_2D_render_manager.h" />
-    <ClInclude Include="render_manager\SDL2_render_resource.h" />
     <ClInclude Include="render_manager\SDL_2D_render_object.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />

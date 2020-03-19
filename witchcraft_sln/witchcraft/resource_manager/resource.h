@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "plog/Log.h"
+
 #include "../engine/engine.h"
 
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
@@ -27,16 +29,34 @@ public:
 	std::string _file_name;
 	RESOURCE_TYPE _type;
 
-	// to overload
-	virtual ~cResource() {}
-	virtual void load() {}
-	virtual void unload() {}
-
-	inline cResource()
-	{
-		_resource_id = _scope = 0;
-		_type = RESOURCE_NULL;
+	// these are working in the fashion of an IResource interface
+	virtual ~cResource()  
+	{ 
+		PLOGV 
+			<< "resource id: " << _resource_id 
+			<< "  file: " << _file_name 
+			<< "  cResource::~cResource()";
 	}
+	virtual void load()   
+	{ 
+		PLOGV 
+			<< "resource id: " << _resource_id 
+			<< "  file: " << _file_name 
+			<< "  cResource::load()";
+	}
+	virtual void unload() 
+	{ 
+		PLOGV
+			<< "resource id: " << _resource_id
+			<< "  file: " << _file_name
+			<< "  cResource::unload()";
+	}
+
+	inline cResource() 
+		: _resource_id(0)
+		, _scope(0)
+		, _type(RESOURCE_NULL)
+	{}
 };
 
 #endif // !RESOURCE_H

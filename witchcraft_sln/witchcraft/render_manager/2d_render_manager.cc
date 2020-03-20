@@ -1,6 +1,6 @@
-#include "SDL2_2D_render_manager.h"
+#include "2d_render_manager.h"
 
-bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool c2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
 	// SDL_Init() returns 0 on success, and a negative number on error
@@ -45,7 +45,7 @@ bool cSDL2RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsign
 	return true;
 }
 
-void cSDL2RenderManager::shutdown()
+void c2DRenderManager::shutdown()
 {	
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	SDL_DestroyWindow(_window);
@@ -56,7 +56,7 @@ void cSDL2RenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+void c2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
 	r = utility::clamp_value_to_uint8(r);
 	g = utility::clamp_value_to_uint8(g);
@@ -66,7 +66,7 @@ void cSDL2RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigne
 	SDL_UpdateWindowSurface(_window);
 }
 
-bool cSDL2RenderManager::update()
+bool c2DRenderManager::update()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -98,7 +98,7 @@ bool cSDL2RenderManager::update()
 	return true;
 }
 
-std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<cResource> c2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
 	// some default values
 	unsigned int	resource_id		= cResource::UNINIT_RESOURCE_ID;
@@ -141,7 +141,7 @@ std::unique_ptr<cResource> cSDL2RenderManager::load_resource_from_xml(XML::xml_n
 	return std::move(resource);
 }
 
-void cSDL2RenderManager::render_all_objects()
+void c2DRenderManager::render_all_objects()
 {
 	if (_render_objects.size() < 1)
 		return;

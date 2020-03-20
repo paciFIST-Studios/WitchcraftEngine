@@ -1,5 +1,5 @@
-#ifndef SDL2_2D_RENDER_MANAGER_H
-#define SDL2_2D_RENDER_MANAGER_H
+#ifndef TWO_D_RENDER_MANAGER_H
+#define TWO_D_RENDER_MANAGER_H
 
 // stdlib
 #include <iomanip>
@@ -30,15 +30,15 @@
 
 #include "../resource_manager/resource.h"
 #include "render_resource.h"
-#include "SDL_2D_render_object.h"
+#include "2d_render_object.h"
 #include "render_manager_base.h"
 
-#define RENDER_OBJECT_VECTOR__TYPE std::vector<std::unique_ptr<cSDL2DRenderObject>>
+#define RENDER_OBJECT_VECTOR__TYPE std::vector<std::unique_ptr<c2DRenderObject>>
 
 // Depends on:
 //	c2DSpriteObject
 //	cRenderManagerBase
-//	cSDL2DRenderObject
+//	c2DRenderObject
 //	cRenderResource
 //
 //	This class serves to
@@ -46,19 +46,19 @@
 //	2. initialize hardware
 //	3. create / load / unload graphics resource
 //	4. create / load / unload render graphics
-class cSDL2RenderManager : public cRenderManagerBase
+class c2DRenderManager : public cRenderManagerBase
 {
 private:
 protected:
 
-	static std::unique_ptr<cSDL2RenderManager> _SDL2D_render_manager;
+	static std::unique_ptr<c2DRenderManager> _SDL2D_render_manager;
 
 	RENDER_OBJECT_VECTOR__TYPE _render_objects;
 
 public:
-	cSDL2RenderManager() {}
+	c2DRenderManager() {}
 
-	static cSDL2RenderManager * get_SDL2D_render_manager();
+	static c2DRenderManager * get_SDL2D_render_manager();
 	
 	// the program window
 	SDL_Window * _window;
@@ -90,4 +90,4 @@ public:
 
 };
 
-#endif // SDL2_2D_RENDER_MANAGER_H
+#endif // TWO_D_RENDER_MANAGER_H

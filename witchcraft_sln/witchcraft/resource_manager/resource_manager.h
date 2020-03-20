@@ -17,7 +17,7 @@
 #include "../engine/engine.h"
 #include "resource.h"
 
-#include "../render_manager/SDL2_2D_render_manager.h"
+#include "../render_manager/2d_render_manager.h"
 
 #include "../utility/utility.h"
 
@@ -40,7 +40,7 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	cSDL2RenderManager * _render_manager = nullptr;
+	c2DRenderManager * _render_manager = nullptr;
 
 	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
 	RESOURCE_MAP_TYPE _resource_map;

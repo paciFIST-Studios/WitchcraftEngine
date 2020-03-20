@@ -1,15 +1,15 @@
-#ifndef SPRITE_OBJECT_H
-#define SPRITE_OBJECT_H
+#ifndef TWO_D_SPRITE_OBJECT_H
+#define TWO_D_SPRITE_OBJECT_H
 
 #include "../utility/utility.h"
-#include "SDL_2D_render_object.h"
+#include "2d_render_object.h"
 
 // Encapsulates some animation, sprite anims are 
 // to be packed into a single texture;
 // NOTE: Even though 2D-Sprite is kinda a tautology,
 // we're still going to use it, b/c it will be more
 // accessible than just sprite (says I)
-class c2DSpriteObject : public cSDL2DRenderObject
+class c2DSpriteObject : public c2DRenderObject
 {
 private:
 protected:
@@ -36,4 +36,4 @@ public:
 	unsigned int get_time() { return 0; }
 };
 
-#endif
+#endif // !TWO_D_SPRITE_OBJECT_H

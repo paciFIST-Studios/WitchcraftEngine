@@ -1,6 +1,6 @@
-#include "SDL_2D_render_object.h"
+#include "2d_render_object.h"
 
-void cSDL2DRenderObject::set_resource_object(cRenderResource * RenderResource)
+void c2DRenderObject::set_resource_object(cRenderResource * RenderResource)
 {
 	if(RenderResource)
 	{

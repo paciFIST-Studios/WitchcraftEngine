@@ -17,7 +17,7 @@
 			REQUIRE_NOTHROW(rr->get_file_name());
 			REQUIRE_NOTHROW(rr->get_resource_id());
 			REQUIRE_NOTHROW(rr->get_resource_type());
-			REQUIRE_NOTHROW(rr->get_scope());
+			REQUIRE_NOTHROW(rr->get_scope_id());
 
 			REQUIRE_NOTHROW(rr->load());
 			REQUIRE_NOTHROW(rr->unload());
@@ -39,8 +39,8 @@
 			REQUIRE_NOTHROW(rr.get_resource_id());
 			REQUIRE(rr.get_resource_id() == resource_id);
 
-			REQUIRE_NOTHROW(rr.get_scope());
-			REQUIRE(rr.get_scope() == resource_scope);
+			REQUIRE_NOTHROW(rr.get_scope_id());
+			REQUIRE(rr.get_scope_id() == resource_scope);
 
 			REQUIRE_NOTHROW(rr.get_resource_type());
 			REQUIRE(rr.get_resource_type() == resource_type);

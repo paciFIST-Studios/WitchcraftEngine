@@ -113,7 +113,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					return false;
 
 				// we must use std::move to change ownership of the unique_ptr
-				_resource_map[resource->get_scope()].push_back(std::move(resource));
+				_resource_map[resource->get_scope_id()].push_back(std::move(resource));
 				_resource_count++;
 			}
 		}

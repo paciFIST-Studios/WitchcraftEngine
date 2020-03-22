@@ -18,7 +18,7 @@
 		
 			auto resource = cResource(resource_id, resource_scope, file_name, resource_type);
 			REQUIRE(resource.get_resource_id() == resource_id);
-			REQUIRE(resource.get_scope() == resource_scope);
+			REQUIRE(resource.get_scope_id() == resource_scope);
 			REQUIRE(resource.get_file_name() == file_name);
 			REQUIRE(resource.get_resource_type() == resource_type);
 		}
@@ -30,7 +30,7 @@
 			auto file_name = resource->get_file_name();
 			auto resource_id = resource->get_resource_id();
 			auto resource_type = resource->get_resource_type();
-			auto resource_scope = resource->get_scope();
+			auto resource_scope = resource->get_scope_id();
 
 			// file name
 			REQUIRE(typeid(file_name) == typeid(std::string));

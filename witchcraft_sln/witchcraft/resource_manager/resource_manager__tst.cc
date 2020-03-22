@@ -102,7 +102,7 @@
 			// ID actually matches our request
 			REQUIRE(resource->get_resource_id() == 1);
 			// returned resource exists in its own scope, as defined by file
-			REQUIRE(resource->get_scope() != RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
 		}
 
 		TEST_CASE("ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")

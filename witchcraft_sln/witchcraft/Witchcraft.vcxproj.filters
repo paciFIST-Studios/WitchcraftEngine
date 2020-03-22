@@ -81,6 +81,15 @@
     <ClCompile Include="scene_manager\test_2d_layer.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
+    <ClCompile Include="scene_manager\test_timer.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\test_scene_listener.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\test_2d_scene_manager.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -128,9 +137,6 @@
     <ClInclude Include="scene_manager\scene_object.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
-    <ClInclude Include="scene_manager\timer_h.h">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClInclude>
     <ClInclude Include="scene_manager\scene_listener.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
@@ -138,6 +144,9 @@
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager\test_scene_object.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\timer.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
   </ItemGroup>

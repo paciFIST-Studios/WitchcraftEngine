@@ -136,6 +136,7 @@
     <ClCompile Include="render_manager\2d_sprite_object__tst.cc" />
     <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
+    <ClCompile Include="resource_manager\resource.cpp" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
     <ClCompile Include="resource_manager\resource__tst.cc" />

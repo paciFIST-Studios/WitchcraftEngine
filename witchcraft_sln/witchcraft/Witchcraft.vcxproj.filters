@@ -99,6 +99,9 @@
     <ClCompile Include="render_manager\2d_sprite_object__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="resource_manager\resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">

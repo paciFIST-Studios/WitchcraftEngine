@@ -20,3 +20,5 @@ diablo_pitch.pdf
 witchcraft_sln/visible ram values.png
 witchcraft_sln/witchcraft/Debug/*
 research/*
+witchcraft_sln/witchcraft/scene_manager/scene_listener.h
+witchcraft_sln/witchcraft/scene_manager/2d_scene_manager.h

@@ -12,6 +12,8 @@
 		TEST_CASE("cSceneObject::cSceneObject()")
 		{
 			REQUIRE_NOTHROW(cSceneObject());
+			auto ptr = &cSceneObject();
+			REQUIRE(ptr != nullptr);
 		}
 
 	#endif // RUN_UNIT_TESTS

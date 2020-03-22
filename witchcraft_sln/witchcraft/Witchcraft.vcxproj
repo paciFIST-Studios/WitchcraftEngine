@@ -134,8 +134,8 @@
     <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\tests_render_resource.cc" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
-    <ClCompile Include="resource_manager\tests_resource.cc" />
-    <ClCompile Include="resource_manager\tests_resource_manager.cc" />
+    <ClCompile Include="resource_manager\resource_manager__tst.cc" />
+    <ClCompile Include="resource_manager\resource__tst.cc" />
     <ClCompile Include="scene_manager\test_2d_layer.cc" />
     <ClCompile Include="scene_manager\test_2d_scene_manager.cc" />
     <ClCompile Include="scene_manager\test_scene_listener.cc" />

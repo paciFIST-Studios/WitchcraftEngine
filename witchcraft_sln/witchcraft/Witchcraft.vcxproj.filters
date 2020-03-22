@@ -57,12 +57,6 @@
     <ClCompile Include="utility\tests_utility.cc">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager\tests_resource_manager.cc">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="resource_manager\tests_resource.cc">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\tests_render_resource.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -89,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="scene_manager\test_2d_scene_manager.cc">
       <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager\resource__tst.cc">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager\resource_manager__tst.cc">
+      <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

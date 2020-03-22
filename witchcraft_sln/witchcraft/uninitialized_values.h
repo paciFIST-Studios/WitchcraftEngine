@@ -1,18 +1,14 @@
 #ifndef UNINITIALIZED_VALUES_H
 #define UNINITIALIZED_VALUES_H
 
-
-
-namespace init
+namespace uninit
 {
-	static bool  constexpr UNI_BOOL = false;
+	static bool  constexpr BOOL = false;
 
-	static float constexpr UNI_FLOAT = 0.0;
+	static float constexpr FLOAT = 0.0;
 
-	static unsigned int UNI_UINT = 0;
+	static unsigned char UCHAR = 0;
 
-	static unsigned char UNI_UCHAR = 0;
 }
-
 
 #endif // !UNINITIALIZED_VALUES_H

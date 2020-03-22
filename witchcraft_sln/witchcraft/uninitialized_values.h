@@ -3,15 +3,15 @@
 
 namespace uninit
 {
-	static bool  constexpr BOOL = false;
+	static bool	constexpr			BOOL = false;
 
-	static float constexpr FLOAT = 0.0;
+	static float constexpr			FLOAT = 0.0;
 
-	static unsigned char UCHAR = 0;
+	static unsigned char constexpr	UCHAR = 0;
 
-	static unsigned int UINT = 0;
+	static unsigned int	constexpr	UINT = 0;
 
-	static char const * CSTRING = "un-init";
+	static char const *				CSTRING = "un-init";
 }
 
 #endif // !UNINITIALIZED_VALUES_H

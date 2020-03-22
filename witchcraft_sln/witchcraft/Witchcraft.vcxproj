@@ -165,6 +165,7 @@
     <ClInclude Include="scene_manager\test_scene_object.h" />
     <ClInclude Include="scene_manager\timer.h" />
     <ClInclude Include="string_constants.h" />
+    <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>

@@ -25,31 +25,19 @@ class cResource : public cEngineObject
 private:
 protected:
 	unsigned int _resource_id;
-	unsigned int _scope;
+	unsigned int _scope_id;
 	std::string _file_name;
 	RESOURCE_TYPE _type;
 
 public:
 	
-	unsigned int get_resource_id() 
-	{ 
-		return _resource_id; 
-	}
+	unsigned int get_resource_id() const;
+	
+	unsigned int get_scope_id() const;
 
-	unsigned int get_scope() 
-	{ 
-		return _scope; 
-	}
+	std::string get_file_name() const;
 
-	std::string get_file_name() 
-	{
-		return _file_name; 
-	}
-
-	RESOURCE_TYPE get_resource_type() 
-	{
-		return _type; 
-	}
+	RESOURCE_TYPE get_resource_type() const;
 
 	// these are working in the fashion of an IResource interface
 	virtual ~cResource()
@@ -74,28 +62,11 @@ public:
 			<< "  cResource::unload()";
 	}
 	   	 
-	cResource()
-		// no args
-		// initializer list
-		: _resource_id(uninit::UCHAR)
-		, _scope(uninit::UINT)
-		, _file_name(std::string(uninit::CSTRING))
-		, _type(RESOURCE_TYPE::RESOURCE_NULL)
-	{}
+	cResource();
 
-	cResource(
-		// ctor arguments
-		  unsigned int ID
-		, unsigned int Scope
-		, std::string const & FileName
-		, RESOURCE_TYPE ResourceType)
+	cResource(unsigned int ID, unsigned int Scope, std::string const & FileName
+		, RESOURCE_TYPE ResourceType);
 
-		// initializer list
-		: _resource_id(ID)
-		, _scope(Scope)
-		, _file_name(FileName)
-		, _type(ResourceType)
-	{}
 };
 
 #endif // !RESOURCE_H

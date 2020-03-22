@@ -60,8 +60,7 @@
 		//		OutputDebugString(message.c_str());
 		//	#endif
 		//}
-
-		
+				
 		template<typename t>
 		static t clamp_value_to_uint8(t val)
 		{
@@ -72,7 +71,6 @@
 			else
 				return val;
 		}
-
 	}
 
 #endif

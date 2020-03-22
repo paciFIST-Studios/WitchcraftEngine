@@ -1,10 +1,16 @@
 #ifndef TWO_D_RENDER_OBJECT_H
 #define TWO_D_RENDER_OBJECT_H
 
+#include <tuple>
+
 #include <SDL_rect.h>
+
+#include "../uninitialized_values.h"
 
 #include "../render_manager/render_resource.h"
 #include "../engine/engine.h"
+
+#define POSITION_TUPLE std::tuple<float, float>
 
 // 2D render object; each instance represents a unique renderable item
 // in a 2d scene. It contains position, scale, & rotation, and these
@@ -17,6 +23,7 @@ protected:
 
 	// TODO: only a couple of these should actually be public
 public:
+
 	cRenderResource * _render_resource;
 	SDL_Rect _render_rect;
 	float _position_x;
@@ -30,6 +37,20 @@ public:
 	c2DRenderObject();
 
 	void set_resource_object(cRenderResource * RenderResource);
+
+	// position
+	POSITION_TUPLE get_position();
+	void set_position(float x, float y);
+
+	// visibility
+	bool is_visible();
+	void set_is_visible(bool is);
+
+	// transparency color
+	SDL_Color get_color_key();
+	void set_color_key(SDL_Color key);
+	bool is_color_key_enabled();
+	void set_color_key_enabled(bool is);
 
 	virtual void update() {};
 };

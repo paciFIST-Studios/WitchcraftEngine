@@ -1,5 +1,5 @@
-#ifndef TEST_RESOURCE_CC
-#define TEST_RESOURCE_CC
+#ifndef RESOURCE__TST_CC
+#define RESOURCE__TST_CC
 
 	// this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -34,19 +34,19 @@
 
 			// file name
 			REQUIRE(typeid(file_name) == typeid(std::string));
-			REQUIRE(file_name.compare(resource->UNINIT_FILE_NAME));
+			REQUIRE(file_name.compare(std::string(uninit::CSTRING)));
 
 			// resource id
-			REQUIRE(typeid(resource_id) == typeid(resource->UNINIT_RESOURCE_ID));
-			REQUIRE(resource_id == resource->UNINIT_RESOURCE_ID);
+			REQUIRE(typeid(resource_id) == typeid(unsigned int));
+			REQUIRE(resource_id == uninit::UINT);
 
 			// resource type
-			REQUIRE(typeid(resource_type) == typeid(resource->UNINIT_RESOURCE_TYPE));
-			REQUIRE(resource_type == resource->UNINIT_RESOURCE_TYPE);
+			REQUIRE(typeid(resource_type) == typeid(RESOURCE_TYPE));
+			REQUIRE(resource_type == RESOURCE_TYPE::RESOURCE_NULL);
 
 			// resource scope
-			REQUIRE(typeid(resource_scope) == typeid(resource->UNINIT_RESOURCE_SCOPE));
-			REQUIRE(resource_scope == resource->UNINIT_RESOURCE_SCOPE);
+			REQUIRE(typeid(resource_scope) == typeid(unsigned int));
+			REQUIRE(resource_scope == uninit::UINT);
 
 			// fn
 			REQUIRE_NOTHROW(resource->load());
@@ -55,4 +55,4 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TEST_RESOURCE_CC
+#endif // !RESOURCE__TST_CC

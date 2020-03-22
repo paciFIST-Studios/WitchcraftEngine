@@ -5,6 +5,7 @@
 
 #include "plog/Log.h"
 
+#include "../uninitialized_values.h"
 #include "../engine/engine.h"
 
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
@@ -29,11 +30,6 @@ protected:
 	RESOURCE_TYPE _type;
 
 public:
-
-	static unsigned int  const UNINIT_RESOURCE_ID	= 0;
-	static unsigned int  const UNINIT_RESOURCE_SCOPE = UINT32_MAX;
-	static constexpr char const * UNINIT_FILE_NAME = "UNINITIALIZED FILE NAME";
-	static RESOURCE_TYPE const UNINIT_RESOURCE_TYPE  = RESOURCE_TYPE::RESOURCE_NULL;
 	
 	unsigned int get_resource_id() 
 	{ 
@@ -81,10 +77,10 @@ public:
 	cResource()
 		// no args
 		// initializer list
-		: _resource_id(UNINIT_RESOURCE_ID)
-		, _scope(UNINIT_RESOURCE_SCOPE)
-		, _file_name(std::string(UNINIT_FILE_NAME))
-		, _type(UNINIT_RESOURCE_TYPE)
+		: _resource_id(uninit::UCHAR)
+		, _scope(uninit::UINT)
+		, _file_name(std::string(uninit::CSTRING))
+		, _type(RESOURCE_TYPE::RESOURCE_NULL)
 	{}
 
 	cResource(

@@ -9,6 +9,9 @@ namespace uninit
 
 	static unsigned char UCHAR = 0;
 
+	static unsigned int UINT = 0;
+
+	static char const * CSTRING = "un-init";
 }
 
 #endif // !UNINITIALIZED_VALUES_H

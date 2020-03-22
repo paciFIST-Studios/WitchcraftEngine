@@ -4,7 +4,6 @@
 #include <time.h>
 #include <windows.h>
 
-
 class cTimer
 {
 private:

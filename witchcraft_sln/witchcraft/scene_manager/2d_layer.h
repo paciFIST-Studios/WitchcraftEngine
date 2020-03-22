@@ -22,8 +22,7 @@ public:
 		, _position_x(UNINIT_COORDINATE_F)
 		, _position_y(UNINIT_COORDINATE_F)
 		, _name{std::string("un-init")}
-	{
-	}
+	{}
 
 	bool _layer_is_visible;
 	unsigned int _layer_z_order;

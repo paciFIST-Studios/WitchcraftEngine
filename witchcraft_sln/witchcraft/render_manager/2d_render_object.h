@@ -22,10 +22,8 @@ private:
 protected:
 
 	// TODO: only a couple of these should actually be public
-public:
 
-	cRenderResource * _render_resource;
-	SDL_Rect _render_rect;
+
 	float _position_x;
 	float _position_y;
 
@@ -34,9 +32,14 @@ public:
 	SDL_Color _color_key;
 	bool _color_key_is_enabled;
 
+
+public:
+	cRenderResource * _render_resource;
+	SDL_Rect _render_rect;
+
 	c2DRenderObject();
 
-	void set_resource_object(cRenderResource * RenderResource);
+	void set_resource_object(cRenderResource * renderResource);
 
 	// position
 	POSITION_TUPLE get_position();

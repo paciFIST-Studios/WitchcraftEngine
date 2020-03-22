@@ -148,13 +148,15 @@ void c2DRenderManager::render_all_objects()
 
 	for (auto&& object : _render_objects)
 	{
-		if (object->_is_visible == false)
+		if (object->is_visible() == false)
 			continue;
 
 		object->update();
 		SDL_Rect position;
-		position.x = int(object->_position_x);
-		position.y = int(object->_position_y);
+
+		auto position_tuple = object->get_position();
+		position.x = int(std::get<0>(position_tuple));
+		position.y = int(std::get<1>(position_tuple));
 
 		SDL_RenderCopy(
 			  _current_renderer

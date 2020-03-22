@@ -10,11 +10,11 @@ c2DRenderObject::c2DRenderObject()
 	, _color_key_is_enabled(uninit::BOOL)
 {}
 
-void c2DRenderObject::set_resource_object(cRenderResource * RenderResource)
+void c2DRenderObject::set_resource_object(cRenderResource * renderResource)
 {
-	if(RenderResource)
+	if(renderResource)
 	{
-		_render_resource = RenderResource;
+		_render_resource = renderResource;
 		_render_rect.w = _render_resource->_surface->w;
 		_render_rect.h = _render_resource->_surface->h;
 

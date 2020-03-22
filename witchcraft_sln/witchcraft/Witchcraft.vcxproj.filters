@@ -28,6 +28,9 @@
     <Filter Include="Source Files\render_manager">
       <UniqueIdentifier>{d7cd527a-f0bc-4e45-97df-7aa977abf4ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scene_manager">
+      <UniqueIdentifier>{43058c49-566f-4a8e-b1a8-0d21130f51ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -75,6 +78,9 @@
     <ClCompile Include="render_manager\2d_sprite_object.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="scene_manager\test_2d_layer.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -115,6 +121,24 @@
     </ClInclude>
     <ClInclude Include="render_manager\2d_sprite_object.h">
       <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\2d_layer.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\scene_object.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\timer_h.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\scene_listener.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\2d_scene_manager.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\test_scene_object.h">
+      <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

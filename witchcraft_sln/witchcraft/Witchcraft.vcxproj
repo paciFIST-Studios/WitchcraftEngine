@@ -136,6 +136,7 @@
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\tests_resource.cc" />
     <ClCompile Include="resource_manager\tests_resource_manager.cc" />
+    <ClCompile Include="scene_manager\test_2d_layer.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
     <ClCompile Include="utility\tests_utility.cc" />
@@ -151,6 +152,12 @@
     <ClInclude Include="render_manager\render_resource.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
+    <ClInclude Include="scene_manager\2d_layer.h" />
+    <ClInclude Include="scene_manager\2d_scene_manager.h" />
+    <ClInclude Include="scene_manager\scene_listener.h" />
+    <ClInclude Include="scene_manager\scene_object.h" />
+    <ClInclude Include="scene_manager\test_scene_object.h" />
+    <ClInclude Include="scene_manager\timer_h.h" />
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="unit_testing_switch.h" />
     <ClInclude Include="utility\utility.h" />

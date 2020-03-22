@@ -90,6 +90,15 @@
     <ClCompile Include="render_manager\render_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\2d_render_manager__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\2d_render_object__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\2d_sprite_object__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">

@@ -129,8 +129,11 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="render_manager\2d_render_manager.cc" />
+    <ClCompile Include="render_manager\2d_render_manager__tst.cc" />
     <ClCompile Include="render_manager\2d_render_object.cc" />
+    <ClCompile Include="render_manager\2d_render_object__tst.cc" />
     <ClCompile Include="render_manager\2d_sprite_object.cc" />
+    <ClCompile Include="render_manager\2d_sprite_object__tst.cc" />
     <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
     <ClCompile Include="resource_manager\resource_manager.cc" />

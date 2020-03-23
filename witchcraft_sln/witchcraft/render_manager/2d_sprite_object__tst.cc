@@ -93,7 +93,7 @@
 			REQUIRE(ca->get_next_index() == 4);
 			REQUIRE(ca->get_next_index() == 6);
 			REQUIRE(ca->get_next_index() == 8);
-			REQUIRE(ca->get_next_index() == 1);
+			REQUIRE(ca->get_next_index() == 1); // all sequences perma-loop
 		}
 
 		TEST_CASE("c2DSpriteObject::play")

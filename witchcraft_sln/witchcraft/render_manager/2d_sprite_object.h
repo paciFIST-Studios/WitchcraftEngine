@@ -11,7 +11,6 @@
 #define UINT_UINT_TUPLE std::tuple<unsigned int, unsigned int>
 #define ANIMATION_MAP std::map<std::string, c2DSpriteAnimation>
 
-// idea: sprite object initializer struct
 
 struct c2DSpriteObjectInitializer
 {

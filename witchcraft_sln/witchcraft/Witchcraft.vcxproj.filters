@@ -170,5 +170,8 @@
     <ClInclude Include="render_manager\2d_sprite_animation.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
+    <ClInclude Include="render_manager\animation_resource.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

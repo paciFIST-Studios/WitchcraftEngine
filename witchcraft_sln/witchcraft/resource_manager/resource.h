@@ -11,11 +11,12 @@
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 
 typedef enum {
-	RESOURCE_NULL = 0
-	, RESOURCE_GRAPHIC = 1
-	, RESOURCE_MOVIE = 2
-	, RESOURCE_AUDIO = 3
-	, RESOURCE_TEXT = 4
+	  RESOURCE_NULL			= 0
+	, RESOURCE_GRAPHIC		= 1
+	, RESOURCE_ANIMATION	= 2
+	, RESOURCE_MOVIE		= 3
+	, RESOURCE_AUDIO		= 4
+	, RESOURCE_TEXT			= 5
 } RESOURCE_TYPE;
 
 // The cResource class represents a resource object, which is managed by a resource manager

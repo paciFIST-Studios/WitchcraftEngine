@@ -12,6 +12,7 @@ public:
 	c2DSpriteAnimation animation;
 
 	cAnimationResource() {}
+	cAnimationResource(c2DSpriteAnimation anim) : animation(anim) {}
 	~cAnimationResource() override {}
 	void load() override {}
 	void unload() override {}

@@ -1,46 +1,102 @@
 #include "2D_sprite_object.h"
 
+UINT_UINT_TUPLE c2DSpriteObject::get_sprite_sheet_dimensions()
+{
+	return std::make_tuple(_sprite_sheet_width, _sprite_sheet_height);
+}
+
+UINT_UINT_TUPLE c2DSpriteObject::get_frame_dimensions()
+{
+	return std::make_tuple(_frame_width, _frame_height);
+}
+
+UINT_UINT_TUPLE c2DSpriteObject::get_frame_position()
+{
+	return _current_frame_position;
+}
+
+c2DSpriteAnimation * c2DSpriteObject::get_current_animation()
+{
+	return _current_animation;
+}
+
+float c2DSpriteObject::get_current_frame_timing()
+{
+	return _time_until_frame_advance;
+}
+
+bool c2DSpriteObject::is_animation_playing()
+{
+	return _animation_is_playing;
+}
+
+void c2DSpriteObject::set_animation(std::string const & name)
+{
+	if (_animation_map.count(name) > 0)
+	{
+		_current_animation = &_animation_map[name];
+	}
+	else
+	{
+		_current_animation = nullptr;
+	}
+}
+
+
+
+
+
 void c2DSpriteObject::update()
 {
-	DWORD time_since_last_frame_ms = get_time() - _time_at_last_frame;
+	if (_animation_is_playing == false)
+		return;
 
-	if (time_since_last_frame_ms >= _speed)
+	DWORD time_since_last_frame_ms = timeGetTime() - _time_at_last_frame_advance;
+	
+	if (time_since_last_frame_ms >= _time_until_frame_advance)
 	{
-		_current_frame++;
-
-		if (_current_frame >= _total_animation_frames)
-			_current_frame = _start_frame;
-
-		set_frame_rect(_current_frame);
-
-		_time_at_last_frame = get_time();
+		//_current_frame = _current_animation->get_next_index();
+		//set_frame_rect(_current_frame);	
+		_time_at_last_frame_advance = timeGetTime();
 	}
 }
 
 void c2DSpriteObject::play()
 {
-	// calculate frame dimension
-	auto * surface = _render_resource->_surface;
-	_frame_width = surface->w / _animation_frames_per_row;
-	_frame_height = surface->h / _animation_frames_per_column;
-	_current_frame = _start_frame;
-	set_frame_rect(_current_frame);
-	_time_at_last_frame = get_time();
-	
+	_animation_is_playing = true;
+}
+
+void c2DSpriteObject::stop()
+{
+	_animation_is_playing = false;
 }
 
 void c2DSpriteObject::set_frame_rect(unsigned int FrameNumber)
 {
-	unsigned int row_number = static_cast<int>(std::floor(FrameNumber / _animation_frames_per_row));
-	unsigned int column_number = FrameNumber;
-
-	if (row_number > 0)
-	{
-		column_number = FrameNumber - (row_number * _animation_frames_per_row);
-		_render_rect.x = column_number * _frame_width;
-		_render_rect.y = row_number * _frame_height;
-		_render_rect.w = _frame_width;
-		_render_rect.h = _frame_height;
-	}
-
 }
+
+c2DSpriteObject::c2DSpriteObject()
+	: _sprite_sheet_width(uninit::UINT)
+	, _sprite_sheet_height(uninit::UINT)
+	, _frame_width(uninit::UINT)
+	, _frame_height(uninit::UINT)
+	, _current_frame_position{uninit::UINT, uninit::UINT}
+	, _current_animation(nullptr)
+	, _time_until_frame_advance(uninit::FLOAT)
+	, _animation_is_playing(uninit::BOOL)
+{}
+
+c2DSpriteObject::c2DSpriteObject(c2DSpriteObjectInitializer args)
+	: _sprite_sheet_width(args.sprite_sheet_width)
+	, _sprite_sheet_height(args.sprite_sheet_height)
+	, _frame_width(args.frame_width)
+	, _frame_height(args.frame_height)
+	, _current_frame_position{args.frame_position_x, args.frame_position_y }
+	, _current_animation(nullptr)
+	, _time_until_frame_advance(uninit::FLOAT)
+	, _animation_is_playing(uninit::BOOL)
+{
+	stop();
+}
+
+

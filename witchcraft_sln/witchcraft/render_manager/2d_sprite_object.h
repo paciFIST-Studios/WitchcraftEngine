@@ -1,31 +1,61 @@
 #ifndef TWO_D_SPRITE_OBJECT_H
 #define TWO_D_SPRITE_OBJECT_H
 
+#include <map>
+
 #include "../utility/utility.h"
 #include "2d_render_object.h"
 
-// Encapsulates some animation, sprite anims are 
-// to be packed into a single texture;
-// NOTE: Even though 2D-Sprite is kinda a tautology,
-// we're still going to use it, b/c it will be more
-// accessible than just sprite (says I)
+#include "2d_sprite_animation.h"
+
+#define UINT_UINT_TUPLE std::tuple<unsigned int, unsigned int>
+#define ANIMATION_MAP std::map<std::string, c2DSpriteAnimation>
+
+// idea: sprite object initializer struct
+
+struct c2DSpriteObjectInitializer
+{
+	unsigned int sprite_sheet_width;
+	unsigned int sprite_sheet_height;
+	unsigned int frame_width;
+	unsigned int frame_height;
+	unsigned int frame_position_x;
+	unsigned int frame_position_y;
+};
+
 class c2DSpriteObject : public c2DRenderObject
 {
 private:
 protected:
-	DWORD _time_at_last_frame;
+	DWORD _time_at_last_frame_advance;
+
+	// relating to the sprite sheet, a 4x4 square of sprites
+	unsigned int const _sprite_sheet_width;
+	unsigned int const _sprite_sheet_height;
+	
+	// the w/h of a single frame/sprite in a sprite sheet
+	unsigned int const _frame_width;
+	unsigned int const _frame_height;
+
+	UINT_UINT_TUPLE _current_frame_position;
+
+	ANIMATION_MAP _animation_map;
+
+	c2DSpriteAnimation * _current_animation;
+
+	float _time_until_frame_advance;
+
+	bool _animation_is_playing;
 
 public:
-	unsigned int _total_animation_frames;
-	unsigned int _animation_frames_per_row;
-	unsigned int _animation_frames_per_column;
-	unsigned int _current_frame;
-	unsigned int _start_frame;
+	UINT_UINT_TUPLE get_sprite_sheet_dimensions();
+	UINT_UINT_TUPLE get_frame_dimensions();
+	UINT_UINT_TUPLE get_frame_position();
+	c2DSpriteAnimation * get_current_animation();
+	float get_current_frame_timing();
+	bool is_animation_playing();
 
-	float _speed;
-
-	unsigned int _frame_width;
-	unsigned int _frame_height;
+	void set_animation(std::string const & name);
 
 	void update();
 	void play();
@@ -33,7 +63,8 @@ public:
 	void set_frame_rect(unsigned int FrameNumber);
 	c2DSpriteObject();
 
-	unsigned int get_time() { return 0; }
+	c2DSpriteObject(c2DSpriteObjectInitializer args);
+
 };
 
 #endif // !TWO_D_SPRITE_OBJECT_H

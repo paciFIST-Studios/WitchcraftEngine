@@ -18,9 +18,9 @@
 
 			// we can't tell that it's looping the same zero,
 			// but we do know it should report a zero each time
-			REQUIRE(anim.get_next_frame() == uninit::UINT);
-			REQUIRE(anim.get_next_frame() == uninit::UINT);
-			REQUIRE(anim.get_next_frame() == uninit::UINT);
+			REQUIRE(anim.get_next_index() == uninit::UINT);
+			REQUIRE(anim.get_next_index() == uninit::UINT);
+			REQUIRE(anim.get_next_index() == uninit::UINT);
 		}
 	
 		TEST_CASE("c2DSpriteAnimation::c2DSpriteAnimation(name, sequence, timing)")
@@ -33,16 +33,14 @@
 			REQUIRE(anim.get_name() == anim_name);
 			REQUIRE(anim.get_frame_advance_timing() == anim_timing);
 
-			REQUIRE(anim.get_next_frame() == 1);
-			REQUIRE(anim.get_next_frame() == 2);
-			REQUIRE(anim.get_next_frame() == 3);
-			REQUIRE(anim.get_next_frame() == 1);
-			REQUIRE(anim.get_next_frame() == 2);
-			REQUIRE(anim.get_next_frame() == 3);
-			REQUIRE(anim.get_next_frame() == 1);
+			REQUIRE(anim.get_next_index() == 1);
+			REQUIRE(anim.get_next_index() == 2);
+			REQUIRE(anim.get_next_index() == 3);
+			REQUIRE(anim.get_next_index() == 1);
+			REQUIRE(anim.get_next_index() == 2);
+			REQUIRE(anim.get_next_index() == 3);
+			REQUIRE(anim.get_next_index() == 1);
 		}
-
-
 
 	#endif // RUN_UNIT_TESTS
 

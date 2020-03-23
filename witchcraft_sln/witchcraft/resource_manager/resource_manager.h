@@ -17,6 +17,7 @@
 #include "../engine/engine.h"
 #include "resource.h"
 
+#include "../render_manager/animation_resource.h"
 #include "../render_manager/2d_render_manager.h"
 
 #include "../utility/utility.h"
@@ -45,9 +46,10 @@ protected:
 	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
 
+
 public:
 
-	const int GLOBAL_SCOPE_ID = 0;
+	static int constexpr GLOBAL_SCOPE_ID = 0;
 
 	// find resource by id.  retun null if not found
 	cResource* find_resource_by_id(unsigned int UID);
@@ -94,7 +96,8 @@ public:
 			}
 			else if (file_path == "asset/person.asset")
 			{
-				config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"2\">Person</resource></resources>";
+				//config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"2\"><></></resource></resources>";
+				config_data = "<resources>\n\t<resource UID=\"4\" type=\"graphic\" filename=\"asset / person.png\" scenescope=\"2\"></resource>\n\t<resource UID=\"100\" type=\"2d_animation\" name=\"idle\" timing_ms=\"250\" sequence=\"1 2 3 1 2 3 1 2 3 3 3 4 4\"></resource>\n</resources>";
 			}
 			else if (file_path == "witchcraft.cfg")
 			{

@@ -42,10 +42,6 @@ void c2DSpriteObject::set_animation(std::string const & name)
 	}
 }
 
-
-
-
-
 void c2DSpriteObject::update()
 {
 	if (_animation_is_playing == false)
@@ -97,6 +93,10 @@ c2DSpriteObject::c2DSpriteObject(c2DSpriteObjectInitializer args)
 	, _animation_is_playing(uninit::BOOL)
 {
 	stop();
+
+	// manually add the animations to the map.
+	for (auto anim : args.animations)
+		_animation_map.emplace(anim.get_name(), anim);
 }
 
 

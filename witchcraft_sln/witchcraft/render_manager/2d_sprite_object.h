@@ -21,6 +21,7 @@ struct c2DSpriteObjectInitializer
 	unsigned int frame_height;
 	unsigned int frame_position_x;
 	unsigned int frame_position_y;
+	std::vector<c2DSpriteAnimation> animations;
 };
 
 class c2DSpriteObject : public c2DRenderObject
@@ -61,8 +62,8 @@ public:
 	void play();
 	void stop();
 	void set_frame_rect(unsigned int FrameNumber);
-	c2DSpriteObject();
 
+	c2DSpriteObject();
 	c2DSpriteObject(c2DSpriteObjectInitializer args);
 
 };

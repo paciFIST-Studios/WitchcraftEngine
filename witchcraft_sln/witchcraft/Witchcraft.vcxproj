@@ -132,6 +132,7 @@
     <ClCompile Include="render_manager\2d_render_manager__tst.cc" />
     <ClCompile Include="render_manager\2d_render_object.cc" />
     <ClCompile Include="render_manager\2d_render_object__tst.cc" />
+    <ClCompile Include="render_manager\2d_sprite_animation__tst.cc" />
     <ClCompile Include="render_manager\2d_sprite_object.cc" />
     <ClCompile Include="render_manager\2d_sprite_object__tst.cc" />
     <ClCompile Include="render_manager\render_resource.cc" />
@@ -155,6 +156,7 @@
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="render_manager\2d_render_manager.h" />
     <ClInclude Include="render_manager\2d_render_object.h" />
+    <ClInclude Include="render_manager\2d_sprite_animation.h" />
     <ClInclude Include="render_manager\2d_sprite_object.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
     <ClInclude Include="render_manager\render_resource.h" />

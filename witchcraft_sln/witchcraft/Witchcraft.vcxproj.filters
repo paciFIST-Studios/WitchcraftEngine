@@ -105,6 +105,9 @@
     <ClCompile Include="scene_manager\timer__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\2d_sprite_animation__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="uninitialized_values.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\2d_sprite_animation.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@
 
 		TEST_CASE("c2DSpriteObject::ctor")
 		{
+			// Tests default init values, and calls all methods
+
 			auto so = c2DSpriteObject();
 	
 			auto sprite_dimension = so.get_sprite_sheet_dimensions();
@@ -34,6 +36,12 @@
 			REQUIRE_NOTHROW(so.play());
 			REQUIRE_NOTHROW(so.stop());
 			REQUIRE_NOTHROW(so.set_frame_rect(0));
+			REQUIRE_NOTHROW(so.get_sprite_sheet_dimensions());
+			REQUIRE_NOTHROW(so.get_frame_dimensions());
+			REQUIRE_NOTHROW(so.get_frame_position());
+			REQUIRE_NOTHROW(so.get_current_animation());
+			REQUIRE_NOTHROW(so.get_current_frame_timing());
+			REQUIRE_NOTHROW(so.is_animation_playing());
 		}
 
 		TEST_CASE("c2DSpriteObject::ctor(initializer object)")
@@ -78,7 +86,6 @@
 			so.stop();
 			REQUIRE(so.is_animation_playing() == false);
 		}
-
 
 	#endif // RUN_UNIT_TESTS
 

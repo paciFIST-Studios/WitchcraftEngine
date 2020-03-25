@@ -9,7 +9,6 @@
 	#include <string>
 	#include <vector>
 
-
 	// [NOTE] I read that putting the static methods in a class is "wrong" for C++,
 	// so instead we're going to use namespaces
 	namespace utility
@@ -71,6 +70,30 @@
 			else
 				return val;
 		}
+
+
+		static std::vector<std::string> tokenize_string(std::string const & source, std::string const & delimiters)
+		// http://www.cplusplus.com/forum/beginner/114790/#msg626659
+		{
+			std::vector<std::string> result;
+
+			size_t start = 0;
+			size_t end = source.find_first_of(delimiters.c_str());
+			
+			while (end <= std::string::npos)
+			{
+				result.emplace_back(source.substr(start, end - start));
+			
+				if (end == std::string::npos) 
+					break;
+			
+				start = end + 1;
+				end = source.find_first_of(delimiters, start);
+			}
+
+			return result;
+		}
+
 	}
 
 #endif

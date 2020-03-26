@@ -5,16 +5,18 @@
 
 #include "plog/Log.h"
 
+#include "../uninitialized_values.h"
 #include "../engine/engine.h"
 
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 
 typedef enum {
-	RESOURCE_NULL = 0
-	, RESOURCE_GRAPHIC = 1
-	, RESOURCE_MOVIE = 2
-	, RESOURCE_AUDIO = 3
-	, RESOURCE_TEXT = 4
+	  RESOURCE_NULL			= 0
+	, RESOURCE_GRAPHIC		= 1
+	, RESOURCE_ANIMATION	= 2
+	, RESOURCE_MOVIE		= 3
+	, RESOURCE_AUDIO		= 4
+	, RESOURCE_TEXT			= 5
 } RESOURCE_TYPE;
 
 // The cResource class represents a resource object, which is managed by a resource manager
@@ -24,36 +26,19 @@ class cResource : public cEngineObject
 private:
 protected:
 	unsigned int _resource_id;
-	unsigned int _scope;
+	unsigned int _scope_id;
 	std::string _file_name;
 	RESOURCE_TYPE _type;
 
 public:
-
-	static unsigned int  const UNINIT_RESOURCE_ID	= 0;
-	static unsigned int  const UNINIT_RESOURCE_SCOPE = UINT32_MAX;
-	static constexpr char const * UNINIT_FILE_NAME = "UNINITIALIZED FILE NAME";
-	static RESOURCE_TYPE const UNINIT_RESOURCE_TYPE  = RESOURCE_TYPE::RESOURCE_NULL;
 	
-	unsigned int get_resource_id() 
-	{ 
-		return _resource_id; 
-	}
+	unsigned int get_resource_id() const;
+	
+	unsigned int get_scope_id() const;
 
-	unsigned int get_scope() 
-	{ 
-		return _scope; 
-	}
+	std::string get_file_name() const;
 
-	std::string get_file_name() 
-	{
-		return _file_name; 
-	}
-
-	RESOURCE_TYPE get_resource_type() 
-	{
-		return _type; 
-	}
+	RESOURCE_TYPE get_resource_type() const;
 
 	// these are working in the fashion of an IResource interface
 	virtual ~cResource()
@@ -78,28 +63,11 @@ public:
 			<< "  cResource::unload()";
 	}
 	   	 
-	cResource()
-		// no args
-		// initializer list
-		: _resource_id(UNINIT_RESOURCE_ID)
-		, _scope(UNINIT_RESOURCE_SCOPE)
-		, _file_name(std::string(UNINIT_FILE_NAME))
-		, _type(UNINIT_RESOURCE_TYPE)
-	{}
+	cResource();
 
-	cResource(
-		// ctor arguments
-		  unsigned int ID
-		, unsigned int Scope
-		, std::string const & FileName
-		, RESOURCE_TYPE ResourceType)
+	cResource(unsigned int ID, unsigned int Scope, std::string const & FileName
+		, RESOURCE_TYPE ResourceType);
 
-		// initializer list
-		: _resource_id(ID)
-		, _scope(Scope)
-		, _file_name(FileName)
-		, _type(ResourceType)
-	{}
 };
 
 #endif // !RESOURCE_H

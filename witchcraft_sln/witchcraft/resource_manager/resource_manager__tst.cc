@@ -74,7 +74,7 @@
 
 			rm.load_from_xml_file(person);
 			// loading assets will always increase asset count
-			REQUIRE(rm.get_resource_count() == 3);
+			REQUIRE(rm.get_resource_count() == 4);
 
 			// loading the same file again (as defined by resource_id) returns false
 			REQUIRE(rm.load_from_xml_file(person) == false);
@@ -102,7 +102,7 @@
 			// ID actually matches our request
 			REQUIRE(resource->get_resource_id() == 1);
 			// returned resource exists in its own scope, as defined by file
-			REQUIRE(resource->get_scope() != RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
 		}
 
 		TEST_CASE("ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
@@ -139,7 +139,7 @@
 			rm.load_from_xml_file(person);
 
 			REQUIRE(rm.get_current_scope() == 0);
-			REQUIRE(rm.get_resource_count() == 3);
+			REQUIRE(rm.get_resource_count() == 4);
 
 			rm.empty_cache();
 

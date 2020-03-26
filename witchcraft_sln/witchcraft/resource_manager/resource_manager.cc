@@ -89,7 +89,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						resource = _render_manager->load_resource_from_xml(*child);
+						resource = _render_manager->load_resource_from_xml(*child);						
 						break;
 					}
 					else if (attributeValue == "audio")
@@ -102,6 +102,60 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 						// resource = _config_manager->load_resource_from_xml(child);
 						// break;
 					}
+					else if (attributeValue == "2d_animation")
+					{
+						unsigned int resource_id = uninit::UINT;
+						unsigned int resource_scope = uninit::UINT;
+						unsigned int animation_timing_ms = uninit::UINT;
+						std::vector<unsigned int> frame_index_sequence;
+						std::string animation_name = std::string(uninit::CSTRING);
+
+						for (XML::xml_attribute<> * element_attribute = (*child).first_attribute();
+							element_attribute;
+							element_attribute = element_attribute->next_attribute()
+						)
+						{
+							std::string attr_name = element_attribute->name();
+							std::string attr_value = element_attribute->value();
+
+							if (attr_name == "UID")
+							{
+								resource_id = atoi(attr_value.c_str());
+							}
+							else if (attr_name == "scenescope")
+							{
+								resource_scope = atoi(attr_value.c_str());
+							}
+							else if (attr_name == "name")
+							{
+								animation_name = attr_value;
+							}
+							else if (attr_name == "timing_ms")
+							{
+								animation_timing_ms = atoi(attr_value.c_str());
+							}
+							else if (attr_name == "sequence")
+							{
+								frame_index_sequence.push_back(1);
+								// split into a vector, knowing the delimiter
+								// todo: move this to the string literal file?
+								std::string const delimiters = " ";
+
+								auto sv = utility::tokenize_string(attr_value, delimiters);
+								for (auto element : sv)
+								{
+									frame_index_sequence.push_back
+									(
+										atoi(element.c_str())
+									);
+								}
+							}
+						}
+
+						auto anim = c2DSpriteAnimation(animation_name, frame_index_sequence, animation_timing_ms);
+						resource = std::make_unique<cAnimationResource>(anim);
+						break;
+					} // end: 2d_animation
 				}
 			}
 
@@ -113,7 +167,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 					return false;
 
 				// we must use std::move to change ownership of the unique_ptr
-				_resource_map[resource->get_scope()].push_back(std::move(resource));
+				_resource_map[resource->get_scope_id()].push_back(std::move(resource));
 				_resource_count++;
 			}
 		}

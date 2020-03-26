@@ -101,9 +101,9 @@ bool c2DRenderManager::update()
 std::unique_ptr<cResource> c2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
 	// some default values
-	unsigned int	resource_id		= cResource::UNINIT_RESOURCE_ID;
-	unsigned int	resource_scope	= cResource::UNINIT_RESOURCE_SCOPE;
-	std::string		file_name		= cResource::UNINIT_FILE_NAME;
+	unsigned int	resource_id		= uninit::UINT;
+	unsigned int	resource_scope	= uninit::UINT;
+	std::string		file_name		= std::string(uninit::CSTRING);
 	
 	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
@@ -148,13 +148,15 @@ void c2DRenderManager::render_all_objects()
 
 	for (auto&& object : _render_objects)
 	{
-		if (object->_is_visible == false)
+		if (object->is_visible() == false)
 			continue;
 
 		object->update();
 		SDL_Rect position;
-		position.x = int(object->_position_x);
-		position.y = int(object->_position_y);
+
+		auto position_tuple = object->get_position();
+		position.x = int(std::get<0>(position_tuple));
+		position.y = int(std::get<1>(position_tuple));
 
 		SDL_RenderCopy(
 			  _current_renderer

@@ -69,18 +69,6 @@
     <ClCompile Include="render_manager\2d_sprite_object.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
-    <ClCompile Include="scene_manager\test_2d_layer.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_manager\test_timer.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_manager\test_scene_listener.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_manager\test_2d_scene_manager.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager\resource__tst.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
@@ -99,6 +87,27 @@
     <ClCompile Include="render_manager\2d_sprite_object__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="resource_manager\resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\2d_layer__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\2d_scene_manager__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\scene_listener__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\scene_object__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\timer__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\2d_sprite_animation__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -109,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="unit_testing_switch.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utility\utility.h">
-      <Filter>Source Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="engine\exception.h">
       <Filter>Source Files\engine</Filter>
@@ -152,11 +158,20 @@
     <ClInclude Include="scene_manager\2d_scene_manager.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
-    <ClInclude Include="scene_manager\test_scene_object.h">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClInclude>
     <ClInclude Include="scene_manager\timer.h">
       <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\utility.h">
+      <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="uninitialized_values.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\2d_sprite_animation.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\animation_resource.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

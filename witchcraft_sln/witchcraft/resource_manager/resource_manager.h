@@ -52,16 +52,16 @@ public:
 	static int constexpr GLOBAL_SCOPE_ID = 0;
 
 	// find resource by id.  retun null if not found
-	cResource* find_resource_by_id(unsigned int UID);
+	cResource * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
 	void empty_cache();
 
 	// loads resources from xml
-	bool load_from_xml_file(std::string Filename);
+	bool load_from_xml_file(std::string const & filename);
 
 	// sets the current scope.  Depends on current scene
-	bool set_current_scope(unsigned int Scope);
+	bool set_current_scope(unsigned int scope);
 
 	// Simple getters
 	inline int get_current_scope() const { return _current_scope; }

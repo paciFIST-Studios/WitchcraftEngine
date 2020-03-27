@@ -52,12 +52,12 @@ void cResourceManager::empty_cache()
 }
 
 
-bool cResourceManager::load_from_xml_file(std::string Filename)
+bool cResourceManager::load_from_xml_file(std::string const & filename)
 {
-	if (utility::file_exists(Filename) == false)
+	if (utility::file_exists(filename) == false)
 		return false;
 
-	XML::file<> config_file(Filename.c_str());
+	XML::file<> config_file(filename.c_str());
 	XML::xml_document<> doc;
 	doc.parse<0>(config_file.data());
 

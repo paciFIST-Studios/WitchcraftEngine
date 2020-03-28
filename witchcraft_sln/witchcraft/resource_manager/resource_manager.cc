@@ -1,7 +1,7 @@
 #include "resource_manager.h"
 
 // returns a NON-OWNING ptr
-cResource * cResourceManager::find_resource_by_id(unsigned int UID)
+cResource * cResourceManager::find_resource_by_id(unsigned int UUID)
 {
 	if (_resource_count == 0)
 		return nullptr;
@@ -13,7 +13,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
 			auto element = element_unique_ptr.get();
-			if (element->get_resource_id() == UID)
+			if (element->get_resource_id() == UUID)
 			{
 				return element;
 			}
@@ -52,17 +52,17 @@ void cResourceManager::empty_cache()
 }
 
 
-bool cResourceManager::load_from_xml_file(std::string Filename)
+bool cResourceManager::load_from_xml_file(std::string const & filename)
 {
-	if (utility::file_exists(Filename) == false)
+	if (utility::file_exists(filename) == false)
 		return false;
 
-	XML::file<> config_file(Filename.c_str());
+	XML::file<> config_file(filename.c_str());
 	XML::xml_document<> doc;
 	doc.parse<0>(config_file.data());
 
 	// Top node is also called the "resource tree"
-	XML::xml_node<> * top_node = doc.first_node("resources");
+	XML::xml_node<> * top_node = doc.first_node(witchcraft::xml::resource_list.c_str());
 
 	if (top_node)
 	{
@@ -81,7 +81,7 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 				std::string attributeValue = childAttribute->value();
 
 				// check resourece type
-				if (attributeName == "type")
+				if (attributeName == witchcraft::xml::resource_type)
 				{
 					// We will allow/force resource managers to implement their own derived
 					// versions of cResource.  Those managers will create the resource,
@@ -118,23 +118,23 @@ bool cResourceManager::load_from_xml_file(std::string Filename)
 							std::string attr_name = element_attribute->name();
 							std::string attr_value = element_attribute->value();
 
-							if (attr_name == "UID")
+							if (attr_name == witchcraft::xml::uuid)
 							{
 								resource_id = atoi(attr_value.c_str());
 							}
-							else if (attr_name == "scenescope")
+							else if (attr_name == witchcraft::xml::resource_scope)
 							{
 								resource_scope = atoi(attr_value.c_str());
 							}
-							else if (attr_name == "name")
+							else if (attr_name == witchcraft::xml::resource_name)
 							{
 								animation_name = attr_value;
 							}
-							else if (attr_name == "timing_ms")
+							else if (attr_name == witchcraft::xml::two_d_animation_timing_ms)
 							{
 								animation_timing_ms = atoi(attr_value.c_str());
 							}
-							else if (attr_name == "sequence")
+							else if (attr_name == witchcraft::xml::two_d_animation_sequence)
 							{
 								frame_index_sequence.push_back(1);
 								// split into a vector, knowing the delimiter
@@ -205,6 +205,16 @@ bool cResourceManager::set_current_scope(unsigned int Scope)
 	}
 
 	return true;
+}
+
+int cResourceManager::get_current_scope() const
+{
+	return _current_scope;
+}
+
+unsigned int cResourceManager::get_resource_count() const
+{
+	return _resource_count;
 }
 
 

@@ -113,17 +113,17 @@ std::unique_ptr<cResource> c2DRenderManager::load_resource_from_xml(XML::xml_nod
 		std::string attribute_name = element_attribute->name();
 		std::string attribute_value = element_attribute->value();
 
-		if (attribute_name == "UID")
+		if (attribute_name == witchcraft::xml::uuid)
 		{
 			// atoi stands for ASCII-to-integer, and is used for
 			// parsing a string to an int
 			resource_id = atoi(attribute_value.c_str());
 		}
-		else if (attribute_name == "filename")
+		else if (attribute_name == witchcraft::xml::file_name)
 		{
 			file_name = attribute_value;
 		}
-		else if (attribute_name == "scenescope")
+		else if (attribute_name == witchcraft::xml::resource_scope)
 		{
 			resource_scope = atoi(attribute_value.c_str());
 		}

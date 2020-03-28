@@ -11,9 +11,9 @@
 		
 		#include "../utility/utility.h"
 	
-		std::string const bird = "asset/birds.asset";
-		std::string const buddha = "asset/buddha.asset";
-		std::string const person = "asset/person.asset";
+		std::string const bird = witchcraft::configuration::birds_asset;
+		std::string const buddha = witchcraft::configuration::buddha_asset;
+		std::string const person = witchcraft::configuration::person_asset;
 
 		// Tests default initialization
 		TEST_CASE("ResourceManager: ctor")
@@ -52,7 +52,7 @@
 		{
 			auto rm = cResourceManager();
 			// includes some testing files
-			rm.create_config_files();
+			witchcraft::configuration::create_config_files();
 
 			// default scope
 			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
@@ -81,10 +81,10 @@
 			REQUIRE(rm.load_from_xml_file(bird) == false);
 		}
 
-		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UID)")
+		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
 			auto rm = cResourceManager();
-			rm.create_config_files();
+			witchcraft::configuration::create_config_files();
 
 			// does not throw, even if nothing has been loaded yet
 			REQUIRE_NOTHROW(rm.find_resource_by_id(MAXUINT32));
@@ -128,7 +128,7 @@
 		TEST_CASE("ResourceManager::empty_cache()")
 		{
 			auto rm = cResourceManager();
-			rm.create_config_files();
+			witchcraft::configuration::create_config_files();
 
 			// Does not throw, even if you call before anything has been loaded
 			REQUIRE_NOTHROW(rm.empty_cache());

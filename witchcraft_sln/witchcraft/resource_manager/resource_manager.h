@@ -64,55 +64,59 @@ public:
 	bool set_current_scope(unsigned int scope);
 
 	// Simple getters
-	inline int get_current_scope() const { return _current_scope; }
-	inline unsigned int get_resource_count() const { return _resource_count; }
+	int get_current_scope() const;
+	unsigned int get_resource_count() const;
 
 	cResourceManager();
 
-	bool create_config_files()
-	{
-		std::list<std::string> config_files = {
- 			  std::string("witchcraft.cfg")
-			, std::string("asset/birds.asset")
-			, std::string("asset/buddha.asset")
-			, std::string("asset/neko.asset")
-			, std::string("asset/person.asset")
-			, std::string("asset/whirlwind.asset")
-		};
-
-		for (auto file_path : config_files)
-		{
-			if (utility::file_exists(file_path))
-				continue;
-		
-			std::string config_data;
-			if (file_path == "asset/birds.asset")
-			{
-				config_data = "<resources><resource UID=\"1\" type=\"graphic\" filename=\"asset/birds.png\" scenescope=\"1\">Winter Birds</resource></resources>";
-			}
-			else if (file_path == "asset/buddha.asset")
-			{
-				config_data = "<resources><resource UID=\"2\" type=\"graphic\" filename=\"asset/buddha.png\" scenescope=\"0\">Buddha</resource></resources>";
-			}
-			else if (file_path == "asset/person.asset")
-			{
-				//config_data = "<resources><resource UID=\"4\" type=\"graphic\" filename=\"asset/person.png\" scenescope=\"2\"><></></resource></resources>";
-				config_data = "<resources>\n\t<resource UID=\"4\" type=\"graphic\" filename=\"asset / person.png\" scenescope=\"2\"></resource>\n\t<resource UID=\"100\" type=\"2d_animation\" name=\"idle\" timing_ms=\"250\" sequence=\"1 2 3 1 2 3 1 2 3 3 3 4 4\"></resource>\n</resources>";
-			}
-			else if (file_path == "witchcraft.cfg")
-			{
-				 config_data = "<resources><resource UID=\"0\" type=\"text\" filename=\"witchcraft.cfg\" scenescope=\"0\">Witchcraft</resource></resources>";
-			}
-
-			std::ofstream cfg_file;
-			cfg_file.open(file_path);
-			cfg_file << config_data;
-			cfg_file.close();
-			PLOGV << "File created: " << file_path;
-		}
-		
-		return true;
-	}
 };
+
+// static void create_config_files()
+namespace witchcraft
+{
+	namespace configuration
+	{
+		static void create_config_files()
+		{
+			std::list<std::string> config_files = {
+					  witchcraft::configuration::witchcraft_cfg
+					, witchcraft::configuration::birds_asset
+					, witchcraft::configuration::buddha_asset
+					, witchcraft::configuration::person_asset
+			};
+
+			for (auto file_path : config_files)
+			{
+				if (utility::file_exists(file_path))
+					continue;
+
+				std::string config_data;
+				if (file_path == witchcraft::configuration::birds_asset)
+				{
+					config_data = witchcraft::configuration::birds_asset_file_content;
+				}
+				else if (file_path == witchcraft::configuration::buddha_asset)
+				{
+					config_data = witchcraft::configuration::buddha_asset_file_content;
+				}
+				else if (file_path == witchcraft::configuration::person_asset)
+				{
+					config_data = witchcraft::configuration::person_asset_file_content;
+				}
+				else if (file_path == witchcraft::configuration::witchcraft_cfg)
+				{
+					config_data = witchcraft::configuration::witchcraft_cfg_file_content;
+				}
+
+				std::ofstream cfg_file;
+				cfg_file.open(file_path);
+				cfg_file << config_data;
+				cfg_file.close();
+				PLOGV << "File created: " << file_path;
+			}
+		}
+	}
+}
+
 
 #endif // RESOURCE_MANAGER_H

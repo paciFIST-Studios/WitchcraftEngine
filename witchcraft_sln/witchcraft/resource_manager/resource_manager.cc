@@ -1,7 +1,7 @@
 #include "resource_manager.h"
 
 // returns a NON-OWNING ptr
-cResource * cResourceManager::find_resource_by_id(unsigned int UID)
+cResource * cResourceManager::find_resource_by_id(unsigned int UUID)
 {
 	if (_resource_count == 0)
 		return nullptr;
@@ -13,7 +13,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UID)
 		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
 			auto element = element_unique_ptr.get();
-			if (element->get_resource_id() == UID)
+			if (element->get_resource_id() == UUID)
 			{
 				return element;
 			}

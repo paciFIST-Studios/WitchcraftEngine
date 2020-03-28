@@ -81,7 +81,7 @@
 			REQUIRE(rm.load_from_xml_file(bird) == false);
 		}
 
-		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UID)")
+		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
 			auto rm = cResourceManager();
 			witchcraft::configuration::create_config_files();

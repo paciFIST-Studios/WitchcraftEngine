@@ -207,6 +207,16 @@ bool cResourceManager::set_current_scope(unsigned int Scope)
 	return true;
 }
 
+int cResourceManager::get_current_scope() const
+{
+	return _current_scope;
+}
+
+unsigned int cResourceManager::get_resource_count() const
+{
+	return _resource_count;
+}
+
 
 cResourceManager::cResourceManager() 
 	: _resource_count(0)

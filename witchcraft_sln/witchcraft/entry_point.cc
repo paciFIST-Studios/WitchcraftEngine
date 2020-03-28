@@ -47,7 +47,7 @@ int main(int argc, char** argv[])
 	auto render_manager = c2DRenderManager();
 	PLOGI << witchcraft::log_strings::render_manager_start;
 
-	std::string title = "Witchcraft";
+	std::string title = witchcraft::configuration::witchcraft_program_title;
 	bool use_fullscreen = false;
 
 	bool init_successful = render_manager.init(0, 0, 800, 800, use_fullscreen, title.c_str());

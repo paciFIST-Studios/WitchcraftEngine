@@ -52,12 +52,12 @@ void cResourceManager::empty_cache()
 }
 
 
-bool cResourceManager::load_from_xml_file(std::string const & filename)
+bool cResourceManager::load_from_xml_file(std::string const & file)
 {
-	if (utility::file_exists(filename) == false)
+	if (false == utility::file_exists(file))
 		return false;
 
-	XML::file<> config_file(filename.c_str());
+	XML::file<> config_file(file.c_str());
 	XML::xml_document<> doc;
 	doc.parse<0>(config_file.data());
 
@@ -89,6 +89,11 @@ bool cResourceManager::load_from_xml_file(std::string const & filename)
 					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
+						if (_render_manager == nullptr)
+						{
+							LOGV << "ERROR! No ptr to render manager!";
+						}
+
 						resource = _render_manager->load_resource_from_xml(*child);						
 						break;
 					}

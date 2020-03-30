@@ -8,7 +8,7 @@
 #include "../uninitialized_values.h"
 
 #include "../render_manager/render_resource.h"
-#include "../engine/engine.h"
+#include "../engine/engine_object.h"
 
 #define POSITION_TUPLE std::tuple<float, float>
 

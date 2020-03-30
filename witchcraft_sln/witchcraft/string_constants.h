@@ -21,7 +21,6 @@ namespace witchcraft
 		static std::string const two_d_animation_sequence = "sequence";
 	}
 
-
 	namespace configuration
 	{
 		static std::string const witchcraft_program_title = "Witchcraft";

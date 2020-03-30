@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\engine_object__tst.cc" />
     <ClCompile Include="engine\exception.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />
+    <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\exception.h" />
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="render_manager\2d_render_manager.h" />

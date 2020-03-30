@@ -9,19 +9,10 @@
 	#include "catch.hpp"
 #endif // RUN_UNIT_TESTS
 
-#include <fstream>
-#include <iostream>
-
 // our logging lib
 #include <plog/Log.h>
 
 // witchcraft
-#include "utility\utility.h"
-#include "logging\error_log_manager.h"
-
-#include "resource_manager\resource_manager.h"
-#include "render_manager\2d_render_manager.h"
-
 #include "utility\utility.h"
 #include "string_constants.h"
 
@@ -29,20 +20,12 @@
 int main(int argc, char** argv[])
 {
 	plog::init(plog::verbose, witchcraft::file_strings::engine_log_file_name.c_str());
-	PLOGI << witchcraft::log_strings::engine_startup;
-
+	
 	PLOGV << witchcraft::log_strings::engine_unit_tests_start;
 	Catch::Session session;
 	int numberOfFailures = session.run();
 	PLOGV << witchcraft::log_strings::engine_unit_tests_stop;
 
-	//PLOGI << witchcraft::log_strings::resource_manager_start;
-	//auto resource_manager = cResourceManager();
-	//witchcraft::configuration::create_config_files();
-	//resource_manager.load_from_xml_file(witchcraft::configuration::birds_asset);
-	//resource_manager.load_from_xml_file(witchcraft::configuration::buddha_asset);
-	//resource_manager.load_from_xml_file(witchcraft::configuration::person_asset);
-	//
 	//auto render_manager = c2DRenderManager();
 	//PLOGI << witchcraft::log_strings::render_manager_start;
 	//

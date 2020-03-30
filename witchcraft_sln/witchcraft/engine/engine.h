@@ -1,6 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+
+
 #include "../engine/engine_object.h"
 
 
@@ -12,12 +14,14 @@ class cEngine : public cEngineObject
 {
 private:
 protected:
+
+	//std::unique_ptr<cMessageManager> message;
+	//std::unique_ptr<cResourceManager> resource;
+	//std::unique_ptr<cRenderManager> render;
+	//std::unique_ptr<cSceneManager> scene;
+
 public:
 
-	cResourceManager * resource = nullptr;
-	cRenderManager * render = nullptr;
-	cSceneManager * scene = nullptr;
-	//std::unique_ptr<cMessageManager> message;
 
 	void startup();
 	void run();

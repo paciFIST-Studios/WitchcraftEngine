@@ -9,9 +9,11 @@
 
 		#include "2d_render_manager.h"
 
-		TEST_CASE()
+		TEST_CASE("c2DRenderManager")
 		{
-		
+			
+			//  draw any loaded graphical item
+			// drawn item appears at any valid xy position
 		}
 
 

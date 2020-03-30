@@ -3,15 +3,20 @@
 
 #include "../engine/engine_object.h"
 
+
+class cResourceManager;
+class cRenderManager;
+class cSceneManager;
+
 class cEngine : public cEngineObject
 {
 private:
 protected:
 public:
 
-	//std::unique_ptr<cResourceManager> resource;
-	//std::unique_ptr<cRenderManager> render;
-	//std::unique_ptr<cSceneManager> scene;
+	cResourceManager * resource = nullptr;
+	cRenderManager * render = nullptr;
+	cSceneManager * scene = nullptr;
 	//std::unique_ptr<cMessageManager> message;
 
 	void startup();

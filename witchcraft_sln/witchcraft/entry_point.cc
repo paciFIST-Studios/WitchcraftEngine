@@ -39,15 +39,15 @@ int main(int argc, char** argv[])
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	auto resource_manager = cResourceManager();
-	resource_manager.create_config_files();
-	resource_manager.load_from_xml_file("asset/birds.asset");
-	resource_manager.load_from_xml_file("asset/buddha.asset");
-	resource_manager.load_from_xml_file("asset/person.asset");
+	witchcraft::configuration::create_config_files();
+	resource_manager.load_from_xml_file(witchcraft::configuration::birds_asset);
+	resource_manager.load_from_xml_file(witchcraft::configuration::buddha_asset);
+	resource_manager.load_from_xml_file(witchcraft::configuration::person_asset);
 
 	auto render_manager = c2DRenderManager();
 	PLOGI << witchcraft::log_strings::render_manager_start;
 
-	std::string title = "Witchcraft";
+	std::string title = witchcraft::configuration::witchcraft_program_title;
 	bool use_fullscreen = false;
 
 	bool init_successful = render_manager.init(0, 0, 800, 800, use_fullscreen, title.c_str());

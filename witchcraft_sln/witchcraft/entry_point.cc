@@ -29,7 +29,7 @@
 int main(int argc, char** argv[])
 {
 	plog::init(plog::verbose, witchcraft::file_strings::engine_log_file_name.c_str());
-	PLOGI << witchcraft::log_strings::engine_start;
+	PLOGI << witchcraft::log_strings::engine_startup;
 
 	PLOGV << witchcraft::log_strings::engine_unit_tests_start;
 	Catch::Session session;
@@ -97,5 +97,5 @@ int main(int argc, char** argv[])
 	//resource_manager.empty_cache();
 	//PLOGI << witchcraft::log_strings::resource_manager_stop;
 	//
-	//PLOGI << witchcraft::log_strings::engine_stop;
+	//PLOGI << witchcraft::log_strings::engine_shutdown;
 }

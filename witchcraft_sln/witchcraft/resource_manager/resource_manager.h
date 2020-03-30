@@ -11,8 +11,6 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-#include <plog/Log.h>
-
 #include "../engine/exception.h"
 #include "../engine/engine_object.h"
 #include "resource.h"

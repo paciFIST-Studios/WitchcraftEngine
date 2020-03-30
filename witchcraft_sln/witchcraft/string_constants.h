@@ -46,8 +46,9 @@ namespace witchcraft
 
 	namespace log_strings
 	{
-		static std::string const engine_start = "witchcraft engine start";
-		static std::string const engine_stop = "witchcraft engine stop";
+		static std::string const engine_startup = "witchcraft engine startup";
+		static std::string const engine_running = "witchcraft engine running";
+		static std::string const engine_shutdown = "witchcraft engine shutdown";
 						  
 		static std::string const engine_unit_tests_start = "engine unit tests start";
 		static std::string const engine_unit_tests_stop = "engine unit tests stop";

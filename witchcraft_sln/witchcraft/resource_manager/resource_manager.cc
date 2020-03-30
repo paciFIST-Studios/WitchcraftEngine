@@ -89,13 +89,13 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						if (_render_manager == nullptr)
+						if (auto tmp = _render_manager.lock())
 						{
-							LOGV << "ERROR! No ptr to render manager!";
+							resource = tmp->load_resource_from_xml(*child);
+							break;
 						}
 
-						resource = _render_manager->load_resource_from_xml(*child);						
-						break;
+						throw std::exception("could not lock render manager for use");
 					}
 					else if (attributeValue == "audio")
 					{

@@ -91,7 +91,7 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 					{
 						if (_render_manager == nullptr)
 						{
-							throw std::runtime_error("Error, no ptr to render manager!");
+							LOGV << "ERROR! No ptr to render manager!";
 						}
 
 						resource = _render_manager->load_resource_from_xml(*child);						

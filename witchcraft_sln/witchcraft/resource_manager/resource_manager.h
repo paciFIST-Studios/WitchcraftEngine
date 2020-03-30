@@ -1,9 +1,6 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
-#include <functional>
-#include <iostream>
-#include <list>
 #include <map>
 #include <string>
 
@@ -11,14 +8,11 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-#include "../engine/exception.h"
 #include "../engine/engine_object.h"
 #include "resource.h"
 
 #include "../render_manager/animation_resource.h"
 #include "../render_manager/2d_render_manager.h"
-
-#include "../utility/utility.h"
 
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
 #define RESOURCE_GLOBAL_SCOPE 0
@@ -39,7 +33,7 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	c2DRenderManager * _render_manager = nullptr;
+	std::weak_ptr<c2DRenderManager> _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
 	RESOURCE_MAP_TYPE _resource_map;

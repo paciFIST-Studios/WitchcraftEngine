@@ -12,13 +12,6 @@ void cEngine::startup()
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<cResourceManager>();
 	
-	//witchcraft::configuration::create_config_files();
-	//resource->load_from_xml_file(witchcraft::configuration::birds_asset);
-	//resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
-	//resource->load_from_xml_file(witchcraft::configuration::person_asset);
-
-
-
 
 	//auto render_manager = c2DRenderManager();
 	//PLOGI << witchcraft::log_strings::render_manager_start;

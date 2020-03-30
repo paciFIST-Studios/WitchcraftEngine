@@ -1,6 +1,9 @@
 #ifndef ENGINE_OBJECT_H
 #define ENGINE_OBJECT_H
 
+// Common includes
+#include "plog/Log.h"
+#include "../uninitialized_values.h"
 
 class cEngineObject
 {
@@ -10,7 +13,7 @@ public:
 	unsigned int id;
 
 	cEngineObject()
-		: id(0)
+		: id(uninit::UINT)
 	{}
 
 	cEngineObject(unsigned int const & ID)

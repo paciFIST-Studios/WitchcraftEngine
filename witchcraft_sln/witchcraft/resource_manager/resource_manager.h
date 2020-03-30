@@ -14,7 +14,7 @@
 #include <plog/Log.h>
 
 #include "../engine/exception.h"
-#include "../engine/engine.h"
+#include "../engine/engine_object.h"
 #include "resource.h"
 
 #include "../render_manager/animation_resource.h"

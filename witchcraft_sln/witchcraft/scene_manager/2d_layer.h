@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../engine/engine.h"
+#include "../engine/engine_object.h"
 #include "scene_object.h"
 
 class c2DLayer : public cEngineObject

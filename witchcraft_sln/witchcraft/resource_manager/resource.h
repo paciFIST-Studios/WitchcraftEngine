@@ -6,7 +6,7 @@
 #include "plog/Log.h"
 
 #include "../uninitialized_values.h"
-#include "../engine/engine.h"
+#include "../engine/engine_object.h"
 
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 

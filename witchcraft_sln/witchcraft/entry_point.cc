@@ -13,72 +13,42 @@
 #include <plog/Log.h>
 
 // witchcraft
-#include "utility\utility.h"
 #include "string_constants.h"
 
+#include "engine/engine.h"
 
-int main(int argc, char** argv[])
+
+void init_logging()
 {
+	// we have to initialize logging manually.  This is set to append to any existing file
 	plog::init(plog::verbose, witchcraft::file_strings::engine_log_file_name.c_str());
-	
+}
+
+void run_unit_tests()
+{
+	PLOGV << witchcraft::banners::unit_test_banner;
 	PLOGV << witchcraft::log_strings::engine_unit_tests_start;
 	Catch::Session session;
 	int numberOfFailures = session.run();
 	PLOGV << witchcraft::log_strings::engine_unit_tests_stop;
+	PLOGV << "\n\n\n\n";
+}
 
-	//auto render_manager = c2DRenderManager();
-	//PLOGI << witchcraft::log_strings::render_manager_start;
-	//
-	//std::string title = witchcraft::configuration::witchcraft_program_title;
-	//bool use_fullscreen = false;
-	//
-	//bool init_successful = render_manager.init(0, 0, 800, 800, use_fullscreen, title.c_str());
-	//if (init_successful == false)
-	//{
-	//	PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError(); 
-	//	render_manager.shutdown();
-	//	PLOGV << witchcraft::log_strings::render_manager_stop;
-	//	return EXIT_FAILURE;
-	//}
-	//
-	//bool gameplay_loop_is_running = true;
-	//SDL_Event window_event;
-	//
-	//PLOGI << witchcraft::log_strings::game_loop_start;
-	//while (gameplay_loop_is_running)
-	//{
-	//	if (SDL_PollEvent(&window_event))
-	//	{
-	//		if (SDL_QUIT == window_event.type)
-	//			break;
-	//
-	//		if (window_event.type == SDL_KEYDOWN)
-	//		{
-	//			if (window_event.key.keysym.sym == SDLK_ESCAPE)
-	//			{
-	//				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-	//				gameplay_loop_is_running = false;
-	//			}
-	//
-	//		}
-	//
-	//		// check moar events
-	//	}
-	//
-	//	// do physics update
-	//
-	//	// do render update
-	//	render_manager.update();
-	//
-	//	// do sound update
-	//}
-	//PLOGI << witchcraft::log_strings::game_loop_stop;
-	//
-	//render_manager.shutdown();
-	//PLOGI << witchcraft::log_strings::render_manager_stop;
-	//
-	//resource_manager.empty_cache();
-	//PLOGI << witchcraft::log_strings::resource_manager_stop;
-	//
-	//PLOGI << witchcraft::log_strings::engine_shutdown;
+int main(int argc, char** argv[])
+{
+	// do something with arguments
+
+	// logging must come next
+	init_logging();
+
+	run_unit_tests();
+
+	auto init = EngineInitializer{ 1 };
+	auto engine = cEngine(init);
+
+	engine.startup();
+	engine.run();
+	engine.shutdown();
+
+
 }

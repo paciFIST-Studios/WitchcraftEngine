@@ -5,7 +5,7 @@ namespace uninit
 {
 	static bool	constexpr			BOOL = false;
 
-	static float constexpr			FLOAT = 0.0;
+	static float constexpr			FLOAT = 0.0f;
 
 	static unsigned char constexpr	UCHAR = 0;
 

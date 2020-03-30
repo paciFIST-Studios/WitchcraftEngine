@@ -7,8 +7,6 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 
-		#include "../uninitialized_values.h"
-
 		#include "engine.h"
 
 		TEST_CASE("cEngine::ctor")

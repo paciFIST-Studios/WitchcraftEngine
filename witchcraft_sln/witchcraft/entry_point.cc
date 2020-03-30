@@ -1,14 +1,13 @@
+// NOTE: MUST be defined before initializing SDL, if you're using your own main()
+// we do it before anything else in the program, to make sure it's "not possible"
+// to init SDL before this is defined
+#define SDL_MAIN_HANDLED
 
 #include "unit_testing_switch.h"
 #ifdef RUN_UNIT_TESTS
 	#define CATCH_CONFIG_RUNNER
 	#include "catch.hpp"
 #endif // RUN_UNIT_TESTS
-
-// NOTE: MUST be defined before initializing SDL, if you're using your own main()
-// we do it before anything else in the program, to make sure it's "not possible"
-// to init SDL before this is defined
-#define SDL_MAIN_HANDLED
 
 #include <fstream>
 #include <iostream>

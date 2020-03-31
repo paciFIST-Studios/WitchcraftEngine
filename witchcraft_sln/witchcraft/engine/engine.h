@@ -24,6 +24,7 @@ enum class EEngineState : unsigned char
 struct EngineInitializer
 {
 	unsigned int id;
+	bool tm_early_exit;
 };
 
 class cEngine : public qEngineObject
@@ -37,6 +38,9 @@ protected:
 	//std::unique_ptr<cSceneManager> scene;
 
 	EEngineState _current_engine_state = EEngineState::UNINIT;
+
+	// testing modes
+	bool tm_early_exit;
 
 public:
 	
@@ -54,6 +58,7 @@ public:
 	: _current_engine_state(EEngineState::CONSTRUCTED)
 	{
 		id = init.id;
+		tm_early_exit = init.tm_early_exit;
 	}
 };
 

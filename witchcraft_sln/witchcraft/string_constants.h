@@ -44,10 +44,17 @@ namespace witchcraft
 		static std::string const engine_log_file_name = "witchcraft.log";
 	}
 
+	namespace banners
+	{
+		// I want there to be ascii art in the logs, that goes here
+		static std::string const unit_test_banner = "";
+	}
+
 	namespace log_strings
 	{
-		static std::string const engine_start = "witchcraft engine start";
-		static std::string const engine_stop = "witchcraft engine stop";
+		static std::string const engine_startup = "witchcraft engine startup";
+		static std::string const engine_running = "witchcraft engine running";
+		static std::string const engine_shutdown = "witchcraft engine shutdown";
 						  
 		static std::string const engine_unit_tests_start = "engine unit tests start";
 		static std::string const engine_unit_tests_stop = "engine unit tests stop";

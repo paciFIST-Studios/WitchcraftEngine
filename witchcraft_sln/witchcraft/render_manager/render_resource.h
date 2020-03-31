@@ -9,7 +9,7 @@
 #include "../resource_manager/resource.h"
 
 // Render == "Graphical" == "Graphics"
-class cRenderResource : public cResource
+class cRenderResource : public qResource
 {
 private:
 protected:
@@ -19,7 +19,7 @@ public:
 	SDL_Surface * _surface;
 	SDL_Texture * _texture;
 
-	// provided by cResource
+	// provided by qResource
 	~cRenderResource() override;
 	void load() override;
 	void unload() override;

@@ -85,7 +85,7 @@ public:
 	void free();
 	bool update();
 	void toggle_full_screen();
-	std::unique_ptr<cResource> load_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<qResource> load_resource_from_xml(XML::xml_node<> const & xml);
 	void render_all_objects();
 
 };

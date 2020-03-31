@@ -9,7 +9,7 @@
 
 		#include "2d_sprite_object.h"
 
-		TEST_CASE("c2DSpriteObject::ctor")
+		TEST_CASE(" c2DSpriteObject::ctor")
 		{
 			// Tests default init values, and calls all methods
 
@@ -47,7 +47,7 @@
 			REQUIRE_NOTHROW(so.set_frame_rect(0));
 		}
 
-		TEST_CASE("c2DSpriteObject::ctor(initializer object)")
+		TEST_CASE(" c2DSpriteObject::ctor(initializer object)")
 		{
 			// initializer
 			c2DSpriteObjectInitializer soi;
@@ -96,7 +96,7 @@
 			REQUIRE(ca->get_next_index() == 1); // all sequences perma-loop
 		}
 
-		TEST_CASE("c2DSpriteObject::play")
+		TEST_CASE(" c2DSpriteObject::play")
 		{
 			auto so = c2DSpriteObject();
 			so.stop();
@@ -105,7 +105,7 @@
 			REQUIRE(so.is_animation_playing() == true);
 		}
 
-		TEST_CASE("c2DSpriteObject::stop")
+		TEST_CASE(" c2DSpriteObject::stop")
 		{
 			auto so = c2DSpriteObject();
 			so.play();

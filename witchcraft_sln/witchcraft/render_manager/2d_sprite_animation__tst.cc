@@ -10,7 +10,7 @@
 		#include "../uninitialized_values.h"
 		#include "2d_sprite_animation.h"
 
-		TEST_CASE("c2DSpriteAnimation::ctor"  )
+		TEST_CASE(" c2DSpriteAnimation::ctor"  )
 		{
 			auto anim = c2DSpriteAnimation();
 			REQUIRE(anim.get_name() == uninit::CSTRING);
@@ -23,7 +23,7 @@
 			REQUIRE(anim.get_next_index() == uninit::UINT);
 		}
 	
-		TEST_CASE("c2DSpriteAnimation::c2DSpriteAnimation(name, sequence, timing)")
+		TEST_CASE(" c2DSpriteAnimation::c2DSpriteAnimation(name, sequence, timing)")
 		{
 			std::string anim_name = "walk";
 			std::vector<unsigned int> anim_sequence = { 1, 2, 3 };

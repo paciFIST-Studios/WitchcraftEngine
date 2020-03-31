@@ -19,9 +19,9 @@ typedef enum {
 	, RESOURCE_TEXT			= 5
 } RESOURCE_TYPE;
 
-// The cResource class represents a resource object, which is managed by a resource manager
+// The qResource class represents a resource object, which is managed by a resource manager
 // to be inhereted from, by other objects
-class cResource : public cEngineObject
+class qResource : public qEngineObject
 {
 private:
 protected:
@@ -41,31 +41,31 @@ public:
 	RESOURCE_TYPE get_resource_type() const;
 
 	// these are working in the fashion of an IResource interface
-	virtual ~cResource()
+	virtual ~qResource()
 	{ 
 		PLOGV 
 			<< "resource id: " << _resource_id 
 			<< "  file: " << _file_name 
-			<< "  cResource::~cResource()";
+			<< "  qResource::~qResource()";
 	}
 	virtual void load()   
 	{ 
 		PLOGV 
 			<< "resource id: " << _resource_id 
 			<< "  file: " << _file_name 
-			<< "  cResource::load()";
+			<< "  qResource::load()";
 	}
 	virtual void unload() 
 	{ 
 		PLOGV
 			<< "resource id: " << _resource_id
 			<< "  file: " << _file_name
-			<< "  cResource::unload()";
+			<< "  qResource::unload()";
 	}
 	   	 
-	cResource();
+	qResource();
 
-	cResource(unsigned int ID, unsigned int Scope, std::string const & FileName
+	qResource(unsigned int ID, unsigned int Scope, std::string const & FileName
 		, RESOURCE_TYPE ResourceType);
 
 };

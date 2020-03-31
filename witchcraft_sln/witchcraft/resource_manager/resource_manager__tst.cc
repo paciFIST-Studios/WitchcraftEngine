@@ -16,9 +16,9 @@
 		std::string const person = witchcraft::configuration::person_asset;
 
 		// Tests default initialization
-		TEST_CASE("ResourceManager: ctor")
+		TEST_CASE(" ResourceManager: ctor")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 
 			// Starts w/ no resources
 			REQUIRE(rm.get_resource_count() == 0);
@@ -48,9 +48,9 @@
 			REQUIRE(rm.set_current_scope(1) == false);
 		}
 
-		TEST_CASE("ResourceManager + RenderManager Load rendering assets")
+		TEST_CASE(" ResourceManager + RenderManager Load rendering assets")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			// includes some testing files
 			witchcraft::configuration::create_config_files();
 
@@ -81,9 +81,9 @@
 			REQUIRE(rm.load_from_xml_file(bird) == false);
 		}
 
-		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UUID)")
+		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// does not throw, even if nothing has been loaded yet
@@ -105,9 +105,9 @@
 			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
 		}
 
-		TEST_CASE("ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
+		TEST_CASE(" ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 
 			// default scope is global
 			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
@@ -125,9 +125,9 @@
 			REQUIRE(rm.set_current_scope(100) == true);
 		}
 
-		TEST_CASE("ResourceManager::empty_cache()")
+		TEST_CASE(" ResourceManager::empty_cache()")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// Does not throw, even if you call before anything has been loaded

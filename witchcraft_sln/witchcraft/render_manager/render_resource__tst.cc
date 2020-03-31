@@ -9,7 +9,7 @@
 		
 		#include "render_resource.h"
 			
-		TEST_CASE("cRenderResource::RenderResource()")
+		TEST_CASE(" cRenderResource::RenderResource()")
 		{
 			auto rr = &cRenderResource();
 			REQUIRE(rr != nullptr);
@@ -23,7 +23,7 @@
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
-		TEST_CASE("cRenderResource::cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
+		TEST_CASE(" cRenderResource::cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
 			unsigned int const resource_id = 666;
 			unsigned int const resource_scope = 667;
@@ -49,7 +49,7 @@
 			REQUIRE_NOTHROW(rr.unload());
 		}
 		
-		TEST_CASE("cRenderResource::is_loaded()")
+		TEST_CASE(" cRenderResource::is_loaded()")
 		{
 			auto rr = cRenderResource();
 

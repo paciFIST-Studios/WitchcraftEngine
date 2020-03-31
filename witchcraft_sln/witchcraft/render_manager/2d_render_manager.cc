@@ -98,7 +98,7 @@ bool c2DRenderManager::update()
 	return true;
 }
 
-std::unique_ptr<cResource> c2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<qResource> c2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
 {	
 	// some default values
 	unsigned int	resource_id		= uninit::UINT;
@@ -131,8 +131,8 @@ std::unique_ptr<cResource> c2DRenderManager::load_resource_from_xml(XML::xml_nod
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// NOTE: We're making a cRenderResource, and then moving it to a cResource ptr
-	std::unique_ptr<cResource> resource = std::make_unique<cRenderResource>(
+	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
+	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
 			  resource_id
 			, resource_scope
 			, file_name

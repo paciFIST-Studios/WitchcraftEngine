@@ -1,26 +1,26 @@
 #include "resource.h"
 
-unsigned int cResource::get_resource_id() const
+unsigned int qResource::get_resource_id() const
 {
 	return _resource_id;
 }
 
-unsigned int cResource::get_scope_id() const
+unsigned int qResource::get_scope_id() const
 {
 	return _scope_id;
 }
 
-std::string cResource::get_file_name() const
+std::string qResource::get_file_name() const
 {
 	return _file_name;
 }
 
-RESOURCE_TYPE cResource::get_resource_type() const
+RESOURCE_TYPE qResource::get_resource_type() const
 {
 	return _type;
 }
 
-cResource::cResource()
+qResource::qResource()
 	// no args
 	// initializer list
 	: _resource_id(uninit::UCHAR)
@@ -29,7 +29,7 @@ cResource::cResource()
 	, _type(RESOURCE_TYPE::RESOURCE_NULL)
 {}
 
-cResource::cResource(
+qResource::qResource(
 	// ctor arguments
 	  unsigned int ID
 	, unsigned int Scope

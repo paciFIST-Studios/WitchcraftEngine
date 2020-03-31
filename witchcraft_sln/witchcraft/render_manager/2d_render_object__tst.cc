@@ -10,7 +10,7 @@
 		#include "../uninitialized_values.h"
 		#include "2d_render_object.h"
 
-		TEST_CASE("c2DRenderObject::ctor"  )
+		TEST_CASE(" c2DRenderObject::ctor"  )
 		{
 			auto ro = c2DRenderObject();
 
@@ -23,7 +23,7 @@
 
 		}
 
-		TEST_CASE("c2DRenderObject:: get/set position()")
+		TEST_CASE(" c2DRenderObject:: get/set position()")
 		{
 			int const XPOS = 10;
 			int const YPOS = 20;
@@ -45,7 +45,7 @@
 			REQUIRE(typeid(std::get<0>(pos)) == typeid(std::get<1>(pos)));
 		}
 
-		TEST_CASE("c2DRenderObject:: get/set is_visible")
+		TEST_CASE(" c2DRenderObject:: get/set is_visible")
 		{
 			auto ro = c2DRenderObject();
 			REQUIRE_NOTHROW(ro.set_is_visible(true));

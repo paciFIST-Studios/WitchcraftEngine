@@ -5,7 +5,7 @@
 #include "../resource_manager/resource.h"
 #include "../render_manager/2d_sprite_animation.h"
 
-class cAnimationResource : public cResource
+class cAnimationResource : public qResource
 {
 public:
 

@@ -36,7 +36,7 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	c2DRenderManager * _render_manager;
+	//c2DRenderManager * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	RESOURCE_MAP_TYPE _resource_map;

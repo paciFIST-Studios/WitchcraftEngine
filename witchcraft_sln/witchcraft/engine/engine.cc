@@ -15,7 +15,7 @@ void cEngine::startup()
 	resource = std::make_unique<qResourceManager>();
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<c2DRenderManager>();
+	render = std::make_unique<q2DRenderManager>();
 }
 
 void cEngine::run()

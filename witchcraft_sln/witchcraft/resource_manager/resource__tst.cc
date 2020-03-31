@@ -9,7 +9,7 @@
 		
 		#include "resource.h"
 		
-		TEST_CASE("qResource::qResource(args)  When given default arguments, ctor constructs object with those values")
+		TEST_CASE(" qResource::qResource(args)  When given default arguments, ctor constructs object with those values")
 		{
 			unsigned int resource_id = 666;
 			unsigned int resource_scope = 667;
@@ -23,7 +23,7 @@
 			REQUIRE(resource.get_resource_type() == resource_type);
 		}
 
-		TEST_CASE("qResource::qResource()  Produces correct default object; also, the getter methods work for this data")
+		TEST_CASE(" qResource::qResource()  Produces correct default object; also, the getter methods work for this data")
 		{
 			// default object 
 			auto resource = &qResource();

@@ -9,7 +9,7 @@
 
 		#include "../engine/engine_object.h"
 
-		TEST_CASE("qEngineObject::ctor")
+		TEST_CASE(" qEngineObject::ctor")
 		{
 			auto eo = qEngineObject();
 			REQUIRE(eo.id == 0);

@@ -9,7 +9,7 @@
 		
 		#include "2d_scene_manager.h"
 		
-		TEST_CASE("c2DSceneManager::c2DSceneManager()")
+		TEST_CASE(" c2DSceneManager::c2DSceneManager()")
 		{
 			REQUIRE_NOTHROW(c2DSceneManager());
 		}

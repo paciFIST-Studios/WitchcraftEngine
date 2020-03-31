@@ -9,7 +9,7 @@
 
 		#include "engine.h"
 
-		TEST_CASE("cEngine::ctor")
+		TEST_CASE(" cEngine::ctor")
 		{
 			// default init 
 			auto engine = cEngine();
@@ -25,7 +25,7 @@
 
 		}
 
-		TEST_CASE("cEngine::startup()")
+		TEST_CASE(" cEngine::startup()")
 		{
 			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);
@@ -34,7 +34,7 @@
 			REQUIRE(engine.get_current_state() == EEngineState::STARTUP);
 		}
 
-		TEST_CASE("cEngine::run()")
+		TEST_CASE(" cEngine::run()")
 		{
 			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);
@@ -44,7 +44,7 @@
 			REQUIRE(engine.get_current_state() == EEngineState::RUNNING);
 		}
 
-		TEST_CASE("cEngine::shutdown()")
+		TEST_CASE(" cEngine::shutdown()")
 		{
 			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);

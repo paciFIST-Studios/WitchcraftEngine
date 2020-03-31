@@ -81,7 +81,7 @@
 			REQUIRE(rm.load_from_xml_file(bird) == false);
 		}
 
-		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UUID)")
+		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
 			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();
@@ -105,7 +105,7 @@
 			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
 		}
 
-		TEST_CASE("ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
+		TEST_CASE(" ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
 		{
 			auto rm = qResourceManager();
 
@@ -125,7 +125,7 @@
 			REQUIRE(rm.set_current_scope(100) == true);
 		}
 
-		TEST_CASE("ResourceManager::empty_cache()")
+		TEST_CASE(" ResourceManager::empty_cache()")
 		{
 			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();

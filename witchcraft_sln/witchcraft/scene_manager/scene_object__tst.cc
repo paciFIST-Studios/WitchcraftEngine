@@ -9,7 +9,7 @@
 		
 		#include "scene_object.h"
 		
-		TEST_CASE("cSceneObject::cSceneObject()")
+		TEST_CASE(" cSceneObject::cSceneObject()")
 		{
 			REQUIRE_NOTHROW(cSceneObject());
 			auto ptr = &cSceneObject();

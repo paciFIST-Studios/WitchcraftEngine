@@ -9,7 +9,7 @@
 
 		#include "2d_render_manager.h"
 
-		TEST_CASE("c2DRenderManager")
+		TEST_CASE(" q2DRenderManager")
 		{
 			
 			//  draw any loaded graphical item

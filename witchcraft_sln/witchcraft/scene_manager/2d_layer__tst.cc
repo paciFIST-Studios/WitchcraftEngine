@@ -9,7 +9,7 @@
 		
 		#include "2d_layer.h"
 		
-		TEST_CASE("c2DLayer::ctor")
+		TEST_CASE(" c2DLayer::ctor")
 		{
 			c2DLayer layer;
 

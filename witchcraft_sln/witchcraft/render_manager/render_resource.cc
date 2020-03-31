@@ -50,8 +50,20 @@ cRenderResource::cRenderResource(
 	// args
 	  unsigned int ID
 	, unsigned int scope
-	, std::string const & file_name)
+	, std::string const & file_name
+	, bool load_now)
 	// initializer (containing: call to base class)
 	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
 	, _is_loaded(false)
-{}
+{
+	if (load_now)
+	{
+		// load surface now
+		//_is_loaded = true;
+	}
+}
+
+bool cRenderResource::is_loaded() const
+{
+	return _is_loaded;
+}

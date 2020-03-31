@@ -23,6 +23,20 @@
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
+		TEST_CASE(" cRenderResource:: optinal param, load_now")
+		{
+			unsigned int const resource_id = 666;
+			unsigned int const resource_scope = 667;
+			std::string const file_name = "buddha.png";
+			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
+
+			auto rr = &cRenderResource(resource_id, resource_scope, file_name, false);
+			REQUIRE(rr->is_loaded() == false);
+			
+			rr = &cRenderResource(resource_id, resource_scope, file_name, true);
+			REQUIRE(rr->is_loaded() == true);
+		}
+
 		TEST_CASE(" cRenderResource::cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
 			unsigned int const resource_id = 666;

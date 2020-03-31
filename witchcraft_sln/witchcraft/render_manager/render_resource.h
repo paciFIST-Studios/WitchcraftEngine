@@ -13,21 +13,27 @@ class cRenderResource : public qResource
 {
 private:
 protected:
-	bool _is_loaded;
+	bool _is_loaded = uninit::BOOL;
+
 
 public:
-	SDL_Surface * _surface;
-	SDL_Texture * _texture;
+	SDL_Surface * _surface = nullptr;
+	SDL_Texture * _texture = nullptr;
 
 	// provided by qResource
 	~cRenderResource() override;
 	void load() override;
 	void unload() override;
 
-	// not virtual
 	cRenderResource();
-	cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName);
-	bool is_loaded() { return _is_loaded; }
+	cRenderResource(
+		unsigned int ID
+		, unsigned int scope
+		, std::string const & file_name
+		, bool load_now = false
+	);
+
+	bool is_loaded() const;
 };
 
 #endif // RENDER_RESOURCE_H

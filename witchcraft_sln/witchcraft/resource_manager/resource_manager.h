@@ -1,6 +1,7 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
+#include <functional>
 #include <map>
 #include <string>
 
@@ -16,6 +17,8 @@
 
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
 #define RESOURCE_GLOBAL_SCOPE 0
+
+//#define LOAD_RENDER_RESOURCE_CALLBACK std::function<std::unique_ptr<cResource>(XML::xml_node<> const &)>
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
@@ -33,15 +36,17 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	std::weak_ptr<c2DRenderManager> _render_manager;
+	c2DRenderManager * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
 
+	// callbacks
+	//LOAD_RENDER_RESOURCE_CALLBACK cb_load_render_resource_from_xml;
 
 public:
 
-	// find resource by id.  retun null if not found
+	// find resource by id.  return nullptr if not found
 	cResource * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
@@ -49,16 +54,19 @@ public:
 
 	// loads resources from xml
 	bool load_from_xml_file(std::string const & file);
-
-	// sets the current scope.  Depends on current scene
+	
+	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
+
+
+	cResourceManager();
 
 	// Simple getters
 	int get_current_scope() const;
 	unsigned int get_resource_count() const;
 
-	cResourceManager();
-
+	// render resources are loaded by the render manager, and then returned to us here
+	//void set_callback__load_render_resource(c2DRenderManager & render_manager);
 };
 
 // static void create_config_files()

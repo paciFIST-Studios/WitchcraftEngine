@@ -89,13 +89,9 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 					// scope will need to add the cResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						if (auto tmp = _render_manager.lock())
-						{
-							resource = tmp->load_resource_from_xml(*child);
-							break;
-						}
-
-						throw std::exception("could not lock render manager for use");
+						//resource = cb_load_render_resource_from_xml(*child);
+						resource = _render_manager->load_resource_from_xml(*child);
+						break;
 					}
 					else if (attributeValue == "audio")
 					{
@@ -212,6 +208,12 @@ bool cResourceManager::set_current_scope(unsigned int Scope)
 	return true;
 }
 
+
+cResourceManager::cResourceManager()
+	: _resource_count(0)
+	, _current_scope(RESOURCE_GLOBAL_SCOPE)
+{}
+
 int cResourceManager::get_current_scope() const
 {
 	return _current_scope;
@@ -222,8 +224,7 @@ unsigned int cResourceManager::get_resource_count() const
 	return _resource_count;
 }
 
-
-cResourceManager::cResourceManager() 
-	: _resource_count(0)
-	, _current_scope(RESOURCE_GLOBAL_SCOPE)
-{}
+//void cResourceManager::set_callback__load_render_resource(c2DRenderManager & render_manager)
+//{
+//	cb_load_render_resource_from_xml = &(render_manager.load_resource_from_xml);
+//}

@@ -7,7 +7,7 @@
 #include "../render_manager/2d_render_manager.h"
 
 class qResourceManager;
-class c2DRenderManager;
+class q2DRenderManager;
 
 enum class EEngineState : unsigned char
 {
@@ -34,7 +34,7 @@ protected:
 
 	//std::unique_ptr<cMessageManager> message;
 	std::unique_ptr<qResourceManager> resource;
-	std::unique_ptr<c2DRenderManager> render;
+	std::unique_ptr<q2DRenderManager> render;
 	//std::unique_ptr<cSceneManager> scene;
 
 	EEngineState _current_engine_state = EEngineState::UNINIT;

@@ -45,27 +45,6 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 	return true;
 }
 
-void q2DRenderManager::shutdown()
-{	
-	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
-	SDL_DestroyWindow(_window);
-	SDL_FreeSurface(_rendering_surface);
-	SDL_DestroyRenderer(_current_renderer);
-	SDL_DestroyWindow(_window);
-	SDL_Quit();
-	PLOGV << witchcraft::log_strings::sdl_stop;
-}
-
-void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
-{
-	r = utility::clamp_value_to_uint8(r);
-	g = utility::clamp_value_to_uint8(g);
-	b = utility::clamp_value_to_uint8(b);
-
-	SDL_FillRect(_rendering_surface, rect, SDL_MapRGB(_rendering_surface->format, r, g, b));
-	SDL_UpdateWindowSurface(_window);
-}
-
 bool q2DRenderManager::update()
 {
 	SDL_Event event;
@@ -74,19 +53,19 @@ bool q2DRenderManager::update()
 		// check messages
 		switch (event.type)
 		{
-			case SDL_QUIT: { return false; }
-					
-			case SDL_KEYDOWN:
+		case SDL_QUIT: { return false; }
+
+		case SDL_KEYDOWN:
+		{
+			// [ESC]
+			if (event.key.keysym.sym == SDLK_ESCAPE)
 			{
-				// [ESC]
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-				{
-					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-					return false;
-				}
-				// others
+				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
+				return false;
 			}
-	
+			// others
+		}
+
 		} //end switch
 	} //end message
 
@@ -98,48 +77,16 @@ bool q2DRenderManager::update()
 	return true;
 }
 
-//std::unique_ptr<qResource> q2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
-//{	
-//	// some default values
-//	unsigned int	resource_id		= uninit::UINT;
-//	unsigned int	resource_scope	= uninit::UINT;
-//	std::string		file_name		= std::string(uninit::CSTRING);
-//	
-//	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
-//		element_attribute;
-//		element_attribute = element_attribute->next_attribute()
-//	)
-//	{
-//		std::string attribute_name = element_attribute->name();
-//		std::string attribute_value = element_attribute->value();
-//
-//		if (attribute_name == witchcraft::xml::uuid)
-//		{
-//			// atoi stands for ASCII-to-integer, and is used for
-//			// parsing a string to an int
-//			resource_id = atoi(attribute_value.c_str());
-//		}
-//		else if (attribute_name == witchcraft::xml::file_name)
-//		{
-//			file_name = attribute_value;
-//		}
-//		else if (attribute_name == witchcraft::xml::resource_scope)
-//		{
-//			resource_scope = atoi(attribute_value.c_str());
-//		}
-//	}
-//
-//	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
-//
-//	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
-//	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
-//			  resource_id
-//			, resource_scope
-//			, file_name
-//		);
-//
-//	return std::move(resource);
-//}
+void q2DRenderManager::shutdown()
+{
+	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
+	SDL_DestroyWindow(_window);
+	SDL_FreeSurface(_rendering_surface);
+	SDL_DestroyRenderer(_current_renderer);
+	SDL_DestroyWindow(_window);
+	SDL_Quit();
+	PLOGV << witchcraft::log_strings::sdl_stop;
+}
 
 void q2DRenderManager::render_all_objects()
 {
@@ -165,4 +112,14 @@ void q2DRenderManager::render_all_objects()
 			, &position
 		);
 	}
+}
+
+void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+{
+	r = utility::clamp_value_to_uint8(r);
+	g = utility::clamp_value_to_uint8(g);
+	b = utility::clamp_value_to_uint8(b);
+
+	SDL_FillRect(_rendering_surface, rect, SDL_MapRGB(_rendering_surface->format, r, g, b));
+	SDL_UpdateWindowSurface(_window);
 }

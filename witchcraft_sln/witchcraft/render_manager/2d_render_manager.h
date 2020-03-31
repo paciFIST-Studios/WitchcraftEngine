@@ -74,14 +74,14 @@ public:
 		, char const * WindowTitle = 0
 	);
 
+	bool update();
+
 	void shutdown();
+
+	void render_all_objects();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 
-	bool update();
-	void render_all_objects();
-
-	//std::unique_ptr<qResource> load_resource_from_xml(XML::xml_node<> const & xml);
 };
 
 #endif // TWO_D_RENDER_MANAGER_H

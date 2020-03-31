@@ -4,8 +4,10 @@
 #include "../engine/engine_object.h"
 
 #include "../resource_manager/resource_manager.h"
+#include "../render_manager/2d_render_manager.h"
 
 class cResourceManager;
+class c2DRenderManager;
 
 enum class EEngineState : unsigned char
 {
@@ -31,7 +33,7 @@ protected:
 
 	//std::unique_ptr<cMessageManager> message;
 	std::unique_ptr<cResourceManager> resource;
-	//std::unique_ptr<cRenderManager> render;
+	std::unique_ptr<c2DRenderManager> render;
 	//std::unique_ptr<cSceneManager> scene;
 
 	EEngineState _current_engine_state = EEngineState::UNINIT;

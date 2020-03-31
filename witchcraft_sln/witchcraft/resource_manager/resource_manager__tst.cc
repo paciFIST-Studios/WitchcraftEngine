@@ -16,7 +16,7 @@
 		std::string const person = witchcraft::configuration::person_asset;
 
 		// Tests default initialization
-		TEST_CASE("ResourceManager: ctor")
+		TEST_CASE(" ResourceManager: ctor")
 		{
 			auto rm = qResourceManager();
 
@@ -48,7 +48,7 @@
 			REQUIRE(rm.set_current_scope(1) == false);
 		}
 
-		TEST_CASE("ResourceManager + RenderManager Load rendering assets")
+		TEST_CASE(" ResourceManager + RenderManager Load rendering assets")
 		{
 			auto rm = qResourceManager();
 			// includes some testing files

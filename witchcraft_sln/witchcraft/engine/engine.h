@@ -6,7 +6,7 @@
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/2d_render_manager.h"
 
-class cResourceManager;
+class qResourceManager;
 class c2DRenderManager;
 
 enum class EEngineState : unsigned char
@@ -26,13 +26,13 @@ struct EngineInitializer
 	unsigned int id;
 };
 
-class cEngine : public cEngineObject
+class cEngine : public qEngineObject
 {
 private:
 protected:
 
 	//std::unique_ptr<cMessageManager> message;
-	std::unique_ptr<cResourceManager> resource;
+	std::unique_ptr<qResourceManager> resource;
 	std::unique_ptr<c2DRenderManager> render;
 	//std::unique_ptr<cSceneManager> scene;
 

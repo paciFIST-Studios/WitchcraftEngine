@@ -15,17 +15,17 @@
 #include "../render_manager/animation_resource.h"
 #include "../render_manager/2d_render_manager.h"
 
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
+#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<qResource>>>
 #define RESOURCE_GLOBAL_SCOPE 0
 
-//#define LOAD_RENDER_RESOURCE_CALLBACK std::function<std::unique_ptr<cResource>(XML::xml_node<> const &)>
+//#define LOAD_RENDER_RESOURCE_CALLBACK std::function<std::unique_ptr<qResource>(XML::xml_node<> const &)>
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
 
 // resource manager, to manage the resource objects
-class cResourceManager : public cEngineObject
+class qResourceManager : public qEngineObject
 {
 private:
 protected:
@@ -38,7 +38,7 @@ protected:
 
 	c2DRenderManager * _render_manager;
 
-	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
+	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
 
 	// callbacks
@@ -47,7 +47,7 @@ protected:
 public:
 
 	// find resource by id.  return nullptr if not found
-	cResource * find_resource_by_id(unsigned int UID);
+	qResource * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
 	void empty_cache();
@@ -59,7 +59,7 @@ public:
 	bool set_current_scope(unsigned int scope);
 
 
-	cResourceManager();
+	qResourceManager();
 
 	// Simple getters
 	int get_current_scope() const;

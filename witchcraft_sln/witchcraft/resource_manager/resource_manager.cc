@@ -1,7 +1,7 @@
 #include "resource_manager.h"
 
 // returns a NON-OWNING ptr
-cResource * cResourceManager::find_resource_by_id(unsigned int UUID)
+qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
 {
 	if (_resource_count == 0)
 		return nullptr;
@@ -25,7 +25,7 @@ cResource * cResourceManager::find_resource_by_id(unsigned int UUID)
 }
 
 
-void cResourceManager::empty_cache()
+void qResourceManager::empty_cache()
 {
 	if (_resource_count == 0)
 		return;
@@ -52,7 +52,7 @@ void cResourceManager::empty_cache()
 }
 
 
-bool cResourceManager::load_from_xml_file(std::string const & file)
+bool qResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 		return false;
@@ -69,7 +69,7 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 		// enumerate objects
 		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
 		{
-			std::unique_ptr<cResource> resource = nullptr;
+			std::unique_ptr<qResource> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
 			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); 
@@ -84,9 +84,9 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 				if (attributeName == witchcraft::xml::resource_type)
 				{
 					// We will allow/force resource managers to implement their own derived
-					// versions of cResource.  Those managers will create the resource,
-					// and then give us a unique_ptr<cResource> pointer back, and this 
-					// scope will need to add the cResource pointer to the resource list.
+					// versions of qResource.  Those managers will create the resource,
+					// and then give us a unique_ptr<qResource> pointer back, and this 
+					// scope will need to add the qResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
 						//resource = cb_load_render_resource_from_xml(*child);
@@ -181,7 +181,7 @@ bool cResourceManager::load_from_xml_file(std::string const & file)
 
 
 // WARN: Must be called for each scene change
-bool cResourceManager::set_current_scope(unsigned int Scope)
+bool qResourceManager::set_current_scope(unsigned int Scope)
 {
 	// You cannot change scope, until a global resource is loaded
 	if (_resource_count == 0)
@@ -209,22 +209,22 @@ bool cResourceManager::set_current_scope(unsigned int Scope)
 }
 
 
-cResourceManager::cResourceManager()
+qResourceManager::qResourceManager()
 	: _resource_count(0)
 	, _current_scope(RESOURCE_GLOBAL_SCOPE)
 {}
 
-int cResourceManager::get_current_scope() const
+int qResourceManager::get_current_scope() const
 {
 	return _current_scope;
 }
 
-unsigned int cResourceManager::get_resource_count() const
+unsigned int qResourceManager::get_resource_count() const
 {
 	return _resource_count;
 }
 
-//void cResourceManager::set_callback__load_render_resource(c2DRenderManager & render_manager)
+//void qResourceManager::set_callback__load_render_resource(c2DRenderManager & render_manager)
 //{
 //	cb_load_render_resource_from_xml = &(render_manager.load_resource_from_xml);
 //}

@@ -6,7 +6,7 @@
 #include "../engine/engine_object.h"
 #include "scene_object.h"
 
-class c2DLayer : public cEngineObject
+class c2DLayer : public qEngineObject
 {
 private:
 protected:

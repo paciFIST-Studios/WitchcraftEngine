@@ -52,6 +52,6 @@ cRenderResource::cRenderResource(
 	, unsigned int scope
 	, std::string const & file_name)
 	// initializer (containing: call to base class)
-	: cResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
+	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
 	, _is_loaded(false)
 {}

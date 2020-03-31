@@ -9,24 +9,24 @@
 		
 		#include "resource.h"
 		
-		TEST_CASE("cResource::cResource(args)  When given default arguments, ctor constructs object with those values")
+		TEST_CASE("qResource::qResource(args)  When given default arguments, ctor constructs object with those values")
 		{
 			unsigned int resource_id = 666;
 			unsigned int resource_scope = 667;
 			std::string file_name = "668";
 			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
 		
-			auto resource = cResource(resource_id, resource_scope, file_name, resource_type);
+			auto resource = qResource(resource_id, resource_scope, file_name, resource_type);
 			REQUIRE(resource.get_resource_id() == resource_id);
 			REQUIRE(resource.get_scope_id() == resource_scope);
 			REQUIRE(resource.get_file_name() == file_name);
 			REQUIRE(resource.get_resource_type() == resource_type);
 		}
 
-		TEST_CASE("cResource::cResource()  Produces correct default object; also, the getter methods work for this data")
+		TEST_CASE("qResource::qResource()  Produces correct default object; also, the getter methods work for this data")
 		{
 			// default object 
-			auto resource = &cResource();
+			auto resource = &qResource();
 			auto file_name = resource->get_file_name();
 			auto resource_id = resource->get_resource_id();
 			auto resource_type = resource->get_resource_type();

@@ -5,18 +5,18 @@
 #include "plog/Log.h"
 #include "../uninitialized_values.h"
 
-class cEngineObject
+class qEngineObject
 {
 private:
 protected:
 public:
 	unsigned int id;
 
-	cEngineObject()
+	qEngineObject()
 		: id(uninit::UINT)
 	{}
 
-	cEngineObject(unsigned int const & ID)
+	qEngineObject(unsigned int const & ID)
 		: id(ID)
 	{}
 };

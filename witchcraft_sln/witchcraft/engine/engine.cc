@@ -10,7 +10,7 @@ void cEngine::startup()
 	// todo
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
-	resource = std::make_unique<cResourceManager>();
+	resource = std::make_unique<qResourceManager>();
 
 	//PLOGI << witchcraft::log_strings::render_manager_start;
 

@@ -16,7 +16,7 @@
 // in a 2d scene. It contains position, scale, & rotation, and these
 // chearacteristics will allow the render manager to perform culling.
 // It is possible many objects reference this instance (object pooling) 
-class c2DRenderObject : public cEngineObject
+class c2DRenderObject : public qEngineObject
 {
 private:
 protected:

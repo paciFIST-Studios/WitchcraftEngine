@@ -21,23 +21,19 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-// logging
-#include <plog/Log.h>
-
 // witchcraft
-#include "../utility/utility.h"
-#include "../string_constants.h"
-
+#include "../engine/engine_object.h"
 #include "../resource_manager/resource.h"
-#include "render_resource.h"
+#include "../string_constants.h"
+#include "../utility/utility.h"
 #include "2d_render_object.h"
-#include "render_manager_base.h"
+#include "render_resource.h"
 
-#define RENDER_OBJECT_VECTOR__TYPE std::vector<std::unique_ptr<c2DRenderObject>>
+#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<c2DRenderObject>>
 
 // Depends on:
 //	c2DSpriteObject
-//	cRenderManagerBase
+//	qRenderManagerBase
 //	c2DRenderObject
 //	cRenderResource
 //
@@ -46,19 +42,19 @@
 //	2. initialize hardware
 //	3. create / load / unload graphics resource
 //	4. create / load / unload render graphics
-class c2DRenderManager : public cRenderManagerBase
+class q2DRenderManager : public qEngineObject
 {
 private:
 protected:
 
-	static std::unique_ptr<c2DRenderManager> _SDL2D_render_manager;
+	static std::unique_ptr<q2DRenderManager> _SDL2D_render_manager;
 
-	RENDER_OBJECT_VECTOR__TYPE _render_objects;
+	RENDER_OBJECTS_VECTOR _render_objects;
 
 public:
-	c2DRenderManager() {}
+	q2DRenderManager() {}
 
-	static c2DRenderManager * get_SDL2D_render_manager();
+	static q2DRenderManager * get_SDL2D_render_manager();
 	
 	// the program window
 	SDL_Window * _window;
@@ -72,9 +68,9 @@ public:
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
-		, unsigned int Width = 0
-		, unsigned int Height = 0
-		, bool fullScreen = false
+		, unsigned int Width   = 0
+		, unsigned int Height  = 0
+		, bool fullScreen	   = false
 		, char const * WindowTitle = 0
 	);
 
@@ -82,12 +78,10 @@ public:
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 
-	void free();
 	bool update();
-	void toggle_full_screen();
-	std::unique_ptr<qResource> load_resource_from_xml(XML::xml_node<> const & xml);
 	void render_all_objects();
 
+	//std::unique_ptr<qResource> load_resource_from_xml(XML::xml_node<> const & xml);
 };
 
 #endif // TWO_D_RENDER_MANAGER_H

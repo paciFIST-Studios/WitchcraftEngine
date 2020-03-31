@@ -1,6 +1,6 @@
 #include "2d_render_manager.h"
 
-bool c2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
 	// SDL_Init() returns 0 on success, and a negative number on error
@@ -45,7 +45,7 @@ bool c2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 	return true;
 }
 
-void c2DRenderManager::shutdown()
+void q2DRenderManager::shutdown()
 {	
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	SDL_DestroyWindow(_window);
@@ -56,7 +56,7 @@ void c2DRenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void c2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
 	r = utility::clamp_value_to_uint8(r);
 	g = utility::clamp_value_to_uint8(g);
@@ -66,7 +66,7 @@ void c2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 	SDL_UpdateWindowSurface(_window);
 }
 
-bool c2DRenderManager::update()
+bool q2DRenderManager::update()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -98,50 +98,50 @@ bool c2DRenderManager::update()
 	return true;
 }
 
-std::unique_ptr<qResource> c2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
-{	
-	// some default values
-	unsigned int	resource_id		= uninit::UINT;
-	unsigned int	resource_scope	= uninit::UINT;
-	std::string		file_name		= std::string(uninit::CSTRING);
-	
-	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
-		element_attribute;
-		element_attribute = element_attribute->next_attribute()
-	)
-	{
-		std::string attribute_name = element_attribute->name();
-		std::string attribute_value = element_attribute->value();
+//std::unique_ptr<qResource> q2DRenderManager::load_resource_from_xml(XML::xml_node<> const & xml)
+//{	
+//	// some default values
+//	unsigned int	resource_id		= uninit::UINT;
+//	unsigned int	resource_scope	= uninit::UINT;
+//	std::string		file_name		= std::string(uninit::CSTRING);
+//	
+//	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
+//		element_attribute;
+//		element_attribute = element_attribute->next_attribute()
+//	)
+//	{
+//		std::string attribute_name = element_attribute->name();
+//		std::string attribute_value = element_attribute->value();
+//
+//		if (attribute_name == witchcraft::xml::uuid)
+//		{
+//			// atoi stands for ASCII-to-integer, and is used for
+//			// parsing a string to an int
+//			resource_id = atoi(attribute_value.c_str());
+//		}
+//		else if (attribute_name == witchcraft::xml::file_name)
+//		{
+//			file_name = attribute_value;
+//		}
+//		else if (attribute_name == witchcraft::xml::resource_scope)
+//		{
+//			resource_scope = atoi(attribute_value.c_str());
+//		}
+//	}
+//
+//	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
+//
+//	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
+//	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
+//			  resource_id
+//			, resource_scope
+//			, file_name
+//		);
+//
+//	return std::move(resource);
+//}
 
-		if (attribute_name == witchcraft::xml::uuid)
-		{
-			// atoi stands for ASCII-to-integer, and is used for
-			// parsing a string to an int
-			resource_id = atoi(attribute_value.c_str());
-		}
-		else if (attribute_name == witchcraft::xml::file_name)
-		{
-			file_name = attribute_value;
-		}
-		else if (attribute_name == witchcraft::xml::resource_scope)
-		{
-			resource_scope = atoi(attribute_value.c_str());
-		}
-	}
-
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
-
-	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
-	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
-			  resource_id
-			, resource_scope
-			, file_name
-		);
-
-	return std::move(resource);
-}
-
-void c2DRenderManager::render_all_objects()
+void q2DRenderManager::render_all_objects()
 {
 	if (_render_objects.size() < 1)
 		return;

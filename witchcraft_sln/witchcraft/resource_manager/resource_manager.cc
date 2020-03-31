@@ -90,7 +90,7 @@ bool qResourceManager::load_from_xml_file(std::string const & file)
 					if (attributeValue == "graphic")
 					{
 						//resource = cb_load_render_resource_from_xml(*child);
-						resource = _render_manager->load_resource_from_xml(*child);
+						//resource = _render_manager->load_resource_from_xml(*child);
 						break;
 					}
 					else if (attributeValue == "audio")

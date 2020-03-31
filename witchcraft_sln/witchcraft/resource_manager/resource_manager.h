@@ -15,10 +15,9 @@
 #include "../render_manager/animation_resource.h"
 #include "../render_manager/2d_render_manager.h"
 
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<qResource>>>
+#define RESOURCE_PTR std::unique_ptr<qResource>
+#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<RESOURCE_PTR>>
 #define RESOURCE_GLOBAL_SCOPE 0
-
-//#define LOAD_RENDER_RESOURCE_CALLBACK std::function<std::unique_ptr<qResource>(XML::xml_node<> const &)>
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
@@ -41,8 +40,10 @@ protected:
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
 
-	// callbacks
-	//LOAD_RENDER_RESOURCE_CALLBACK cb_load_render_resource_from_xml;
+
+	RESOURCE_PTR load_render_resource_from_xml(XML::xml_node<> const & xml);
+	RESOURCE_PTR load_animation_resource_from_xml(XML::xml_node<> const & xml);
+
 
 public:
 
@@ -57,7 +58,6 @@ public:
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
-
 
 	qResourceManager();
 

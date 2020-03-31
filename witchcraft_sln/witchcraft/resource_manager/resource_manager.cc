@@ -1,5 +1,106 @@
 #include "resource_manager.h"
 
+RESOURCE_PTR qResourceManager::load_render_resource_from_xml(XML::xml_node<> const & xml)
+{
+	// some default values
+	unsigned int	resource_id		= uninit::UINT;
+	unsigned int	resource_scope	= uninit::UINT;
+	std::string		file_name		= std::string(uninit::CSTRING);
+
+	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
+		element_attribute;
+		element_attribute = element_attribute->next_attribute()
+	)
+	{
+		std::string attribute_name  = element_attribute->name();
+		std::string attribute_value = element_attribute->value();
+
+		if (attribute_name == witchcraft::xml::uuid)
+		{
+			// atoi stands for ASCII-to-integer, and is used for
+			// parsing a string to an int
+			resource_id = atoi(attribute_value.c_str());
+		}
+		else if (attribute_name == witchcraft::xml::file_name)
+		{
+			file_name = attribute_value;
+		}
+		else if (attribute_name == witchcraft::xml::resource_scope)
+		{
+			resource_scope = atoi(attribute_value.c_str());
+		}
+	}
+
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
+
+	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
+	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
+		  resource_id
+		, resource_scope
+		, file_name
+		);
+
+	return std::move(resource);
+}
+
+RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
+{
+	unsigned int				resource_id				= uninit::UINT;
+	unsigned int				resource_scope			= uninit::UINT;
+	unsigned int				animation_timing_ms		= uninit::UINT;
+	std::vector<unsigned int>	frame_index_sequence;
+	std::string					animation_name			= std::string(uninit::CSTRING);
+
+	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
+		element_attribute;
+		element_attribute = element_attribute->next_attribute()
+	)
+	{
+		std::string attr_name = element_attribute->name();
+		std::string attr_value = element_attribute->value();
+
+		if (attr_name == witchcraft::xml::uuid)
+		{
+			resource_id = atoi(attr_value.c_str());
+		}
+		else if (attr_name == witchcraft::xml::resource_scope)
+		{
+			resource_scope = atoi(attr_value.c_str());
+		}
+		else if (attr_name == witchcraft::xml::resource_name)
+		{
+			animation_name = attr_value;
+		}
+		else if (attr_name == witchcraft::xml::two_d_animation_timing_ms)
+		{
+			animation_timing_ms = atoi(attr_value.c_str());
+		}
+		else if (attr_name == witchcraft::xml::two_d_animation_sequence)
+		{
+			frame_index_sequence.push_back(1);
+			// split into a vector, knowing the delimiter
+			// todo: move this to the string literal file?
+			std::string const delimiters = " ";
+
+			auto sv = utility::tokenize_string(attr_value, delimiters);
+			for (auto element : sv)
+			{
+				frame_index_sequence.push_back
+				(
+					atoi(element.c_str())
+				);
+			}
+		}
+	}
+
+	auto anim = c2DSpriteAnimation(animation_name, frame_index_sequence, animation_timing_ms);
+
+	// NOTE: there is a cast to qResource
+	std::unique_ptr<qResource> resource = std::make_unique<cAnimationResource>(anim);
+
+	return std::move(resource);
+}
+
 // returns a NON-OWNING ptr
 qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
 {
@@ -89,8 +190,7 @@ bool qResourceManager::load_from_xml_file(std::string const & file)
 					// scope will need to add the qResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						//resource = cb_load_render_resource_from_xml(*child);
-						//resource = _render_manager->load_resource_from_xml(*child);
+						resource = load_render_resource_from_xml(*child);
 						break;
 					}
 					else if (attributeValue == "audio")
@@ -105,58 +205,9 @@ bool qResourceManager::load_from_xml_file(std::string const & file)
 					}
 					else if (attributeValue == "2d_animation")
 					{
-						unsigned int resource_id = uninit::UINT;
-						unsigned int resource_scope = uninit::UINT;
-						unsigned int animation_timing_ms = uninit::UINT;
-						std::vector<unsigned int> frame_index_sequence;
-						std::string animation_name = std::string(uninit::CSTRING);
-
-						for (XML::xml_attribute<> * element_attribute = (*child).first_attribute();
-							element_attribute;
-							element_attribute = element_attribute->next_attribute()
-						)
-						{
-							std::string attr_name = element_attribute->name();
-							std::string attr_value = element_attribute->value();
-
-							if (attr_name == witchcraft::xml::uuid)
-							{
-								resource_id = atoi(attr_value.c_str());
-							}
-							else if (attr_name == witchcraft::xml::resource_scope)
-							{
-								resource_scope = atoi(attr_value.c_str());
-							}
-							else if (attr_name == witchcraft::xml::resource_name)
-							{
-								animation_name = attr_value;
-							}
-							else if (attr_name == witchcraft::xml::two_d_animation_timing_ms)
-							{
-								animation_timing_ms = atoi(attr_value.c_str());
-							}
-							else if (attr_name == witchcraft::xml::two_d_animation_sequence)
-							{
-								frame_index_sequence.push_back(1);
-								// split into a vector, knowing the delimiter
-								// todo: move this to the string literal file?
-								std::string const delimiters = " ";
-
-								auto sv = utility::tokenize_string(attr_value, delimiters);
-								for (auto element : sv)
-								{
-									frame_index_sequence.push_back
-									(
-										atoi(element.c_str())
-									);
-								}
-							}
-						}
-
-						auto anim = c2DSpriteAnimation(animation_name, frame_index_sequence, animation_timing_ms);
-						resource = std::make_unique<cAnimationResource>(anim);
+						resource = load_animation_resource_from_xml(*child);
 						break;
-					} // end: 2d_animation
+					}
 				}
 			}
 
@@ -223,8 +274,3 @@ unsigned int qResourceManager::get_resource_count() const
 {
 	return _resource_count;
 }
-
-//void qResourceManager::set_callback__load_render_resource(c2DRenderManager & render_manager)
-//{
-//	cb_load_render_resource_from_xml = &(render_manager.load_resource_from_xml);
-//}

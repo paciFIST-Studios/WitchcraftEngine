@@ -18,7 +18,7 @@
 
 
 			// init with initializer should give the correct id
-			auto init = EngineInitializer{ 666 };
+			auto init = EngineInitializer{ 666, true };
 			auto engine2 = cEngine(init);
 			REQUIRE(engine2.id == 666);
 			REQUIRE(engine.get_current_state() == EEngineState::CONSTRUCTED);
@@ -27,7 +27,7 @@
 
 		TEST_CASE("cEngine::startup()")
 		{
-			auto init = EngineInitializer{ 1 };
+			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);
 
 			engine.startup();
@@ -36,18 +36,21 @@
 
 		TEST_CASE("cEngine::run()")
 		{
-			auto init = EngineInitializer{ 1 };
+			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);
 
+			engine.startup();
 			engine.run();
 			REQUIRE(engine.get_current_state() == EEngineState::RUNNING);
 		}
 
 		TEST_CASE("cEngine::shutdown()")
 		{
-			auto init = EngineInitializer{ 1 };
+			auto init = EngineInitializer{ 1, true };
 			auto engine = cEngine(init);
 
+			engine.startup();
+			engine.run();
 			engine.shutdown();
 			REQUIRE(engine.get_current_state() == EEngineState::SHUTDOWN);
 		}

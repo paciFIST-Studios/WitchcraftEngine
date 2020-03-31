@@ -6,8 +6,6 @@
 #include "../resource_manager/resource_manager.h"
 
 class cResourceManager;
-class cRenderManager;
-class cSceneManager;
 
 enum class EEngineState : unsigned char
 {
@@ -47,11 +45,11 @@ public:
 	EEngineState get_current_state() const { return _current_engine_state; }
 
 	cEngine() 
-		: _current_engine_state(EEngineState::CONSTRUCTED) 
+	: _current_engine_state(EEngineState::CONSTRUCTED) 
 	{}
 
 	cEngine(EngineInitializer init) 
-		: _current_engine_state(EEngineState::CONSTRUCTED)
+	: _current_engine_state(EEngineState::CONSTRUCTED)
 	{
 		id = init.id;
 	}

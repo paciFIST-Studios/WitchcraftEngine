@@ -7,14 +7,13 @@ void cEngine::startup()
 	_current_engine_state = EEngineState::STARTUP;
 
 	// messaging layer
-
+	// todo
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<cResourceManager>();
-	
 
-	//auto render_manager = c2DRenderManager();
 	//PLOGI << witchcraft::log_strings::render_manager_start;
+
 }
 
 void cEngine::run()

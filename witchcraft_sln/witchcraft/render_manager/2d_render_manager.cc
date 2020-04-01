@@ -3,18 +3,43 @@
 bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
+
+	int flags = 0;
+
+	// use for setting flag options
+	if (true)
+	{
+		flags = flags | SDL_INIT_EVERYTHING;
+	}
+
 	// SDL_Init() returns 0 on success, and a negative number on error
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+	if (SDL_Init(flags) < 0)
 	{
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
-	
-	// Flags are set with bitmasking
-	// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
-	// sdl chooses the renderer, use the 
-	int flags = 0;
 
+
+	flags = 0;
+	// use for setting SDL_Image flag options
+	if(true)
+	{
+		flags = flags | IMG_INIT_JPG;
+		flags = flags | IMG_INIT_PNG;
+	}
+	// not sure what this returns, actually
+	int icode = IMG_Init(flags);
+	if ((icode & flags) != flags)
+	{
+		// failed to init
+		PLOGF << witchcraft::log_strings::sdl_init_failure 
+			  << "\nError: Could not initialize PNG + JPG support!\n" 
+			  << IMG_GetError();
+		return false;
+	}
+
+
+	flags = 0;
 	if (fullScreen)
 	{
 		flags = flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -22,6 +47,8 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 
 	flags = flags | SDL_WINDOW_SHOWN;
 
+	// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
+	// sdl chooses the renderer, use the 
 	PLOGD << witchcraft::log_strings::sdl_window_init;
 	SDL_CreateWindowAndRenderer(
 		  Width
@@ -80,6 +107,7 @@ bool q2DRenderManager::update()
 void q2DRenderManager::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
+	IMG_Quit();
 	SDL_DestroyWindow(_window);
 	SDL_FreeSurface(_rendering_surface);
 	SDL_DestroyRenderer(_current_renderer);

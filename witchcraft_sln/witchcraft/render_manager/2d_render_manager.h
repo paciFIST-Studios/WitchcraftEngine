@@ -13,6 +13,7 @@
 
 // sdl
 #include <SDL.h>
+#include <SDL_image.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>
 
@@ -81,6 +82,8 @@ public:
 	void render_all_objects();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
+
+	void set_render_object_at_position(c2DRenderObject const & obj, unsigned int x, unsigned int y);
 
 };
 

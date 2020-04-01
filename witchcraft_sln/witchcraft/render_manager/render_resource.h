@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 
 // witchcraft
+#include "../utility/utility.h"
 #include "../resource_manager/resource.h"
 
 // Render == "Graphical" == "Graphics"
@@ -15,7 +16,8 @@ private:
 protected:
 	bool _is_loaded = uninit::BOOL;
 
-
+	void attempt_load(std::string const & file_name);
+	
 public:
 	SDL_Surface * _surface = nullptr;
 	SDL_Texture * _texture = nullptr;

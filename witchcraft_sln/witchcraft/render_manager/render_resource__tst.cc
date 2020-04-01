@@ -27,7 +27,7 @@
 		{
 			unsigned int const resource_id = 666;
 			unsigned int const resource_scope = 667;
-			std::string const file_name = "buddha.png";
+			std::string const file_name = witchcraft::configuration::buddha_png;
 			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
 
 			auto rr = &cRenderResource(resource_id, resource_scope, file_name, false);
@@ -41,7 +41,7 @@
 		{
 			unsigned int const resource_id = 666;
 			unsigned int const resource_scope = 667;
-			std::string const file_name = "buddha.png";
+			std::string const file_name = witchcraft::configuration::buddha_png;
 			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
 
 			// the cRenderResource sets its own resource type

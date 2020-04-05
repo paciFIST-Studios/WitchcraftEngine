@@ -21,17 +21,17 @@ class c2DRenderObject : public qEngineObject
 private:
 protected:
 
-	float _position_x;
-	float _position_y;
+	float position_x_;
+	float position_y_;
 
-	bool _is_visible;
+	bool is_visible_;
 
-	SDL_Color _color_key;
-	bool _color_key_is_enabled;
+	SDL_Color color_key_;
+	bool color_key_is_enabled_;
 
 public:
-	qRenderResource * _render_resource;
-	SDL_Rect _render_rect;
+	qRenderResource * render_resource;
+	SDL_Rect render_rect;
 
 	c2DRenderObject();
 

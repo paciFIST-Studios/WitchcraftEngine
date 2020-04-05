@@ -19,16 +19,16 @@ public:
 	c2DLayer()
 		: _layer_is_visible(UNINIT_VISIBILITY)
 		, _layer_z_order(UNINIT_Z_ORDER)
-		, _position_x(UNINIT_COORDINATE_F)
-		, _position_y(UNINIT_COORDINATE_F)
+		, position_x_(UNINIT_COORDINATE_F)
+		, position_y_(UNINIT_COORDINATE_F)
 		, _name{std::string("un-init")}
 	{}
 
 	bool _layer_is_visible;
 	unsigned int _layer_z_order;
 
-	float _position_x;
-	float _position_y;
+	float position_x_;
+	float position_y_;
 
 	std::string _name;
 

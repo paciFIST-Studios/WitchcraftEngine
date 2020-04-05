@@ -19,8 +19,8 @@
 			// and default ctor uses un-init values
 			REQUIRE(layer._layer_z_order == c2DLayer::UNINIT_Z_ORDER);
 			REQUIRE(layer._layer_is_visible == c2DLayer::UNINIT_VISIBILITY);
-			REQUIRE(layer._position_x == c2DLayer::UNINIT_COORDINATE_F);
-			REQUIRE(layer._position_y == c2DLayer::UNINIT_COORDINATE_F);
+			REQUIRE(layer.position_x_ == c2DLayer::UNINIT_COORDINATE_F);
+			REQUIRE(layer.position_y_ == c2DLayer::UNINIT_COORDINATE_F);
 			REQUIRE(layer._name == "un-init");
 		}
 

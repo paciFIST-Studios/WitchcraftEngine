@@ -54,19 +54,19 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 		  Width
 		, Height
 		, static_cast<SDL_WindowFlags>(flags)
-		, &_window
-		, &_current_renderer
+		, &program_window
+		, &active_renderer
 	);
 
-	if (_window == NULL)
+	if (program_window == NULL)
 	{
 		PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 
-	SDL_SetWindowTitle(_window, WindowTitle);
+	SDL_SetWindowTitle(program_window, WindowTitle);
 
-	_rendering_surface = SDL_GetWindowSurface(_window);
+	rendering_surface = SDL_GetWindowSurface(program_window);
 	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
 	return true;
@@ -97,9 +97,9 @@ bool q2DRenderManager::update()
 	} //end message
 
 	// clear screen
-	SDL_RenderClear(_current_renderer);
+	SDL_RenderClear(active_renderer);
 	render_all_objects();
-	SDL_RenderPresent(_current_renderer);
+	SDL_RenderPresent(active_renderer);
 
 	return true;
 }
@@ -108,10 +108,10 @@ void q2DRenderManager::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
-	SDL_DestroyWindow(_window);
-	SDL_FreeSurface(_rendering_surface);
-	SDL_DestroyRenderer(_current_renderer);
-	SDL_DestroyWindow(_window);
+	SDL_DestroyWindow(program_window);
+	SDL_FreeSurface(rendering_surface);
+	SDL_DestroyRenderer(active_renderer);
+	SDL_DestroyWindow(program_window);
 	SDL_Quit();
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
@@ -134,9 +134,9 @@ void q2DRenderManager::render_all_objects()
 		position.y = int(std::get<1>(position_tuple));
 
 		SDL_RenderCopy(
-			  _current_renderer
-			, object->_render_resource->texture
-			, &object->_render_rect
+			  active_renderer
+			, object->render_resource->texture
+			, &object->render_rect
 			, &position
 		);
 	}
@@ -148,6 +148,6 @@ void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 	g = utility::clamp_value_to_uint8(g);
 	b = utility::clamp_value_to_uint8(b);
 
-	SDL_FillRect(_rendering_surface, rect, SDL_MapRGB(_rendering_surface->format, r, g, b));
-	SDL_UpdateWindowSurface(_window);
+	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
+	SDL_UpdateWindowSurface(program_window);
 }

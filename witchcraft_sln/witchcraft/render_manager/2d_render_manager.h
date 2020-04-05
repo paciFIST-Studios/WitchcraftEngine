@@ -55,14 +55,11 @@ protected:
 public:
 	q2DRenderManager() {}
 	
-	// the program window
-	SDL_Window * _window;
+	SDL_Window * program_window;
 
-	// the render SDL uses
-	SDL_Renderer * _current_renderer;
+	SDL_Renderer * active_renderer;
 
-	// Surface is software, texture is hardware (GPU rendering)
-	SDL_Surface * _rendering_surface;
+	SDL_Surface * rendering_surface;
 
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED

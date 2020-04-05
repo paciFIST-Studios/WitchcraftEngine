@@ -9,19 +9,70 @@
 	#include "catch.hpp"
 #endif // RUN_UNIT_TESTS
 
+
 // our logging lib
 #include <plog/Log.h>
 
 // witchcraft
 #include "string_constants.h"
+#include "utility/get_latest_log_str.h"
 
 #include "engine/engine.h"
 
 
+namespace witchcraft
+{
+	namespace configuration
+	{
+		static unsigned int const logging_severity = static_cast<unsigned int>(plog::verbose);
+		static unsigned int const log_file_max_size_bytes = 100000; // "marketing" 100k
+		static unsigned int const log_file_max_logs = 4;
+	}
+}
+
+
 void init_logging()
 {
-	// we have to initialize logging manually.  This is set to append to any existing file
-	plog::init(plog::verbose, witchcraft::file_strings::engine_log_file_name.c_str());
+	bool preserve_old_logs = true;
+	bool delete_old_logs = false;
+
+	bool record_failure_to_move_prior_log = true;
+
+	if (preserve_old_logs)
+	{
+		std::string start_name = witchcraft::file_strings::engine_log_file_name;
+		if (utility::file_exists(start_name))
+		{
+			std::string end_name = witchcraft::configuration::get_latest_log_str();
+			int result = rename(start_name.c_str(), end_name.c_str());
+
+			if (result >= 0)
+			{
+				record_failure_to_move_prior_log = false;
+			}
+		}
+	}
+	else if (delete_old_logs)
+	{
+		std::string file = witchcraft::file_strings::engine_log_file_name;
+		if (utility::file_exists(file))
+		{
+			remove(file.c_str());
+		}
+	}
+	
+	// This is set to append to any existing file
+	plog::init(
+		  static_cast<plog::Severity>(witchcraft::configuration::logging_severity)
+		, witchcraft::file_strings::engine_log_file_name.c_str()
+		, witchcraft::configuration::log_file_max_size_bytes
+		, witchcraft::configuration::log_file_max_logs
+	);
+
+	if (record_failure_to_move_prior_log)
+	{
+		PLOGE << "\n\nFAILED TO RENAME OLD LOG.\n\n";
+	}
 }
 
 void run_unit_tests()
@@ -49,6 +100,4 @@ int main(int argc, char** argv[])
 	engine.startup();
 	engine.run();
 	engine.shutdown();
-
-
 }

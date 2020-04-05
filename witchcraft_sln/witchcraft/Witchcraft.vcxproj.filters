@@ -117,6 +117,9 @@
     <ClCompile Include="engine\engine__tst.cc">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
+    <ClCompile Include="utility\get_latest_log_str__tst.cc">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="engine\engine_object.h">
       <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\get_latest_log_str.h">
+      <Filter>Source Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

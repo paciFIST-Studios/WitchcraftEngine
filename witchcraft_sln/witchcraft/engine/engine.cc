@@ -1,10 +1,10 @@
 #include "engine.h"
 
 
-void cEngine::startup()
+void Engine::startup()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
-	_current_engine_state = EEngineState::STARTUP;
+	current_engine_state = EEngineState::STARTUP;
 	if (tm_early_exit) return;
 
 
@@ -18,10 +18,10 @@ void cEngine::startup()
 	render = std::make_unique<q2DRenderManager>();
 }
 
-void cEngine::run()
+void Engine::run()
 {
 	PLOGI << witchcraft::log_strings::engine_running;
-	_current_engine_state = EEngineState::RUNNING;
+	current_engine_state = EEngineState::RUNNING;
 	if (tm_early_exit) return;
 
 
@@ -79,10 +79,10 @@ void cEngine::run()
 	PLOGI << witchcraft::log_strings::game_loop_stop;
 }
 
-void cEngine::shutdown()
+void Engine::shutdown()
 {
 	PLOGI << witchcraft::log_strings::engine_shutdown;
-	_current_engine_state = EEngineState::SHUTDOWN;
+	current_engine_state = EEngineState::SHUTDOWN;
 	if (tm_early_exit) return;
 
 

@@ -44,7 +44,7 @@ int main(int argc, char** argv[])
 	run_unit_tests();
 
 	auto init = EngineInitializer{ 1 };
-	auto engine = cEngine(init);
+	auto engine = Engine(init);
 
 	engine.startup();
 	engine.run();

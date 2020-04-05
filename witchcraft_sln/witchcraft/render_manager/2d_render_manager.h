@@ -36,7 +36,7 @@
 //	c2DSpriteObject
 //	qRenderManagerBase
 //	c2DRenderObject
-//	cRenderResource
+//	qRenderResource
 //
 //	This class serves to
 //	1. create a window
@@ -54,8 +54,6 @@ protected:
 
 public:
 	q2DRenderManager() {}
-
-	static q2DRenderManager * get_SDL2D_render_manager();
 	
 	// the program window
 	SDL_Window * _window;

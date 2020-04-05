@@ -10,25 +10,25 @@
 #include "../resource_manager/resource.h"
 
 // Render == "Graphical" == "Graphics"
-class cRenderResource : public qResource
+class qRenderResource : public qResource
 {
 private:
 protected:
-	bool _is_loaded = uninit::BOOL;
+	bool is_loaded_ = uninit::BOOL;
 
 	void attempt_load(std::string const & file_name);
 	
 public:
-	SDL_Surface * _surface = nullptr;
-	SDL_Texture * _texture = nullptr;
+	SDL_Surface * surface = nullptr;
+	SDL_Texture * texture = nullptr;
 
 	// provided by qResource
-	~cRenderResource() override;
+	~qRenderResource() override;
 	void load() override;
 	void unload() override;
 
-	cRenderResource();
-	cRenderResource(
+	qRenderResource();
+	qRenderResource(
 		unsigned int ID
 		, unsigned int scope
 		, std::string const & file_name

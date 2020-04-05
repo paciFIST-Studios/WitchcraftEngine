@@ -10,9 +10,9 @@
 		#include "../uninitialized_values.h"
 		#include "2d_render_object.h"
 
-		TEST_CASE(" c2DRenderObject::ctor"  )
+		TEST_CASE(" RenderObject2D::ctor"  )
 		{
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 
 			REQUIRE(ro.is_visible() == uninit::BOOL);
 
@@ -23,12 +23,12 @@
 
 		}
 
-		TEST_CASE(" c2DRenderObject:: get/set position()")
+		TEST_CASE(" RenderObject2D:: get/set position()")
 		{
 			int const XPOS = 10;
 			int const YPOS = 20;
 
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 
 			// get/set should not throw exceptions
 			REQUIRE_NOTHROW(ro.get_position());
@@ -45,9 +45,9 @@
 			REQUIRE(typeid(std::get<0>(pos)) == typeid(std::get<1>(pos)));
 		}
 
-		TEST_CASE(" c2DRenderObject:: get/set is_visible")
+		TEST_CASE(" RenderObject2D:: get/set is_visible")
 		{
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 			REQUIRE_NOTHROW(ro.set_is_visible(true));
 			REQUIRE(ro.is_visible());
 			ro.set_is_visible(false);

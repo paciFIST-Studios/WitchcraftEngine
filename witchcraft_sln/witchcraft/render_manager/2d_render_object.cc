@@ -1,6 +1,6 @@
 #include "2d_render_object.h"
 
-c2DRenderObject::c2DRenderObject()
+RenderObject2D::RenderObject2D()
 	: render_resource(nullptr)
 	, render_rect{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
 	, position_x_(uninit::FLOAT)
@@ -10,7 +10,7 @@ c2DRenderObject::c2DRenderObject()
 	, color_key_is_enabled_(uninit::BOOL)
 {}
 
-void c2DRenderObject::set_resource_object(qRenderResource * renderResource)
+void RenderObject2D::set_resource(qRenderResource * renderResource)
 {
 	if(renderResource)
 	{
@@ -32,43 +32,43 @@ void c2DRenderObject::set_resource_object(qRenderResource * renderResource)
 	}
 }
 
-POSITION_TUPLE c2DRenderObject::get_position()
+POSITION_TUPLE RenderObject2D::get_position()
 {
 	return std::make_tuple(position_x_, position_y_);
 }
 
-void c2DRenderObject::set_position(float x, float y)
+void RenderObject2D::set_position(float x, float y)
 {
 	position_x_ = x;
 	position_y_ = y;
 }
 
-bool c2DRenderObject::is_visible()
+bool RenderObject2D::is_visible()
 {
 	return is_visible_;
 }
 
-void c2DRenderObject::set_is_visible(bool is)
+void RenderObject2D::set_is_visible(bool is)
 {
 	is_visible_ = is;
 }
 
-SDL_Color c2DRenderObject::get_color_key()
+SDL_Color RenderObject2D::get_color_key()
 {
 	return color_key_;
 }
 
-void c2DRenderObject::set_color_key(SDL_Color key)
+void RenderObject2D::set_color_key(SDL_Color key)
 {
 	color_key_ = key;
 }
 
-bool c2DRenderObject::is_color_key_enabled()
+bool RenderObject2D::is_color_key_enabled()
 {
 	return color_key_is_enabled_;
 }
 
-void c2DRenderObject::set_color_key_enabled(bool is)
+void RenderObject2D::set_color_key_enabled(bool is)
 {
 	color_key_is_enabled_ = is;
 }

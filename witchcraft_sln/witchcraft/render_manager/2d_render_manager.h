@@ -30,12 +30,12 @@
 #include "2d_render_object.h"
 #include "render_resource.h"
 
-#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<c2DRenderObject>>
+#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
 
 // Depends on:
 //	c2DSpriteObject
 //	qRenderManagerBase
-//	c2DRenderObject
+//	RenderObject2D
 //	qRenderResource
 //
 //	This class serves to
@@ -78,7 +78,7 @@ public:
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 
-	void set_render_object_at_position(c2DRenderObject const & obj, unsigned int x, unsigned int y);
+	void set_render_object_at_position(RenderObject2D const & obj, unsigned int x, unsigned int y);
 
 };
 

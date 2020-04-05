@@ -118,10 +118,10 @@ void q2DRenderManager::shutdown()
 
 void q2DRenderManager::render_all_objects()
 {
-	if (_render_objects.size() < 1)
+	if (render_objects.size() < 1)
 		return;
 
-	for (auto&& object : _render_objects)
+	for (auto&& object : render_objects)
 	{
 		if (object->is_visible() == false)
 			continue;

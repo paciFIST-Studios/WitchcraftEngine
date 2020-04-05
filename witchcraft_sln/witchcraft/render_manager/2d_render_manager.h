@@ -13,6 +13,7 @@
 
 // sdl
 #include <SDL.h>
+#include <SDL_image.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>
 
@@ -21,72 +22,63 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-// logging
-#include <plog/Log.h>
-
 // witchcraft
-#include "../utility/utility.h"
-#include "../string_constants.h"
-
+#include "../engine/engine_object.h"
 #include "../resource_manager/resource.h"
-#include "render_resource.h"
+#include "../string_constants.h"
+#include "../utility/utility.h"
 #include "2d_render_object.h"
-#include "render_manager_base.h"
+#include "render_resource.h"
 
-#define RENDER_OBJECT_VECTOR__TYPE std::vector<std::unique_ptr<c2DRenderObject>>
+#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
 
 // Depends on:
 //	c2DSpriteObject
-//	cRenderManagerBase
-//	c2DRenderObject
-//	cRenderResource
+//	qRenderManagerBase
+//	RenderObject2D
+//	qRenderResource
 //
 //	This class serves to
 //	1. create a window
 //	2. initialize hardware
 //	3. create / load / unload graphics resource
 //	4. create / load / unload render graphics
-class c2DRenderManager : public cRenderManagerBase
+class q2DRenderManager : public qEngineObject
 {
 private:
 protected:
 
-	static std::unique_ptr<c2DRenderManager> _SDL2D_render_manager;
+	static std::unique_ptr<q2DRenderManager> SDL2_2D_render_manager;
 
-	RENDER_OBJECT_VECTOR__TYPE _render_objects;
+	RENDER_OBJECTS_VECTOR render_objects;
 
 public:
-	c2DRenderManager() {}
-
-	static c2DRenderManager * get_SDL2D_render_manager();
+	q2DRenderManager() {}
 	
-	// the program window
-	SDL_Window * _window;
+	SDL_Window * program_window;
 
-	// the render SDL uses
-	SDL_Renderer * _current_renderer;
+	SDL_Renderer * active_renderer;
 
-	// Surface is software, texture is hardware (GPU rendering)
-	SDL_Surface * _rendering_surface;
+	SDL_Surface * rendering_surface;
 
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
-		, unsigned int Width = 0
-		, unsigned int Height = 0
-		, bool fullScreen = false
+		, unsigned int Width   = 0
+		, unsigned int Height  = 0
+		, bool fullScreen	   = false
 		, char const * WindowTitle = 0
 	);
 
+	bool update();
+
 	void shutdown();
+
+	void render_all_objects();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 
-	void free();
-	bool update();
-	void toggle_full_screen();
-	std::unique_ptr<qResource> load_resource_from_xml(XML::xml_node<> const & xml);
-	void render_all_objects();
+	void set_render_object_at_position(RenderObject2D const & obj, unsigned int x, unsigned int y);
 
 };
 

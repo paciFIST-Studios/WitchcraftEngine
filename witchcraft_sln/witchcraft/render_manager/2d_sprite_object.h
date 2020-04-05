@@ -23,7 +23,7 @@ struct c2DSpriteObjectInitializer
 	std::vector<c2DSpriteAnimation> animations;
 };
 
-class c2DSpriteObject : public c2DRenderObject
+class c2DSpriteObject : public RenderObject2D
 {
 private:
 protected:

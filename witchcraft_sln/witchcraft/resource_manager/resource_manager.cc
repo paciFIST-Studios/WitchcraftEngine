@@ -33,8 +33,8 @@ RESOURCE_PTR qResourceManager::load_render_resource_from_xml(XML::xml_node<> con
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// NOTE: We're making a cRenderResource, and then moving it to a qResource ptr
-	std::unique_ptr<qResource> resource = std::make_unique<cRenderResource>(
+	// NOTE: We're making a qRenderResource, and then moving it to a qResource ptr
+	std::unique_ptr<qResource> resource = std::make_unique<qRenderResource>(
 		  resource_id
 		, resource_scope
 		, file_name

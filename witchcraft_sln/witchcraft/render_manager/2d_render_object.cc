@@ -1,74 +1,74 @@
 #include "2d_render_object.h"
 
-c2DRenderObject::c2DRenderObject()
-	: _render_resource(nullptr)
-	, _render_rect{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
-	, _position_x(uninit::FLOAT)
-	, _position_y(uninit::FLOAT)
-	, _is_visible(uninit::BOOL)
-	, _color_key{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
-	, _color_key_is_enabled(uninit::BOOL)
+RenderObject2D::RenderObject2D()
+	: render_resource(nullptr)
+	, render_rect{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
+	, position_x_(uninit::FLOAT)
+	, position_y_(uninit::FLOAT)
+	, is_visible_(uninit::BOOL)
+	, color_key_{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
+	, color_key_is_enabled_(uninit::BOOL)
 {}
 
-void c2DRenderObject::set_resource_object(cRenderResource * renderResource)
+void RenderObject2D::set_resource(qRenderResource * renderResource)
 {
 	if(renderResource)
 	{
-		_render_resource = renderResource;
-		_render_rect.w = _render_resource->_surface->w;
-		_render_rect.h = _render_resource->_surface->h;
+		render_resource = renderResource;
+		render_rect.w = render_resource->surface->w;
+		render_rect.h = render_resource->surface->h;
 
-		if (_color_key_is_enabled)
+		if (color_key_is_enabled_)
 		{
 			Uint32 color_key = SDL_MapRGB(
-				_render_resource->_surface->format
-				, _color_key.r
-				, _color_key.g
-				, _color_key.b
+				render_resource->surface->format
+				, color_key_.r
+				, color_key_.g
+				, color_key_.b
 			);
 
-			SDL_SetColorKey(_render_resource->_surface, SDL_TRUE, color_key);
+			SDL_SetColorKey(render_resource->surface, SDL_TRUE, color_key);
 		}
 	}
 }
 
-POSITION_TUPLE c2DRenderObject::get_position()
+POSITION_TUPLE RenderObject2D::get_position()
 {
-	return std::make_tuple(_position_x, _position_y);
+	return std::make_tuple(position_x_, position_y_);
 }
 
-void c2DRenderObject::set_position(float x, float y)
+void RenderObject2D::set_position(float x, float y)
 {
-	_position_x = x;
-	_position_y = y;
+	position_x_ = x;
+	position_y_ = y;
 }
 
-bool c2DRenderObject::is_visible()
+bool RenderObject2D::is_visible()
 {
-	return _is_visible;
+	return is_visible_;
 }
 
-void c2DRenderObject::set_is_visible(bool is)
+void RenderObject2D::set_is_visible(bool is)
 {
-	_is_visible = is;
+	is_visible_ = is;
 }
 
-SDL_Color c2DRenderObject::get_color_key()
+SDL_Color RenderObject2D::get_color_key()
 {
-	return _color_key;
+	return color_key_;
 }
 
-void c2DRenderObject::set_color_key(SDL_Color key)
+void RenderObject2D::set_color_key(SDL_Color key)
 {
-	_color_key = key;
+	color_key_ = key;
 }
 
-bool c2DRenderObject::is_color_key_enabled()
+bool RenderObject2D::is_color_key_enabled()
 {
-	return _color_key_is_enabled;
+	return color_key_is_enabled_;
 }
 
-void c2DRenderObject::set_color_key_enabled(bool is)
+void RenderObject2D::set_color_key_enabled(bool is)
 {
-	_color_key_is_enabled = is;
+	color_key_is_enabled_ = is;
 }

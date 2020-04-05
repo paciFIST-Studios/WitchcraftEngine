@@ -9,45 +9,45 @@
 
 		#include "engine.h"
 
-		TEST_CASE(" cEngine::ctor")
+		TEST_CASE(" Engine::ctor")
 		{
 			// default init 
-			auto engine = cEngine();
+			auto engine = Engine();
 			REQUIRE(engine.id == uninit::UINT);
 			REQUIRE(engine.get_current_state() == EEngineState::CONSTRUCTED);
 
 
 			// init with initializer should give the correct id
 			auto init = EngineInitializer{ 666, true };
-			auto engine2 = cEngine(init);
+			auto engine2 = Engine(init);
 			REQUIRE(engine2.id == 666);
 			REQUIRE(engine.get_current_state() == EEngineState::CONSTRUCTED);
 
 		}
 
-		TEST_CASE(" cEngine::startup()")
+		TEST_CASE(" Engine::startup()")
 		{
 			auto init = EngineInitializer{ 1, true };
-			auto engine = cEngine(init);
+			auto engine = Engine(init);
 
 			engine.startup();
 			REQUIRE(engine.get_current_state() == EEngineState::STARTUP);
 		}
 
-		TEST_CASE(" cEngine::run()")
+		TEST_CASE(" Engine::run()")
 		{
 			auto init = EngineInitializer{ 1, true };
-			auto engine = cEngine(init);
+			auto engine = Engine(init);
 
 			engine.startup();
 			engine.run();
 			REQUIRE(engine.get_current_state() == EEngineState::RUNNING);
 		}
 
-		TEST_CASE(" cEngine::shutdown()")
+		TEST_CASE(" Engine::shutdown()")
 		{
 			auto init = EngineInitializer{ 1, true };
-			auto engine = cEngine(init);
+			auto engine = Engine(init);
 
 			engine.startup();
 			engine.run();

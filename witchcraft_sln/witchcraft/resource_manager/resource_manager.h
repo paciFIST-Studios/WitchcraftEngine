@@ -35,7 +35,7 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	//c2DRenderManager * _render_manager;
+	//q2DRenderManager * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
@@ -66,7 +66,7 @@ public:
 	unsigned int get_resource_count() const;
 
 	// render resources are loaded by the render manager, and then returned to us here
-	//void set_callback__load_render_resource(c2DRenderManager & render_manager);
+	//void set_callback__load_render_resource(q2DRenderManager & render_manager);
 };
 
 // static void create_config_files()

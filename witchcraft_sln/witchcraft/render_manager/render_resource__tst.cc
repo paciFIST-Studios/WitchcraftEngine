@@ -9,9 +9,9 @@
 		
 		#include "render_resource.h"
 			
-		TEST_CASE(" cRenderResource::RenderResource()")
+		TEST_CASE(" qRenderResource::RenderResource()")
 		{
-			auto rr = &cRenderResource();
+			auto rr = &qRenderResource();
 			REQUIRE(rr != nullptr);
 
 			REQUIRE_NOTHROW(rr->get_file_name());
@@ -23,15 +23,29 @@
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
-		TEST_CASE(" cRenderResource::cRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
+		TEST_CASE(" qRenderResource:: optinal param, load_now")
 		{
 			unsigned int const resource_id = 666;
 			unsigned int const resource_scope = 667;
-			std::string const file_name = "buddha.png";
+			std::string const file_name = witchcraft::configuration::buddha_png;
 			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
 
-			// the cRenderResource sets its own resource type
-			auto rr = cRenderResource(resource_id, resource_scope, file_name);
+			auto rr = &qRenderResource(resource_id, resource_scope, file_name, false);
+			REQUIRE(rr->is_loaded() == false);
+			
+			rr = &qRenderResource(resource_id, resource_scope, file_name, true);
+			REQUIRE(rr->is_loaded() == true);
+		}
+
+		TEST_CASE(" qRenderResource::qRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
+		{
+			unsigned int const resource_id = 666;
+			unsigned int const resource_scope = 667;
+			std::string const file_name = witchcraft::configuration::buddha_png;
+			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
+
+			// the qRenderResource sets its own resource type
+			auto rr = qRenderResource(resource_id, resource_scope, file_name);
 
 			REQUIRE_NOTHROW(rr.get_file_name());
 			REQUIRE(rr.get_file_name() == file_name);
@@ -49,9 +63,9 @@
 			REQUIRE_NOTHROW(rr.unload());
 		}
 		
-		TEST_CASE(" cRenderResource::is_loaded()")
+		TEST_CASE(" qRenderResource::is_loaded()")
 		{
-			auto rr = cRenderResource();
+			auto rr = qRenderResource();
 
 			REQUIRE_NOTHROW(rr.is_loaded());
 			REQUIRE(rr.is_loaded() == false);

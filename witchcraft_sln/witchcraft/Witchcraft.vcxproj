@@ -151,6 +151,7 @@
     <ClCompile Include="scene_manager\timer__tst.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
+    <ClCompile Include="utility\get_latest_log_str__tst.cc" />
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />
+    <ClInclude Include="utility\get_latest_log_str.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

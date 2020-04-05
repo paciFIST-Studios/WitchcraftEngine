@@ -28,14 +28,17 @@ namespace witchcraft
 		static std::string const witchcraft_cfg = "witchcraft.cfg";
 		static std::string const witchcraft_cfg_file_content = "<resources><resource UUID=\"0\" type=\"text\" file=\"witchcraft.cfg\" scope=\"0\">Witchcraft</resource></resources>";
 
+		static std::string const birds_png = "asset/birds.png";
 		static std::string const birds_asset = "asset/birds.asset";
 		static std::string const birds_asset_file_content = "<resources><resource UUID=\"1\" type=\"graphic\" file=\"asset/birds.png\" scope=\"1\">Winter Birds</resource></resources>";
 
+		static std::string const buddha_png = "asset/buddha.png";
 		static std::string const buddha_asset = "asset/buddha.asset";
 		static std::string const buddha_asset_file_content = "<resources><resource UUID=\"2\" type=\"graphic\" file=\"asset/buddha.png\" scope=\"0\">Buddha</resource></resources>";
 
+		static std::string const person_png = "asset/person.png";
 		static std::string const person_asset = "asset/person.asset";
-		static std::string const person_asset_file_content = "<resources>\n\t<resource UUID=\"4\" type=\"graphic\" file=\"asset / person.png\" scope=\"2\"></resource>\n\t<resource UUID=\"100\" type=\"2d_animation\" name=\"idle\" timing_ms=\"250\" sequence=\"1 2 3 1 2 3 1 2 3 3 3 4 4\"></resource>\n</resources>";
+		static std::string const person_asset_file_content = "<resources>\n\t<resource UUID=\"4\" type=\"graphic\" file=\"asset/person.png\" scope=\"2\"></resource>\n\t<resource UUID=\"100\" type=\"2d_animation\" name=\"idle\" timing_ms=\"250\" sequence=\"1 2 3 1 2 3 1 2 3 3 3 4 4\"></resource>\n</resources>";
 	}
 
 	namespace file_strings

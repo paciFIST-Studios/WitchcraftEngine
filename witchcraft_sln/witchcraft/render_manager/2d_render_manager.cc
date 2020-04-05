@@ -111,7 +111,6 @@ void q2DRenderManager::shutdown()
 	SDL_DestroyWindow(program_window);
 	SDL_FreeSurface(rendering_surface);
 	SDL_DestroyRenderer(active_renderer);
-	SDL_DestroyWindow(program_window);
 	SDL_Quit();
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }

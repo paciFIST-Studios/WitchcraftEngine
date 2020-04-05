@@ -3,7 +3,7 @@
 
 #include "../render_manager/2d_render_object.h"
 
-class cSceneObject : public c2DRenderObject
+class cSceneObject : public RenderObject2D
 {
 private:
 protected:

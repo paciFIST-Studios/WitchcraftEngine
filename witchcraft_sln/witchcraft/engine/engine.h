@@ -6,9 +6,6 @@
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/2d_render_manager.h"
 
-//class qResourceManager;
-//class q2DRenderManager;
-
 enum class EEngineState : unsigned char
 {
 	  UNINIT		= 0x01

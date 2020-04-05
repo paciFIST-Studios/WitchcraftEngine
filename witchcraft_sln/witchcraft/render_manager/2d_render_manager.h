@@ -48,9 +48,9 @@ class q2DRenderManager : public qEngineObject
 private:
 protected:
 
-	static std::unique_ptr<q2DRenderManager> _SDL2D_render_manager;
+	static std::unique_ptr<q2DRenderManager> SDL2_2D_render_manager;
 
-	RENDER_OBJECTS_VECTOR _render_objects;
+	RENDER_OBJECTS_VECTOR render_objects;
 
 public:
 	q2DRenderManager() {}

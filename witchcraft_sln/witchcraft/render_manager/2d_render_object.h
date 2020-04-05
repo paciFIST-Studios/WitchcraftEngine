@@ -16,7 +16,7 @@
 // in a 2d scene. It contains position, scale, & rotation, and these
 // chearacteristics will allow the render manager to perform culling.
 // It is possible many objects reference this instance (object pooling) 
-class c2DRenderObject : public qEngineObject
+class RenderObject2D : public qEngineObject
 {
 private:
 protected:
@@ -33,9 +33,9 @@ public:
 	qRenderResource * render_resource;
 	SDL_Rect render_rect;
 
-	c2DRenderObject();
+	RenderObject2D();
 
-	void set_resource_object(qRenderResource * renderResource);
+	void set_resource(qRenderResource * renderResource);
 
 	// position
 	POSITION_TUPLE get_position();

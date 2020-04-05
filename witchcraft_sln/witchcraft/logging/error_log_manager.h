@@ -13,7 +13,7 @@
 
 // purpose: handle and log all exceptions, when they occur, and
 // output to human readable text log
-class cErrorLogManager : public cEngine
+class cErrorLogManager : public Engine
 {
 
 public:

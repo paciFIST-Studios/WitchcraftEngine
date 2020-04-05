@@ -9,21 +9,17 @@ void cRenderResource::attempt_load(std::string const & file_name)
 
 	_surface = IMG_Load(file_name.c_str());
 
-	//SDL_Renderer * renderer = nullptr;
-	//
-	//// load image to temp buffer
-	//auto temp_surface = IMG_Load(_file_name.c_str());
-	//if (temp_surface)
-	//{
-	//	_texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
-	//
-	//	// free old buffer
-	//	SDL_FreeSurface(temp_surface);
-	//
-	//	// if surface is loaded, mark render resource as loaded, else, as not loaded
-	//	//is_loaded = _surface ? true : false;
-	//	_is_loaded = _texture ? true : false;
-	//}
+	SDL_Renderer * renderer = nullptr;
+	
+	// load image to temp buffer
+	if (_surface)
+	{
+		_texture = SDL_CreateTextureFromSurface(renderer, _surface);
+	
+		// if surface is loaded, mark render resource as loaded, else, as not loaded
+		//is_loaded = _surface ? true : false;
+		_is_loaded = _texture ? true : false;
+	}
 
 	if (_surface != nullptr)
 	{
@@ -38,25 +34,6 @@ void cRenderResource::load()
 {
 	unload();
 	attempt_load(_file_name.c_str());
-
-	//SDL_Renderer * renderer = nullptr;
-	//
-	//unload();
-	//
-	//// load image to temp buffer
-	//auto temp_surface = IMG_Load(_file_name.c_str());
-	//
-	//if (temp_surface)
-	//{
-	//	_texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
-	//
-	//	// free old buffer
-	//	SDL_FreeSurface(temp_surface);
-	//
-	//	// if surface is loaded, mark render resource as loaded, else, as not loaded
-	//	//is_loaded = _surface ? true : false;
-	//	_is_loaded = _texture ? true : false;
-	//}
 }
 
 void cRenderResource::unload()

@@ -30,12 +30,12 @@ protected:
 	bool _color_key_is_enabled;
 
 public:
-	cRenderResource * _render_resource;
+	qRenderResource * _render_resource;
 	SDL_Rect _render_rect;
 
 	c2DRenderObject();
 
-	void set_resource_object(cRenderResource * renderResource);
+	void set_resource_object(qRenderResource * renderResource);
 
 	// position
 	POSITION_TUPLE get_position();

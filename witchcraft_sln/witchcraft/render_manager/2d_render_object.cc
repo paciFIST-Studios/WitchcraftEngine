@@ -10,24 +10,24 @@ c2DRenderObject::c2DRenderObject()
 	, _color_key_is_enabled(uninit::BOOL)
 {}
 
-void c2DRenderObject::set_resource_object(cRenderResource * renderResource)
+void c2DRenderObject::set_resource_object(qRenderResource * renderResource)
 {
 	if(renderResource)
 	{
 		_render_resource = renderResource;
-		_render_rect.w = _render_resource->_surface->w;
-		_render_rect.h = _render_resource->_surface->h;
+		_render_rect.w = _render_resource->surface->w;
+		_render_rect.h = _render_resource->surface->h;
 
 		if (_color_key_is_enabled)
 		{
 			Uint32 color_key = SDL_MapRGB(
-				_render_resource->_surface->format
+				_render_resource->surface->format
 				, _color_key.r
 				, _color_key.g
 				, _color_key.b
 			);
 
-			SDL_SetColorKey(_render_resource->_surface, SDL_TRUE, color_key);
+			SDL_SetColorKey(_render_resource->surface, SDL_TRUE, color_key);
 		}
 	}
 }

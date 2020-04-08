@@ -22,3 +22,4 @@ witchcraft_sln/witchcraft/Debug/*
 research/*
 witchcraft_sln/witchcraft/scene_manager/__scene_listener.h
 witchcraft_sln/witchcraft/scene_manager/__2d_scene_manager.h
+*.pdf

@@ -14,7 +14,7 @@ class qRenderResource : public qResource
 {
 private:
 protected:
-	bool is_loaded_ = uninit::BOOL;
+	SDL_Renderer * renderer = nullptr;
 
 	void attempt_load(std::string const & file_name);
 	
@@ -27,15 +27,17 @@ public:
 	void load() override;
 	void unload() override;
 
+	void bind_renderer(SDL_Renderer * renderer);
+
 	qRenderResource();
 	qRenderResource(
 		unsigned int ID
 		, unsigned int scope
 		, std::string const & file_name
-		, bool load_now = false
 	);
 
 	bool is_loaded() const;
+	bool renderer_is_ready() const;
 };
 
 #endif // RENDER_RESOURCE_H

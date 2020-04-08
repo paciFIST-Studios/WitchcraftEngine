@@ -41,7 +41,7 @@ protected:
 	RESOURCE_MAP_TYPE _resource_map;
 
 
-	RESOURCE_PTR load_render_resource_from_xml(XML::xml_node<> const & xml);
+	RESOURCE_PTR build_render_resource_from_xml(XML::xml_node<> const & xml);
 	RESOURCE_PTR load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 
@@ -54,7 +54,7 @@ public:
 	void empty_cache();
 
 	// loads resources from xml
-	bool load_from_xml_file(std::string const & file);
+	int load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
@@ -64,9 +64,6 @@ public:
 	// Simple getters
 	int get_current_scope() const;
 	unsigned int get_resource_count() const;
-
-	// render resources are loaded by the render manager, and then returned to us here
-	//void set_callback__load_render_resource(q2DRenderManager & render_manager);
 };
 
 // static void create_config_files()

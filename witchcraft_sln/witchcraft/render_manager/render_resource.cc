@@ -7,24 +7,15 @@ void qRenderResource::attempt_load(std::string const & file_name)
 		PLOGE << "WARNING: FILE DOES NOT EXIST\n" << file_name;
 	}
 
-	surface = IMG_Load(file_name.c_str());
-
-	SDL_Renderer * renderer = nullptr;
-	
-	// load image to temp buffer
-	if (surface)
+	if (renderer == nullptr)
 	{
-		texture = SDL_CreateTextureFromSurface(renderer, surface);
-	
-		// if surface is loaded, mark render resource as loaded, else, as not loaded
-		//is_loaded = surface ? true : false;
-		is_loaded_ = texture ? true : false;
+		PLOGW << "WARNING: Loading texture with a null renderer.  This image will not be shown: ";
+		PLOGW << "\t\tfile_name: " << file_name;
 	}
 
-	if (surface != nullptr)
-	{
-		is_loaded_ = true;
-	}	
+	texture = IMG_LoadTexture(renderer, file_name.c_str());
+
+	surface = IMG_Load(file_name.c_str());
 }
 
 qRenderResource::~qRenderResource()
@@ -43,37 +34,35 @@ void qRenderResource::unload()
 		SDL_DestroyTexture(texture);
 		texture = nullptr;
 	}
-	
-	if (surface)
+}
+
+void qRenderResource::bind_renderer(SDL_Renderer * renderer)
+{
+	if (renderer != nullptr)
 	{
-		SDL_FreeSurface(surface);
-		surface = nullptr;
+		this->renderer = renderer;
 	}
-	
-	is_loaded_ = false;
 }
 
 qRenderResource::qRenderResource() 
-	: is_loaded_(false)
 {}
 
 qRenderResource::qRenderResource(
 	  unsigned int ID
 	, unsigned int scope
-	, std::string const & file_name
-	, bool load_now)
+	, std::string const & file_name)
 	// -- end args
 	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
-	, is_loaded_(false)
 	// -- end initializer
 {
-	if (load_now)
-	{
-		attempt_load(file_name);
-	}
 }
 
 bool qRenderResource::is_loaded() const
 {
-	return is_loaded_;
+	return (texture != nullptr);
+}
+
+bool qRenderResource::renderer_is_ready() const
+{
+	return (renderer != nullptr);
 }

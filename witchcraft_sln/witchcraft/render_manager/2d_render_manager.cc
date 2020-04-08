@@ -135,8 +135,10 @@ void q2DRenderManager::render_all_objects()
 		SDL_RenderCopy(
 			  active_renderer
 			, object->render_resource->texture
-			, &object->render_rect
-			, &position
+			//, &object->render_rect
+			//, &position
+			, nullptr
+			, nullptr
 		);
 	}
 }

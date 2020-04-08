@@ -74,77 +74,9 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 
 bool q2DRenderManager::update()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		// check messages
-		switch (event.type)
-		{
-		case SDL_QUIT: { return false; }
-
-		case SDL_KEYDOWN:
-		{
-			float const speed = 10.f;
-
-			// [ESC]
-			if (event.key.keysym.sym == SDLK_ESCAPE)
-			{
-				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-				return false;
-			}
-			else if (event.key.keysym.sym == SDLK_w) 
-			{
-				auto pos = render_objects[0]->get_position();
-				auto x = std::get<0>(pos);
-				auto y = std::get<1>(pos);
-
-				y += speed;
-
-				render_objects[0]->set_position(x, y);
-			}
-			else if (event.key.keysym.sym == SDLK_a) 
-			{
-				auto pos = render_objects[0]->get_position();
-				auto x = std::get<0>(pos);
-				auto y = std::get<1>(pos);
-
-				x += speed;
-
-				render_objects[0]->set_position(x, y);
-			}
-			else if (event.key.keysym.sym == SDLK_s) 
-			{
-				auto pos = render_objects[0]->get_position();
-				auto x = std::get<0>(pos);
-				auto y = std::get<1>(pos);
-
-				y -= speed;
-
-				render_objects[0]->set_position(x, y);
-			}
-			else if (event.key.keysym.sym == SDLK_d) 
-			{
-				auto pos = render_objects[0]->get_position();
-				auto x = std::get<0>(pos);
-				auto y = std::get<1>(pos);
-
-				x -= speed;
-
-				render_objects[0]->set_position(x, y);
-			}
-
-
-			// others
-		}
-
-		} //end switch
-	} //end message
-
-	// clear screen
 	SDL_RenderClear(active_renderer);
 	render_all_objects();
 	SDL_RenderPresent(active_renderer);
-
 	return true;
 }
 

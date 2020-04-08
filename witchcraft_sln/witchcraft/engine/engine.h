@@ -24,6 +24,7 @@ struct EngineInitializer
 	bool tm_early_exit;
 };
 
+
 class Engine : public qEngineObject
 {
 private:
@@ -38,6 +39,7 @@ protected:
 
 	// testing modes
 	bool tm_early_exit;
+
 
 public:
 	

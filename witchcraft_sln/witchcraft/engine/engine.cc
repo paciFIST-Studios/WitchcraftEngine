@@ -7,6 +7,8 @@ void Engine::startup()
 	current_engine_state = EEngineState::STARTUP;
 	if (tm_early_exit) return;
 
+	// project loader runs here, so we have access to our config info and save files
+
 
 	// messaging layer
 	// todo
@@ -23,7 +25,6 @@ void Engine::run()
 	PLOGI << witchcraft::log_strings::engine_running;
 	current_engine_state = EEngineState::RUNNING;
 	if (tm_early_exit) return;
-
 
 	// todo: use initializer struct
 	bool init_successful = render->init(
@@ -44,6 +45,25 @@ void Engine::run()
 		return;
 	}
 	
+
+
+	// once the project loader exists, we can load files, based on what it says.
+	// loop over a set of strings, which are our asset paths
+	{
+		// In this iteration of the game, we set up the scene in this method,
+		// and we load all the assets we'll ever use in the game, right now.
+		// any final setup work should happen here
+
+		auto id = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		render->register_render_object(render_resource);
+	}
+
+
+
 	
 	bool gameplay_loop_is_running = true;
 	SDL_Event window_event;

@@ -39,7 +39,7 @@
 			REQUIRE_NOTHROW(rm.load_from_xml_file("fake"));
 
 			// load_from_xml_file returns false if file not found 
-			REQUIRE(rm.load_from_xml_file("fake") == false);
+			REQUIRE(rm.load_from_xml_file("fake") == -1);
 
 			// set_current_scope does not throw, even before anything is loaded
 			REQUIRE_NOTHROW(rm.set_current_scope(1));
@@ -60,7 +60,7 @@
 			REQUIRE(rm.get_resource_count() == 0);
 
 			// Load returns true on success
-			REQUIRE(rm.load_from_xml_file(buddha) == true);
+			REQUIRE(rm.load_from_xml_file(buddha) == 2);
 			
 			REQUIRE(rm.get_resource_count() == 1);
 
@@ -74,11 +74,11 @@
 
 			rm.load_from_xml_file(person);
 			// loading assets will always increase asset count
-			REQUIRE(rm.get_resource_count() == 4);
+			REQUIRE(rm.get_resource_count() == 3);
 
 			// loading the same file again (as defined by resource_id) returns false
-			REQUIRE(rm.load_from_xml_file(person) == false);
-			REQUIRE(rm.load_from_xml_file(bird) == false);
+			REQUIRE(rm.load_from_xml_file(person) == 4);
+			REQUIRE(rm.load_from_xml_file(bird) == 1);
 		}
 
 		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
@@ -139,7 +139,7 @@
 			rm.load_from_xml_file(person);
 
 			REQUIRE(rm.get_current_scope() == 0);
-			REQUIRE(rm.get_resource_count() == 4);
+			REQUIRE(rm.get_resource_count() == 3);
 
 			rm.empty_cache();
 

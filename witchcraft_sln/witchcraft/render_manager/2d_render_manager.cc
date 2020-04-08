@@ -84,12 +84,56 @@ bool q2DRenderManager::update()
 
 		case SDL_KEYDOWN:
 		{
+			float const speed = 10.f;
+
 			// [ESC]
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 			{
 				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 				return false;
 			}
+			else if (event.key.keysym.sym == SDLK_w) 
+			{
+				auto pos = render_objects[0]->get_position();
+				auto x = std::get<0>(pos);
+				auto y = std::get<1>(pos);
+
+				y += speed;
+
+				render_objects[0]->set_position(x, y);
+			}
+			else if (event.key.keysym.sym == SDLK_a) 
+			{
+				auto pos = render_objects[0]->get_position();
+				auto x = std::get<0>(pos);
+				auto y = std::get<1>(pos);
+
+				x += speed;
+
+				render_objects[0]->set_position(x, y);
+			}
+			else if (event.key.keysym.sym == SDLK_s) 
+			{
+				auto pos = render_objects[0]->get_position();
+				auto x = std::get<0>(pos);
+				auto y = std::get<1>(pos);
+
+				y -= speed;
+
+				render_objects[0]->set_position(x, y);
+			}
+			else if (event.key.keysym.sym == SDLK_d) 
+			{
+				auto pos = render_objects[0]->get_position();
+				auto x = std::get<0>(pos);
+				auto y = std::get<1>(pos);
+
+				x -= speed;
+
+				render_objects[0]->set_position(x, y);
+			}
+
+
 			// others
 		}
 
@@ -131,14 +175,14 @@ void q2DRenderManager::render_all_objects()
 		auto position_tuple = object->get_position();
 		position.x = int(std::get<0>(position_tuple));
 		position.y = int(std::get<1>(position_tuple));
+		position.w = object->render_rect.w;
+		position.h = object->render_rect.h;
 
 		SDL_RenderCopy(
 			  active_renderer
 			, object->render_resource->texture
-			//, &object->render_rect
-			//, &position
-			, nullptr
-			, nullptr
+			, &object->render_rect
+			, &position
 		);
 	}
 }
@@ -151,4 +195,21 @@ void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 
 	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(program_window);
+}
+
+void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+{
+	auto render_object = std::make_unique<RenderObject2D>();
+	render_object->set_is_visible(is_visible);
+	render_object->set_render_resource(non_owner);
+
+	// This SDL_Rect covers the parts of the texture we will display
+	// We're sizing it to include the entire texture
+	auto wh = non_owner->get_width_height();
+	render_object->render_rect.w = std::get<0>(wh);
+	render_object->render_rect.h = std::get<1>(wh);
+	render_object->render_rect.x = 0;
+	render_object->render_rect.y = 0;
+
+	render_objects.push_back(std::move(render_object));
 }

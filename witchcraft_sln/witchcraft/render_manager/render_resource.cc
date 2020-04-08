@@ -13,9 +13,17 @@ void qRenderResource::attempt_load(std::string const & file_name)
 		PLOGW << "\t\tfile_name: " << file_name;
 	}
 
-	texture = IMG_LoadTexture(renderer, file_name.c_str());
+	//texture = IMG_LoadTexture(renderer, file_name.c_str());
 
 	surface = IMG_Load(file_name.c_str());
+
+	if (surface)
+	{
+		width = surface->w;
+		height = surface->h;
+
+		texture = SDL_CreateTextureFromSurface(renderer, surface);
+	}
 }
 
 qRenderResource::~qRenderResource()
@@ -34,6 +42,13 @@ void qRenderResource::unload()
 		SDL_DestroyTexture(texture);
 		texture = nullptr;
 	}
+
+	if (surface)
+	{
+		SDL_FreeSurface(surface);
+		surface = nullptr;
+	}
+
 }
 
 void qRenderResource::bind_renderer(SDL_Renderer * renderer)

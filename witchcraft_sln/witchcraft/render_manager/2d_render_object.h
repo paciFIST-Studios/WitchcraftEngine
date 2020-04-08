@@ -34,7 +34,7 @@ public:
 
 	RenderObject2D();
 
-	void set_resource(qRenderResource * renderResource);
+	void set_render_resource(qRenderResource * renderResource);
 
 	// position
 	POSITION_TUPLE get_position();

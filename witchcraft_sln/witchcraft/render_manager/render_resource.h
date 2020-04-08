@@ -1,6 +1,8 @@
 #ifndef RENDER_RESOURCE_H
 #define RENDER_RESOURCE_H
 
+#include <tuple>
+
 // SDL
 #include <SDL.h>
 #include <SDL_image.h>
@@ -14,6 +16,9 @@ class qRenderResource : public qResource
 {
 private:
 protected:
+	unsigned int width = 0;
+	unsigned int height = 0;
+	
 	SDL_Renderer * renderer = nullptr;
 
 	void attempt_load(std::string const & file_name);
@@ -38,6 +43,11 @@ public:
 
 	bool is_loaded() const;
 	bool renderer_is_ready() const;
+
+	std::tuple<int, int> get_width_height() const
+	{
+		return std::make_tuple(width, height);
+	}
 };
 
 #endif // RENDER_RESOURCE_H

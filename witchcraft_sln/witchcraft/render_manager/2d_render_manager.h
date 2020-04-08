@@ -78,16 +78,7 @@ public:
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 	
-	bool register_render_object(qRenderResource * non_owner, bool is_visible = true)
-	{
-		auto render_object = std::make_unique<RenderObject2D>();
-		render_object->set_is_visible(is_visible);
-		render_object->set_render_resource(non_owner);
-		render_objects.push_back(std::move(render_object));
-		return true;
-	}
-
-	void set_render_object_at_position(RenderObject2D const & obj, unsigned int x, unsigned int y);
+	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
 
 };
 

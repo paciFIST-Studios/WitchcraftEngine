@@ -46,7 +46,7 @@ void Engine::run()
 	}
 	
 
-
+	int uid;
 	// once the project loader exists, we can load files, based on what it says.
 	// loop over a set of strings, which are our asset paths
 	{
@@ -60,10 +60,11 @@ void Engine::run()
 		render_resource->bind_renderer(render->active_renderer);
 		render_resource->load();
 		render->register_render_object(render_resource);
+		uid = id;
 	}
 
-
-
+	float const move_speed = 20.f;
+	auto buddha = render->get_render_object(uid);
 	
 	bool gameplay_loop_is_running = true;
 	SDL_Event window_event;
@@ -82,6 +83,40 @@ void Engine::run()
 				{
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
+				}
+				else if (window_event.key.keysym.sym == SDLK_w)
+				{
+					auto wh = buddha->get_position();
+					auto x = std::get<0>(wh);
+					auto y = std::get<1>(wh);
+					y -= move_speed;
+					buddha->set_position(x, y);
+				}
+				else if (window_event.key.keysym.sym == SDLK_a)
+				{
+					auto wh = buddha->get_position();
+					auto x = std::get<0>(wh);
+					auto y = std::get<1>(wh);
+					x -= move_speed;
+					buddha->set_position(x, y);
+
+				}
+				else if (window_event.key.keysym.sym == SDLK_s)
+				{
+					auto wh = buddha->get_position();
+					auto x = std::get<0>(wh);
+					auto y = std::get<1>(wh);
+					y += move_speed;
+					buddha->set_position(x, y);
+
+				}
+				else if (window_event.key.keysym.sym == SDLK_d)
+				{
+					auto wh = buddha->get_position();
+					auto x = std::get<0>(wh);
+					auto y = std::get<1>(wh);
+					x += move_speed;
+					buddha->set_position(x, y);
 				}
 	
 			}	

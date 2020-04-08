@@ -82,7 +82,7 @@ public:
 	{
 		auto render_object = std::make_unique<RenderObject2D>();
 		render_object->set_is_visible(is_visible);
-		render_object->set_resource(non_owner);
+		render_object->set_render_resource(non_owner);
 		render_objects.push_back(std::move(render_object));
 		return true;
 	}

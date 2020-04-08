@@ -80,6 +80,8 @@ public:
 	
 	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
 
+	RenderObject2D * get_render_object(int id);
+
 };
 
 #endif // TWO_D_RENDER_MANAGER_H

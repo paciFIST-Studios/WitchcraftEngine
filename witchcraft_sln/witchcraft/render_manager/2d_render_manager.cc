@@ -145,3 +145,14 @@ void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool 
 
 	render_objects.push_back(std::move(render_object));
 }
+
+RenderObject2D * q2DRenderManager::get_render_object(int id)
+{
+	for (auto&& object : render_objects)
+	{
+		if (object->render_resource->get_resource_id() == id)
+			return object.get();
+	}
+
+	return nullptr;
+}

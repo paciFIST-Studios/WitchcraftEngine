@@ -45,8 +45,9 @@ void Engine::run()
 		return;
 	}
 	
+	// ----------------------------------------------------------------------------------
 
-	int uid;
+	int buddha_resource_id;
 	// once the project loader exists, we can load files, based on what it says.
 	// loop over a set of strings, which are our asset paths
 	{
@@ -60,18 +61,33 @@ void Engine::run()
 		render_resource->bind_renderer(render->active_renderer);
 		render_resource->load();
 		render->register_render_object(render_resource);
-		uid = id;
+		buddha_resource_id = id;
 	}
 
-	float const move_speed = 20.f;
-	auto buddha = render->get_render_object(uid);
+	int const move_speed = 20;
+	auto buddha = render->get_render_object(buddha_resource_id);
 	
+	// ----------------------------------------------------------------------------------
+
+	SDL_Color debug_text_color = { 0, 0, 0, 255 };
+	
+	std::stringstream debug_text_fps;
+
+	// ----------------------------------------------------------------------------------
+
+
+	bool debug_emit_frame_length = false;
 	bool gameplay_loop_is_running = true;
 	SDL_Event window_event;
-	
+	Uint32 last_frame_time = SDL_GetTicks();
+	Uint32 current_frame_time = 0;
+
 	PLOGI << witchcraft::log_strings::game_loop_start;
 	while (gameplay_loop_is_running)
 	{
+		last_frame_time = current_frame_time;
+		current_frame_time = SDL_GetTicks();
+
 		if (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
@@ -87,38 +103,41 @@ void Engine::run()
 				else if (window_event.key.keysym.sym == SDLK_w)
 				{
 					auto wh = buddha->get_position();
-					auto x = std::get<0>(wh);
-					auto y = std::get<1>(wh);
+					auto x = int(std::get<0>(wh));
+					auto y = int(std::get<1>(wh));
 					y -= move_speed;
-					buddha->set_position(x, y);
+					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
 				}
 				else if (window_event.key.keysym.sym == SDLK_a)
 				{
 					auto wh = buddha->get_position();
-					auto x = std::get<0>(wh);
-					auto y = std::get<1>(wh);
+					auto x = int(std::get<0>(wh));
+					auto y = int(std::get<1>(wh));
 					x -= move_speed;
-					buddha->set_position(x, y);
-
+					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
 				}
 				else if (window_event.key.keysym.sym == SDLK_s)
 				{
 					auto wh = buddha->get_position();
-					auto x = std::get<0>(wh);
-					auto y = std::get<1>(wh);
+					auto x = int(std::get<0>(wh));
+					auto y = int(std::get<1>(wh));
 					y += move_speed;
-					buddha->set_position(x, y);
+					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
 
 				}
 				else if (window_event.key.keysym.sym == SDLK_d)
 				{
 					auto wh = buddha->get_position();
-					auto x = std::get<0>(wh);
-					auto y = std::get<1>(wh);
+					auto x = int(std::get<0>(wh));
+					auto y = int(std::get<1>(wh));
 					x += move_speed;
-					buddha->set_position(x, y);
+					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
 				}
-	
+				else if (window_event.key.keysym.sym == SDLK_1)
+				{
+					// toggle emit_frame_len
+					debug_emit_frame_length = !debug_emit_frame_length;
+				}
 			}	
 			// check moar events
 		}
@@ -129,6 +148,12 @@ void Engine::run()
 		render->update();
 	
 		// do sound update
+		
+		if (debug_emit_frame_length)
+		{
+			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
+		}
+
 	}
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;

@@ -4,7 +4,8 @@ void qRenderResource::attempt_load(std::string const & file_name)
 {
 	if (false == utility::file_exists(file_name))
 	{
-		PLOGE << "WARNING: FILE DOES NOT EXIST\n" << file_name;
+		PLOGE << "WARNING: FILE DOES NOT EXIST";
+		PLOGE << "\t\tfile_name: " << file_name;
 	}
 
 	if (renderer == nullptr)

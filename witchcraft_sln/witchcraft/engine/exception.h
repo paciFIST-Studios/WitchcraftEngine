@@ -5,13 +5,13 @@
 #include <sstream>
 #include <string>
 
-// This is going to be our throw macro, to throw a cException class
+// This is going to be our throw macro, to throw a qException class
 #ifndef THROW_EXCEPTION
-#define THROW_EXCEPTION(ErrorNum, ErrorDesc) throw cException(ErrorNum, ErrorDesc, __FILE__, __LINE__);
+#define THROW_EXCEPTION(ErrorNum, ErrorDesc) throw qException(ErrorNum, ErrorDesc, __FILE__, __LINE__);
 #endif
 
 // purpose: encapsulate a runtime error
-class cException : public std::exception
+class qException : public std::exception
 {
 private:
 protected:
@@ -26,8 +26,8 @@ public:
 	// overrice std::exception::what
 	const char* what();
 
-	cException(int ErrorNum, std::string ErrorDesc, std::string SrcFilename, int LineNumber);
-	~cException() throw() {}
+	qException(int ErrorNum, std::string ErrorDesc, std::string SrcFilename, int LineNumber);
+	~qException() throw() {}
 };
 
 #endif // EXCEPTION_H

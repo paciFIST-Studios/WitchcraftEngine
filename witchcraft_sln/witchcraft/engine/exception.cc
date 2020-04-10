@@ -1,6 +1,6 @@
 #include "exception.h"
 
-cException::cException(int ErrorNum, std::string ErrorDesc, std::string SrcFileName, int LineNum)
+qException::qException(int ErrorNum, std::string ErrorDesc, std::string SrcFileName, int LineNum)
 	: _error_id(ErrorNum)
 	, _error_description(ErrorDesc)
 	, _source_file_name(SrcFileName)
@@ -18,7 +18,7 @@ cException::cException(int ErrorNum, std::string ErrorDesc, std::string SrcFileN
 	_readable_message = ErrorStr.str();
 }
 
-char const * cException::what()
+char const * qException::what()
 {
 	return _error_description.c_str();
 }
@@ -28,7 +28,7 @@ char const * cException::what()
 //	{
 //		THROW_EXCEPTION(1, "Test Error");
 //	}
-//	catch (cException & e)
+//	catch (qException & e)
 //	{
 //		e.what();
 //	}

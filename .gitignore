@@ -24,3 +24,7 @@ witchcraft_sln/witchcraft/scene_manager/__scene_listener.h
 witchcraft_sln/witchcraft/scene_manager/__2d_scene_manager.h
 *.pdf
 witchcraft_sln/__hopes/Untitled (Recovered).bmp
+
+witchcraft_sln/lib/SDL2/SDL2_mixer-2.0.4/*
+witchcraft_sln/lib/SDL2/SDL2_net-2.0.1/*
+zip/*

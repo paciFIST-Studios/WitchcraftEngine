@@ -76,33 +76,33 @@ namespace witchcraft
 			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
 		}
 
-		//Uint32 get_delta_time()
-		//{
-		//	float const smoothing = 0.99f;
-		//	
-		//	static Uint32 frame_time_current = 0;
-		//	static Uint32 frame_time_last = 0;
-		//	static Uint32 delta_time = 0;
-		//
-		//	frame_time_current = SDL_GetTicks();
-		//	delta_time = frame_time_current - frame_time_last;
-		//	delta_time = static_cast<Uint32>(
-		//		floor(
-		//			static_cast<float>(delta_time) * smoothing
-		//		)
-		//	);
-		//
-		//	return delta_time;
-		//}
-		//
-		//std::string get_debug_fps_text()
-		//{
-		//	auto delta_time = get_delta_time();
-		//	std::stringstream out;
-		//	out << "delta time: " << delta_time << " ms";
-		//	out << "\nfps: " << 1.f / delta_time;
-		//	return out.str();
-		//}
+		static Uint32 get_delta_time()
+		{
+			float const smoothing = 0.99f;
+			
+			static Uint32 frame_time_current = 0;
+			static Uint32 frame_time_last = 0;
+			static Uint32 delta_time = 0;
+		
+			frame_time_current = SDL_GetTicks();
+			delta_time = frame_time_current - frame_time_last;
+			delta_time = static_cast<Uint32>(
+				floor(
+					static_cast<float>(delta_time) * smoothing
+				)
+			);
+		
+			return delta_time;
+		}
+		
+		static std::string get_debug_fps_text()
+		{
+			auto delta_time = get_delta_time();
+			std::stringstream out;
+			out << "delta time: " << delta_time << " ms";
+			out << "\nfps: " << 1.f / delta_time;
+			return out.str();
+		}
 	}
 
 	namespace configuration

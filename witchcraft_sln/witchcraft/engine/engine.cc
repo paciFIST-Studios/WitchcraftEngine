@@ -146,7 +146,9 @@ void Engine::run()
 			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
 		}
 
-	}
+
+
+	} // !game_loop
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;
 }

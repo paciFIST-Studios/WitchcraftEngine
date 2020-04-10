@@ -93,10 +93,10 @@ RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> 
 		}
 	}
 
-	auto anim = c2DSpriteAnimation(animation_name, frame_index_sequence, animation_timing_ms);
+	auto anim = Animation2D(animation_name, frame_index_sequence, animation_timing_ms);
 
 	// NOTE: there is a cast to qResource
-	std::unique_ptr<qResource> resource = std::make_unique<cAnimationResource>(anim);
+	std::unique_ptr<qResource> resource = std::make_unique<AnimationResource>(anim);
 
 	return std::move(resource);
 }

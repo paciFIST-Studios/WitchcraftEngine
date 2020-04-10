@@ -68,6 +68,14 @@ namespace witchcraft
 {
 	namespace engine
 	{
+		static void move_object_by_vector(RenderObject2D * object, int x, int y)
+		{
+			auto wh = object->get_position();
+			auto _x = x + int(std::get<0>(wh));
+			auto _y = y + int(std::get<1>(wh));
+			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
+		}
+
 		//Uint32 get_delta_time()
 		//{
 		//	float const smoothing = 0.99f;

@@ -100,48 +100,40 @@ void Engine::run()
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-				else if (window_event.key.keysym.sym == SDLK_w)
-				{
-					auto wh = buddha->get_position();
-					auto x = int(std::get<0>(wh));
-					auto y = int(std::get<1>(wh));
-					y -= move_speed;
-					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
-				}
-				else if (window_event.key.keysym.sym == SDLK_a)
-				{
-					auto wh = buddha->get_position();
-					auto x = int(std::get<0>(wh));
-					auto y = int(std::get<1>(wh));
-					x -= move_speed;
-					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
-				}
-				else if (window_event.key.keysym.sym == SDLK_s)
-				{
-					auto wh = buddha->get_position();
-					auto x = int(std::get<0>(wh));
-					auto y = int(std::get<1>(wh));
-					y += move_speed;
-					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
-
-				}
-				else if (window_event.key.keysym.sym == SDLK_d)
-				{
-					auto wh = buddha->get_position();
-					auto x = int(std::get<0>(wh));
-					auto y = int(std::get<1>(wh));
-					x += move_speed;
-					buddha->set_position(static_cast<float>(x), static_cast<float>(y));
-				}
-				else if (window_event.key.keysym.sym == SDLK_1)
-				{
-					// toggle emit_frame_len
-					debug_emit_frame_length = !debug_emit_frame_length;
-				}
 			}	
 			// check moar events
 		}
 	
+		// do input update
+		int key_state_len = 0;
+		const Uint8 * key_state = SDL_GetKeyboardState(&key_state_len);
+
+		if (key_state[SDL_SCANCODE_W])
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 0, -1);
+		}
+		else if (key_state[SDL_SCANCODE_S]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 0,  1);
+		}
+		else if (key_state[SDL_SCANCODE_A]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, -1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_D]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_1])
+		{
+			debug_emit_frame_length = !debug_emit_frame_length;
+		}
+		else if (key_state[SDL_SCANCODE_2])
+		{
+			buddha->set_position(100, 100);
+		}
+
+
 		// do physics update
 	
 		// do render update

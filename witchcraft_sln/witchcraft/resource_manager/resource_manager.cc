@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-RESOURCE_PTR qResourceManager::load_render_resource_from_xml(XML::xml_node<> const & xml)
+RESOURCE_PTR qResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	resource_id		= uninit::UINT;
@@ -93,10 +93,10 @@ RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> 
 		}
 	}
 
-	auto anim = c2DSpriteAnimation(animation_name, frame_index_sequence, animation_timing_ms);
+	auto anim = Animation2D(animation_name, frame_index_sequence, animation_timing_ms);
 
 	// NOTE: there is a cast to qResource
-	std::unique_ptr<qResource> resource = std::make_unique<cAnimationResource>(anim);
+	std::unique_ptr<qResource> resource = std::make_unique<AnimationResource>(anim);
 
 	return std::move(resource);
 }
@@ -153,10 +153,10 @@ void qResourceManager::empty_cache()
 }
 
 
-bool qResourceManager::load_from_xml_file(std::string const & file)
+int qResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
-		return false;
+		return -1;
 
 	XML::file<> config_file(file.c_str());
 	XML::xml_document<> doc;
@@ -190,7 +190,7 @@ bool qResourceManager::load_from_xml_file(std::string const & file)
 					// scope will need to add the qResource pointer to the resource list.
 					if (attributeValue == "graphic")
 					{
-						resource = load_render_resource_from_xml(*child);
+						resource = build_render_resource_from_xml(*child);
 						break;
 					}
 					else if (attributeValue == "audio")
@@ -216,18 +216,18 @@ bool qResourceManager::load_from_xml_file(std::string const & file)
 				// do not add duplicates of the same file
 				if (find_resource_by_id(resource->get_resource_id()))
 					// TODO: figure out duplicates w/o completely loading the file
-					return false;
+					return resource->get_resource_id();
 
+				auto id = resource->get_resource_id();
 				// we must use std::move to change ownership of the unique_ptr
 				_resource_map[resource->get_scope_id()].push_back(std::move(resource));
 				_resource_count++;
+				return id;
 			}
 		}
-
-		return true;
 	}
 	
-	return false;
+	return -1;
 }
 
 

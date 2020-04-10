@@ -33,8 +33,8 @@ namespace witchcraft
 
 void init_logging()
 {
-	bool preserve_old_logs = true;
-	bool delete_old_logs = false;
+	bool preserve_old_logs = false;
+	bool delete_old_logs = true;
 
 	bool record_failure_to_move_prior_log = true;
 
@@ -69,7 +69,7 @@ void init_logging()
 		, witchcraft::configuration::log_file_max_logs
 	);
 
-	if (record_failure_to_move_prior_log)
+	if (record_failure_to_move_prior_log && !delete_old_logs)
 	{
 		PLOGE << "\n\nFAILED TO RENAME OLD LOG.\n\n";
 	}

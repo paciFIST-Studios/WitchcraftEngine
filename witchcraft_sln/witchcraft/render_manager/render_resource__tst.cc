@@ -23,20 +23,6 @@
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
-		TEST_CASE(" qRenderResource:: optinal param, load_now")
-		{
-			unsigned int const resource_id = 666;
-			unsigned int const resource_scope = 667;
-			std::string const file_name = witchcraft::configuration::buddha_png;
-			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
-
-			auto rr = &qRenderResource(resource_id, resource_scope, file_name, false);
-			REQUIRE(rr->is_loaded() == false);
-			
-			rr = &qRenderResource(resource_id, resource_scope, file_name, true);
-			REQUIRE(rr->is_loaded() == true);
-		}
-
 		TEST_CASE(" qRenderResource::qRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
 			unsigned int const resource_id = 666;

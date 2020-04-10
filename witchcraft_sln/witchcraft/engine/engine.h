@@ -1,6 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include <SDL_ttf.h>
+
 #include "../engine/engine_object.h"
 
 #include "../resource_manager/resource_manager.h"
@@ -24,6 +26,7 @@ struct EngineInitializer
 	bool tm_early_exit;
 };
 
+
 class Engine : public qEngineObject
 {
 private:
@@ -38,6 +41,7 @@ protected:
 
 	// testing modes
 	bool tm_early_exit;
+
 
 public:
 	
@@ -58,5 +62,54 @@ public:
 		tm_early_exit = init.tm_early_exit;
 	}
 };
+
+
+namespace witchcraft
+{
+	namespace engine
+	{
+		static void move_object_by_vector(RenderObject2D * object, int x, int y)
+		{
+			auto wh = object->get_position();
+			auto _x = x + int(std::get<0>(wh));
+			auto _y = y + int(std::get<1>(wh));
+			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
+		}
+
+		static Uint32 get_delta_time()
+		{
+			float const smoothing = 0.99f;
+			
+			static Uint32 frame_time_current = 0;
+			static Uint32 frame_time_last = 0;
+			static Uint32 delta_time = 0;
+		
+			frame_time_current = SDL_GetTicks();
+			delta_time = frame_time_current - frame_time_last;
+			delta_time = static_cast<Uint32>(
+				floor(
+					static_cast<float>(delta_time) * smoothing
+				)
+			);
+		
+			return delta_time;
+		}
+		
+		static std::string get_debug_fps_text()
+		{
+			auto delta_time = get_delta_time();
+			std::stringstream out;
+			out << "delta time: " << delta_time << " ms";
+			out << "\nfps: " << 1.f / delta_time;
+			return out.str();
+		}
+	}
+
+	namespace configuration
+	{
+		int const screen_fps = 60;
+		float const frame_length_ms = 1000/screen_fps;
+	}
+}
 
 #endif // !ENGINE_H

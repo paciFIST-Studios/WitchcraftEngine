@@ -37,7 +37,7 @@ public:
 
 	void close_file();
 
-	void log_exception(cException e);
+	void log_exception(qException e);
 
 	std::string get_timestamp();
 

@@ -10,13 +10,17 @@ RenderObject2D::RenderObject2D()
 	, color_key_is_enabled_(uninit::BOOL)
 {}
 
-void RenderObject2D::set_resource(qRenderResource * renderResource)
+void RenderObject2D::set_render_resource(qRenderResource * resource)
 {
-	if(renderResource)
+	if(resource)
 	{
-		render_resource = renderResource;
-		render_rect.w = render_resource->surface->w;
-		render_rect.h = render_resource->surface->h;
+		render_resource = resource;
+		
+		if (render_resource->surface)
+		{
+			render_rect.w = render_resource->surface->w;
+			render_rect.h = render_resource->surface->h;
+		}
 
 		if (color_key_is_enabled_)
 		{

@@ -74,33 +74,9 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 
 bool q2DRenderManager::update()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		// check messages
-		switch (event.type)
-		{
-		case SDL_QUIT: { return false; }
-
-		case SDL_KEYDOWN:
-		{
-			// [ESC]
-			if (event.key.keysym.sym == SDLK_ESCAPE)
-			{
-				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-				return false;
-			}
-			// others
-		}
-
-		} //end switch
-	} //end message
-
-	// clear screen
 	SDL_RenderClear(active_renderer);
 	render_all_objects();
 	SDL_RenderPresent(active_renderer);
-
 	return true;
 }
 
@@ -131,6 +107,8 @@ void q2DRenderManager::render_all_objects()
 		auto position_tuple = object->get_position();
 		position.x = int(std::get<0>(position_tuple));
 		position.y = int(std::get<1>(position_tuple));
+		position.w = object->render_rect.w;
+		position.h = object->render_rect.h;
 
 		SDL_RenderCopy(
 			  active_renderer
@@ -149,4 +127,32 @@ void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 
 	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(program_window);
+}
+
+void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+{
+	auto render_object = std::make_unique<RenderObject2D>();
+	render_object->set_is_visible(is_visible);
+	render_object->set_render_resource(non_owner);
+
+	// This SDL_Rect covers the parts of the texture we will display
+	// We're sizing it to include the entire texture
+	auto wh = non_owner->get_width_height();
+	render_object->render_rect.w = std::get<0>(wh);
+	render_object->render_rect.h = std::get<1>(wh);
+	render_object->render_rect.x = 0;
+	render_object->render_rect.y = 0;
+
+	render_objects.push_back(std::move(render_object));
+}
+
+RenderObject2D * q2DRenderManager::get_render_object(int id)
+{
+	for (auto&& object : render_objects)
+	{
+		if (object->render_resource->get_resource_id() == id)
+			return object.get();
+	}
+
+	return nullptr;
 }

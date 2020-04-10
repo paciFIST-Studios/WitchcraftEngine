@@ -6,7 +6,7 @@
 
 #include "../uninitialized_values.h"
 
-class c2DSpriteAnimation 
+class Animation2D 
 {
 private:
 protected:
@@ -40,13 +40,13 @@ public:
 		return _animation_vector[_current_idx];
 	}
 	
-	c2DSpriteAnimation() 
+	Animation2D() 
 		: _name(std::string(uninit::CSTRING))
 		, _current_idx(uninit::UINT)
 		, _animation_vector{uninit::UINT, uninit::UINT}
 	{}
 
-	c2DSpriteAnimation
+	Animation2D
 	// args ---
 	(
 		  std::string const & name

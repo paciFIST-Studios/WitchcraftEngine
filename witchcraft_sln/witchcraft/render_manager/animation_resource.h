@@ -5,15 +5,15 @@
 #include "../resource_manager/resource.h"
 #include "../render_manager/2d_sprite_animation.h"
 
-class cAnimationResource : public qResource
+class AnimationResource : public qResource
 {
 public:
 
-	c2DSpriteAnimation animation;
+	Animation2D animation;
 
-	cAnimationResource() {}
-	cAnimationResource(c2DSpriteAnimation anim) : animation(anim) {}
-	~cAnimationResource() override {}
+	AnimationResource() {}
+	AnimationResource(Animation2D anim) : animation(anim) {}
+	~AnimationResource() override {}
 	void load() override {}
 	void unload() override {}
 

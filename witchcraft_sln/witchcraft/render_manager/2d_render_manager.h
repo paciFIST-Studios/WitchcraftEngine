@@ -32,17 +32,6 @@
 
 #define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
 
-// Depends on:
-//	c2DSpriteObject
-//	qRenderManagerBase
-//	RenderObject2D
-//	qRenderResource
-//
-//	This class serves to
-//	1. create a window
-//	2. initialize hardware
-//	3. create / load / unload graphics resource
-//	4. create / load / unload render graphics
 class q2DRenderManager : public qEngineObject
 {
 private:
@@ -79,6 +68,8 @@ public:
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 	
 	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
+
+	RenderObject2D * get_render_object(int id);
 
 };
 

@@ -62,7 +62,7 @@
 			std::vector<unsigned int> anim_sequence = { 1, 3, 5, 7, 2, 4, 6, 8 };
 			std::string anim_name = "test";
 			unsigned int anim_speed = 10;
-			auto test_anim = c2DSpriteAnimation(anim_name, anim_sequence, anim_speed);
+			auto test_anim = Animation2D(anim_name, anim_sequence, anim_speed);
 			soi.animations.push_back(test_anim);
 
 			// initialized object

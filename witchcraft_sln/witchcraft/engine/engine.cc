@@ -45,8 +45,9 @@ void Engine::run()
 		return;
 	}
 	
+	// ----------------------------------------------------------------------------------
 
-
+	int buddha_resource_id;
 	// once the project loader exists, we can load files, based on what it says.
 	// loop over a set of strings, which are our asset paths
 	{
@@ -60,17 +61,33 @@ void Engine::run()
 		render_resource->bind_renderer(render->active_renderer);
 		render_resource->load();
 		render->register_render_object(render_resource);
+		buddha_resource_id = id;
 	}
 
-
-
+	int const move_speed = 20;
+	auto buddha = render->get_render_object(buddha_resource_id);
 	
+	// ----------------------------------------------------------------------------------
+
+	SDL_Color debug_text_color = { 0, 0, 0, 255 };
+	
+	std::stringstream debug_text_fps;
+
+	// ----------------------------------------------------------------------------------
+
+
+	bool debug_emit_frame_length = false;
 	bool gameplay_loop_is_running = true;
 	SDL_Event window_event;
-	
+	Uint32 last_frame_time = SDL_GetTicks();
+	Uint32 current_frame_time = 0;
+
 	PLOGI << witchcraft::log_strings::game_loop_start;
 	while (gameplay_loop_is_running)
 	{
+		last_frame_time = current_frame_time;
+		current_frame_time = SDL_GetTicks();
+
 		if (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
@@ -83,18 +100,55 @@ void Engine::run()
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-	
 			}	
 			// check moar events
 		}
 	
+		// do input update
+		int key_state_len = 0;
+		const Uint8 * key_state = SDL_GetKeyboardState(&key_state_len);
+
+		if (key_state[SDL_SCANCODE_W])
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 0, -1);
+		}
+		else if (key_state[SDL_SCANCODE_S]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 0,  1);
+		}
+		else if (key_state[SDL_SCANCODE_A]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, -1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_D]) 
+		{
+			witchcraft::engine::move_object_by_vector(buddha, 1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_1])
+		{
+			debug_emit_frame_length = !debug_emit_frame_length;
+		}
+		else if (key_state[SDL_SCANCODE_2])
+		{
+			buddha->set_position(100, 100);
+		}
+
+
 		// do physics update
 	
 		// do render update
 		render->update();
 	
 		// do sound update
-	}
+		
+		if (debug_emit_frame_length)
+		{
+			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
+		}
+
+
+
+	} // !game_loop
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;
 }

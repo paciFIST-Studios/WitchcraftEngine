@@ -76,11 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>

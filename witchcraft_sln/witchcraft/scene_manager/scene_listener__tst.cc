@@ -9,17 +9,28 @@
 		
 		#include "scene_listener.h"
 	
-		class TestSceneListener : public cSceneListener
-		{		
+		class TestSceneListener : public qSceneListener
+		{	
+		public:
+			TestSceneListener()
+			{
+				listening_for = SCENE_EVENT_TYPE::SE_TIMER_EXPIRED;
+			}
+
 			void event(SceneManager2D const & manager, void * callback_data) const override
 			{
 			}
+
+			SCENE_EVENT_TYPE get_listening_for() const { return listening_for; }
 		};
 
 		TEST_CASE(" TestSceneListener::ctor")
 		{
 			// We should be able to override an ABC w/o causing problems
 			REQUIRE_NOTHROW(TestSceneListener());
+
+			auto tsl = TestSceneListener();
+			REQUIRE(tsl.get_listening_for() == SCENE_EVENT_TYPE::SE_TIMER_EXPIRED);
 		}
 
 
@@ -45,9 +56,9 @@
 		//#define FAIL_COMPILATION
 
 		#ifdef FAIL_COMPILATION
-		TEST_CASE(" cSceneListener::cSceneListener() compilation fails for abstract base class")
+		TEST_CASE(" qSceneListener::qSceneListener() compilation fails for abstract base class")
 		{
-			REQUIRE_NOTHROW(cSceneListener());
+			REQUIRE_NOTHROW(qSceneListener());
 		}
 		#endif // !FAIL_COMPILATION
 

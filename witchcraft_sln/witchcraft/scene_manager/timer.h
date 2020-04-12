@@ -4,7 +4,8 @@
 #include <time.h>
 #include <windows.h>
 
-class TickTimer
+
+class TickTimer : public qEngineObject
 {
 private:
 protected:

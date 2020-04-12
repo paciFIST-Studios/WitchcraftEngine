@@ -9,41 +9,126 @@
 		
 		#include "timer.h"
 		
-		TEST_CASE(" cTimer::cTimer()")
+		TEST_CASE(" TickTimer:: ctor")
 		{
-			cTimer * ptr;
-			REQUIRE_NOTHROW(ptr = &cTimer());
+			unsigned int const test_value = 20;
+			bool time_elapsed = false;
+			auto timer = &TickTimer();
+			REQUIRE(timer != nullptr);
 
-			REQUIRE(ptr != nullptr);
-
-			REQUIRE(ptr->_id == cTimer::UNINIT_ID);
-			REQUIRE(ptr->_start_time == cTimer::UNINIT_START_TIME);
-			REQUIRE(ptr->_interval_length == cTimer::UNINIT_INTERVAL_LEN);
-			REQUIRE(ptr->_time_period_elapsed == cTimer::UNINIT_TIME_ELAPSED);
-		}
-
-		TEST_CASE(" cTimer::start()")
-		{
-			// can call start method
-			auto t1 = cTimer();
-			REQUIRE_NOTHROW(t1.start());
-		}
-
-		TEST_CASE(" cTimer::update()")
-		{
-			auto t3 = &cTimer();
-			t3->_interval_length = 100; // ms
-
-			t3->start();
-			for (int i = 0; i < 100; i++)
+			timer->set_time_length(test_value);
+			timer->start();
+			while (true)
 			{
-				t3->update();
-				Sleep(25);
-
-				if (t3->_time_period_elapsed)
+				if (timer->time_elapsed())
+				{
+					time_elapsed = true;
 					break;
+				}
 			}
-			REQUIRE(t3->_time_period_elapsed);
+
+			REQUIRE(time_elapsed == true);
+		}
+
+
+		class TestTickTimer : public TickTimer
+		{
+		public:
+			unsigned int get_started_at_time() const { return started_at_time; }
+			unsigned int get_ticks_to_wait() const { return ticks_to_wait; }
+		};
+
+		TEST_CASE(" TestTickTimer:: ctor")
+		{
+			auto timer = TestTickTimer();
+			REQUIRE(timer.get_started_at_time() == uninit::UINT);
+			REQUIRE(timer.get_ticks_to_wait() == uninit::UINT);
+
+			REQUIRE_NOTHROW(timer.set_time_length(uninit::UINT));
+			REQUIRE_NOTHROW(timer.reset());
+			REQUIRE_NOTHROW(timer.start());
+			REQUIRE_NOTHROW(timer.time_elapsed());
+		}
+
+		TEST_CASE(" TestTickTimer:: set_time_length")
+		{
+			unsigned int const test_value = 20;
+			auto timer = TestTickTimer();
+			REQUIRE(timer.get_started_at_time() == uninit::UINT);
+			REQUIRE(timer.get_ticks_to_wait() == uninit::UINT);
+			timer.set_time_length(test_value);
+			REQUIRE(timer.get_ticks_to_wait() == test_value);
+		}
+
+		TEST_CASE(" TestTickTimer:: reset")
+		{
+			unsigned int const test_value = 20;
+			auto timer = TestTickTimer();
+			REQUIRE(timer.get_started_at_time() == uninit::UINT);
+			REQUIRE(timer.get_ticks_to_wait() == uninit::UINT);
+			timer.set_time_length(test_value);
+			REQUIRE(timer.get_ticks_to_wait() == test_value);
+			timer.start();
+			auto start_time = timer.get_started_at_time();
+			REQUIRE(start_time != uninit::UINT);
+			REQUIRE(start_time > 0);
+			timer.reset();
+			REQUIRE(timer.get_started_at_time() == 0);
+			REQUIRE(timer.get_ticks_to_wait() == 0);
+		}
+
+		TEST_CASE(" TestTickTimer:: time_elapsed")
+		{
+			unsigned int const test_value = 20;
+			auto timer = TestTickTimer();
+			REQUIRE(timer.get_started_at_time() == uninit::UINT);
+			REQUIRE(timer.get_ticks_to_wait() == uninit::UINT);
+			timer.set_time_length(test_value);
+			REQUIRE(timer.get_ticks_to_wait() == test_value);
+			timer.start();
+
+			while (true)
+			{
+				if (timer.time_elapsed())
+				{
+					REQUIRE(true);
+					break;
+				}
+			}
+			REQUIRE(true);
+		}
+
+
+		struct CallbackTestObject
+		{
+		public:
+			bool success;
+			void callback() { success = true; }
+		};
+
+		TEST_CASE(" CallbackTimer:: ctor")
+		{
+			unsigned int const test_value = 20;
+			auto cbo = &CallbackTestObject();
+			cbo->success = false;
+			auto cb_timer = CallbackTimer();
+
+			std::function<void()> fn = std::bind(&CallbackTestObject::callback, cbo);
+			cb_timer.set_callback(fn);
+			cb_timer.set_time_length(test_value);
+
+			REQUIRE(cbo->success == false);
+			cb_timer.start();
+			while (true)
+			{
+				cb_timer.update();
+				if (cb_timer.time_elapsed())
+				{
+					break;
+				}
+			}
+			
+			REQUIRE(cbo->success);
 		}
 
 

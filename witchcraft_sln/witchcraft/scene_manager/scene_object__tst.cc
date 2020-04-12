@@ -9,10 +9,10 @@
 		
 		#include "scene_object.h"
 		
-		TEST_CASE(" cSceneObject::cSceneObject()")
+		TEST_CASE(" qSceneObject::qSceneObject()")
 		{
-			REQUIRE_NOTHROW(cSceneObject());
-			auto ptr = &cSceneObject();
+			REQUIRE_NOTHROW(qSceneObject());
+			auto ptr = &qSceneObject();
 			REQUIRE(ptr != nullptr);
 		}
 

@@ -1,4 +1,4 @@
-#include "2d_render_manager.h"
+#include "render_manager_2d.h"
 
 bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {

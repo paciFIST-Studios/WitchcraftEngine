@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_MANAGER_H
-#define TWO_D_RENDER_MANAGER_H
+#ifndef RENDER_MANAGER_TWO_D_H
+#define RENDER_MANAGER_TWO_D_H
 
 // stdlib
 #include <iomanip>
@@ -27,7 +27,7 @@
 #include "../resource_manager/resource.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
-#include "2d_render_object.h"
+#include "render_object_2d.h"
 #include "render_resource.h"
 
 #define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
@@ -73,4 +73,4 @@ public:
 
 };
 
-#endif // TWO_D_RENDER_MANAGER_H
+#endif // RENDER_MANAGER_TWO_D_H

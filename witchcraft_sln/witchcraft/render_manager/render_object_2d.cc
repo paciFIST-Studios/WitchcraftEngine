@@ -1,4 +1,4 @@
-#include "2d_render_object.h"
+#include "render_object_2d.h"
 
 RenderObject2D::RenderObject2D()
 	: render_resource(nullptr)

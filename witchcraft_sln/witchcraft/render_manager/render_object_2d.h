@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_OBJECT_H
-#define TWO_D_RENDER_OBJECT_H
+#ifndef RENDER_OBJECT_TWO_D_H
+#define RENDER_OBJECT_TWO_D_H
 
 #include <tuple>
 
@@ -53,4 +53,4 @@ public:
 	virtual void update() {};
 };
 
-#endif // !TWO_D_RENDER_OBJECT_H
+#endif // !RENDER_OBJECT_TWO_D_H

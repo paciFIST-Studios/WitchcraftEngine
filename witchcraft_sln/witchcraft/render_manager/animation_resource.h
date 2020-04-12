@@ -3,7 +3,7 @@
 #define ANIMATION_RESOURCE_H
 
 #include "../resource_manager/resource.h"
-#include "../render_manager/2d_sprite_animation.h"
+#include "../render_manager/sprite_animation_2d.h"
 
 class AnimationResource : public qResource
 {

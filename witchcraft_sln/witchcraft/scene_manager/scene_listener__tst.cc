@@ -11,7 +11,7 @@
 	
 		class TestSceneListener : public cSceneListener
 		{		
-			void event(c2DSceneManager const & manager, void * callback_data) const override
+			void event(SceneManager2D const & manager, void * callback_data) const override
 			{
 			}
 		};

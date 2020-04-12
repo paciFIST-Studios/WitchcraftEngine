@@ -1,5 +1,5 @@
-#ifndef TWO_D_SPRITE_ANIMATION_H
-#define TWO_D_SPRITE_ANIMATION_H
+#ifndef SPRITE_ANIMATION_TWO_D_H
+#define SPRITE_ANIMATION_TWO_D_H
 
 #include <string>
 #include <vector>
@@ -72,4 +72,4 @@ public:
 
 };
 
-#endif // !TWO_D_SPRITE_ANIMATION_H
+#endif // !SPRITE_ANIMATION_TWO_D_H

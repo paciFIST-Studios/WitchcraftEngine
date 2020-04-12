@@ -6,7 +6,7 @@
 #include "../engine/engine_object.h"
 
 #include "../resource_manager/resource_manager.h"
-#include "../render_manager/2d_render_manager.h"
+#include "../render_manager/render_manager_2d.h"
 
 enum class EEngineState : unsigned char
 {

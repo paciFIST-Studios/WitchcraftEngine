@@ -13,7 +13,7 @@
 #include "resource.h"
 
 #include "../render_manager/animation_resource.h"
-#include "../render_manager/2d_render_manager.h"
+#include "../render_manager/render_manager_2d.h"
 
 #define RESOURCE_PTR std::unique_ptr<qResource>
 #define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<RESOURCE_PTR>>

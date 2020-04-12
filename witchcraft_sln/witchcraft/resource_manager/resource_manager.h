@@ -30,16 +30,15 @@ private:
 protected:
 
 	// Also the "scene id" of the current scene
-	unsigned int _current_scope = 0;
+	unsigned int current_scope = 0;
 
 	// total resources managed
-	unsigned int _resource_count = 0;
+	unsigned int resource_count = 0;
 
 	//q2DRenderManager * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
-	RESOURCE_MAP_TYPE _resource_map;
-
+	RESOURCE_MAP_TYPE resource_map;
 
 	RESOURCE_PTR build_render_resource_from_xml(XML::xml_node<> const & xml);
 	RESOURCE_PTR load_animation_resource_from_xml(XML::xml_node<> const & xml);

@@ -117,8 +117,8 @@
 			cb_timer.set_callback(fn);
 			cb_timer.set_time_length(test_value);
 
-			REQUIRE(cbo->success == false);
 			cb_timer.start();
+			REQUIRE(cbo->success == false);
 			while (true)
 			{
 				cb_timer.update();
@@ -127,7 +127,6 @@
 					break;
 				}
 			}
-			
 			REQUIRE(cbo->success);
 		}
 

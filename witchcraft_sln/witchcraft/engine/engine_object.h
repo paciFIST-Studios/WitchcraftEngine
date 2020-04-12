@@ -10,7 +10,7 @@ class qEngineObject
 private:
 protected:
 public:
-	unsigned int id;
+	unsigned int const id;
 
 	qEngineObject()
 		: id(uninit::UINT)

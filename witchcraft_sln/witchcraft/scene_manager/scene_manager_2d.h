@@ -1,9 +1,9 @@
-#ifndef TWO_D_SCENE_MANAGER_H
-#define TWO_D_SCENE_MANAGER_H
+#ifndef SCENE_MANAGER_TWO_D_H
+#define SCENE_MANAGER_TWO_D_H
 
-class c2DSceneManager
+class SceneManager2D
 {
 
 };
 
-#endif // !TWO_D_SCENE_MANAGER_H
+#endif // !SCENE_MANAGER_TWO_D_H

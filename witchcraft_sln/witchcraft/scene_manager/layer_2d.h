@@ -1,27 +1,23 @@
-#ifndef TWO_D_LAYER_H
-#define TWO_D_LAYER_H
+#ifndef LAYER_TWO_D_H
+#define LAYER_TWO_D_H
 
 #include <string>
 
 #include "../engine/engine_object.h"
 #include "scene_object.h"
 
-class c2DLayer : public qEngineObject
+class Layer2D : public qEngineObject
 {
 private:
 protected:
 public:
 
-	static bool			constexpr UNINIT_VISIBILITY		= false;
-	static unsigned int constexpr UNINIT_Z_ORDER		= 0;
-	static float		constexpr UNINIT_COORDINATE_F	= 0.0;
-
-	c2DLayer()
-		: _layer_is_visible(UNINIT_VISIBILITY)
-		, _layer_z_order(UNINIT_Z_ORDER)
-		, position_x_(UNINIT_COORDINATE_F)
-		, position_y_(UNINIT_COORDINATE_F)
-		, _name{std::string("un-init")}
+	Layer2D()
+		: _layer_is_visible(uninit::BOOL)
+		, _layer_z_order(uninit::UINT)
+		, position_x_(uninit::FLOAT)
+		, position_y_(uninit::FLOAT)
+		, _name{std::string(uninit::CSTRING)}
 	{}
 
 	bool _layer_is_visible;
@@ -37,4 +33,4 @@ public:
 	void update();
 };
 
-#endif // !TWO_D_LAYER_H
+#endif // !LAYER_TWO_D_H

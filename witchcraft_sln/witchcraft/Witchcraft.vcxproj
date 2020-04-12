@@ -144,9 +144,9 @@
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
     <ClCompile Include="resource_manager\resource__tst.cc" />
-    <ClCompile Include="scene_manager\2d_layer__tst.cc" />
-    <ClCompile Include="scene_manager\2d_scene_manager__tst.cc" />
+    <ClCompile Include="scene_manager\layer_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_listener__tst.cc" />
+    <ClCompile Include="scene_manager\scene_manager_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_object__tst.cc" />
     <ClCompile Include="scene_manager\timer__tst.cc" />
     <ClCompile Include="test.cc" />
@@ -168,9 +168,9 @@
     <ClInclude Include="render_manager\sprite_object_2d.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
-    <ClInclude Include="scene_manager\2d_layer.h" />
-    <ClInclude Include="scene_manager\2d_scene_manager.h" />
+    <ClInclude Include="scene_manager\layer_2d.h" />
     <ClInclude Include="scene_manager\scene_listener.h" />
+    <ClInclude Include="scene_manager\scene_manager_2d.h" />
     <ClInclude Include="scene_manager\scene_object.h" />
     <ClInclude Include="scene_manager\timer.h" />
     <ClInclude Include="string_constants.h" />

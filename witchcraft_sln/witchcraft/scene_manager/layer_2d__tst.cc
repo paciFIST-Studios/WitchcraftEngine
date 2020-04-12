@@ -1,5 +1,5 @@
-#ifndef TEST_TWO_D_LAYER_CC
-#define TEST_TWO_D_LAYER_CC
+#ifndef LAYER_TWO_D__TST_CC
+#define LAYER_TWO_D__TST_CC
 
 	// this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -7,23 +7,23 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 		
-		#include "2d_layer.h"
+		#include "layer_2d.h"
 		
-		TEST_CASE(" c2DLayer::ctor")
+		TEST_CASE(" Layer2D::ctor")
 		{
-			c2DLayer layer;
+			Layer2D layer;
 
 			// ctor can construct
-			REQUIRE_NOTHROW(layer = c2DLayer());
+			REQUIRE_NOTHROW(layer = Layer2D());
 
 			// and default ctor uses un-init values
-			REQUIRE(layer._layer_z_order == c2DLayer::UNINIT_Z_ORDER);
-			REQUIRE(layer._layer_is_visible == c2DLayer::UNINIT_VISIBILITY);
-			REQUIRE(layer.position_x_ == c2DLayer::UNINIT_COORDINATE_F);
-			REQUIRE(layer.position_y_ == c2DLayer::UNINIT_COORDINATE_F);
-			REQUIRE(layer._name == "un-init");
+			REQUIRE(layer._layer_z_order == uninit::UINT);
+			REQUIRE(layer._layer_is_visible == uninit::BOOL);
+			REQUIRE(layer.position_x_ == uninit::FLOAT);
+			REQUIRE(layer.position_y_ == uninit::FLOAT);
+			REQUIRE(layer._name == std::string(uninit::CSTRING));
 		}
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TEST_TWO_D_LAYER_CC
+#endif // !LAYER_TWO_D__TST_CC

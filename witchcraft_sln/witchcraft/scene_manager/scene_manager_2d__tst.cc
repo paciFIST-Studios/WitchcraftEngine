@@ -7,11 +7,11 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 		
-		#include "2d_scene_manager.h"
+		#include "scene_manager_2d.h"
 		
-		TEST_CASE(" c2DSceneManager::c2DSceneManager()")
+		TEST_CASE(" SceneManager2D::SceneManager2D()")
 		{
-			REQUIRE_NOTHROW(c2DSceneManager());
+			REQUIRE_NOTHROW(SceneManager2D());
 		}
 
 	#endif // RUN_UNIT_TESTS

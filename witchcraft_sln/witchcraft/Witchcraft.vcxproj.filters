@@ -69,12 +69,6 @@
     <ClCompile Include="render_manager\render_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
-    <ClCompile Include="scene_manager\2d_layer__tst.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="scene_manager\2d_scene_manager__tst.cc">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClCompile>
     <ClCompile Include="scene_manager\scene_listener__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
@@ -120,6 +114,12 @@
     <ClCompile Include="render_manager\sprite_object_2d__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="scene_manager\layer_2d__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\scene_manager_2d__tst.cc">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -149,16 +149,10 @@
     <ClInclude Include="render_manager\render_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
-    <ClInclude Include="scene_manager\2d_layer.h">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClInclude>
     <ClInclude Include="scene_manager\scene_object.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager\scene_listener.h">
-      <Filter>Source Files\scene_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="scene_manager\2d_scene_manager.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager\timer.h">
@@ -190,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="render_manager\sprite_object_2d.h">
       <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\layer_2d.h">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="scene_manager\scene_manager_2d.h">
+      <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

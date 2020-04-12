@@ -6,7 +6,9 @@
 
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
-		
+
+		#include <time.h>
+
 		#include "timer.h"
 		
 		TEST_CASE(" TickTimer:: ctor")
@@ -119,15 +121,12 @@
 
 			cb_timer.start();
 			REQUIRE(cbo->success == false);
-			while (true)
+			while (cbo->success == false)
 			{
 				cb_timer.update();
-				if (cb_timer.time_elapsed())
-				{
-					break;
-				}
 			}
-			REQUIRE(cbo->success);
+
+			REQUIRE(cbo->success == true);
 		}
 
 

@@ -27,7 +27,7 @@ protected:
 	void add_to_layer(Layer2D * layer, XML::xml_node<> const & xml);
 	void check_timers();
 
-	//LAYER_VECTOR layers;
+	LAYER_VECTOR layers;
 	//TIMER_VECTOR timers;
 	//LISTEN_VECTOR listeners;
 

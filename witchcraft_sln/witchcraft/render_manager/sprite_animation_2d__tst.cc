@@ -1,5 +1,5 @@
-#ifndef TWO_D_SPRITE_ANIMATION__TST_CC
-#define TWO_D_SPRITE_ANIMATION__TST_CC
+#ifndef SPRITE_ANIMATION_TWO_D__TST_CC
+#define SPRITE_ANIMATION_TWO_D__TST_CC
 
 	// this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -8,11 +8,11 @@
 		#include "../catch.hpp"
 
 		#include "../uninitialized_values.h"
-		#include "2d_sprite_animation.h"
+		#include "sprite_animation_2d.h"
 
-		TEST_CASE("c2DSpriteAnimation::ctor"  )
+		TEST_CASE(" Animation2D::ctor"  )
 		{
-			auto anim = c2DSpriteAnimation();
+			auto anim = Animation2D();
 			REQUIRE(anim.get_name() == uninit::CSTRING);
 			REQUIRE(anim.get_frame_advance_timing() == uninit::UINT);
 
@@ -23,13 +23,13 @@
 			REQUIRE(anim.get_next_index() == uninit::UINT);
 		}
 	
-		TEST_CASE("c2DSpriteAnimation::c2DSpriteAnimation(name, sequence, timing)")
+		TEST_CASE(" Animation2D::Animation2D(name, sequence, timing)")
 		{
 			std::string anim_name = "walk";
 			std::vector<unsigned int> anim_sequence = { 1, 2, 3 };
 			unsigned int anim_timing = 500;
 
-			auto anim = c2DSpriteAnimation(anim_name, anim_sequence, anim_timing);
+			auto anim = Animation2D(anim_name, anim_sequence, anim_timing);
 			REQUIRE(anim.get_name() == anim_name);
 			REQUIRE(anim.get_frame_advance_timing() == anim_timing);
 
@@ -44,4 +44,4 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TWO_D_SPRITE_ANIMATION__TST_CC
+#endif // !SPRITE_ANIMATION_TWO_D__TST_CC

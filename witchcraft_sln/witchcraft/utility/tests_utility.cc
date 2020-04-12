@@ -15,7 +15,7 @@
 		const std::string OUTFILE_PATH = "delete_me_test_file.del";
 		const std::string OUTFILE_DATA = "\nsample data\n";
 
-		TEST_CASE("Utility::read_file_to_string returns correct string")
+		TEST_CASE(" Utility::read_file_to_string returns correct string")
 		{
 			// create file
 			std::ofstream outfile(OUTFILE_PATH.c_str(), std::ios::out | std::ios::binary | std::ios::trunc);
@@ -33,7 +33,7 @@
 			REQUIRE(utility::file_exists(OUTFILE_PATH.c_str()) == false);
 		}
 		
-		TEST_CASE("Utility::file_exists returns true when file exits and false otherwise")
+		TEST_CASE(" Utility::file_exists returns true when file exits and false otherwise")
 		{
 			// create file
 			std::ofstream outfile(OUTFILE_PATH.c_str(), std::ios::out | std::ios::binary | std::ios::trunc);

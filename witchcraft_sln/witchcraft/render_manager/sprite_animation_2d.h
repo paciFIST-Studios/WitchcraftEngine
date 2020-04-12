@@ -1,12 +1,12 @@
-#ifndef TWO_D_SPRITE_ANIMATION_H
-#define TWO_D_SPRITE_ANIMATION_H
+#ifndef SPRITE_ANIMATION_TWO_D_H
+#define SPRITE_ANIMATION_TWO_D_H
 
 #include <string>
 #include <vector>
 
 #include "../uninitialized_values.h"
 
-class c2DSpriteAnimation 
+class Animation2D 
 {
 private:
 protected:
@@ -40,13 +40,13 @@ public:
 		return _animation_vector[_current_idx];
 	}
 	
-	c2DSpriteAnimation() 
+	Animation2D() 
 		: _name(std::string(uninit::CSTRING))
 		, _current_idx(uninit::UINT)
 		, _animation_vector{uninit::UINT, uninit::UINT}
 	{}
 
-	c2DSpriteAnimation
+	Animation2D
 	// args ---
 	(
 		  std::string const & name
@@ -72,4 +72,4 @@ public:
 
 };
 
-#endif // !TWO_D_SPRITE_ANIMATION_H
+#endif // !SPRITE_ANIMATION_TWO_D_H

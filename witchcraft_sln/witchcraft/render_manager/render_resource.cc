@@ -1,57 +1,84 @@
 #include "render_resource.h"
 
-cRenderResource::~cRenderResource()
+void qRenderResource::attempt_load(std::string const & file_name)
+{
+	if (false == utility::file_exists(file_name))
+	{
+		PLOGE << "WARNING: FILE DOES NOT EXIST";
+		PLOGE << "\t\tfile_name: " << file_name;
+	}
+
+	if (renderer == nullptr)
+	{
+		PLOGW << "WARNING: Loading texture with a null renderer.  This image will not be shown: ";
+		PLOGW << "\t\tfile_name: " << file_name;
+	}
+
+	//texture = IMG_LoadTexture(renderer, file_name.c_str());
+
+	surface = IMG_Load(file_name.c_str());
+
+	if (surface)
+	{
+		width = surface->w;
+		height = surface->h;
+
+		texture = SDL_CreateTextureFromSurface(renderer, surface);
+	}
+}
+
+qRenderResource::~qRenderResource()
 {}
 
-void cRenderResource::load()
+void qRenderResource::load()
 {
-	SDL_Renderer * renderer = nullptr;
-	
 	unload();
-	
-	// load image to temp buffer
-	auto temp_surface = IMG_Load(_file_name.c_str());
-	
-	if (temp_surface)
-	{
-		_texture = SDL_CreateTextureFromSurface(renderer, temp_surface);
-	
-		// free old buffer
-		SDL_FreeSurface(temp_surface);
-	
-		// if surface is loaded, mark render resource as loaded, else, as not loaded
-		//is_loaded = _surface ? true : false;
-		_is_loaded = _texture ? true : false;
-	}
+	attempt_load(_file_name.c_str());
 }
 
-void cRenderResource::unload()
+void qRenderResource::unload()
 {
-	if (_texture)
+	if (texture)
 	{
-		SDL_DestroyTexture(_texture);
-		_texture = nullptr;
+		SDL_DestroyTexture(texture);
+		texture = nullptr;
 	}
-	
-	if (_surface)
+
+	if (surface)
 	{
-		SDL_FreeSurface(_surface);
-		_surface = nullptr;
+		SDL_FreeSurface(surface);
+		surface = nullptr;
 	}
-	
-	_is_loaded = false;
+
 }
 
-cRenderResource::cRenderResource() 
-	: _is_loaded(false)
+void qRenderResource::bind_renderer(SDL_Renderer * renderer)
+{
+	if (renderer != nullptr)
+	{
+		this->renderer = renderer;
+	}
+}
+
+qRenderResource::qRenderResource() 
 {}
 
-cRenderResource::cRenderResource(
-	// args
+qRenderResource::qRenderResource(
 	  unsigned int ID
 	, unsigned int scope
 	, std::string const & file_name)
-	// initializer (containing: call to base class)
-	: cResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
-	, _is_loaded(false)
-{}
+	// -- end args
+	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
+	// -- end initializer
+{
+}
+
+bool qRenderResource::is_loaded() const
+{
+	return (texture != nullptr);
+}
+
+bool qRenderResource::renderer_is_ready() const
+{
+	return (renderer != nullptr);
+}

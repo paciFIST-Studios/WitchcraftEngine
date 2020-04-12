@@ -76,11 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
@@ -124,31 +124,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />
+    <ClCompile Include="engine\engine__tst.cc" />
     <ClCompile Include="engine\exception.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
-    <ClCompile Include="render_manager\2d_render_manager.cc" />
-    <ClCompile Include="render_manager\2d_render_manager__tst.cc" />
-    <ClCompile Include="render_manager\2d_render_object.cc" />
-    <ClCompile Include="render_manager\2d_render_object__tst.cc" />
-    <ClCompile Include="render_manager\2d_sprite_animation__tst.cc" />
-    <ClCompile Include="render_manager\2d_sprite_object.cc" />
-    <ClCompile Include="render_manager\2d_sprite_object__tst.cc" />
+    <ClCompile Include="render_manager\render_manager_2d.cc" />
+    <ClCompile Include="render_manager\render_manager_2d__tst.cc" />
+    <ClCompile Include="render_manager\render_object_2d.cc" />
+    <ClCompile Include="render_manager\render_object_2d__tst.cc" />
     <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
+    <ClCompile Include="render_manager\sprite_animation_2d__tst.cc" />
+    <ClCompile Include="render_manager\sprite_object_2d.cc" />
+    <ClCompile Include="render_manager\sprite_object_2d__tst.cc" />
     <ClCompile Include="resource_manager\resource.cpp" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
     <ClCompile Include="resource_manager\resource__tst.cc" />
-    <ClCompile Include="scene_manager\2d_layer__tst.cc" />
-    <ClCompile Include="scene_manager\2d_scene_manager__tst.cc" />
+    <ClCompile Include="scene_manager\layer_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_listener__tst.cc" />
+    <ClCompile Include="scene_manager\scene_manager_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_object__tst.cc" />
     <ClCompile Include="scene_manager\timer__tst.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
+    <ClCompile Include="utility\get_latest_log_str__tst.cc" />
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -156,23 +159,24 @@
     <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\exception.h" />
     <ClInclude Include="logging\error_log_manager.h" />
-    <ClInclude Include="render_manager\2d_render_manager.h" />
-    <ClInclude Include="render_manager\2d_render_object.h" />
-    <ClInclude Include="render_manager\2d_sprite_animation.h" />
-    <ClInclude Include="render_manager\2d_sprite_object.h" />
     <ClInclude Include="render_manager\animation_resource.h" />
+    <ClInclude Include="render_manager\render_manager_2d.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
+    <ClInclude Include="render_manager\render_object_2d.h" />
     <ClInclude Include="render_manager\render_resource.h" />
+    <ClInclude Include="render_manager\sprite_animation_2d.h" />
+    <ClInclude Include="render_manager\sprite_object_2d.h" />
     <ClInclude Include="resource_manager\resource.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
-    <ClInclude Include="scene_manager\2d_layer.h" />
-    <ClInclude Include="scene_manager\2d_scene_manager.h" />
+    <ClInclude Include="scene_manager\layer_2d.h" />
     <ClInclude Include="scene_manager\scene_listener.h" />
+    <ClInclude Include="scene_manager\scene_manager_2d.h" />
     <ClInclude Include="scene_manager\scene_object.h" />
     <ClInclude Include="scene_manager\timer.h" />
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />
+    <ClInclude Include="utility\get_latest_log_str.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

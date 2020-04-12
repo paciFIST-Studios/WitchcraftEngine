@@ -1,4 +1,4 @@
-#include "2D_sprite_object.h"
+#include "sprite_object_2d.h"
 
 UINT_UINT_TUPLE c2DSpriteObject::get_sprite_sheet_dimensions()
 {
@@ -15,7 +15,7 @@ UINT_UINT_TUPLE c2DSpriteObject::get_frame_position()
 	return _current_frame_position;
 }
 
-c2DSpriteAnimation * c2DSpriteObject::get_current_animation()
+Animation2D * c2DSpriteObject::get_current_animation()
 {
 	return _current_animation;
 }

@@ -1,15 +1,15 @@
-#ifndef TWO_D_SPRITE_OBJECT_H
-#define TWO_D_SPRITE_OBJECT_H
+#ifndef SPRITE_OBJECT_TWO_D_H
+#define SPRITE_OBJECT_TWO_D_H
 
 #include <map>
 
 #include "../utility/utility.h"
-#include "2d_render_object.h"
+#include "render_object_2d.h"
 
-#include "2d_sprite_animation.h"
+#include "sprite_animation_2d.h"
 
 #define UINT_UINT_TUPLE std::tuple<unsigned int, unsigned int>
-#define ANIMATION_MAP std::map<std::string, c2DSpriteAnimation>
+#define ANIMATION_MAP std::map<std::string, Animation2D>
 
 
 struct c2DSpriteObjectInitializer
@@ -20,10 +20,10 @@ struct c2DSpriteObjectInitializer
 	unsigned int frame_height;
 	unsigned int frame_position_x;
 	unsigned int frame_position_y;
-	std::vector<c2DSpriteAnimation> animations;
+	std::vector<Animation2D> animations;
 };
 
-class c2DSpriteObject : public c2DRenderObject
+class c2DSpriteObject : public RenderObject2D
 {
 private:
 protected:
@@ -41,7 +41,7 @@ protected:
 
 	ANIMATION_MAP _animation_map;
 
-	c2DSpriteAnimation * _current_animation;
+	Animation2D * _current_animation;
 
 	float _time_until_frame_advance;
 
@@ -51,7 +51,7 @@ public:
 	UINT_UINT_TUPLE get_sprite_sheet_dimensions();
 	UINT_UINT_TUPLE get_frame_dimensions();
 	UINT_UINT_TUPLE get_frame_position();
-	c2DSpriteAnimation * get_current_animation();
+	Animation2D * get_current_animation();
 	float get_current_frame_timing();
 	bool is_animation_playing();
 
@@ -67,4 +67,4 @@ public:
 
 };
 
-#endif // !TWO_D_SPRITE_OBJECT_H
+#endif // !SPRITE_OBJECT_TWO_D_H

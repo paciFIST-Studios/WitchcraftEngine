@@ -29,7 +29,7 @@ void cErrorLogManager::close_file()
 	_log_file.close();
 }
 
-void cErrorLogManager::log_exception(cException e)
+void cErrorLogManager::log_exception(qException e)
 {
 	_file_buffer << get_timestamp() << "\n" << e.what();
 	flush_buffer();

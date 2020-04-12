@@ -17,9 +17,9 @@
 		const std::string EXCEPTION_FILE_NAME = "";
 		constexpr int EXCEPTION_LINE_NUMBER = 0;
 		
-		TEST_CASE("cException: Default ctor constructs exception correctly")
+		TEST_CASE("qException: Default ctor constructs exception correctly")
 		{
-			cException e(
+			qException e(
 				  EXCEPTION_NUMBER
 				, EXCEPTION_DESCRIPTION
 				, EXCEPTION_FILE_NAME
@@ -57,12 +57,12 @@
 			REQUIRE(e._readable_message.length() > 0);
 		}
 		
-		TEST_CASE("cException: dtor")
+		TEST_CASE("qException: dtor")
 		{
-			cException e(EXCEPTION_NUMBER, EXCEPTION_DESCRIPTION, EXCEPTION_FILE_NAME, EXCEPTION_LINE_NUMBER);
+			qException e(EXCEPTION_NUMBER, EXCEPTION_DESCRIPTION, EXCEPTION_FILE_NAME, EXCEPTION_LINE_NUMBER);
 
 			// I think this isn't supposed to throw an error, but honestly I don't even know
-			REQUIRE_NOTHROW(e.~cException());
+			REQUIRE_NOTHROW(e.~qException());
 
 			// after the delete, this sould get reset
 			REQUIRE(e._readable_message.length() == 0);

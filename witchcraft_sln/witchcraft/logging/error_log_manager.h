@@ -13,7 +13,7 @@
 
 // purpose: handle and log all exceptions, when they occur, and
 // output to human readable text log
-class cErrorLogManager : public cEngine
+class cErrorLogManager : public Engine
 {
 
 public:
@@ -37,7 +37,7 @@ public:
 
 	void close_file();
 
-	void log_exception(cException e);
+	void log_exception(qException e);
 
 	std::string get_timestamp();
 

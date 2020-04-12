@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_OBJECT__TST_CC
-#define TWO_D_RENDER_OBJECT__TST_CC
+#ifndef RENDER_OBJECT_TWO_D__TST_CC
+#define RENDER_OBJECT_TWO_D__TST_CC
 
 	// this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -8,11 +8,11 @@
 		#include "../catch.hpp"
 
 		#include "../uninitialized_values.h"
-		#include "2d_render_object.h"
+		#include "render_object_2d.h"
 
-		TEST_CASE("c2DRenderObject::ctor"  )
+		TEST_CASE(" RenderObject2D::ctor"  )
 		{
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 
 			REQUIRE(ro.is_visible() == uninit::BOOL);
 
@@ -23,12 +23,12 @@
 
 		}
 
-		TEST_CASE("c2DRenderObject:: get/set position()")
+		TEST_CASE(" RenderObject2D:: get/set position()")
 		{
 			int const XPOS = 10;
 			int const YPOS = 20;
 
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 
 			// get/set should not throw exceptions
 			REQUIRE_NOTHROW(ro.get_position());
@@ -45,9 +45,9 @@
 			REQUIRE(typeid(std::get<0>(pos)) == typeid(std::get<1>(pos)));
 		}
 
-		TEST_CASE("c2DRenderObject:: get/set is_visible")
+		TEST_CASE(" RenderObject2D:: get/set is_visible")
 		{
-			auto ro = c2DRenderObject();
+			auto ro = RenderObject2D();
 			REQUIRE_NOTHROW(ro.set_is_visible(true));
 			REQUIRE(ro.is_visible());
 			ro.set_is_visible(false);
@@ -58,4 +58,4 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TWO_D_RENDER_OBJECT__TST_CC
+#endif // !RENDER_OBJECT_TWO_D__TST_CC

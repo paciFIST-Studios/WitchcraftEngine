@@ -16,9 +16,9 @@
 		std::string const person = witchcraft::configuration::person_asset;
 
 		// Tests default initialization
-		TEST_CASE("ResourceManager: ctor")
+		TEST_CASE(" ResourceManager: ctor")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 
 			// Starts w/ no resources
 			REQUIRE(rm.get_resource_count() == 0);
@@ -39,7 +39,7 @@
 			REQUIRE_NOTHROW(rm.load_from_xml_file("fake"));
 
 			// load_from_xml_file returns false if file not found 
-			REQUIRE(rm.load_from_xml_file("fake") == false);
+			REQUIRE(rm.load_from_xml_file("fake") == -1);
 
 			// set_current_scope does not throw, even before anything is loaded
 			REQUIRE_NOTHROW(rm.set_current_scope(1));
@@ -48,9 +48,9 @@
 			REQUIRE(rm.set_current_scope(1) == false);
 		}
 
-		TEST_CASE("ResourceManager + RenderManager Load rendering assets")
+		TEST_CASE(" ResourceManager + RenderManager Load rendering assets")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			// includes some testing files
 			witchcraft::configuration::create_config_files();
 
@@ -60,7 +60,7 @@
 			REQUIRE(rm.get_resource_count() == 0);
 
 			// Load returns true on success
-			REQUIRE(rm.load_from_xml_file(buddha) == true);
+			REQUIRE(rm.load_from_xml_file(buddha) == 2);
 			
 			REQUIRE(rm.get_resource_count() == 1);
 
@@ -74,16 +74,16 @@
 
 			rm.load_from_xml_file(person);
 			// loading assets will always increase asset count
-			REQUIRE(rm.get_resource_count() == 4);
+			REQUIRE(rm.get_resource_count() == 3);
 
 			// loading the same file again (as defined by resource_id) returns false
-			REQUIRE(rm.load_from_xml_file(person) == false);
-			REQUIRE(rm.load_from_xml_file(bird) == false);
+			REQUIRE(rm.load_from_xml_file(person) == 4);
+			REQUIRE(rm.load_from_xml_file(bird) == 1);
 		}
 
-		TEST_CASE("ResourceManager::find_resource_by_id(unsigned int UUID)")
+		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// does not throw, even if nothing has been loaded yet
@@ -105,9 +105,9 @@
 			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
 		}
 
-		TEST_CASE("ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
+		TEST_CASE(" ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 
 			// default scope is global
 			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
@@ -125,9 +125,9 @@
 			REQUIRE(rm.set_current_scope(100) == true);
 		}
 
-		TEST_CASE("ResourceManager::empty_cache()")
+		TEST_CASE(" ResourceManager::empty_cache()")
 		{
-			auto rm = cResourceManager();
+			auto rm = qResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// Does not throw, even if you call before anything has been loaded
@@ -139,7 +139,7 @@
 			rm.load_from_xml_file(person);
 
 			REQUIRE(rm.get_current_scope() == 0);
-			REQUIRE(rm.get_resource_count() == 4);
+			REQUIRE(rm.get_resource_count() == 3);
 
 			rm.empty_cache();
 

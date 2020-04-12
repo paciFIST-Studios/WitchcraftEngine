@@ -2,8 +2,6 @@
 #define RESOURCE_MANAGER_H
 
 #include <functional>
-#include <iostream>
-#include <list>
 #include <map>
 #include <string>
 
@@ -11,18 +9,14 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-#include <plog/Log.h>
-
-#include "../engine/exception.h"
 #include "../engine/engine_object.h"
 #include "resource.h"
 
 #include "../render_manager/animation_resource.h"
-#include "../render_manager/2d_render_manager.h"
+#include "../render_manager/render_manager_2d.h"
 
-#include "../utility/utility.h"
-
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<std::unique_ptr<cResource>>>
+#define RESOURCE_PTR std::unique_ptr<qResource>
+#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<RESOURCE_PTR>>
 #define RESOURCE_GLOBAL_SCOPE 0
 
 
@@ -30,7 +24,7 @@
 
 
 // resource manager, to manage the resource objects
-class cResourceManager : public cEngineObject
+class qResourceManager : public qEngineObject
 {
 private:
 protected:
@@ -41,32 +35,35 @@ protected:
 	// total resources managed
 	unsigned int _resource_count = 0;
 
-	c2DRenderManager * _render_manager = nullptr;
+	//q2DRenderManager * _render_manager;
 
-	// a std::map, whose keys are <unsigned int, std::list<cResource*>>
+	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	RESOURCE_MAP_TYPE _resource_map;
+
+
+	RESOURCE_PTR build_render_resource_from_xml(XML::xml_node<> const & xml);
+	RESOURCE_PTR load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 
 public:
 
-	// find resource by id.  retun null if not found
-	cResource * find_resource_by_id(unsigned int UID);
+	// find resource by id.  return nullptr if not found
+	qResource * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
 	void empty_cache();
 
 	// loads resources from xml
-	bool load_from_xml_file(std::string const & file);
-
-	// sets the current scope.  Depends on current scene
+	int load_from_xml_file(std::string const & file);
+	
+	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
+
+	qResourceManager();
 
 	// Simple getters
 	int get_current_scope() const;
 	unsigned int get_resource_count() const;
-
-	cResourceManager();
-
 };
 
 // static void create_config_files()

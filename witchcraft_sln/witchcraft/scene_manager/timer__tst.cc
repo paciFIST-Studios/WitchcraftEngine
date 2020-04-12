@@ -9,7 +9,7 @@
 		
 		#include "timer.h"
 		
-		TEST_CASE("cTimer::cTimer()")
+		TEST_CASE(" cTimer::cTimer()")
 		{
 			cTimer * ptr;
 			REQUIRE_NOTHROW(ptr = &cTimer());
@@ -22,14 +22,14 @@
 			REQUIRE(ptr->_time_period_elapsed == cTimer::UNINIT_TIME_ELAPSED);
 		}
 
-		TEST_CASE("cTimer::start()")
+		TEST_CASE(" cTimer::start()")
 		{
 			// can call start method
 			auto t1 = cTimer();
 			REQUIRE_NOTHROW(t1.start());
 		}
 
-		TEST_CASE("cTimer::update()")
+		TEST_CASE(" cTimer::update()")
 		{
 			auto t3 = &cTimer();
 			t3->_interval_length = 100; // ms

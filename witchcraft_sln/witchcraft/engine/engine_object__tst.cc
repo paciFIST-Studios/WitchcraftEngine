@@ -9,12 +9,12 @@
 
 		#include "../engine/engine_object.h"
 
-		TEST_CASE("cEngineObject::ctor")
+		TEST_CASE(" qEngineObject::ctor")
 		{
-			auto eo = cEngineObject();
+			auto eo = qEngineObject();
 			REQUIRE(eo.id == 0);
 
-			cEngineObject eo2(2);
+			qEngineObject eo2(2);
 			REQUIRE(eo2.id == 2);
 		}
 

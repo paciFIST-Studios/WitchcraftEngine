@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_MANAGER__TST_CC
-#define TWO_D_RENDER_MANAGER__TST_CC
+#ifndef RENDER_MANAGER_TWO_D__TST_CC
+#define RENDER_MANAGER_TWO_D__TST_CC
 
 // this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -7,9 +7,9 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 
-		#include "2d_render_manager.h"
+		#include "render_manager_2d.h"
 
-		TEST_CASE("c2DRenderManager")
+		TEST_CASE(" q2DRenderManager")
 		{
 			
 			//  draw any loaded graphical item
@@ -19,6 +19,6 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TWO_D_RENDER_MANAGER__TST_CC
+#endif // !RENDER_MANAGER_TWO_D__TST_CC
 
 

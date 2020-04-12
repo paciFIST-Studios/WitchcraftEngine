@@ -1,5 +1,5 @@
-#ifndef TWO_D_RENDER_OBJECT_H
-#define TWO_D_RENDER_OBJECT_H
+#ifndef RENDER_OBJECT_TWO_D_H
+#define RENDER_OBJECT_TWO_D_H
 
 #include <tuple>
 
@@ -14,28 +14,27 @@
 
 // 2D render object; each instance represents a unique renderable item
 // in a 2d scene. It contains position, scale, & rotation, and these
-// chearacteristics will allow the render manager to perform culling.
-// It is possible many objects reference this instance (object pooling) 
-class c2DRenderObject : public cEngineObject
+// characteristics will allow the render manager to perform culling.
+class RenderObject2D : public qEngineObject
 {
 private:
 protected:
 
-	float _position_x;
-	float _position_y;
+	float position_x_;
+	float position_y_;
 
-	bool _is_visible;
+	bool is_visible_;
 
-	SDL_Color _color_key;
-	bool _color_key_is_enabled;
+	SDL_Color color_key_;
+	bool color_key_is_enabled_;
 
 public:
-	cRenderResource * _render_resource;
-	SDL_Rect _render_rect;
+	qRenderResource * render_resource;
+	SDL_Rect render_rect;
 
-	c2DRenderObject();
+	RenderObject2D();
 
-	void set_resource_object(cRenderResource * renderResource);
+	void set_render_resource(qRenderResource * renderResource);
 
 	// position
 	POSITION_TUPLE get_position();
@@ -54,4 +53,4 @@ public:
 	virtual void update() {};
 };
 
-#endif // !TWO_D_RENDER_OBJECT_H
+#endif // !RENDER_OBJECT_TWO_D_H

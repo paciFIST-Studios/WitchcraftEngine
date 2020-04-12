@@ -11,12 +11,12 @@
 	
 		class TestSceneListener : public cSceneListener
 		{		
-			void event(c2DSceneManager const & manager, void * callback_data) const override
+			void event(SceneManager2D const & manager, void * callback_data) const override
 			{
 			}
 		};
 
-		TEST_CASE("TestSceneListener::ctor")
+		TEST_CASE(" TestSceneListener::ctor")
 		{
 			// We should be able to override an ABC w/o causing problems
 			REQUIRE_NOTHROW(TestSceneListener());
@@ -45,7 +45,7 @@
 		//#define FAIL_COMPILATION
 
 		#ifdef FAIL_COMPILATION
-		TEST_CASE("cSceneListener::cSceneListener() compilation fails for abstract base class")
+		TEST_CASE(" cSceneListener::cSceneListener() compilation fails for abstract base class")
 		{
 			REQUIRE_NOTHROW(cSceneListener());
 		}

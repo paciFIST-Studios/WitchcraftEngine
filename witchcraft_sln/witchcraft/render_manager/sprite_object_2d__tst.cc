@@ -1,5 +1,5 @@
-#ifndef TWO_D_SPRITE_OBJECT__TST_CC
-#define TWO_D_SPRITE_OBJECT__TST_CC
+#ifndef SPRITE_OBJECT_TWO_D__TST_CC
+#define SPRITE_OBJECT_TWO_D__TST_CC
 
 // this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -7,9 +7,9 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 
-		#include "2d_sprite_object.h"
+		#include "sprite_object_2d.h"
 
-		TEST_CASE("c2DSpriteObject::ctor")
+		TEST_CASE(" c2DSpriteObject::ctor")
 		{
 			// Tests default init values, and calls all methods
 
@@ -47,7 +47,7 @@
 			REQUIRE_NOTHROW(so.set_frame_rect(0));
 		}
 
-		TEST_CASE("c2DSpriteObject::ctor(initializer object)")
+		TEST_CASE(" c2DSpriteObject::ctor(initializer object)")
 		{
 			// initializer
 			c2DSpriteObjectInitializer soi;
@@ -62,7 +62,7 @@
 			std::vector<unsigned int> anim_sequence = { 1, 3, 5, 7, 2, 4, 6, 8 };
 			std::string anim_name = "test";
 			unsigned int anim_speed = 10;
-			auto test_anim = c2DSpriteAnimation(anim_name, anim_sequence, anim_speed);
+			auto test_anim = Animation2D(anim_name, anim_sequence, anim_speed);
 			soi.animations.push_back(test_anim);
 
 			// initialized object
@@ -96,7 +96,7 @@
 			REQUIRE(ca->get_next_index() == 1); // all sequences perma-loop
 		}
 
-		TEST_CASE("c2DSpriteObject::play")
+		TEST_CASE(" c2DSpriteObject::play")
 		{
 			auto so = c2DSpriteObject();
 			so.stop();
@@ -105,7 +105,7 @@
 			REQUIRE(so.is_animation_playing() == true);
 		}
 
-		TEST_CASE("c2DSpriteObject::stop")
+		TEST_CASE(" c2DSpriteObject::stop")
 		{
 			auto so = c2DSpriteObject();
 			so.play();
@@ -116,4 +116,4 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TWO_D_SPRITE_OBJECT__TST_CC
+#endif // !SPRITE_OBJECT_TWO_D__TST_CC

@@ -60,15 +60,6 @@
     <ClCompile Include="render_manager\render_resource.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\2d_render_manager.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\2d_render_object.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\2d_sprite_object.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager\resource__tst.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
@@ -76,15 +67,6 @@
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
     <ClCompile Include="render_manager\render_resource__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\2d_render_manager__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\2d_render_object__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\2d_sprite_object__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
     <ClCompile Include="scene_manager\2d_layer__tst.cc">
@@ -102,9 +84,6 @@
     <ClCompile Include="scene_manager\timer__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\2d_sprite_animation__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
     <ClCompile Include="engine\engine_object__tst.cc">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
@@ -119,6 +98,27 @@
     </ClCompile>
     <ClCompile Include="utility\get_latest_log_str__tst.cc">
       <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_manager_2d.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_manager_2d__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_object_2d.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_object_2d__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\sprite_animation_2d__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\sprite_object_2d.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\sprite_object_2d__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,15 +149,6 @@
     <ClInclude Include="render_manager\render_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\2d_render_manager.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\2d_render_object.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\2d_sprite_object.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
     <ClInclude Include="scene_manager\2d_layer.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
@@ -179,9 +170,6 @@
     <ClInclude Include="uninitialized_values.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\2d_sprite_animation.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\animation_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
@@ -190,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="utility\get_latest_log_str.h">
       <Filter>Source Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\render_manager_2d.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\render_object_2d.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\sprite_animation_2d.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\sprite_object_2d.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

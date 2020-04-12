@@ -1,4 +1,4 @@
-#include "2D_sprite_object.h"
+#include "sprite_object_2d.h"
 
 UINT_UINT_TUPLE c2DSpriteObject::get_sprite_sheet_dimensions()
 {

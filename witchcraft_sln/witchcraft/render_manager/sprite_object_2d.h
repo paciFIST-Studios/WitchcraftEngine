@@ -1,12 +1,12 @@
-#ifndef TWO_D_SPRITE_OBJECT_H
-#define TWO_D_SPRITE_OBJECT_H
+#ifndef SPRITE_OBJECT_TWO_D_H
+#define SPRITE_OBJECT_TWO_D_H
 
 #include <map>
 
 #include "../utility/utility.h"
-#include "2d_render_object.h"
+#include "render_object_2d.h"
 
-#include "2d_sprite_animation.h"
+#include "sprite_animation_2d.h"
 
 #define UINT_UINT_TUPLE std::tuple<unsigned int, unsigned int>
 #define ANIMATION_MAP std::map<std::string, Animation2D>
@@ -67,4 +67,4 @@ public:
 
 };
 
-#endif // !TWO_D_SPRITE_OBJECT_H
+#endif // !SPRITE_OBJECT_TWO_D_H

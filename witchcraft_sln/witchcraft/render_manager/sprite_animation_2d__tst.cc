@@ -1,5 +1,5 @@
-#ifndef TWO_D_SPRITE_ANIMATION__TST_CC
-#define TWO_D_SPRITE_ANIMATION__TST_CC
+#ifndef SPRITE_ANIMATION_TWO_D__TST_CC
+#define SPRITE_ANIMATION_TWO_D__TST_CC
 
 	// this header defines RUN_UNIT_TESTS, if testing is on
 	#include "../unit_testing_switch.h"
@@ -8,7 +8,7 @@
 		#include "../catch.hpp"
 
 		#include "../uninitialized_values.h"
-		#include "2d_sprite_animation.h"
+		#include "sprite_animation_2d.h"
 
 		TEST_CASE(" Animation2D::ctor"  )
 		{
@@ -44,4 +44,4 @@
 
 	#endif // RUN_UNIT_TESTS
 
-#endif // !TWO_D_SPRITE_ANIMATION__TST_CC
+#endif // !SPRITE_ANIMATION_TWO_D__TST_CC

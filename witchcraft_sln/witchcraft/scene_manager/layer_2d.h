@@ -30,9 +30,7 @@ protected:
 	float pos_x;
 	float pos_y;
 
-
-	std::vector<std::unique_ptr<qSceneObject>> scene_objects;
-
+	std::vector<qSceneObject*> objec_vec;
 
 public:
 
@@ -56,11 +54,23 @@ public:
 	
 	~Layer2D() {}
 	
-
-	
 	void update();
 
+	void add_scene_object(qSceneObject * obj)
+	{
+		// todo: avoid double insert by checking ids
+		objec_vec.push_back(obj);
+	}
 
+	std::vector<qSceneObject*> get_layer_objects()
+	{
+		std::vector<qSceneObject*> result;
+		for (auto&& obj : objec_vec)
+		{
+			result.push_back(obj);
+		}
+		return result;
+	}
 
 	// vis
 	bool get_is_visible() const { return visible; }

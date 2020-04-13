@@ -51,9 +51,21 @@ public:
 
 
 
-	witchcraft::callback_types::SceneLayersCallbackType get_scene_layers_callback() const
+	witchcraft::callback_types::SceneLayersCallbackType2 get_scene_layers_callback() const
 	{
-		return std::bind(&SceneManager2D::get_layers_for_callback, this);
+		return std::bind(&SceneManager2D::get_scene_layer_ptrs, this);
+	}
+
+	witchcraft::callback_types::SceneLayersPtrsVector get_scene_layer_ptrs() const
+	{
+		std::vector<Layer2D *> result;
+
+		for (auto&& layer : layers)
+		{
+			result.push_back(layer.get());
+		}
+
+		return result;
 	}
 
 

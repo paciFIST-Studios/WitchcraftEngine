@@ -34,6 +34,8 @@
 
 #include "../scene_manager/scene_manager_2d.h"
 
+class SceneManager2D;
+
 class RenderManager2D : public qEngineObject
 {
 public:
@@ -45,8 +47,8 @@ protected:
 
 	RenderObjectsVector render_objects;
 
-	witchcraft::callback_types::SceneLayersCallbackType2 cb_get_layers = nullptr;
-
+	SceneManager2D * scene_manager = nullptr;
+	
 public:
 	RenderManager2D() {}
 	
@@ -69,7 +71,7 @@ public:
 
 	void shutdown();
 
-	void render_all_objects();
+	void render_call();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 	
@@ -77,8 +79,7 @@ public:
 
 	RenderObject2D * get_render_object(int id);
 	
-	void set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType2 cb);
-	
+	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 };
 
 #endif // RENDER_MANAGER_TWO_D_H

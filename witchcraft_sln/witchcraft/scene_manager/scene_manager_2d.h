@@ -12,10 +12,13 @@
 #include "../engine/engine_object.h"
 #include "../utility/callback_types.h"
 
+#include "../render_manager/render_manager_2d.h"
+
 #include "layer_2d.h"
 #include "scene_listener.h"
 #include "timer.h"
 
+class RenderManager2D;
 
 class SceneManager2D : public qEngineObject
 {
@@ -30,14 +33,12 @@ protected:
 	void check_timers();
 	void sort_layers();
 
-	LayerVectorType const & get_layers_for_callback() const
-	{
-		return layers;
-	}
 
 	LayerVectorType layers;
 	//TickTimerType timers;
 	//SceneListenerType listeners;
+
+	RenderManager2D * render_manager = nullptr;
 
 public:
 
@@ -50,24 +51,7 @@ public:
 	//void add_listener(qSceneListener * listener);
 
 
-
-	witchcraft::callback_types::SceneLayersCallbackType2 get_scene_layers_callback() const
-	{
-		return std::bind(&SceneManager2D::get_scene_layer_ptrs, this);
-	}
-
-	witchcraft::callback_types::SceneLayersPtrsVector get_scene_layer_ptrs() const
-	{
-		std::vector<Layer2D *> result;
-
-		for (auto&& layer : layers)
-		{
-			result.push_back(layer.get());
-		}
-
-		return result;
-	}
-
+	void set_render_manager(RenderManager2D * rm) { render_manager = rm; }
 
 	void update();
 };

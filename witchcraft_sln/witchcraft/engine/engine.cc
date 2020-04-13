@@ -53,6 +53,7 @@ void Engine::run()
 	// - Load objects ---------------------------------------------------------------------------------
 
 	int buddha_resource_id;
+	qSceneObject * buddha_scene_object = nullptr;
 	// once the project loader exists, we can load files, based on what it says.
 	// loop over a set of strings, which are our asset paths
 	{
@@ -65,19 +66,16 @@ void Engine::run()
 		auto render_resource = static_cast<qRenderResource*>(rr);
 		render_resource->bind_renderer(render->active_renderer);
 		render_resource->load();
-		render->register_render_object(render_resource);
+		buddha_scene_object = render->register_render_object(render_resource);
 		buddha_resource_id = id;
 	}
 
-	// character's move speed
-	int const move_speed = 20;
-	// this is the game object
-	auto buddha = render->get_render_object(buddha_resource_id);
 
 	// - Add objects to layers ---------------------------------------------------------------------------------
 	
 	auto buddha_layer = scene->add_layer("buddha");
-	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha));
+	buddha_layer->set_is_visible(true);
+	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
 
 	// - Dubug stuff ---------------------------------------------------------------------------------
 
@@ -122,19 +120,19 @@ void Engine::run()
 
 		if (key_state[SDL_SCANCODE_W])
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 0, -1);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, -1);
 		}
 		else if (key_state[SDL_SCANCODE_S]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 0,  1);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0,  1);
 		}
 		else if (key_state[SDL_SCANCODE_A]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, -1, 0);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, -1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_D]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 1, 0);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_UP])
 		{
@@ -142,15 +140,15 @@ void Engine::run()
 		}
 		else if (key_state[SDL_SCANCODE_RIGHT])
 		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
+			witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_DOWN])
 		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
+			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
 		}
 		else if (key_state[SDL_SCANCODE_LEFT])
 		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
+			witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_1])
 		{
@@ -158,7 +156,7 @@ void Engine::run()
 		}
 		else if (key_state[SDL_SCANCODE_2])
 		{
-			buddha->set_position(100, 100);
+			buddha_scene_object->set_position(100, 100);
 		}
 
 		// - Physics Update ---------------------------------------------------------------------------------
@@ -177,6 +175,8 @@ void Engine::run()
 		{
 			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
 		}
+
+		// yield for the rest of the frame
 	} // !game_loop
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;

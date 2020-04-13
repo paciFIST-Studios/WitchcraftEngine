@@ -1,6 +1,6 @@
 #include "render_manager_2d.h"
 
-bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
 
@@ -72,7 +72,7 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 	return true;
 }
 
-bool q2DRenderManager::update()
+bool RenderManager2D::update()
 {
 	SDL_RenderClear(active_renderer);
 	render_all_objects();
@@ -80,7 +80,7 @@ bool q2DRenderManager::update()
 	return true;
 }
 
-void q2DRenderManager::shutdown()
+void RenderManager2D::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
@@ -91,10 +91,12 @@ void q2DRenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void q2DRenderManager::render_all_objects()
+void RenderManager2D::render_all_objects()
 {
 	if (render_objects.size() < 1)
 		return;
+
+
 
 	for (auto&& object : render_objects)
 	{
@@ -110,6 +112,8 @@ void q2DRenderManager::render_all_objects()
 		position.w = object->render_rect.w;
 		position.h = object->render_rect.h;
 
+
+
 		SDL_RenderCopy(
 			  active_renderer
 			, object->render_resource->texture
@@ -119,7 +123,7 @@ void q2DRenderManager::render_all_objects()
 	}
 }
 
-void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
 	r = utility::clamp_value_to_uint8(r);
 	g = utility::clamp_value_to_uint8(g);
@@ -129,7 +133,7 @@ void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 	SDL_UpdateWindowSurface(program_window);
 }
 
-void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+void RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
 	auto render_object = std::make_unique<RenderObject2D>();
 	render_object->set_is_visible(is_visible);
@@ -146,7 +150,7 @@ void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool 
 	render_objects.push_back(std::move(render_object));
 }
 
-RenderObject2D * q2DRenderManager::get_render_object(int id)
+RenderObject2D * RenderManager2D::get_render_object(int id)
 {
 	for (auto&& object : render_objects)
 	{

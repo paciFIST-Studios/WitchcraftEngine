@@ -30,19 +30,27 @@
 #include "render_object_2d.h"
 #include "render_resource.h"
 
-#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
+#include "../scene_manager/scene_manager_2d.h"
 
-class q2DRenderManager : public qEngineObject
+class RenderManager2D : public qEngineObject
 {
+public:
+	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
+
+	// callback is a fn, holding a vec const &, holding unique_ptrs, and the fn takes no args
+	typedef std::function<std::vector<std::unique_ptr<Layer2D>> const & ()> LayersCallbackType;
+
 private:
 protected:
 
-	static std::unique_ptr<q2DRenderManager> SDL2_2D_render_manager;
+	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
 
-	RENDER_OBJECTS_VECTOR render_objects;
+	RenderObjectsVector render_objects;
+
+	LayersCallbackType get_layers_callback = nullptr;
 
 public:
-	q2DRenderManager() {}
+	RenderManager2D() {}
 	
 	SDL_Window * program_window;
 
@@ -70,7 +78,8 @@ public:
 	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
 
 	RenderObject2D * get_render_object(int id);
-
+	
+	void set_layers_callback(LayersCallbackType cb)	{ get_layers_callback = cb; }
 };
 
 #endif // RENDER_MANAGER_TWO_D_H

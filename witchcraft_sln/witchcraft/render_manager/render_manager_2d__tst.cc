@@ -9,13 +9,20 @@
 
 		#include "render_manager_2d.h"
 
-		TEST_CASE(" q2DRenderManager")
+		TEST_CASE(" RenderManager2D")
 		{
 			
 			//  draw any loaded graphical item
 			// drawn item appears at any valid xy position
 		}
 
+		TEST_CASE(" RenderManager2D:: set_layers_callback")
+		{
+			auto rm = RenderManager2D();
+			auto sm = SceneManager2D();
+
+			//rm.set_layers_callback(std::bind(sm.get_layers_callback()));
+		}
 
 	#endif // RUN_UNIT_TESTS
 

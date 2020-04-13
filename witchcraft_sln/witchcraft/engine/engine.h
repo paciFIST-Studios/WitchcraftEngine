@@ -75,6 +75,14 @@ namespace witchcraft
 			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
 		}
 
+		static void move_layer_by_vector(Layer2D * layer, int x, int y)
+		{
+			auto wh = layer->get_offset();
+			auto _x = x + int(std::get<0>(wh));
+			auto _y = y + int(std::get<1>(wh));
+			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
+		}
+
 		static Uint32 get_delta_time()
 		{
 			float const smoothing = 0.99f;

@@ -7,9 +7,11 @@ Layer2D * SceneManager2D::add_layer(std::string const & name)
 	if (found == nullptr)
 	{
 		Layer2DInitializer init;
-		init.is_visible = false;
 		init.name = name;
-		init.zOrder = 0;
+		init.is_visible = uninit::BOOL;
+		init.zOrder = uninit::UINT;
+		init.x = uninit::FLOAT;
+		init.y = uninit::FLOAT;
 		auto layer = std::make_unique<Layer2D>(init);
 	
 		auto result = layer.get();
@@ -35,12 +37,13 @@ Layer2D * SceneManager2D::find_layer(std::string const & name)
 
 void SceneManager2D::drop_layer(std::string const & name)
 {
-	for (auto&& layer : layers)
+	for (int i = 0; i < layers.size(); i++)
 	{
-		if (layer->get_name() == name)
+		if (layers[i]->get_name() == name)
 		{
-			// moves unique_ptr into this scope, and then lets go
-			std::move(layer);
+			// reset in-place, so we don't jostle the underlying array
+			layers[i] = std::make_unique<Layer2D>();
+			break;
 		}
 	}
 }

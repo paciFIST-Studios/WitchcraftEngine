@@ -65,13 +65,14 @@
 		class TestSceneManager2D : public SceneManager2D
 		{
 		public:
+			void invoke_sort_layers() { sort_layers(); }
+
 			std::vector<unsigned int> get_current_layer_order()
 			{
 				std::vector<unsigned int> result;
 				for (auto&& layer : layers)	{ result.push_back(layer->get_z_order()); }
 				return result;
 			}
-
 		};
 
 		TEST_CASE(" SceneManager2D:: sort_layers()")
@@ -90,6 +91,7 @@
 			layer_2->set_z_order(2);
 			layer_3->set_z_order(3);
 
+			// test to make sure they're out of order right now
 			{
 				auto order = manager->get_current_layer_order();
 				REQUIRE(order[0] == 3);
@@ -97,9 +99,9 @@
 				REQUIRE(order[2] == 1);
 			}
 
-			manager->sort_layers();
+			manager->invoke_sort_layers();
+	
 			auto order = manager->get_current_layer_order();
-			
 			unsigned int last_z_index = 0;
 			for (auto&& element : order)
 			{

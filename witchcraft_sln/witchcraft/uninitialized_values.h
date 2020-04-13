@@ -11,6 +11,8 @@ namespace uninit
 
 	static unsigned int	constexpr	UINT = 0;
 
+	static unsigned long constexpr	ULONG = 0;
+
 	static char const *				CSTRING = "un-init";
 }
 

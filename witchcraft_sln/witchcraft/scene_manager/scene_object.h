@@ -8,6 +8,7 @@ class qSceneObject : public RenderObject2D
 private:
 protected:
 public:
+
 };
 
 #endif // !SCENE_OBJECT_H

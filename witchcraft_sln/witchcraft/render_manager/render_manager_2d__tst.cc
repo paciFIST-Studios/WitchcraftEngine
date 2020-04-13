@@ -16,12 +16,16 @@
 			// drawn item appears at any valid xy position
 		}
 
-		TEST_CASE(" RenderManager2D:: set_layers_callback")
+		TEST_CASE(" RenderManager2D:: set_scene_layers_callback")
 		{
 			auto rm = RenderManager2D();
 			auto sm = SceneManager2D();
 
-			//rm.set_layers_callback(std::bind(sm.get_layers_callback()));
+			auto scene_cb = sm.get_scene_layers_callback();
+			rm.set_scene_layers_callback(scene_cb);
+
+
+
 		}
 
 	#endif // RUN_UNIT_TESTS

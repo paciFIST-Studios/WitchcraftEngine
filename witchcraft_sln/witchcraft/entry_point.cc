@@ -85,6 +85,12 @@ void run_unit_tests()
 	PLOGV << "\n\n\n\n";
 }
 
+static unsigned int get_engine_id() 
+{
+	static unsigned int id = 0;
+	return id++;
+}
+
 int main(int argc, char** argv[])
 {
 	// do something with arguments
@@ -94,7 +100,7 @@ int main(int argc, char** argv[])
 
 	run_unit_tests();
 
-	auto init = EngineInitializer{ 1 };
+	auto init = EngineInitializer{ get_engine_id() };
 	auto engine = Engine(init);
 
 	engine.startup();

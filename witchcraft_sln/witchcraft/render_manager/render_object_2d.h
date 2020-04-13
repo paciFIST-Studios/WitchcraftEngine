@@ -20,13 +20,13 @@ class RenderObject2D : public qEngineObject
 private:
 protected:
 
-	float position_x_;
-	float position_y_;
+	float position_x;
+	float position_y;
 
-	bool is_visible_;
+	bool visible;
 
-	SDL_Color color_key_;
-	bool color_key_is_enabled_;
+	SDL_Color color_key;
+	bool color_key_enabled;
 
 public:
 	qRenderResource * render_resource;

@@ -30,12 +30,10 @@ private:
 protected:
 
 	// Also the "scene id" of the current scene
-	unsigned int current_scope = 0;
+	unsigned int current_scope = uninit::UINT;
 
 	// total resources managed
 	unsigned int resource_count = 0;
-
-	//RenderManager2D * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	ResourceMapType resource_map;

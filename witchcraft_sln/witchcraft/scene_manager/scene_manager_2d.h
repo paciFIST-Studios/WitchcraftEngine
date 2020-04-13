@@ -10,28 +10,34 @@
 #define XML rapidxml
 
 #include "../engine/engine_object.h"
+#include "../utility/callback_types.h"
 
 #include "layer_2d.h"
 #include "scene_listener.h"
 #include "timer.h"
 
 
-#define LAYER_VECTOR std::vector<std::unique_ptr<Layer2D>>
-#define TIMER_VECTOR std::vector<std::unique_ptr<TickTimer>>
-#define LISTEN_VECTOR std::vector<std::unique_ptr<qSceneListener>>
-
 class SceneManager2D : public qEngineObject
 {
+public:
+	typedef std::vector<std::unique_ptr<Layer2D>> LayerVectorType;
+	typedef std::vector<std::unique_ptr<TickTimer>> TickTimerType;
+	typedef std::vector<std::unique_ptr<qSceneListener>> SceneListenerType;
+
 private:
 protected:
 	void add_to_layer(Layer2D * layer, XML::xml_node<> const & xml);
 	void check_timers();
 	void sort_layers();
 
+	LayerVectorType const & get_layers_for_callback() const
+	{
+		return layers;
+	}
 
-	LAYER_VECTOR layers;
-	//TIMER_VECTOR timers;
-	//LISTEN_VECTOR listeners;
+	LayerVectorType layers;
+	//TickTimerType timers;
+	//SceneListenerType listeners;
 
 public:
 
@@ -42,6 +48,13 @@ public:
 	bool load_from_xml(std::string const & file);
 	void add_timer(unsigned int time_len, std::function<void()> cb);
 	//void add_listener(qSceneListener * listener);
+
+
+
+	witchcraft::callback_types::SceneLayersCallbackType get_scene_layers_callback() const
+	{
+		return std::bind(&SceneManager2D::get_layers_for_callback, this);
+	}
 
 
 	void update();

@@ -161,7 +161,7 @@ RenderObject2D * RenderManager2D::get_render_object(int id)
 	return nullptr;
 }
 
-void RenderManager2D::set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType cb)
+void RenderManager2D::set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType2 cb)
 {
 	cb_get_layers = cb;
 }

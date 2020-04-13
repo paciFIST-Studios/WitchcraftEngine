@@ -45,7 +45,7 @@ protected:
 
 	RenderObjectsVector render_objects;
 
-	witchcraft::callback_types::SceneLayersCallbackType cb_get_layers = nullptr;
+	witchcraft::callback_types::SceneLayersCallbackType2 cb_get_layers = nullptr;
 
 public:
 	RenderManager2D() {}
@@ -77,7 +77,7 @@ public:
 
 	RenderObject2D * get_render_object(int id);
 	
-	void set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType cb);
+	void set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType2 cb);
 	
 };
 

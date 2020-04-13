@@ -125,7 +125,6 @@ qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
 	return nullptr;
 }
 
-
 void qResourceManager::empty_cache()
 {
 	if (resource_count == 0)
@@ -151,7 +150,6 @@ void qResourceManager::empty_cache()
 	resource_count = 0;
 	current_scope = RESOURCE_GLOBAL_SCOPE;
 }
-
 
 int qResourceManager::load_from_xml_file(std::string const & file)
 {
@@ -230,7 +228,6 @@ int qResourceManager::load_from_xml_file(std::string const & file)
 	return -1;
 }
 
-
 // WARN: Must be called for each scene change
 bool qResourceManager::set_current_scope(unsigned int Scope)
 {
@@ -258,7 +255,6 @@ bool qResourceManager::set_current_scope(unsigned int Scope)
 
 	return true;
 }
-
 
 qResourceManager::qResourceManager()
 	: resource_count(0)

@@ -12,7 +12,8 @@ namespace witchcraft
 	namespace callback_types
 	{
 		typedef std::function<std::vector<std::unique_ptr<Layer2D>>const&()> SceneLayersCallbackType;
-
+		typedef std::function<std::vector< Layer2D*>()> SceneLayersCallbackType2;
+		typedef std::vector<Layer2D *> SceneLayersPtrsVector;
 	}
 }
 

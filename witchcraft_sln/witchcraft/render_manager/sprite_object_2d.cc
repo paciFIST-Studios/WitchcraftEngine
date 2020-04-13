@@ -79,7 +79,7 @@ c2DSpriteObject::c2DSpriteObject()
 	, _current_frame_position{uninit::UINT, uninit::UINT}
 	, _current_animation(nullptr)
 	, _time_until_frame_advance(uninit::FLOAT)
-	, _time_at_last_frame_advance(uninit::FLOAT)
+	, _time_at_last_frame_advance(uninit::ULONG)
 	, _animation_is_playing(uninit::BOOL)
 {}
 
@@ -91,7 +91,7 @@ c2DSpriteObject::c2DSpriteObject(c2DSpriteObjectInitializer args)
 	, _current_frame_position{args.frame_position_x, args.frame_position_y }
 	, _current_animation(nullptr)
 	, _time_until_frame_advance(uninit::FLOAT)
-	, _time_at_last_frame_advance(uninit::FLOAT)
+	, _time_at_last_frame_advance(uninit::ULONG)
 	, _animation_is_playing(uninit::BOOL)
 {
 	stop();

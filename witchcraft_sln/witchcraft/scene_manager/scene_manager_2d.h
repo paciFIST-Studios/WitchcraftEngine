@@ -2,8 +2,8 @@
 #define SCENE_MANAGER_TWO_D_H
 
 #include <functional>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "../../lib/rapidxml/rapidxml.hpp"
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
@@ -35,15 +35,18 @@ public:
 
 	Layer2D * add_layer(std::string const & name);
 	Layer2D * find_layer(std::string const & name);
-	void drop_layer(std::string const & name);
+	std::unique_ptr<Layer2D> eject_layer(std::string const & name);
 
 
 	bool load_from_xml(std::string const & file);
 	void add_timer(unsigned int time_len, std::function<void()> cb);
 	//void add_listener(qSceneListener * listener);
 
+	void sort_layers();
+
 	void update();
 
 };
+
 
 #endif // !SCENE_MANAGER_TWO_D_H

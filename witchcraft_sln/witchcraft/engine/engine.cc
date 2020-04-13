@@ -11,8 +11,7 @@ void Engine::startup()
 
 
 	// messaging layer
-	// todo
-
+	
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>();
 
@@ -21,6 +20,10 @@ void Engine::startup()
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>();
+
+	// this will be replaced by messaging system
+	render->set_scene_manager(scene.get());
+	scene->set_render_manager(render.get());
 }
 
 void Engine::run()
@@ -67,9 +70,19 @@ void Engine::run()
 		buddha_resource_id = id;
 	}
 
+	// character's move speed
 	int const move_speed = 20;
+	// this is the game object
 	auto buddha = render->get_render_object(buddha_resource_id);
+
+
+	// ----------------------------------------------------------------------------------
+
 	
+	auto layer = scene->add_layer("buddha");
+	layer->add_scene_object(static_cast<qSceneObject*>(buddha));
+
+
 	// ----------------------------------------------------------------------------------
 
 	SDL_Color debug_text_color = { 0, 0, 0, 255 };

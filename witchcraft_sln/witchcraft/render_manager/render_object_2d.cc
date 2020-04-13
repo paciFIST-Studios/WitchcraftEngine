@@ -39,7 +39,7 @@ void RenderObject2D::set_render_resource(qRenderResource * resource)
 	}
 }
 
-POSITION_TUPLE RenderObject2D::get_position()
+POSITION_TUPLE RenderObject2D::get_position() const
 {
 	return std::make_tuple(position_x, position_y);
 }
@@ -50,7 +50,7 @@ void RenderObject2D::set_position(float x, float y)
 	position_y = y;
 }
 
-bool RenderObject2D::is_visible()
+bool RenderObject2D::is_visible() const
 {
 	return visible;
 }
@@ -60,7 +60,7 @@ void RenderObject2D::set_is_visible(bool is)
 	visible = is;
 }
 
-SDL_Color RenderObject2D::get_color_key()
+SDL_Color RenderObject2D::get_color_key() const
 {
 	return color_key;
 }
@@ -70,7 +70,7 @@ void RenderObject2D::set_color_key(SDL_Color key)
 	color_key = key;
 }
 
-bool RenderObject2D::is_color_key_enabled()
+bool RenderObject2D::is_color_key_enabled() const
 {
 	return color_key_enabled;
 }

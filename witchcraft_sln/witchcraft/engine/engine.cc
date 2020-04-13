@@ -14,10 +14,10 @@ void Engine::startup()
 	// todo
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
-	resource = std::make_unique<qResourceManager>();
+	resource = std::make_unique<ResourceManager>();
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<q2DRenderManager>();
+	render = std::make_unique<RenderManager2D>();
 }
 
 void Engine::run()

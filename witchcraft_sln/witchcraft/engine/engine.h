@@ -33,8 +33,8 @@ private:
 protected:
 
 	//std::unique_ptr<cMessageManager> message;
-	std::unique_ptr<qResourceManager> resource;
-	std::unique_ptr<q2DRenderManager> render;
+	std::unique_ptr<ResourceManager> resource;
+	std::unique_ptr<RenderManager2D> render;
 	//std::unique_ptr<cSceneManager> scene;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;

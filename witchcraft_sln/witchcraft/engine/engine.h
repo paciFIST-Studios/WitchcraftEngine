@@ -57,10 +57,9 @@ public:
 
 	Engine(EngineInitializer init) 
 	: qEngineObject(init.id)
+	, tm_early_exit(init.tm_early_exit)
 	, current_engine_state(EEngineState::CONSTRUCTED)
-	{
-		tm_early_exit = init.tm_early_exit;
-	}
+	{}
 };
 
 

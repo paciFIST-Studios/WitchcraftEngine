@@ -75,7 +75,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 bool RenderManager2D::update()
 {
 	SDL_RenderClear(active_renderer);
-	render_all_objects();
+	render_call();
 	SDL_RenderPresent(active_renderer);
 	return true;
 }
@@ -91,12 +91,13 @@ void RenderManager2D::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void RenderManager2D::render_all_objects()
+void RenderManager2D::render_call()
 {
-	if (render_objects.size() < 1)
+	if (scene_manager == nullptr)
 		return;
 
-
+	if (render_objects.size() < 1)
+		return;
 
 	for (auto&& object : render_objects)
 	{
@@ -111,7 +112,6 @@ void RenderManager2D::render_all_objects()
 		position.y = int(std::get<1>(position_tuple));
 		position.w = object->render_rect.w;
 		position.h = object->render_rect.h;
-
 
 
 		SDL_RenderCopy(
@@ -135,7 +135,7 @@ void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned i
 
 void RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
-	auto render_object = std::make_unique<RenderObject2D>();
+	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
 	render_object->set_is_visible(is_visible);
 	render_object->set_render_resource(non_owner);
 
@@ -159,9 +159,4 @@ RenderObject2D * RenderManager2D::get_render_object(int id)
 	}
 
 	return nullptr;
-}
-
-void RenderManager2D::set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType2 cb)
-{
-	cb_get_layers = cb;
 }

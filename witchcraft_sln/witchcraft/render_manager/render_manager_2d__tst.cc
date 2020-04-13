@@ -12,9 +12,8 @@
 		#include "render_manager_2d.h"
 
 		TEST_CASE(" RenderManager2D")
-		{
-			
-			//  draw any loaded graphical item
+		{			
+			// draw any loaded graphical item
 			// drawn item appears at any valid xy position
 		}
 

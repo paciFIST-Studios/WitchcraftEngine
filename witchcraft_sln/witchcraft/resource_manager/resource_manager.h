@@ -15,17 +15,17 @@
 #include "../render_manager/animation_resource.h"
 #include "../render_manager/render_manager_2d.h"
 
-#define RESOURCE_PTR std::unique_ptr<qResource>
-#define RESOURCE_MAP_TYPE std::map<unsigned int, std::vector<RESOURCE_PTR>>
-#define RESOURCE_GLOBAL_SCOPE 0
-
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
 
 // resource manager, to manage the resource objects
-class qResourceManager : public qEngineObject
+class ResourceManager : public qEngineObject
 {
+public:
+	typedef std::unique_ptr<qResource> ResourcePtr;
+	typedef std::map<unsigned int, std::vector<ResourcePtr>> ResourceMapType;
+
 private:
 protected:
 
@@ -35,13 +35,13 @@ protected:
 	// total resources managed
 	unsigned int resource_count = 0;
 
-	//q2DRenderManager * _render_manager;
+	//RenderManager2D * _render_manager;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
-	RESOURCE_MAP_TYPE resource_map;
+	ResourceMapType resource_map;
 
-	RESOURCE_PTR build_render_resource_from_xml(XML::xml_node<> const & xml);
-	RESOURCE_PTR load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	ResourcePtr build_render_resource_from_xml(XML::xml_node<> const & xml);
+	ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 
 public:
@@ -58,7 +58,7 @@ public:
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
 
-	qResourceManager();
+	ResourceManager();
 
 	// Simple getters
 	int get_current_scope() const;
@@ -70,6 +70,8 @@ namespace witchcraft
 {
 	namespace configuration
 	{
+		static unsigned int const global_resource_scope = 0;
+
 		static void create_config_files()
 		{
 			std::list<std::string> config_files = {

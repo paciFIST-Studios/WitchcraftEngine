@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-RESOURCE_PTR qResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
+ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	resource_id		= uninit::UINT;
@@ -43,7 +43,7 @@ RESOURCE_PTR qResourceManager::build_render_resource_from_xml(XML::xml_node<> co
 	return std::move(resource);
 }
 
-RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
+ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
 {
 	unsigned int				resource_id				= uninit::UINT;
 	unsigned int				resource_scope			= uninit::UINT;
@@ -102,7 +102,7 @@ RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> 
 }
 
 // returns a NON-OWNING ptr
-qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
+qResource * ResourceManager::find_resource_by_id(unsigned int UUID)
 {
 	if (resource_count == 0)
 		return nullptr;
@@ -125,7 +125,7 @@ qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
 	return nullptr;
 }
 
-void qResourceManager::empty_cache()
+void ResourceManager::empty_cache()
 {
 	if (resource_count == 0)
 		return;
@@ -148,10 +148,10 @@ void qResourceManager::empty_cache()
 	
 	resource_map.clear();
 	resource_count = 0;
-	current_scope = RESOURCE_GLOBAL_SCOPE;
+	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-int qResourceManager::load_from_xml_file(std::string const & file)
+int ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 		return -1;
@@ -229,7 +229,7 @@ int qResourceManager::load_from_xml_file(std::string const & file)
 }
 
 // WARN: Must be called for each scene change
-bool qResourceManager::set_current_scope(unsigned int Scope)
+bool ResourceManager::set_current_scope(unsigned int Scope)
 {
 	// You cannot change scope, until a global resource is loaded
 	if (resource_count == 0)
@@ -256,17 +256,17 @@ bool qResourceManager::set_current_scope(unsigned int Scope)
 	return true;
 }
 
-qResourceManager::qResourceManager()
+ResourceManager::ResourceManager()
 	: resource_count(0)
-	, current_scope(RESOURCE_GLOBAL_SCOPE)
+	, current_scope(witchcraft::configuration::global_resource_scope)
 {}
 
-int qResourceManager::get_current_scope() const
+int ResourceManager::get_current_scope() const
 {
 	return current_scope;
 }
 
-unsigned int qResourceManager::get_resource_count() const
+unsigned int ResourceManager::get_resource_count() const
 {
 	return resource_count;
 }

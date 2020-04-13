@@ -32,8 +32,10 @@
 #include "render_resource.h"
 
 #include "../scene_manager/scene_manager_2d.h"
+#include "../scene_manager/scene_object.h"
 
 class SceneManager2D;
+class qSceneObject;
 
 class RenderManager2D : public qEngineObject
 {
@@ -48,6 +50,9 @@ protected:
 
 	SceneManager2D * scene_manager = nullptr;
 	
+	unsigned int screen_width = 0;
+	unsigned int screen_height = 0;
+
 public:
 	RenderManager2D() {}
 	
@@ -73,8 +78,8 @@ public:
 	void render_call();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
-	
-	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
+			
+	qSceneObject * register_render_object(qRenderResource * non_owner, bool is_visible = true);
 
 	RenderObject2D * get_render_object(int id);
 	

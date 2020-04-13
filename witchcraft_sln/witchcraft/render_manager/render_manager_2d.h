@@ -52,11 +52,11 @@ protected:
 public:
 	RenderManager2D() {}
 	
-	SDL_Window * program_window;
+	SDL_Window * program_window = nullptr;
 
-	SDL_Renderer * active_renderer;
+	SDL_Renderer * active_renderer = nullptr;
 
-	SDL_Surface * rendering_surface;
+	SDL_Surface * rendering_surface = nullptr;
 
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED

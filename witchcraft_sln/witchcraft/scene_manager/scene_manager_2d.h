@@ -10,7 +10,6 @@
 #define XML rapidxml
 
 #include "../engine/engine_object.h"
-#include "../utility/callback_types.h"
 
 #include "../render_manager/render_manager_2d.h"
 
@@ -52,6 +51,18 @@ public:
 
 
 	void set_render_manager(RenderManager2D * rm) { render_manager = rm; }
+
+	std::vector<Layer2D*> get_layers_ptrs_vector() const
+	{
+		std::vector<Layer2D*> result;
+
+		for (auto&& layer : layers)
+		{
+			result.push_back(layer.get());
+		}
+
+		return result;
+	}
 
 	void update();
 };

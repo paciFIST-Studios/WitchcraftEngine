@@ -194,8 +194,5 @@
     <ClInclude Include="scene_manager\scene_manager_2d.h">
       <Filter>Source Files\scene_manager</Filter>
     </ClInclude>
-    <ClInclude Include="utility\callback_types.h">
-      <Filter>Source Files\utility</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

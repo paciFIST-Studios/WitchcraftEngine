@@ -177,7 +177,6 @@
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />
-    <ClInclude Include="utility\callback_types.h" />
     <ClInclude Include="utility\get_latest_log_str.h" />
     <ClInclude Include="utility\utility.h" />
   </ItemGroup>

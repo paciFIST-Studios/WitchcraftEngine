@@ -24,7 +24,6 @@
 
 // witchcraft
 #include "../engine/engine_object.h"
-#include "../utility/callback_types.h"
 
 #include "../resource_manager/resource.h"
 #include "../string_constants.h"

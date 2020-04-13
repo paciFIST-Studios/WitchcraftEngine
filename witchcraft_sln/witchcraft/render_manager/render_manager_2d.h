@@ -24,6 +24,8 @@
 
 // witchcraft
 #include "../engine/engine_object.h"
+#include "../utility/callback_types.h"
+
 #include "../resource_manager/resource.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
@@ -36,18 +38,14 @@ class RenderManager2D : public qEngineObject
 {
 public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
-
-	// callback is a fn, holding a vec const &, holding unique_ptrs, and the fn takes no args
-	typedef std::function<std::vector<std::unique_ptr<Layer2D>> const & ()> LayersCallbackType;
-
+	
 private:
 protected:
-
 	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
 
 	RenderObjectsVector render_objects;
 
-	LayersCallbackType get_layers_callback = nullptr;
+	witchcraft::callback_types::SceneLayersCallbackType cb_get_layers = nullptr;
 
 public:
 	RenderManager2D() {}
@@ -79,7 +77,8 @@ public:
 
 	RenderObject2D * get_render_object(int id);
 	
-	void set_layers_callback(LayersCallbackType cb)	{ get_layers_callback = cb; }
+	void set_scene_layers_callback(witchcraft::callback_types::SceneLayersCallbackType cb);
+	
 };
 
 #endif // RENDER_MANAGER_TWO_D_H

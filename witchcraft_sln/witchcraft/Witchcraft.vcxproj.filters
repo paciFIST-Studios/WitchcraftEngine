@@ -120,6 +120,9 @@
     <ClCompile Include="scene_manager\scene_manager_2d__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
+    <ClCompile Include="scene_manager\scene_manager_2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">

@@ -146,6 +146,7 @@
     <ClCompile Include="resource_manager\resource__tst.cc" />
     <ClCompile Include="scene_manager\layer_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_listener__tst.cc" />
+    <ClCompile Include="scene_manager\scene_manager_2d.cpp" />
     <ClCompile Include="scene_manager\scene_manager_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_object__tst.cc" />
     <ClCompile Include="scene_manager\timer__tst.cc" />

@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-RESOURCE_PTR qResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
+ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	resource_id		= uninit::UINT;
@@ -43,7 +43,7 @@ RESOURCE_PTR qResourceManager::build_render_resource_from_xml(XML::xml_node<> co
 	return std::move(resource);
 }
 
-RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
+ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
 {
 	unsigned int				resource_id				= uninit::UINT;
 	unsigned int				resource_scope			= uninit::UINT;
@@ -102,13 +102,13 @@ RESOURCE_PTR qResourceManager::load_animation_resource_from_xml(XML::xml_node<> 
 }
 
 // returns a NON-OWNING ptr
-qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
+qResource * ResourceManager::find_resource_by_id(unsigned int UUID)
 {
-	if (_resource_count == 0)
+	if (resource_count == 0)
 		return nullptr;
 	
 	// iterate through all of the scene ids
-	for (auto&& resource_kvp : _resource_map)
+	for (auto&& resource_kvp : resource_map)
 	{
 		// iterate through the vector associated w/ each id
 		for (auto&& element_unique_ptr : (resource_kvp.second))
@@ -125,14 +125,13 @@ qResource * qResourceManager::find_resource_by_id(unsigned int UUID)
 	return nullptr;
 }
 
-
-void qResourceManager::empty_cache()
+void ResourceManager::empty_cache()
 {
-	if (_resource_count == 0)
+	if (resource_count == 0)
 		return;
 	
 	// look through scene ids
-	for (auto&& resource_kvp : _resource_map)
+	for (auto&& resource_kvp : resource_map)
 	{
 		// and the resource lists associated with each id
 		for (auto&& element_unique_ptr : resource_kvp.second)
@@ -147,13 +146,12 @@ void qResourceManager::empty_cache()
 		resource_kvp.second.clear();
 	}
 	
-	_resource_map.clear();
-	_resource_count = 0;
-	_current_scope = RESOURCE_GLOBAL_SCOPE;
+	resource_map.clear();
+	resource_count = 0;
+	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-
-int qResourceManager::load_from_xml_file(std::string const & file)
+int ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 		return -1;
@@ -220,8 +218,8 @@ int qResourceManager::load_from_xml_file(std::string const & file)
 
 				auto id = resource->get_resource_id();
 				// we must use std::move to change ownership of the unique_ptr
-				_resource_map[resource->get_scope_id()].push_back(std::move(resource));
-				_resource_count++;
+				resource_map[resource->get_scope_id()].push_back(std::move(resource));
+				resource_count++;
 				return id;
 			}
 		}
@@ -230,27 +228,26 @@ int qResourceManager::load_from_xml_file(std::string const & file)
 	return -1;
 }
 
-
 // WARN: Must be called for each scene change
-bool qResourceManager::set_current_scope(unsigned int Scope)
+bool ResourceManager::set_current_scope(unsigned int Scope)
 {
 	// You cannot change scope, until a global resource is loaded
-	if (_resource_count == 0)
+	if (resource_count == 0)
 		return false;
 	
 	// unload old scope, but not global
-	if (_current_scope != 0)
+	if (current_scope != 0)
 	{
-		for (auto& element_unique_ptr : _resource_map[_current_scope])
+		for (auto& element_unique_ptr : resource_map[current_scope])
 		{
 			auto element = element_unique_ptr.get();
 			element->unload();
 		}
 	}
 	
-	_current_scope = Scope;
+	current_scope = Scope;
 	
-	for (auto&& element_unique_ptr : _resource_map[_current_scope])
+	for (auto&& element_unique_ptr : resource_map[current_scope])
 	{
 		auto element = element_unique_ptr.get();
 		element->load();
@@ -259,18 +256,17 @@ bool qResourceManager::set_current_scope(unsigned int Scope)
 	return true;
 }
 
-
-qResourceManager::qResourceManager()
-	: _resource_count(0)
-	, _current_scope(RESOURCE_GLOBAL_SCOPE)
+ResourceManager::ResourceManager()
+	: resource_count(0)
+	, current_scope(witchcraft::configuration::global_resource_scope)
 {}
 
-int qResourceManager::get_current_scope() const
+int ResourceManager::get_current_scope() const
 {
-	return _current_scope;
+	return current_scope;
 }
 
-unsigned int qResourceManager::get_resource_count() const
+unsigned int ResourceManager::get_resource_count() const
 {
-	return _resource_count;
+	return resource_count;
 }

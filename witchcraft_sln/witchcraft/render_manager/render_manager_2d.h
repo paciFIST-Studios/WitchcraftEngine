@@ -24,31 +24,43 @@
 
 // witchcraft
 #include "../engine/engine_object.h"
+
 #include "../resource_manager/resource.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
 #include "render_object_2d.h"
 #include "render_resource.h"
 
-#define RENDER_OBJECTS_VECTOR std::vector<std::unique_ptr<RenderObject2D>>
+#include "../scene_manager/scene_manager_2d.h"
+#include "../scene_manager/scene_object.h"
 
-class q2DRenderManager : public qEngineObject
+class SceneManager2D;
+class qSceneObject;
+
+class RenderManager2D : public qEngineObject
 {
+public:
+	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
+	
 private:
 protected:
+	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
 
-	static std::unique_ptr<q2DRenderManager> SDL2_2D_render_manager;
+	RenderObjectsVector render_objects;
 
-	RENDER_OBJECTS_VECTOR render_objects;
+	SceneManager2D * scene_manager = nullptr;
+	
+	unsigned int screen_width = 0;
+	unsigned int screen_height = 0;
 
 public:
-	q2DRenderManager() {}
+	RenderManager2D() {}
 	
-	SDL_Window * program_window;
+	SDL_Window * program_window = nullptr;
 
-	SDL_Renderer * active_renderer;
+	SDL_Renderer * active_renderer = nullptr;
 
-	SDL_Surface * rendering_surface;
+	SDL_Surface * rendering_surface = nullptr;
 
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
@@ -63,14 +75,15 @@ public:
 
 	void shutdown();
 
-	void render_all_objects();
+	void render_call();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
-	
-	void register_render_object(qRenderResource * non_owner, bool is_visible = true);
+			
+	qSceneObject * register_render_object(qRenderResource * non_owner, bool is_visible = true);
 
 	RenderObject2D * get_render_object(int id);
-
+	
+	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 };
 
 #endif // RENDER_MANAGER_TWO_D_H

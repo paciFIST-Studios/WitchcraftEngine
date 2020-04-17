@@ -4,45 +4,76 @@
 #include <time.h>
 #include <windows.h>
 
-class cTimer
+
+class TickTimer : public qEngineObject
 {
 private:
 protected:
+	unsigned int started_at_time = 0;
+	unsigned int ticks_to_wait = 0;
 
 public:
-	static unsigned int constexpr UNINIT_ID = 0;
-	static DWORD constexpr UNINIT_START_TIME = 0;
-	static DWORD constexpr UNINIT_INTERVAL_LEN = 0;
-	static bool constexpr UNINIT_TIME_ELAPSED = true;
 
-	unsigned int _id;
-	DWORD _start_time;			// ms (miliseconds)
-	DWORD _interval_length;		// ms
-	bool _time_period_elapsed;
-
-	cTimer()
-		: _id(UNINIT_ID)
-		, _start_time(UNINIT_START_TIME)
-		, _interval_length(UNINIT_INTERVAL_LEN)
-		, _time_period_elapsed(UNINIT_TIME_ELAPSED)
+	TickTimer() 
+		: started_at_time(uninit::UINT)
+		, ticks_to_wait(uninit::UINT)
 	{}
+
+	TickTimer(unsigned int time_length)
+		: started_at_time(uninit::UINT)
+		, ticks_to_wait(time_length)
+	{}
+
+	void set_time_length(unsigned int ms)
+	{
+		ticks_to_wait = ms;
+	}
+
+	void reset()
+	{
+		ticks_to_wait = 0;
+		started_at_time = 0;
+	}
 
 	void start()
 	{
-		_start_time = timeGetTime();
-		_time_period_elapsed = false;
+		// todo: throw error if no wait time has been set
+
+		started_at_time = SDL_GetTicks();
+	}
+
+	bool time_elapsed() const
+	{
+		auto current_time = SDL_GetTicks();
+		return (current_time - started_at_time) > ticks_to_wait;
+	}
+
+};
+
+
+
+class CallbackTimer : public TickTimer
+{
+public:
+	typedef std::function<void()> CallbackVoidType;
+
+private:
+protected:
+	CallbackVoidType cb;	
+	bool callback_sent = false;
+public:
+
+	void set_callback(CallbackVoidType callback)
+	{
+		cb = callback;
 	}
 
 	void update()
 	{
-		if (_time_period_elapsed)
-			return;
-
-		DWORD elapsed_time = timeGetTime() - _start_time;
-
-		if (elapsed_time > _interval_length)
+		if (time_elapsed() && !callback_sent)
 		{
-			_time_period_elapsed = true;
+			callback_sent = true;
+			cb();
 		}
 	}
 };

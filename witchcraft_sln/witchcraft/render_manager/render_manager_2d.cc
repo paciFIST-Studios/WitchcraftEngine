@@ -1,8 +1,11 @@
 #include "render_manager_2d.h"
 
-bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
+	screen_width = Width;
+	screen_height = Height;
+
 
 	int flags = 0;
 
@@ -72,15 +75,15 @@ bool q2DRenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned
 	return true;
 }
 
-bool q2DRenderManager::update()
+bool RenderManager2D::update()
 {
 	SDL_RenderClear(active_renderer);
-	render_all_objects();
+	render_call();
 	SDL_RenderPresent(active_renderer);
 	return true;
 }
 
-void q2DRenderManager::shutdown()
+void RenderManager2D::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
@@ -91,35 +94,53 @@ void q2DRenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void q2DRenderManager::render_all_objects()
+void RenderManager2D::render_call()
 {
-	if (render_objects.size() < 1)
+	if (scene_manager == nullptr)
 		return;
 
-	for (auto&& object : render_objects)
+	auto layers = scene_manager->get_layers_ptrs_vector();
+	for (auto&& layer : layers)
 	{
-		if (object->is_visible() == false)
+		if (layer == nullptr)
 			continue;
 
-		object->update();
-		SDL_Rect position;
+		if (layer->get_is_visible() == false)
+			continue;
 
-		auto position_tuple = object->get_position();
-		position.x = int(std::get<0>(position_tuple));
-		position.y = int(std::get<1>(position_tuple));
-		position.w = object->render_rect.w;
-		position.h = object->render_rect.h;
+		auto objects = layer->get_layer_objects();
 
-		SDL_RenderCopy(
-			  active_renderer
-			, object->render_resource->texture
-			, &object->render_rect
-			, &position
-		);
+		for (auto&& obj : objects)
+		{
+			if (obj == nullptr)
+				continue;
+
+			if (obj->is_visible() == false)
+				continue;
+
+			// is this where the tick for the object is called? Is that okay?
+			obj->update();
+
+			SDL_Rect dest;
+			auto layer_pos = layer->get_offset();
+			auto obj_pos = obj->get_position();
+		
+			dest.x = int(std::get<0>(layer_pos)) + int(std::get<0>(obj_pos));
+			dest.y = int(std::get<1>(layer_pos)) + int(std::get<1>(obj_pos));
+			dest.w = obj->render_rect.w;
+			dest.h = obj->render_rect.h;
+
+			SDL_RenderCopy(
+				  active_renderer
+				, obj->render_resource->texture
+				, &obj->render_rect
+				, &dest
+			);
+		}
 	}
 }
 
-void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
 	r = utility::clamp_value_to_uint8(r);
 	g = utility::clamp_value_to_uint8(g);
@@ -129,9 +150,9 @@ void q2DRenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned 
 	SDL_UpdateWindowSurface(program_window);
 }
 
-void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
-	auto render_object = std::make_unique<RenderObject2D>();
+	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
 	render_object->set_is_visible(is_visible);
 	render_object->set_render_resource(non_owner);
 
@@ -143,10 +164,12 @@ void q2DRenderManager::register_render_object(qRenderResource * non_owner, bool 
 	render_object->render_rect.x = 0;
 	render_object->render_rect.y = 0;
 
+	auto result = static_cast<qSceneObject*>(render_object.get());
 	render_objects.push_back(std::move(render_object));
+	return result;
 }
 
-RenderObject2D * q2DRenderManager::get_render_object(int id)
+RenderObject2D * RenderManager2D::get_render_object(int id)
 {
 	for (auto&& object : render_objects)
 	{

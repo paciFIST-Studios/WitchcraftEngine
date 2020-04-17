@@ -17,16 +17,19 @@
 // characteristics will allow the render manager to perform culling.
 class RenderObject2D : public qEngineObject
 {
+public:
+	//typedef std::tuple<float, float> PositionTuple;
+
 private:
 protected:
 
-	float position_x_;
-	float position_y_;
+	float position_x;
+	float position_y;
 
-	bool is_visible_;
+	bool visible;
 
-	SDL_Color color_key_;
-	bool color_key_is_enabled_;
+	SDL_Color color_key;
+	bool color_key_enabled;
 
 public:
 	qRenderResource * render_resource;
@@ -37,17 +40,17 @@ public:
 	void set_render_resource(qRenderResource * renderResource);
 
 	// position
-	POSITION_TUPLE get_position();
+	POSITION_TUPLE get_position() const;
 	void set_position(float x, float y);
 
 	// visibility
-	bool is_visible();
+	bool is_visible() const;
 	void set_is_visible(bool is);
 
 	// transparency color
-	SDL_Color get_color_key();
+	SDL_Color get_color_key() const;
 	void set_color_key(SDL_Color key);
-	bool is_color_key_enabled();
+	bool is_color_key_enabled() const;
 	void set_color_key_enabled(bool is);
 
 	virtual void update() {};

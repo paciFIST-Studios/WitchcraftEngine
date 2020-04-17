@@ -3,11 +3,11 @@
 RenderObject2D::RenderObject2D()
 	: render_resource(nullptr)
 	, render_rect{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
-	, position_x_(uninit::FLOAT)
-	, position_y_(uninit::FLOAT)
-	, is_visible_(uninit::BOOL)
-	, color_key_{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
-	, color_key_is_enabled_(uninit::BOOL)
+	, position_x(uninit::FLOAT)
+	, position_y(uninit::FLOAT)
+	, visible(uninit::BOOL)
+	, color_key{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
+	, color_key_enabled(uninit::BOOL)
 {}
 
 void RenderObject2D::set_render_resource(qRenderResource * resource)
@@ -22,57 +22,60 @@ void RenderObject2D::set_render_resource(qRenderResource * resource)
 			render_rect.h = render_resource->surface->h;
 		}
 
-		if (color_key_is_enabled_)
+		if (color_key_enabled)
 		{
-			Uint32 color_key = SDL_MapRGB(
-				render_resource->surface->format
-				, color_key_.r
-				, color_key_.g
-				, color_key_.b
-			);
+			if (render_resource->surface != nullptr)
+			{
+				Uint32 ck = SDL_MapRGB(
+					render_resource->surface->format
+					, color_key.r
+					, color_key.g
+					, color_key.b
+				);
 
-			SDL_SetColorKey(render_resource->surface, SDL_TRUE, color_key);
+				SDL_SetColorKey(render_resource->surface, SDL_TRUE, ck);
+			}
 		}
 	}
 }
 
-POSITION_TUPLE RenderObject2D::get_position()
+POSITION_TUPLE RenderObject2D::get_position() const
 {
-	return std::make_tuple(position_x_, position_y_);
+	return std::make_tuple(position_x, position_y);
 }
 
 void RenderObject2D::set_position(float x, float y)
 {
-	position_x_ = x;
-	position_y_ = y;
+	position_x = x;
+	position_y = y;
 }
 
-bool RenderObject2D::is_visible()
+bool RenderObject2D::is_visible() const
 {
-	return is_visible_;
+	return visible;
 }
 
 void RenderObject2D::set_is_visible(bool is)
 {
-	is_visible_ = is;
+	visible = is;
 }
 
-SDL_Color RenderObject2D::get_color_key()
+SDL_Color RenderObject2D::get_color_key() const
 {
-	return color_key_;
+	return color_key;
 }
 
 void RenderObject2D::set_color_key(SDL_Color key)
 {
-	color_key_ = key;
+	color_key = key;
 }
 
-bool RenderObject2D::is_color_key_enabled()
+bool RenderObject2D::is_color_key_enabled() const
 {
-	return color_key_is_enabled_;
+	return color_key_enabled;
 }
 
 void RenderObject2D::set_color_key_enabled(bool is)
 {
-	color_key_is_enabled_ = is;
+	color_key_enabled = is;
 }

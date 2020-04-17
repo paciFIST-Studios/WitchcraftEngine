@@ -18,13 +18,13 @@
 		// Tests default initialization
 		TEST_CASE(" ResourceManager: ctor")
 		{
-			auto rm = qResourceManager();
+			auto rm = ResourceManager();
 
 			// Starts w/ no resources
 			REQUIRE(rm.get_resource_count() == 0);
 
 			// starts w/ global scope
-			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
 			
 			// find by id does not throw error, even before anthing is loaded
 			REQUIRE_NOTHROW(rm.find_resource_by_id(0));
@@ -50,12 +50,12 @@
 
 		TEST_CASE(" ResourceManager + RenderManager Load rendering assets")
 		{
-			auto rm = qResourceManager();
+			auto rm = ResourceManager();
 			// includes some testing files
 			witchcraft::configuration::create_config_files();
 
 			// default scope
-			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
 
 			REQUIRE(rm.get_resource_count() == 0);
 
@@ -65,7 +65,7 @@
 			REQUIRE(rm.get_resource_count() == 1);
 
 			// loading a resource does not change scope
-			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
 
 			rm.load_from_xml_file(bird);
 			REQUIRE(rm.get_resource_count() == 2);
@@ -83,7 +83,7 @@
 
 		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
 		{
-			auto rm = qResourceManager();
+			auto rm = ResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// does not throw, even if nothing has been loaded yet
@@ -102,15 +102,15 @@
 			// ID actually matches our request
 			REQUIRE(resource->get_resource_id() == 1);
 			// returned resource exists in its own scope, as defined by file
-			REQUIRE(resource->get_scope_id() != RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(resource->get_scope_id() != witchcraft::configuration::global_resource_scope);
 		}
 
 		TEST_CASE(" ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
 		{
-			auto rm = qResourceManager();
+			auto rm = ResourceManager();
 
 			// default scope is global
-			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
 	
 			// changing scope before loading any resources fails
 			REQUIRE(rm.set_current_scope(1) == false);
@@ -127,7 +127,7 @@
 
 		TEST_CASE(" ResourceManager::empty_cache()")
 		{
-			auto rm = qResourceManager();
+			auto rm = ResourceManager();
 			witchcraft::configuration::create_config_files();
 
 			// Does not throw, even if you call before anything has been loaded
@@ -157,7 +157,7 @@
 
 			rm.empty_cache();
 			// emptying cache also sets back to global scope
-			REQUIRE(rm.get_current_scope() == RESOURCE_GLOBAL_SCOPE);
+			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
 		}
 	#endif // RUN_UNIT_TESTS
 

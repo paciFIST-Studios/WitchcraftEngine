@@ -5,11 +5,12 @@
 
 typedef enum {SE_TIMER_EXPIRED=0}SCENE_EVENT_TYPE;
 
-class cSceneListener
+class SceneManager2D;
+
+class qSceneListener : public qEngineObject
 {
 public:
-	SCENE_EVENT_TYPE _listening_for_type;
-
+	SCENE_EVENT_TYPE listening_for;
 	virtual void event(SceneManager2D const & manager, void * callback_data) const = 0;
 };
 

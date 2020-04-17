@@ -11,13 +11,19 @@ void Engine::startup()
 
 
 	// messaging layer
-	// todo
-
+	
 	PLOGI << witchcraft::log_strings::resource_manager_start;
-	resource = std::make_unique<qResourceManager>();
+	resource = std::make_unique<ResourceManager>();
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<q2DRenderManager>();
+	render = std::make_unique<RenderManager2D>();
+
+	PLOGI << witchcraft::log_strings::scene_manager_start;
+	scene = std::make_unique<SceneManager2D>();
+
+	// this will be replaced by messaging system
+	render->set_scene_manager(scene.get());
+	scene->set_render_manager(render.get());
 }
 
 void Engine::run()
@@ -36,7 +42,6 @@ void Engine::run()
 		, witchcraft::configuration::witchcraft_program_title.c_str()
 		);
 	
-
 	if (init_successful == false)
 	{
 		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError(); 
@@ -45,9 +50,10 @@ void Engine::run()
 		return;
 	}
 	
-	// ----------------------------------------------------------------------------------
+	// - Load objects ---------------------------------------------------------------------------------
 
 	int buddha_resource_id;
+	qSceneObject * buddha_scene_object = nullptr;
 	// once the project loader exists, we can load files, based on what it says.
 	// loop over a set of strings, which are our asset paths
 	{
@@ -60,21 +66,24 @@ void Engine::run()
 		auto render_resource = static_cast<qRenderResource*>(rr);
 		render_resource->bind_renderer(render->active_renderer);
 		render_resource->load();
-		render->register_render_object(render_resource);
+		buddha_scene_object = render->register_render_object(render_resource);
 		buddha_resource_id = id;
 	}
 
-	int const move_speed = 20;
-	auto buddha = render->get_render_object(buddha_resource_id);
+
+	// - Add objects to layers ---------------------------------------------------------------------------------
 	
-	// ----------------------------------------------------------------------------------
+	auto buddha_layer = scene->add_layer("buddha");
+	buddha_layer->set_is_visible(true);
+	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
+
+	// - Dubug stuff ---------------------------------------------------------------------------------
 
 	SDL_Color debug_text_color = { 0, 0, 0, 255 };
 	
 	std::stringstream debug_text_fps;
 
-	// ----------------------------------------------------------------------------------
-
+	// - Game Loop ---------------------------------------------------------------------------------
 
 	bool debug_emit_frame_length = false;
 	bool gameplay_loop_is_running = true;
@@ -104,25 +113,42 @@ void Engine::run()
 			// check moar events
 		}
 	
-		// do input update
+		// - Input Update ---------------------------------------------------------------------------------
+
 		int key_state_len = 0;
 		const Uint8 * key_state = SDL_GetKeyboardState(&key_state_len);
 
 		if (key_state[SDL_SCANCODE_W])
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 0, -1);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, -1);
 		}
 		else if (key_state[SDL_SCANCODE_S]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 0,  1);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0,  1);
 		}
 		else if (key_state[SDL_SCANCODE_A]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, -1, 0);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, -1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_D]) 
 		{
-			witchcraft::engine::move_object_by_vector(buddha, 1, 0);
+			witchcraft::engine::move_object_by_vector(buddha_scene_object, 1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_UP])
+		{
+			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, -1);
+		}
+		else if (key_state[SDL_SCANCODE_RIGHT])
+		{
+			witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
+		}
+		else if (key_state[SDL_SCANCODE_DOWN])
+		{
+			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
+		}
+		else if (key_state[SDL_SCANCODE_LEFT])
+		{
+			witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
 		}
 		else if (key_state[SDL_SCANCODE_1])
 		{
@@ -130,24 +156,27 @@ void Engine::run()
 		}
 		else if (key_state[SDL_SCANCODE_2])
 		{
-			buddha->set_position(100, 100);
+			buddha_scene_object->set_position(100, 100);
 		}
 
+		// - Physics Update ---------------------------------------------------------------------------------
 
-		// do physics update
-	
-		// do render update
+
+		// - Render Update ---------------------------------------------------------------------------------
+
 		render->update();
-	
-		// do sound update
+
+		// - Sound Update ---------------------------------------------------------------------------------
+
+
+		// - Debug ---------------------------------------------------------------------------------
 		
 		if (debug_emit_frame_length)
 		{
 			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
 		}
 
-
-
+		// yield for the rest of the frame
 	} // !game_loop
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;

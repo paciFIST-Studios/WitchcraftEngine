@@ -6,16 +6,25 @@
 
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
+		
+		#include <string>
 
 		#include "render_manager_2d.h"
 
-		TEST_CASE(" q2DRenderManager")
-		{
-			
-			//  draw any loaded graphical item
+		TEST_CASE(" RenderManager2D")
+		{			
+			// draw any loaded graphical item
 			// drawn item appears at any valid xy position
 		}
 
+		class TestRenderManager2D : public RenderManager2D
+		{
+		public:
+		};
+		
+		TEST_CASE(" RenderManager2D:: ")
+		{
+		}
 
 	#endif // RUN_UNIT_TESTS
 

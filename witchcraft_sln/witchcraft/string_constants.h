@@ -70,6 +70,10 @@ namespace witchcraft
 		static std::string const render_manager_stop = "render manager stop";
 		static std::string const render_manager_init_failure = "FAILURE! Could not initialize render manager.  Exiting Program";
 
+		static std::string const scene_manager_start = "scene manager start";
+		static std::string const scene_manager_stop = "scene manager stop";
+		static std::string const scene_manager_init_failure = "FAILURE! Could not initialize scene manager.  Exiting Program.";
+
 		static std::string const sdl_start = "sdl start";
 		static std::string const sdl_stop = "sdl stop";
 		static std::string const sdl_break_event_polling = "breaking out of sdl event polling";

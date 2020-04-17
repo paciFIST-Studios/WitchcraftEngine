@@ -32,10 +32,10 @@ class Engine : public qEngineObject
 private:
 protected:
 
-	//std::unique_ptr<cMessageManager> message;
-	std::unique_ptr<qResourceManager> resource;
-	std::unique_ptr<q2DRenderManager> render;
-	//std::unique_ptr<cSceneManager> scene;
+	//std::unique_ptr<MessageManager> message;
+	std::unique_ptr<ResourceManager> resource;
+	std::unique_ptr<RenderManager2D> render;
+	std::unique_ptr<SceneManager2D> scene;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
 
@@ -56,11 +56,10 @@ public:
 	{}
 
 	Engine(EngineInitializer init) 
-	: current_engine_state(EEngineState::CONSTRUCTED)
-	{
-		id = init.id;
-		tm_early_exit = init.tm_early_exit;
-	}
+	: qEngineObject(init.id)
+	, tm_early_exit(init.tm_early_exit)
+	, current_engine_state(EEngineState::CONSTRUCTED)
+	{}
 };
 
 
@@ -74,6 +73,14 @@ namespace witchcraft
 			auto _x = x + int(std::get<0>(wh));
 			auto _y = y + int(std::get<1>(wh));
 			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
+		}
+
+		static void move_layer_by_vector(Layer2D * layer, int x, int y)
+		{
+			auto wh = layer->get_offset();
+			auto _x = x + int(std::get<0>(wh));
+			auto _y = y + int(std::get<1>(wh));
+			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
 		}
 
 		static Uint32 get_delta_time()

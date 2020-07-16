@@ -104,9 +104,15 @@ ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(X
 // returns a NON-OWNING ptr
 qResource * ResourceManager::find_resource_by_id(unsigned int UUID)
 {
-	if (resource_count == 0)
+	if (resource_count == 0){ return nullptr; }
+
+	if (UUID == -1)
+	{ 
+		PLOGE << "NO RESOURCE FOUND!"; 
 		return nullptr;
-	
+	}
+
+
 	// iterate through all of the scene ids
 	for (auto&& resource_kvp : resource_map)
 	{
@@ -154,7 +160,10 @@ void ResourceManager::empty_cache()
 int ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
+	{
+		PLOGE << "ERROR: FILE DOES NOT EXIST; path: \"" << file << "\"";
 		return -1;
+	}
 
 	XML::file<> config_file(file.c_str());
 	XML::xml_document<> doc;

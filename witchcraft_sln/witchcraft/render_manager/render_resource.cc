@@ -54,6 +54,13 @@ void qRenderResource::unload()
 
 void qRenderResource::bind_renderer(SDL_Renderer * renderer)
 {
+	if (this == nullptr)
+	{
+		PLOGE << "WARNING: RENDER RESOURCE IS NOT FULLY INITIALIZED";
+		// todo: print callstack so we know what happened here
+		return;
+	}
+
 	if (renderer != nullptr)
 	{
 		this->renderer = renderer;

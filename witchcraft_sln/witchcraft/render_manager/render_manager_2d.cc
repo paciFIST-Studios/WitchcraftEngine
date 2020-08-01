@@ -12,6 +12,9 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	// use for setting flag options
 	if (true)
 	{
+		// we shouldn't do joystick stuff in the renderer
+		// but this is where we're initializing SDL right now
+		//flags = flags | SDL_INIT_JOYSTICK;
 		flags = flags | SDL_INIT_EVERYTHING;
 	}
 
@@ -157,7 +160,7 @@ qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_own
 	render_object->set_render_resource(non_owner);
 
 	// This SDL_Rect covers the parts of the texture we will display
-	// We're sizing it to include the entire texture
+	// We're sizing it to include the entire texture (ie: no sprite atlas support)
 	auto wh = non_owner->get_width_height();
 	render_object->render_rect.w = std::get<0>(wh);
 	render_object->render_rect.h = std::get<1>(wh);

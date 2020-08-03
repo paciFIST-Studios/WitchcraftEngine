@@ -72,11 +72,21 @@ namespace witchcraft
 {
 	namespace engine
 	{
+		static int clamp_to_range(int value, int bottom, int top)
+		{
+			if (value < bottom) return bottom;
+			if (value > top) return top;
+			return value;
+		}
+
 		static void move_object_by_vector(RenderObject2D * object, int x, int y)
 		{
 			auto wh = object->get_position(); // width, height
 			auto _x = x + int(std::get<0>(wh));
 			auto _y = y + int(std::get<1>(wh));
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			_x = clamp_to_range(_x, 0, 768);
+			_y = clamp_to_range(_y, 0, 768);
 			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
 		}
 

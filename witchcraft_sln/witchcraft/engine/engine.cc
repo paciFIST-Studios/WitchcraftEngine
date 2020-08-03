@@ -8,7 +8,7 @@ void Engine::startup()
 	if (tm_early_exit) return;
 
 	// project loader runs here, so we have access to our config info and save files
-
+	{}
 
 	// messaging layer
 	
@@ -34,11 +34,11 @@ void Engine::run()
 
 	// todo: use initializer struct
 	bool init_successful = render->init(
-		  0			// x offset
-		, 0			// y offset
-		, 800		// x size - width
-		, 800		// y size - height
-		, false		// fullscreen
+		  witchcraft::configuration::default_window_x_offset
+		, witchcraft::configuration::default_window_y_offset
+		, witchcraft::configuration::default_window_x_width
+		, witchcraft::configuration::default_window_y_height
+		, witchcraft::configuration::default_window_start_fullscreen
 		, witchcraft::configuration::witchcraft_program_title.c_str()
 		);
 	
@@ -50,6 +50,14 @@ void Engine::run()
 		return;
 	}
 	
+
+	// the renderer initializes SDL, so this code MUST follow render init
+	{
+		gameController = SDL_JoystickOpen(0);
+	}
+
+
+
 	// - Load objects ---------------------------------------------------------------------------------
 
 	int buddha_resource_id;
@@ -70,12 +78,32 @@ void Engine::run()
 		buddha_resource_id = id;
 	}
 
+	//// pitch (field)
+	//int soccer_pitch_id;
+	//qSceneObject * soccer_pitch_scene_object = nullptr;
+	//{
+	//	auto id = resource->load_from_xml_file("");
+	//	auto rr = resource->find_resource_by_id(id);
+	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	render_resource->bind_renderer(render->active_renderer);
+	//	render_resource->load();
+	//	soccer_pitch_scene_object = render->register_render_object(render_resource);
+	//	soccer_pitch_id = id;
+	//}
+
 
 	// - Add objects to layers ---------------------------------------------------------------------------------
-	
+
+	// buddha
 	auto buddha_layer = scene->add_layer("buddha");
 	buddha_layer->set_is_visible(true);
 	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
+
+	//// pitch (field)
+	//auto soccer_pitch_layer = scene->add_layer("pitch");
+	//soccer_pitch_layer->set_is_visible(true);
+	//soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
+
 
 	// - Dubug stuff ---------------------------------------------------------------------------------
 
@@ -86,16 +114,25 @@ void Engine::run()
 	// - Game Loop ---------------------------------------------------------------------------------
 
 	bool debug_emit_frame_length = false;
+	bool debug_emit_controller_count = false;
+	bool debug_emit_controller_state = false;
 	bool gameplay_loop_is_running = true;
 	SDL_Event window_event;
 	Uint32 last_frame_time = SDL_GetTicks();
 	Uint32 current_frame_time = 0;
+
+	int const controller_idx = 0;
+
+	float player_0_x_input = 0.0f;
+	float player_0_y_input = 0.0f;
 
 	PLOGI << witchcraft::log_strings::game_loop_start;
 	while (gameplay_loop_is_running)
 	{
 		last_frame_time = current_frame_time;
 		current_frame_time = SDL_GetTicks();
+
+		// - Event Update ---------------------------------------------------------------------------------
 
 		if (SDL_PollEvent(&window_event))
 		{
@@ -109,14 +146,67 @@ void Engine::run()
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-			}	
+			}
+
+			// - Gamepad Events ------------------------------------------------------------------------
+
+			else if (window_event.jaxis.which == controller_idx)
+			{
+				// x-axis
+				if (window_event.jaxis.axis == 0)
+				{
+					// left of dead zone
+					if (window_event.jaxis.value < -JOYSTICK_DEAD_ZONE)
+					{
+						player_0_x_input = -1;
+					}
+					// right of deadzone
+					else if (window_event.jaxis.value > JOYSTICK_DEAD_ZONE)
+					{
+						player_0_x_input = 1;
+					}
+					// deadzone
+					else
+					{
+						player_0_x_input = 0.0f;
+					}
+				}
+				// y-axis
+				else if (window_event.jaxis.axis == 1)
+				{
+					// below dead zone
+					if (window_event.jaxis.value < -JOYSTICK_DEAD_ZONE)
+					{
+						player_0_y_input = -1;
+					}
+					// above dead zone
+					else if (window_event.jaxis.value > JOYSTICK_DEAD_ZONE)
+					{
+						player_0_y_input = 1;
+					}
+					// deadzone
+					else
+					{
+						player_0_y_input = 0.0f;
+					}
+				}
+			}
+
+			// - Keyboard events ----------------------------------------------------------------------
+
+
 			// check moar events
 		}
 	
+		if (debug_emit_controller_state)
+		{
+			std::cout << "Controller[0](x,y): " << player_0_x_input << ", " << player_0_y_input << std::endl;
+		}
+
 		// - Input Update ---------------------------------------------------------------------------------
 
 		int key_state_len = 0;
-		const Uint8 * key_state = SDL_GetKeyboardState(&key_state_len);
+		Uint8 const * key_state = SDL_GetKeyboardState(&key_state_len);
 
 		if (key_state[SDL_SCANCODE_W])
 		{
@@ -158,8 +248,18 @@ void Engine::run()
 		{
 			buddha_scene_object->set_position(100, 100);
 		}
+		else if (key_state[SDL_SCANCODE_3])
+		{
+			debug_emit_controller_count = true;
+			gameController = witchcraft::engine::get_controller(0);
+		}
+
+
+
 
 		// - Physics Update ---------------------------------------------------------------------------------
+
+		witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
 
 
 		// - Render Update ---------------------------------------------------------------------------------
@@ -171,6 +271,7 @@ void Engine::run()
 
 		// - Debug ---------------------------------------------------------------------------------
 		
+
 		if (debug_emit_frame_length)
 		{
 			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
@@ -188,6 +289,10 @@ void Engine::shutdown()
 	current_engine_state = EEngineState::SHUTDOWN;
 	if (tm_early_exit) return;
 
+	// we're going to shut down SDL in the renderer, so all SDL components
+	// have to be closed by then
+	SDL_JoystickClose(gameController);
+	gameController = nullptr;
 
 	render->shutdown();
 	PLOGI << witchcraft::log_strings::render_manager_stop;

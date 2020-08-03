@@ -23,7 +23,7 @@ enum class EEngineState : unsigned char
 struct EngineInitializer
 {
 	unsigned int id;
-	bool tm_early_exit;
+	bool tm_early_exit; // tm = testing mode
 };
 
 
@@ -41,6 +41,11 @@ protected:
 
 	// testing modes
 	bool tm_early_exit;
+
+
+	int const JOYSTICK_DEAD_ZONE = 8000;
+	SDL_Joystick * gameController = nullptr;
+
 
 
 public:
@@ -69,7 +74,7 @@ namespace witchcraft
 	{
 		static void move_object_by_vector(RenderObject2D * object, int x, int y)
 		{
-			auto wh = object->get_position();
+			auto wh = object->get_position(); // width, height
 			auto _x = x + int(std::get<0>(wh));
 			auto _y = y + int(std::get<1>(wh));
 			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
@@ -77,7 +82,7 @@ namespace witchcraft
 
 		static void move_layer_by_vector(Layer2D * layer, int x, int y)
 		{
-			auto wh = layer->get_offset();
+			auto wh = layer->get_offset();  // width, height
 			auto _x = x + int(std::get<0>(wh));
 			auto _y = y + int(std::get<1>(wh));
 			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
@@ -110,12 +115,37 @@ namespace witchcraft
 			out << "\nfps: " << 1.f / delta_time;
 			return out.str();
 		}
+
+		static int connnected_controller_count()
+		{
+			return SDL_NumJoysticks();
+		}
+
+		static SDL_Joystick * get_controller(int idx)
+		{
+			if (idx < 0) return nullptr;
+
+			if (connnected_controller_count() > 0)
+				return SDL_JoystickOpen(idx);
+
+			return nullptr;
+		}
+
+
 	}
 
 	namespace configuration
 	{
+		bool const default_window_start_fullscreen = false;
+		int const default_window_x_width = 800;
+		int const default_window_y_height = 800;
+		int const default_window_x_offset = 0;
+		int const default_window_y_offset = 0;
+
+
 		int const screen_fps = 60;
-		float const frame_length_ms = 1000/screen_fps;
+		float const frame_length_ms = static_cast<float>(screen_fps * 0.001f); // same as division by 1000
+
 	}
 }
 

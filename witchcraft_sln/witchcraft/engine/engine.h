@@ -81,9 +81,9 @@ namespace witchcraft
 
 		static void move_object_by_vector(RenderObject2D * object, int x, int y)
 		{
-			auto wh = object->get_position(); // width, height
-			auto _x = x + int(std::get<0>(wh));
-			auto _y = y + int(std::get<1>(wh));
+			auto pos = object->get_position();
+			auto _x = x + int(std::get<0>(pos));
+			auto _y = y + int(std::get<1>(pos));
 			// HACK: 20200802 - EB - clamp movement to visible screen area, 
 			_x = clamp_to_range(_x, 0, 768);
 			_y = clamp_to_range(_y, 0, 768);
@@ -92,9 +92,9 @@ namespace witchcraft
 
 		static void move_layer_by_vector(Layer2D * layer, int x, int y)
 		{
-			auto wh = layer->get_offset();  // width, height
-			auto _x = x + int(std::get<0>(wh));
-			auto _y = y + int(std::get<1>(wh));
+			auto pos = layer->get_offset();
+			auto _x = x + int(std::get<0>(pos));
+			auto _y = y + int(std::get<1>(pos));
 			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
 		}
 

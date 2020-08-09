@@ -138,104 +138,152 @@ void Engine::run()
 		current_frame_time = SDL_GetTicks();
 
 		// - Event Update ---------------------------------------------------------------------------------
-
+		// TODO: process more than one event per tick
 		if (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
 				break;
 	
-			if (window_event.type == SDL_KEYDOWN)
+			// Keyboard events
+			if (witchcraft::engine::is_keyboard_event(window_event))
 			{
-				if (window_event.key.keysym.sym == SDLK_ESCAPE)
+				auto key_pressed = window_event.key.keysym.sym;
+				switch (key_pressed) {
+				case SDLK_ESCAPE:
+					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
+					gameplay_loop_is_running = false;
+					break;
+
+					// WASD
+				case SDLK_w:
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, -1);
+					break;
+				case SDLK_s:
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, 1);
+					break;
+				case SDLK_a:
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, -1, 0);
+					break;
+				case SDLK_d:
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 1, 0);
+					break;
+
+					// Arrows
+				case SDLK_UP:
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 0, -1);
+					break;
+				case SDLK_RIGHT:
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
+					break;
+				case SDLK_DOWN:
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
+					break;
+				case SDLK_LEFT:
+					witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
+					break;
+
+					// Numeric
+				case SDLK_1:
+					debug_emit_frame_length = !debug_emit_frame_length;
+					break;
+				case SDLK_2:
+					buddha_scene_object->set_position(100, 100);
+					break;
+				case SDLK_3:
+					debug_emit_controller_count = true;
+					gameController = witchcraft::engine::get_controller(0);
+					break;
+				case SDLK_4:
+					break;
+				case SDLK_5:
+					break;
+				case SDLK_6:
+					break;
+				case SDLK_7:
+					break;
+				case SDLK_8:
+					break;
+				case SDLK_9:
+					break;
+				case SDLK_0:
+					break;
+				}
+			} // end keyboard events
+
+			// - Gamepad Events ------------------------------------------------------------------------
+			else if (witchcraft::engine::is_gamepad_event(window_event))
+			{
+				// start button is quit
+				if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
 				{
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-			}
-
-			// - Gamepad Events ------------------------------------------------------------------------
-
-			// start button is quit
-			else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
-			{
-				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-				gameplay_loop_is_running = false;
-			}
-
-			//// 'nintendo' buttons
-			//else if (window_event.caxis.which == controller_idx)
-			//{
-			//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-			//	{
-			//		std::cout << "controller: [A]\n";
-			//	}
-			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-			//	{
-			//		std::cout << "controller: [B]\n";
-			//	}
-			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-			//	{
-			//		std::cout << "controller: [X]\n";
-			//	}
-			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
-			//	{
-			//		std::cout << "controller: [Y]\n";
-			//	}
-			//}
-
-			// controller axes
-			else if (window_event.caxis.which == controller_idx)
-			{
-				// x-axis
-				if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
+	
+				//// 'nintendo' buttons
+				//else if (window_event.caxis.which == controller_idx)
+				//{
+				//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+				//	{
+				//		std::cout << "controller: [A]\n";
+				//	}
+				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+				//	{
+				//		std::cout << "controller: [B]\n";
+				//	}
+				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+				//	{
+				//		std::cout << "controller: [X]\n";
+				//	}
+				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
+				//	{
+				//		std::cout << "controller: [Y]\n";
+				//	}
+				//}
+	
+				// gamepad axes
+				else if (window_event.caxis.which == controller_idx)
 				{
-					// left of dead zone
-					if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+					// x-axis
+					if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
 					{
-						player_0_x_input = -1.f;
+						// left of dead zone
+						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+						{
+							player_0_x_input = -1.f;
+						}
+						// right of deadzone
+						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+						{
+							player_0_x_input = 1.f;
+						}
+						// deadzone
+						else
+						{
+							player_0_x_input = 0.0f;
+						}
 					}
-					// right of deadzone
-					else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+					// y-axis
+					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
 					{
-						player_0_x_input = 1.f;
+						// below dead zone
+						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+						{
+							player_0_y_input = -1.f;
+						}
+						// above dead zone
+						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+						{
+							player_0_y_input = 1.f;
+						}
+						// deadzone
+						else
+						{
+							player_0_y_input = 0.0f;
+						}
 					}
-					// deadzone
-					else
-					{
-						player_0_x_input = 0.0f;
-					}
-				}
-				// y-axis
-				else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
-				{
-					// below dead zone
-					if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-					{
-						player_0_y_input = -1.f;
-					}
-					// above dead zone
-					else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-					{
-						player_0_y_input = 1.f;
-					}
-					// deadzone
-					else
-					{
-						player_0_y_input = 0.0f;
-					}
-				}
-
-
-
-
-
-			}
-
-			// - Keyboard events ----------------------------------------------------------------------
-
-
-
-
+				} // end gamepad axis events
+			} // end gamepad events
 
 
 			// check moar events
@@ -246,65 +294,10 @@ void Engine::run()
 			std::cout << "Controller[0](x,y): " << player_0_x_input << ", " << player_0_y_input << std::endl;
 		}
 
-		// - Input Update ---------------------------------------------------------------------------------
-
-		int key_state_len = 0;
-		Uint8 const * key_state = SDL_GetKeyboardState(&key_state_len);
-
-		if (key_state[SDL_SCANCODE_W])
-		{
-			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, -1);
-		}
-		else if (key_state[SDL_SCANCODE_S]) 
-		{
-			witchcraft::engine::move_object_by_vector(buddha_scene_object, 0,  1);
-		}
-		else if (key_state[SDL_SCANCODE_A]) 
-		{
-			witchcraft::engine::move_object_by_vector(buddha_scene_object, -1, 0);
-		}
-		else if (key_state[SDL_SCANCODE_D]) 
-		{
-			witchcraft::engine::move_object_by_vector(buddha_scene_object, 1, 0);
-		}
-		else if (key_state[SDL_SCANCODE_UP])
-		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, -1);
-		}
-		else if (key_state[SDL_SCANCODE_RIGHT])
-		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
-		}
-		else if (key_state[SDL_SCANCODE_DOWN])
-		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
-		}
-		else if (key_state[SDL_SCANCODE_LEFT])
-		{
-			witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
-		}
-		else if (key_state[SDL_SCANCODE_1])
-		{
-			debug_emit_frame_length = !debug_emit_frame_length;
-		}
-		else if (key_state[SDL_SCANCODE_2])
-		{
-			buddha_scene_object->set_position(100, 100);
-		}
-		else if (key_state[SDL_SCANCODE_3])
-		{
-			debug_emit_controller_count = true;
-			gameController = witchcraft::engine::get_controller(0);
-		}
-
-
-
-
 		// - Physics Update ---------------------------------------------------------------------------------
 
 		witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
-
-
+		
 		// - Render Update ---------------------------------------------------------------------------------
 
 		render->update();

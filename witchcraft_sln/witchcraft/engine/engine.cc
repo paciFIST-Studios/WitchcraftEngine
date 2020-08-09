@@ -138,10 +138,10 @@ void Engine::run()
 		current_frame_time = SDL_GetTicks();
 
 		// - Event Update ---------------------------------------------------------------------------------
-		// TODO: process more than one event per tick
-		if (SDL_PollEvent(&window_event))
+		while (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
+				gameplay_loop_is_running = false;
 				break;
 	
 			// Keyboard events

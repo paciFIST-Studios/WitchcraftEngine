@@ -16,6 +16,7 @@ void qRenderResource::attempt_load(std::string const & file_name)
 
 	//texture = IMG_LoadTexture(renderer, file_name.c_str());
 
+	// this requires the c_str
 	surface = IMG_Load(file_name.c_str());
 
 	if (surface)
@@ -33,7 +34,7 @@ qRenderResource::~qRenderResource()
 void qRenderResource::load()
 {
 	unload();
-	attempt_load(_file_name.c_str());
+	attempt_load(_file_name);
 }
 
 void qRenderResource::unload()

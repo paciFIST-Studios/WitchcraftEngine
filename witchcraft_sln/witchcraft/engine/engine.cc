@@ -83,7 +83,7 @@ void Engine::run()
 	int soccer_pitch_id;
 	qSceneObject * soccer_pitch_scene_object = nullptr;
 	{
-		auto id = resource->load_from_xml_file("asset/soccer_game/stadium.asset");
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/stadium.asset");
 		auto rr = resource->find_resource_by_id(id);
 		auto render_resource = static_cast<qRenderResource*>(rr);
 		render_resource->bind_renderer(render->active_renderer);

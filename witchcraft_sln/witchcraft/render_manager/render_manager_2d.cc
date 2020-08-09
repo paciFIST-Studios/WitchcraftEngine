@@ -145,9 +145,9 @@ void RenderManager2D::render_call()
 
 void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
-	r = utility::clamp_value_to_uint8(r);
-	g = utility::clamp_value_to_uint8(g);
-	b = utility::clamp_value_to_uint8(b);
+	r = utility::clamp_to_0_255(r);
+	g = utility::clamp_to_0_255(g);
+	b = utility::clamp_to_0_255(b);
 
 	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(program_window);

@@ -50,6 +50,65 @@
 			REQUIRE(utility::file_exists(OUTFILE_PATH.c_str()) == false);
 		}
 
+		TEST_CASE(" Utility::clamp_to_range(t val, t bottom, t top)")
+		{
+			int value = -1;
+			int bottom = 0;
+			int top = 2;
+
+			// test lower bounding
+			{
+				auto result = utility::clamp_to_range(value, bottom, top);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == bottom);
+			}
+
+			// test pass through
+			{
+				value = 1.f; // float should implicitly cast to int
+				auto result = utility::clamp_to_range(value, bottom, top);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == value);
+			}
+
+			// test upper bounding
+			{
+				value = 3.0; // double should implicitly cast to int
+				auto result = utility::clamp_to_range(value, bottom, top);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == top);
+			}
+		}
+
+		TEST_CASE(" Utility::clamp_to_0_255")
+		{
+			long value = -1;
+			
+			// test lower bounding
+			{
+				auto result = utility::clamp_to_0_255(value);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == 0);
+			}
+
+			// test pass through
+			{
+				value = 10;
+				auto result = utility::clamp_to_0_255(value);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == value);
+			}
+
+			// test upper bounding
+			{
+				value = MAXLONG;
+				auto result = utility::clamp_to_0_255(value);
+				REQUIRE(typeid(result) == typeid(value));
+				REQUIRE(result == 255);
+			}
+		}
+
+
 	#endif // RUN_UNIT_TESTS
 
 #endif // TEST_EXCEPTION_CC

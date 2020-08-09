@@ -61,14 +61,19 @@
 		//}
 				
 		template<typename t>
-		static t clamp_value_to_uint8(t val)
+		static t clamp_to_0_255(t val)
 		{
-			if (val < 0)
-				return 0;
-			else if (val > 255)
-				return 255;
-			else
-				return val;
+			t bottom = 0;
+			t top = 255;
+			return utility::clamp_to_range(val, bottom, top);
+		}
+
+		template<typename t>
+		static t clamp_to_range(t value, t bottom, t top)
+		{
+			if (value < bottom) return bottom;
+			if (value > top) return top;
+			return value;
 		}
 
 

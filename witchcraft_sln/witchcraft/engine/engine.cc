@@ -98,7 +98,7 @@ void Engine::run()
 	// NOTE: this is back-to-front ordering
 
 	// pitch (field)
-	auto soccer_pitch_layer = scene->add_layer("pitch");
+	auto soccer_pitch_layer = scene->add_layer("soccer_pitch");
 	soccer_pitch_layer->set_is_visible(true);
 	soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
 
@@ -149,67 +149,69 @@ void Engine::run()
 			// Keyboard events
 			if (witchcraft::engine::is_keyboard_event(window_event))
 			{
-				auto key_pressed = window_event.key.keysym.sym;
-				switch (key_pressed) {
-				case SDLK_ESCAPE:
-					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-					gameplay_loop_is_running = false;
-					break;
+				if (window_event.key.type == SDL_KEYDOWN)
+				{
+					switch (window_event.key.keysym.sym) {
+					case SDLK_ESCAPE:
+						PLOGI << witchcraft::log_strings::sdl_break_event_polling;
+						gameplay_loop_is_running = false;
+						break;
 
-					// WASD
-				case SDLK_w:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
-					break;
-				case SDLK_s:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
-					break;
-				case SDLK_a:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
-					break;
-				case SDLK_d:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
-					break;
+						// WASD
+					case SDLK_w:
+						witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
+						break;
+					case SDLK_s:
+						witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
+						break;
+					case SDLK_a:
+						witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
+						break;
+					case SDLK_d:
+						witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
+						break;
 
-					// Arrows
-				case SDLK_UP:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
-					break;
-				case SDLK_RIGHT:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 1.f, 0.0f);
-					break;
-				case SDLK_DOWN:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, 1.f);
-					break;
-				case SDLK_LEFT:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
-					break;
+						// Arrows
+					case SDLK_UP:
+						witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
+						break;
+					case SDLK_RIGHT:
+						witchcraft::engine::move_layer_by_vector(buddha_layer, 1.f, 0.0f);
+						break;
+					case SDLK_DOWN:
+						witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, 1.f);
+						break;
+					case SDLK_LEFT:
+						witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
+						break;
 
-					// Numeric
-				case SDLK_1:
-					debug_emit_frame_length = !debug_emit_frame_length;
-					break;
-				case SDLK_2:
-					buddha_scene_object->set_position(100.f, 100.f);
-					break;
-				case SDLK_3:
-					debug_emit_controller_count = true;
-					gameController = witchcraft::engine::get_controller(0);
-					break;
-				case SDLK_4:
-					debug_emit_controller_state = !debug_emit_controller_state;
-					break;
-				case SDLK_5:
-					break;
-				case SDLK_6:
-					break;
-				case SDLK_7:
-					break;
-				case SDLK_8:
-					break;
-				case SDLK_9:
-					break;
-				case SDLK_0:
-					break;
+						// Numeric
+					case SDLK_1:
+						debug_emit_frame_length = !debug_emit_frame_length;
+						break;
+					case SDLK_2:
+						buddha_scene_object->set_position(100.f, 100.f);
+						break;
+					case SDLK_3:
+						debug_emit_controller_count = true;
+						gameController = witchcraft::engine::get_controller(0);
+						break;
+					case SDLK_4:
+						debug_emit_controller_state = !debug_emit_controller_state;
+						break;
+					case SDLK_5:
+						break;
+					case SDLK_6:
+						break;
+					case SDLK_7:
+						break;
+					case SDLK_8:
+						break;
+					case SDLK_9:
+						break;
+					case SDLK_0:
+						break;
+					}
 				}
 			} // end keyboard events
 
@@ -222,28 +224,32 @@ void Engine::run()
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-	
-				//// 'nintendo' buttons
-				//else if (window_event.caxis.which == controller_idx)
-				//{
-				//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-				//	{
-				//		std::cout << "controller: [A]\n";
-				//	}
-				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-				//	{
-				//		std::cout << "controller: [B]\n";
-				//	}
-				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-				//	{
-				//		std::cout << "controller: [X]\n";
-				//	}
-				//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
-				//	{
-				//		std::cout << "controller: [Y]\n";
-				//	}
-				//}
-	
+				// button down
+				if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
+				{
+					// 'nintendo' buttons
+					if (window_event.caxis.which == controller_idx)
+					{
+						if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+						{
+							std::cout << "controller: [A]\ttoggle_layer_visibility\n";
+							witchcraft::engine::toggle_layer_visibility(buddha_layer);
+						}
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+						{
+							std::cout << "controller: [B]\ttoggle_layer_visibility\n";
+							witchcraft::engine::toggle_layer_visibility(soccer_pitch_layer);
+						}
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+						{
+							std::cout << "controller: [X]\n";
+						}
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
+						{
+							std::cout << "controller: [Y]\n";
+						}
+					}
+				}
 				// gamepad axes
 				else if (window_event.caxis.which == controller_idx)
 				{
@@ -287,15 +293,8 @@ void Engine::run()
 					}
 				} // end gamepad axis events
 			} // end gamepad events
-
-
-			// check moar events
-		}
+		}	// end event update loop
 	
-		if (debug_emit_controller_state)
-		{
-			std::cout << "Controller[0](x,y): " << player_0_x_input << ", " << player_0_y_input << std::endl;
-		}
 
 		// - Physics Update ---------------------------------------------------------------------------------
 
@@ -309,7 +308,11 @@ void Engine::run()
 
 
 		// - Debug ---------------------------------------------------------------------------------
-		
+
+		if (debug_emit_controller_state)
+		{
+			std::cout << "Controller[0](x,y): " << player_0_x_input << ", " << player_0_y_input << std::endl;
+		}
 
 		if (debug_emit_frame_length)
 		{

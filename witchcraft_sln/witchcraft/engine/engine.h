@@ -144,8 +144,8 @@ namespace witchcraft
 
 		static bool is_keyboard_event(SDL_Event const & e)
 		{
-			if (e.type == SDL_KEYDOWN
-				//e.type == SDL_KEYUP
+			if (e.type == SDL_KEYDOWN ||
+				e.type == SDL_KEYUP
 			)
 			{
 				return true;
@@ -158,11 +158,10 @@ namespace witchcraft
 		{			
 			if (e.type == SDL_CONTROLLERBUTTONDOWN ||
 				e.type == SDL_CONTROLLERBUTTONUP   ||
-				e.type == SDL_CONTROLLERAXISMOTION 
-				// ||
-				//e.type == SDL_CONTROLLERDEVICEADDED   ||
-				//e.type == SDL_CONTROLLERDEVICEREMOVED ||
-				//e.type == SDL_CONTROLLERDEVICEREMAPPED
+				e.type == SDL_CONTROLLERAXISMOTION ||
+				e.type == SDL_CONTROLLERDEVICEADDED   ||
+				e.type == SDL_CONTROLLERDEVICEREMOVED ||
+				e.type == SDL_CONTROLLERDEVICEREMAPPED
 				)
 			{
 				return true;
@@ -170,6 +169,14 @@ namespace witchcraft
 
 			return false;
 		}
+
+		static void toggle_layer_visibility(Layer2D * layer)
+		{
+			bool is_visible = layer->get_is_visible();
+			is_visible = !is_visible;
+			layer->set_is_visible(is_visible);
+		}
+
 
 	}
 

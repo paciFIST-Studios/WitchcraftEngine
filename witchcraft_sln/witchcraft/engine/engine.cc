@@ -79,31 +79,35 @@ void Engine::run()
 		buddha_resource_id = id;
 	}
 
-	//// pitch (field)
-	//int soccer_pitch_id;
-	//qSceneObject * soccer_pitch_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	soccer_pitch_scene_object = render->register_render_object(render_resource);
-	//	soccer_pitch_id = id;
-	//}
+	// pitch (field)
+	int soccer_pitch_id;
+	qSceneObject * soccer_pitch_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/stadium.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		soccer_pitch_scene_object = render->register_render_object(render_resource);
+		soccer_pitch_id = id;
+	}
 
 
 	// - Add objects to layers ---------------------------------------------------------------------------------
+
+	// NOTE: this is back-to-front ordering
+
+	// pitch (field)
+	auto soccer_pitch_layer = scene->add_layer("pitch");
+	soccer_pitch_layer->set_is_visible(true);
+	soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
+
 
 	// buddha
 	auto buddha_layer = scene->add_layer("buddha");
 	buddha_layer->set_is_visible(true);
 	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
 
-	//// pitch (field)
-	//auto soccer_pitch_layer = scene->add_layer("pitch");
-	//soccer_pitch_layer->set_is_visible(true);
-	//soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
 
 
 	// - Dubug stuff ---------------------------------------------------------------------------------

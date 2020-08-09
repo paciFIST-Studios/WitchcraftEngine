@@ -80,6 +80,7 @@ namespace witchcraft
 			// HACK: 20200802 - EB - clamp movement to visible screen area, 
 			_x = utility::clamp_to_range(_x, 0.0f, 768.f);
 			_y = utility::clamp_to_range(_y, 0.0f, 768.f);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
 			object->set_position(_x, _y);
 		}
 

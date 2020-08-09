@@ -17,9 +17,9 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 
 		if (attribute_name == witchcraft::xml::uuid)
 		{
-			// atoi stands for ASCII-to-integer, and is used for
+			// stoi stands for string-to-integer, and is used for
 			// parsing a string to an int
-			resource_id = atoi(attribute_value.c_str());
+			resource_id = std::stoi(attribute_value);
 		}
 		else if (attribute_name == witchcraft::xml::file_name)
 		{
@@ -27,7 +27,7 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 		}
 		else if (attribute_name == witchcraft::xml::resource_scope)
 		{
-			resource_scope = atoi(attribute_value.c_str());
+			resource_scope = std::stoi(attribute_value);
 		}
 	}
 
@@ -61,11 +61,11 @@ ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(X
 
 		if (attr_name == witchcraft::xml::uuid)
 		{
-			resource_id = atoi(attr_value.c_str());
+			resource_id = std::stoi(attr_value);
 		}
 		else if (attr_name == witchcraft::xml::resource_scope)
 		{
-			resource_scope = atoi(attr_value.c_str());
+			resource_scope = std::stoi(attr_value);
 		}
 		else if (attr_name == witchcraft::xml::resource_name)
 		{
@@ -73,7 +73,7 @@ ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(X
 		}
 		else if (attr_name == witchcraft::xml::two_d_animation_timing_ms)
 		{
-			animation_timing_ms = atoi(attr_value.c_str());
+			animation_timing_ms = std::stoi(attr_value);
 		}
 		else if (attr_name == witchcraft::xml::two_d_animation_sequence)
 		{

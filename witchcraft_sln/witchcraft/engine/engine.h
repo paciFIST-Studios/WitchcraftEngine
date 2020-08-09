@@ -72,30 +72,30 @@ namespace witchcraft
 {
 	namespace engine
 	{
-		static int clamp_to_range(int value, int bottom, int top)
+		static float clamp_to_range(float value, float bottom, float top)
 		{
 			if (value < bottom) return bottom;
 			if (value > top) return top;
 			return value;
 		}
 
-		static void move_object_by_vector(RenderObject2D * object, int x, int y)
+		static void move_object_by_vector(RenderObject2D * object, float x, float y)
 		{
 			auto pos = object->get_position();
-			auto _x = x + int(std::get<0>(pos));
-			auto _y = y + int(std::get<1>(pos));
+			auto _x = x + std::get<0>(pos);
+			auto _y = y + std::get<1>(pos);
 			// HACK: 20200802 - EB - clamp movement to visible screen area, 
-			_x = clamp_to_range(_x, 0, 768);
-			_y = clamp_to_range(_y, 0, 768);
-			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
+			_x = clamp_to_range(_x, 0.0f, 768.f);
+			_y = clamp_to_range(_y, 0.0f, 768.f);
+			object->set_position(_x, _y);
 		}
 
-		static void move_layer_by_vector(Layer2D * layer, int x, int y)
+		static void move_layer_by_vector(Layer2D * layer, float x, float y)
 		{
 			auto pos = layer->get_offset();
-			auto _x = x + int(std::get<0>(pos));
-			auto _y = y + int(std::get<1>(pos));
-			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
+			auto _x = x + std::get<0>(pos);
+			auto _y = y + std::get<1>(pos);
+			layer->set_offset(_x, _y);
 		}
 
 		static Uint32 get_delta_time()

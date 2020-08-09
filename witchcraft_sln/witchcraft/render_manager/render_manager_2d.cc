@@ -128,8 +128,8 @@ void RenderManager2D::render_call()
 			auto layer_pos = layer->get_offset();
 			auto obj_pos = obj->get_position();
 		
-			dest.x = int(std::get<0>(layer_pos)) + int(std::get<0>(obj_pos));
-			dest.y = int(std::get<1>(layer_pos)) + int(std::get<1>(obj_pos));
+			dest.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
+			dest.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
 			dest.w = obj->render_rect.w;
 			dest.h = obj->render_rect.h;
 

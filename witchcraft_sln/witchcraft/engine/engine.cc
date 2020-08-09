@@ -53,7 +53,7 @@ void Engine::run()
 
 	// the renderer initializes SDL, so this code MUST follow render init
 	{
-		gameController = SDL_JoystickOpen(0);
+		gameController = SDL_GameControllerOpen(0);
 	}
 
 
@@ -150,20 +150,49 @@ void Engine::run()
 
 			// - Gamepad Events ------------------------------------------------------------------------
 
-			else if (window_event.jaxis.which == controller_idx)
+			// start button is quit
+			else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
+			{
+				PLOGI << witchcraft::log_strings::sdl_break_event_polling;
+				gameplay_loop_is_running = false;
+			}
+
+			//// 'nintendo' buttons
+			//else if (window_event.caxis.which == controller_idx)
+			//{
+			//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+			//	{
+			//		std::cout << "controller: [A]\n";
+			//	}
+			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+			//	{
+			//		std::cout << "controller: [B]\n";
+			//	}
+			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+			//	{
+			//		std::cout << "controller: [X]\n";
+			//	}
+			//	else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
+			//	{
+			//		std::cout << "controller: [Y]\n";
+			//	}
+			//}
+
+			// controller axes
+			else if (window_event.caxis.which == controller_idx)
 			{
 				// x-axis
-				if (window_event.jaxis.axis == 0)
+				if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
 				{
 					// left of dead zone
-					if (window_event.jaxis.value < -JOYSTICK_DEAD_ZONE)
+					if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 					{
-						player_0_x_input = -1;
+						player_0_x_input = -1.f;
 					}
 					// right of deadzone
-					else if (window_event.jaxis.value > JOYSTICK_DEAD_ZONE)
+					else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 					{
-						player_0_x_input = 1;
+						player_0_x_input = 1.f;
 					}
 					// deadzone
 					else
@@ -172,17 +201,17 @@ void Engine::run()
 					}
 				}
 				// y-axis
-				else if (window_event.jaxis.axis == 1)
+				else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
 				{
 					// below dead zone
-					if (window_event.jaxis.value < -JOYSTICK_DEAD_ZONE)
+					if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 					{
-						player_0_y_input = -1;
+						player_0_y_input = -1.f;
 					}
 					// above dead zone
-					else if (window_event.jaxis.value > JOYSTICK_DEAD_ZONE)
+					else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 					{
-						player_0_y_input = 1;
+						player_0_y_input = 1.f;
 					}
 					// deadzone
 					else
@@ -190,9 +219,18 @@ void Engine::run()
 						player_0_y_input = 0.0f;
 					}
 				}
+
+
+
+
+
 			}
 
 			// - Keyboard events ----------------------------------------------------------------------
+
+
+
+
 
 
 			// check moar events
@@ -291,7 +329,7 @@ void Engine::shutdown()
 
 	// we're going to shut down SDL in the renderer, so all SDL components
 	// have to be closed by then
-	SDL_JoystickClose(gameController);
+	SDL_GameControllerClose(gameController);
 	gameController = nullptr;
 
 	render->shutdown();

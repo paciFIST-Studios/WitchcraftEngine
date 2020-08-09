@@ -44,7 +44,7 @@ protected:
 
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
-	SDL_Joystick * gameController = nullptr;
+	SDL_GameController * gameController = nullptr;
 
 
 
@@ -54,7 +54,7 @@ public:
 	void run();
 	void shutdown();
 
-	EEngineState get_current_state() const { return current_engine_state; }
+	EEngineState const get_current_state() const { return current_engine_state; }
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
@@ -131,18 +131,18 @@ namespace witchcraft
 			return SDL_NumJoysticks();
 		}
 
-		static SDL_Joystick * get_controller(int idx)
+		static SDL_GameController * get_controller(int idx)
 		{
 			if (idx < 0) return nullptr;
 
 			if (connnected_controller_count() > 0)
-				return SDL_JoystickOpen(idx);
+				return SDL_GameControllerOpen(idx);
 
 			return nullptr;
 		}
-
-
 	}
+
+
 
 	namespace configuration
 	{
@@ -153,9 +153,8 @@ namespace witchcraft
 		int const default_window_y_offset = 0;
 
 
-		int const screen_fps = 60;
-		float const frame_length_ms = static_cast<float>(screen_fps * 0.001f); // same as division by 1000
-
+		float const screen_fps = 60.0f;
+		float const frame_length_ms = (screen_fps * 0.001f); // same as division by 1000
 	}
 }
 

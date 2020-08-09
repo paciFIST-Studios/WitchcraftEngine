@@ -75,7 +75,7 @@ qRenderResource::qRenderResource(
 	, unsigned int scope
 	, std::string const & file_name)
 	// -- end args
-	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
+	: qResource(ID, scope, file_name, EResourceType::RESOURCE_GRAPHIC)
 	// -- end initializer
 {
 }

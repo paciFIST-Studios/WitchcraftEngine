@@ -10,14 +10,17 @@
 
 #define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 
-typedef enum {
-	  RESOURCE_NULL			= 0
-	, RESOURCE_GRAPHIC		= 1
-	, RESOURCE_ANIMATION	= 2
-	, RESOURCE_MOVIE		= 3
-	, RESOURCE_AUDIO		= 4
-	, RESOURCE_TEXT			= 5
-} RESOURCE_TYPE;
+enum class EResourceType : unsigned char
+{
+	  RESOURCE_NULL			= 0x01
+	, RESOURCE_GRAPHIC		= 0x02
+	, RESOURCE_ANIMATION	= 0x04
+	, RESOURCE_MOVIE		= 0x08
+	, RESOURCE_AUDIO		= 0x10
+	, RESOURCE_TEXT			= 0x20
+	// 0x40
+	// 0x80
+};
 
 // The qResource class represents a resource object, which is managed by a resource manager
 // to be inhereted from, by other objects
@@ -28,7 +31,7 @@ protected:
 	unsigned int _resource_id;
 	unsigned int _scope_id;
 	std::string _file_name;
-	RESOURCE_TYPE _type;
+	EResourceType _type;
 
 public:
 	
@@ -38,7 +41,7 @@ public:
 
 	std::string get_file_name() const;
 
-	RESOURCE_TYPE get_resource_type() const;
+	EResourceType get_resource_type() const;
 
 	// these are working in the fashion of an IResource interface
 	virtual ~qResource()
@@ -66,7 +69,7 @@ public:
 	qResource();
 
 	qResource(unsigned int ID, unsigned int Scope, std::string const & FileName
-		, RESOURCE_TYPE ResourceType);
+		, EResourceType ResourceType);
 
 };
 

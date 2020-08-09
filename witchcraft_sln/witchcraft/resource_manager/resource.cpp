@@ -15,7 +15,7 @@ std::string qResource::get_file_name() const
 	return _file_name;
 }
 
-RESOURCE_TYPE qResource::get_resource_type() const
+EResourceType qResource::get_resource_type() const
 {
 	return _type;
 }
@@ -26,7 +26,7 @@ qResource::qResource()
 	: _resource_id(uninit::UCHAR)
 	, _scope_id(uninit::UINT)
 	, _file_name(std::string(uninit::CSTRING))
-	, _type(RESOURCE_TYPE::RESOURCE_NULL)
+	, _type(EResourceType::RESOURCE_NULL)
 {}
 
 qResource::qResource(
@@ -34,7 +34,7 @@ qResource::qResource(
 	  unsigned int ID
 	, unsigned int Scope
 	, std::string const & FileName
-	, RESOURCE_TYPE ResourceType)
+	, EResourceType ResourceType)
 	// initializer list
 	: _resource_id(ID)
 	, _scope_id(Scope)

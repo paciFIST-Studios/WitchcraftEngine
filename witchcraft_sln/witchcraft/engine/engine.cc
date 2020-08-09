@@ -11,7 +11,9 @@ void Engine::startup()
 	{}
 
 	// messaging layer
-	
+	{}
+
+	// engine components
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>();
 
@@ -49,10 +51,9 @@ void Engine::run()
 		PLOGV << witchcraft::log_strings::render_manager_stop;
 		return;
 	}
-	
-
-	// the renderer initializes SDL, so this code MUST follow render init
+	else
 	{
+		// the renderer initializes SDL, so this code MUST follow render init
 		gameController = SDL_GameControllerOpen(0);
 	}
 

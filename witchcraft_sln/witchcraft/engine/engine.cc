@@ -141,9 +141,11 @@ void Engine::run()
 		while (SDL_PollEvent(&window_event))
 		{
 			if (SDL_QUIT == window_event.type)
+			{
 				gameplay_loop_is_running = false;
 				break;
-	
+			}
+
 			// Keyboard events
 			if (witchcraft::engine::is_keyboard_event(window_event))
 			{
@@ -156,30 +158,30 @@ void Engine::run()
 
 					// WASD
 				case SDLK_w:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, -1);
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
 					break;
 				case SDLK_s:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0, 1);
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
 					break;
 				case SDLK_a:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, -1, 0);
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
 					break;
 				case SDLK_d:
-					witchcraft::engine::move_object_by_vector(buddha_scene_object, 1, 0);
+					witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
 					break;
 
 					// Arrows
 				case SDLK_UP:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 0, -1);
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
 					break;
 				case SDLK_RIGHT:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 1, 0);
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 1.f, 0.0f);
 					break;
 				case SDLK_DOWN:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, 0, 1);
+					witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, 1.f);
 					break;
 				case SDLK_LEFT:
-					witchcraft::engine::move_layer_by_vector(buddha_layer, -1, 0);
+					witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
 					break;
 
 					// Numeric
@@ -187,13 +189,14 @@ void Engine::run()
 					debug_emit_frame_length = !debug_emit_frame_length;
 					break;
 				case SDLK_2:
-					buddha_scene_object->set_position(100, 100);
+					buddha_scene_object->set_position(100.f, 100.f);
 					break;
 				case SDLK_3:
 					debug_emit_controller_count = true;
 					gameController = witchcraft::engine::get_controller(0);
 					break;
 				case SDLK_4:
+					debug_emit_controller_state = !debug_emit_controller_state;
 					break;
 				case SDLK_5:
 					break;

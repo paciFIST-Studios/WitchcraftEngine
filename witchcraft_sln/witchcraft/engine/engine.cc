@@ -157,7 +157,7 @@ void Engine::run()
 						gameplay_loop_is_running = false;
 						break;
 
-						// WASD
+					// WASD
 					case SDLK_w:
 						witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
 						break;
@@ -171,7 +171,7 @@ void Engine::run()
 						witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
 						break;
 
-						// Arrows
+					// Arrows
 					case SDLK_UP:
 						witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
 						break;
@@ -185,7 +185,7 @@ void Engine::run()
 						witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
 						break;
 
-						// Numeric
+					// Numeric
 					case SDLK_1:
 						debug_emit_frame_length = !debug_emit_frame_length;
 						break;

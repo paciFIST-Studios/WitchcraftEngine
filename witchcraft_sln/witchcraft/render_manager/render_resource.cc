@@ -21,8 +21,8 @@ void qRenderResource::attempt_load(std::string const & file_name)
 
 	if (surface)
 	{
-		width = surface->w;
-		height = surface->h;
+		surface_width = surface->w;
+		surface_height = surface->h;
 
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
 	}

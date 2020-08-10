@@ -130,6 +130,9 @@ void Engine::run()
 
 	float player_0_x_input = 0.0f;
 	float player_0_y_input = 0.0f;
+	float layer_0_x_offset = 0.0f;
+	float layer_0_y_offset = 0.0f;
+
 
 	PLOGI << witchcraft::log_strings::game_loop_start;
 	while (gameplay_loop_is_running)
@@ -191,6 +194,7 @@ void Engine::run()
 						break;
 					case SDLK_2:
 						buddha_scene_object->set_position(100.f, 100.f);
+						buddha_layer->set_offset(0.0f, 0.0f);
 						break;
 					case SDLK_3:
 						debug_emit_controller_count = true;
@@ -218,13 +222,13 @@ void Engine::run()
 			// - Gamepad Events ------------------------------------------------------------------------
 			else if (witchcraft::engine::is_gamepad_event(window_event))
 			{
-				// start button is quit
+				// gamepad start button -> quit
 				if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
 				{
 					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
 					gameplay_loop_is_running = false;
 				}
-				// button down
+				// gamepad button down
 				if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
 				{
 					// 'nintendo' buttons
@@ -253,7 +257,7 @@ void Engine::run()
 				// gamepad axes
 				else if (window_event.caxis.which == controller_idx)
 				{
-					// x-axis
+					// left_stick x-axis
 					if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
 					{
 						// left of dead zone
@@ -272,7 +276,7 @@ void Engine::run()
 							player_0_x_input = 0.0f;
 						}
 					}
-					// y-axis
+					// left_stick y-axis
 					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
 					{
 						// below dead zone
@@ -291,6 +295,39 @@ void Engine::run()
 							player_0_y_input = 0.0f;
 						}
 					}
+					// right_stick x-axis
+					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
+					{
+						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+						{
+							layer_0_x_offset += -1.0f;
+						}
+						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+						{
+							layer_0_x_offset += 1.0f;
+						}
+						else
+						{
+							layer_0_x_offset = 0.0f;
+						}
+					}
+					// right_stick y-axis
+					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+					{
+						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+						{
+							layer_0_y_offset += -1.0f;
+						}
+						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+						{
+							layer_0_y_offset += 1.0f;
+						}
+						else
+						{
+							layer_0_y_offset = 0.0f;
+						}
+					}
+
 				} // end gamepad axis events
 			} // end gamepad events
 		}	// end event update loop
@@ -299,7 +336,8 @@ void Engine::run()
 		// - Physics Update ---------------------------------------------------------------------------------
 
 		witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
-		
+		witchcraft::engine::move_layer_by_vector(soccer_pitch_layer, layer_0_x_offset, layer_0_y_offset);
+
 		// - Render Update ---------------------------------------------------------------------------------
 
 		render->update();
@@ -320,6 +358,10 @@ void Engine::run()
 		}
 
 		// yield for the rest of the frame
+		auto yield_time = witchcraft::configuration::frame_length_ms - (current_frame_time - last_frame_time);
+		// HACK: only has 10ms resolution, so we're just going to use it as a 10ms sleep
+		SDL_Delay(1);
+
 	} // !game_loop
 	
 	PLOGI << witchcraft::log_strings::game_loop_stop;

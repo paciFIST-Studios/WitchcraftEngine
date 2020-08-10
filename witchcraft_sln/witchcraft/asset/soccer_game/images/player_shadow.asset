@@ -1,0 +1,3 @@
+<resources>
+  <resource UUID="9" type="graphic" file="asset/soccer_game/images/player_shadow.png" scope="1">Player Shadow</resource>
+</resources>

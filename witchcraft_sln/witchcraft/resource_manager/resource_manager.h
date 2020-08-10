@@ -39,8 +39,10 @@ protected:
 	ResourceMapType resource_map;
 
 	ResourcePtr build_render_resource_from_xml(XML::xml_node<> const & xml);
-	ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
+	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
+	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
 public:
 

@@ -92,6 +92,71 @@ void Engine::run()
 		soccer_pitch_id = id;
 	}
 
+	// ball
+	int ball_id;
+	qSceneObject * ball_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/ball.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		ball_scene_object = render->register_render_object(render_resource);
+		ball_id = id;
+	}
+
+	// ball shadow
+	int ball_shadow_id;
+	qSceneObject * ball_shadow_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/ball_shadow.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		ball_shadow_scene_object = render->register_render_object(render_resource);
+		ball_shadow_id = id;
+	}
+
+	// player
+	//int player_id;
+	//qSceneObject * player_scene_object = nullptr;
+	//{
+	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/player.asset");
+	//	auto rr = resource->find_resource_by_id(id);
+	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	render_resource->bind_renderer(render->active_renderer);
+	//	render_resource->load();
+	//	player_scene_object = render->register_render_object(render_resource);
+	//	player_id = id;
+	//}
+
+	// player shadow
+	int player_shadow_id;
+	qSceneObject * player_shadow_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/player_shadow.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		player_shadow_scene_object = render->register_render_object(render_resource);
+		player_shadow_id = id;
+	}
+
+	// cursor
+	int cursor_id;
+	qSceneObject * cursor_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/cursor.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		cursor_scene_object = render->register_render_object(render_resource);
+		cursor_id = id;
+	}
+
 
 	// - Add objects to rendering layers -------------------------------------------------------------------------
 

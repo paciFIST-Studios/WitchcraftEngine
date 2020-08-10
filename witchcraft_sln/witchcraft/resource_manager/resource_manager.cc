@@ -7,6 +7,9 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 	unsigned int	resource_scope	= uninit::UINT;
 	std::string		file_name		= std::string(uninit::CSTRING);
 
+	unsigned int sprite_atlas_tile_width = uninit::UINT;
+	unsigned int sprite_atlas_tile_height = uninit::UINT;
+
 	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
 		element_attribute = element_attribute->next_attribute()
@@ -29,27 +32,52 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 		{
 			resource_scope = std::stoi(attribute_value);
 		}
+		else if (attribute_name == witchcraft::xml::sprite_atlas)
+		{
+			// NOTE: format is: sprite_atlas="w,h"
+			auto atlas_vec = utility::tokenize_string(attribute_value, witchcraft::xml::delimiter);
+			if (atlas_vec.size() == 2)
+			{
+				auto x = std::stoi(atlas_vec[0]);
+				auto y = std::stoi(atlas_vec[1]);
+				sprite_atlas_tile_width = x;
+				sprite_atlas_tile_height = y;
+			}
+		}
 	}
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
 	// NOTE: We're making a qRenderResource, and then moving it to a qResource ptr
-	std::unique_ptr<qResource> resource = std::make_unique<qRenderResource>(
+	//std::unique_ptr<qResource> resource = std::make_unique<qRenderResource>(
+	//	  resource_id
+	//	, resource_scope
+	//	, file_name
+	//	);
+	
+	auto rr = std::make_unique<qRenderResource>(
 		  resource_id
 		, resource_scope
 		, file_name
 		);
 
+	if (sprite_atlas_tile_width != uninit::UINT && 
+		sprite_atlas_tile_height != uninit::UINT)
+	{
+		rr->set_atlas_tiling(sprite_atlas_tile_width, sprite_atlas_tile_height);
+	}
+
+	std::unique_ptr<qResource> resource = std::move(rr);
 	return std::move(resource);
 }
 
 ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
 {
-	unsigned int				resource_id				= uninit::UINT;
-	unsigned int				resource_scope			= uninit::UINT;
-	unsigned int				animation_timing_ms		= uninit::UINT;
-	std::vector<unsigned int>	frame_index_sequence;
 	std::string					animation_name			= std::string(uninit::CSTRING);
+	std::string					atlas_name				= std::string(uninit::CSTRING);
+	unsigned int				atlas_uuid				= uninit::UINT;
+	unsigned int				animation_ms_per_frame  = uninit::UINT;
+	std::vector<unsigned int>	frame_index_sequence;
 
 	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
 		element_attribute;
@@ -59,41 +87,42 @@ ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(X
 		std::string attr_name = element_attribute->name();
 		std::string attr_value = element_attribute->value();
 
-		if (attr_name == witchcraft::xml::uuid)
-		{
-			resource_id = std::stoi(attr_value);
-		}
-		else if (attr_name == witchcraft::xml::resource_scope)
-		{
-			resource_scope = std::stoi(attr_value);
-		}
-		else if (attr_name == witchcraft::xml::resource_name)
+		if (attr_name == witchcraft::xml::resource_name)
 		{
 			animation_name = attr_value;
 		}
-		else if (attr_name == witchcraft::xml::two_d_animation_timing_ms)
+		else if (attr_name == witchcraft::xml::atlas_name)
 		{
-			animation_timing_ms = std::stoi(attr_value);
+			atlas_name = attr_value;
 		}
-		else if (attr_name == witchcraft::xml::two_d_animation_sequence)
+		else if (attr_name == witchcraft::xml::atlas_uuid)
 		{
-			frame_index_sequence.push_back(1);
-			// split into a vector, knowing the delimiter
-			// todo: move this to the string literal file?
-			std::string const delimiters = " ";
-
-			auto sv = utility::tokenize_string(attr_value, delimiters);
+			atlas_uuid = std::stoi(attr_value);
+		}
+		else if (attr_name == witchcraft::xml::animation_2d_ms_per_frame)
+		{
+			animation_ms_per_frame = std::stoi(attr_value);
+		}
+		else if (attr_name == witchcraft::xml::animation_2d_sequence)
+		{
+			auto sv = utility::tokenize_string(attr_value, witchcraft::xml::delimiter);
 			for (auto element : sv)
 			{
-				frame_index_sequence.push_back
-				(
-					atoi(element.c_str())
-				);
+				frame_index_sequence.push_back(std::stoi(element));
 			}
 		}
 	}
 
-	auto anim = Animation2D(animation_name, frame_index_sequence, animation_timing_ms);
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << 
+		"anim: " << animation_name << "atlas_name: " << atlas_name;
+
+	auto anim = Animation2D(
+		  animation_name
+		, atlas_name
+		, atlas_uuid
+		, animation_ms_per_frame
+		, frame_index_sequence
+	);
 
 	// NOTE: there is a cast to qResource
 	std::unique_ptr<qResource> resource = std::make_unique<AnimationResource>(anim);
@@ -210,10 +239,11 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 						// resource = _config_manager->load_resource_from_xml(child);
 						// break;
 					}
-					else if (attributeValue == "2d_animation")
+					else if (attributeValue == "animation_2d")
 					{
-						resource = load_animation_resource_from_xml(*child);
-						break;
+						int i = 0;
+						//resource = load_animation_resource_from_xml(*child);
+						//break;
 					}
 				}
 			}

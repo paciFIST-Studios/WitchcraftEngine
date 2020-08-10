@@ -65,7 +65,7 @@
 
 			// test pass through
 			{
-				value = 1.f; // float should implicitly cast to int
+				value = (int)1.f;
 				auto result = utility::clamp_to_range(value, bottom, top);
 				REQUIRE(typeid(result) == typeid(value));
 				REQUIRE(result == value);
@@ -73,7 +73,7 @@
 
 			// test upper bounding
 			{
-				value = 3.0; // double should implicitly cast to int
+				value = (int)3.0;
 				auto result = utility::clamp_to_range(value, bottom, top);
 				REQUIRE(typeid(result) == typeid(value));
 				REQUIRE(result == top);

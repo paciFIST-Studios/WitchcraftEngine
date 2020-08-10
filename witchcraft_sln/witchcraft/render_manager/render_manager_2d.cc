@@ -121,8 +121,9 @@ void RenderManager2D::render_call()
 			if (obj->is_visible() == false)
 				continue;
 
-			// is this where the tick for the object is called? Is that okay?
-			obj->update();
+			// NOTE: we should move this out of the rendering area
+			//// is this where the tick for the object is called? Is that okay?
+			//obj->update();
 
 			SDL_Rect dest;
 			auto layer_pos = layer->get_offset();
@@ -130,8 +131,10 @@ void RenderManager2D::render_call()
 		
 			dest.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
 			dest.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
-			dest.w = obj->render_rect.w;
-			dest.h = obj->render_rect.h;
+			
+			auto scale = obj->get_scale();
+			dest.w = int(obj->render_rect.w * std::get<0>(scale));
+			dest.h = int(obj->render_rect.h * std::get<1>(scale));
 
 			SDL_RenderCopy(
 				  active_renderer

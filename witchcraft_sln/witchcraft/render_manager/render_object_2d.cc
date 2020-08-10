@@ -2,9 +2,11 @@
 
 RenderObject2D::RenderObject2D()
 	: render_resource(nullptr)
-	, render_rect{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
+	, render_rect{ uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR }
 	, position_x(uninit::FLOAT)
 	, position_y(uninit::FLOAT)
+	, scale_x(uninit::FLOAT)
+	, scale_y(uninit::FLOAT)
 	, visible(uninit::BOOL)
 	, color_key{uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR}
 	, color_key_enabled(uninit::BOOL)
@@ -20,6 +22,10 @@ void RenderObject2D::set_render_resource(qRenderResource * resource)
 		{
 			render_rect.w = render_resource->surface->w;
 			render_rect.h = render_resource->surface->h;
+
+			// set scaling to 1:1
+			scale_x = 1.0f;
+			scale_y = 1.0f;
 		}
 
 		if (color_key_enabled)
@@ -49,6 +55,17 @@ void RenderObject2D::set_position(float x, float y)
 	position_x = x;
 	position_y = y;
 }
+
+SCALE_TUPLE RenderObject2D::get_scale() const
+{
+	return std::make_tuple(scale_x, scale_y);
+}
+void RenderObject2D::set_scale(float x, float y)
+{
+	scale_x = x;
+	scale_y = y;
+}
+
 
 bool RenderObject2D::is_visible() const
 {

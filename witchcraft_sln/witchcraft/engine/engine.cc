@@ -231,9 +231,9 @@ void Engine::run()
 				// gamepad button down
 				if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
 				{
-					// 'nintendo' buttons
 					if (window_event.caxis.which == controller_idx)
 					{
+						// 'nintendo' buttons
 						if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 						{
 							std::cout << "controller: [A]\ttoggle_layer_visibility\n";
@@ -252,6 +252,33 @@ void Engine::run()
 						{
 							std::cout << "controller: [Y]\n";
 						}
+
+						// shoulder bumpers
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
+						{
+							auto scale = soccer_pitch_scene_object->get_scale();
+							auto x = std::get<0>(scale) * 1.1f;
+							auto y = std::get<1>(scale) * 1.1f;
+							soccer_pitch_scene_object->set_scale(x, y);
+						}
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+						{
+							auto scale = soccer_pitch_scene_object->get_scale();
+							auto x = std::get<0>(scale) * 0.9f;
+							auto y = std::get<1>(scale) * 0.9f;
+							soccer_pitch_scene_object->set_scale(x, y);
+						}
+
+						// click sticks
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSTICK)
+						{
+							soccer_pitch_scene_object->set_scale(1.f, 1.f);
+						}
+						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
+						{
+							buddha_scene_object->set_scale(1.f, 1.f);
+						}
+
 					}
 				}
 				// gamepad axes

@@ -22,6 +22,8 @@ protected:
 	unsigned int tile_width = 0;
 	unsigned int tile_height = 0;
 
+	// std::map animation_map
+
 	SDL_Renderer * renderer = nullptr;
 
 	void attempt_load(std::string const & file_name);
@@ -57,6 +59,11 @@ public:
 		tile_width = width;
 		tile_height = height;
 	}
+
+	// void add_animation(Animation2d anim) { has anim name as std::string }
+	// void set_current_animation(std::string)
+	// std::vector<std::string> get_animations()
+	// SDL_Rect get_next_animation_frame()
 };
 
 #endif // RENDER_RESOURCE_H

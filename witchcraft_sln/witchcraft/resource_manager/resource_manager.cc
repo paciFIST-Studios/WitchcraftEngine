@@ -239,12 +239,13 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 						// resource = _config_manager->load_resource_from_xml(child);
 						// break;
 					}
-					else if (attributeValue == "animation_2d")
-					{
-						int i = 0;
-						//resource = load_animation_resource_from_xml(*child);
-						//break;
-					}
+
+					// Ellie TODO: move this inside the graphic thing, 
+					// it's going to be an exclusive graphic task
+					//else if (attributeValue == "animation_2d")
+					//{
+					//	resource = load_animation_resource_from_xml(*child);
+					//}
 				}
 			}
 

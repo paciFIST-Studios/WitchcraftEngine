@@ -18,9 +18,6 @@
 // characteristics will allow the render manager to perform culling.
 class RenderObject2D : public qEngineObject
 {
-public:
-	//typedef std::tuple<float, float> PositionTuple;
-
 private:
 protected:
 

@@ -119,17 +119,17 @@ void Engine::run()
 	}
 
 	// player
-	//int player_id;
-	//qSceneObject * player_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/player.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	player_scene_object = render->register_render_object(render_resource);
-	//	player_id = id;
-	//}
+	int player_id;
+	qSceneObject * player_scene_object = nullptr;
+	{
+		auto id = resource->load_from_xml_file("asset/soccer_game/images/player_a.asset");
+		auto rr = resource->find_resource_by_id(id);
+		auto render_resource = static_cast<qRenderResource*>(rr);
+		render_resource->bind_renderer(render->active_renderer);
+		render_resource->load();
+		player_scene_object = render->register_render_object(render_resource);
+		player_id = id;
+	}
 
 	// player shadow
 	int player_shadow_id;

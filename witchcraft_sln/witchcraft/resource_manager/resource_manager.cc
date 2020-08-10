@@ -6,6 +6,7 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 	unsigned int	resource_id		= uninit::UINT;
 	unsigned int	resource_scope	= uninit::UINT;
 	std::string		file_name		= std::string(uninit::CSTRING);
+	std::string		friendly_name = std::string(uninit::CSTRING);
 
 	bool is_sprite_atlas = false;
 	unsigned int sprite_atlas_tile_width  = uninit::UINT;
@@ -29,6 +30,10 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 		{
 			file_name = attribute_value;
 		}
+		else if (attribute_name == witchcraft::xml::resource_name)
+		{
+			friendly_name = attribute_value;
+		}
 		else if (attribute_name == witchcraft::xml::resource_scope)
 		{
 			resource_scope = std::stoi(attribute_value);
@@ -51,7 +56,7 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// we'll return this
+	// note: we're going to make something derived from qResource
 	std::unique_ptr<qResource> resource;
 
 	if (is_sprite_atlas)
@@ -65,10 +70,13 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 			);
 
 		auto embedded_animations = parse_embedded_sprite_animations(xml);
-
 		for (auto&& anim : embedded_animations)
 		{
 			sar->add_animation(anim.name, anim);
+			PLOGV << witchcraft::log_strings::resource_manager_meta_load 
+				<< "{ atlas=\"" << friendly_name << "\"  anim=\"" << anim.name << "\" }";
+				// NOTE: in CPP20 we can do the following, with a more python style
+				// << std::format("atlas=\"{0}\}    anim=\"{1}\"", friendly_name, anim.name);
 		}
 
 		resource = std::move(sar);
@@ -81,63 +89,6 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 	
 	return std::move(resource);
 }
-
-//ResourceManager::ResourcePtr ResourceManager::load_animation_resource_from_xml(XML::xml_node<> const & xml)
-//{
-//	std::string					animation_name			= std::string(uninit::CSTRING);
-//	std::string					atlas_name				= std::string(uninit::CSTRING);
-//	unsigned int				atlas_uuid				= uninit::UINT;
-//	unsigned int				animation_ms_per_frame  = uninit::UINT;
-//	std::vector<unsigned int>	frame_index_sequence;
-//
-//	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
-//		element_attribute;
-//		element_attribute = element_attribute->next_attribute()
-//	)
-//	{
-//		std::string attr_name = element_attribute->name();
-//		std::string attr_value = element_attribute->value();
-//
-//		if (attr_name == witchcraft::xml::resource_name)
-//		{
-//			animation_name = attr_value;
-//		}
-//		else if (attr_name == witchcraft::xml::atlas_name)
-//		{
-//			atlas_name = attr_value;
-//		}
-//		else if (attr_name == witchcraft::xml::atlas_uuid)
-//		{
-//			atlas_uuid = std::stoi(attr_value);
-//		}
-//		else if (attr_name == witchcraft::xml::animation_2d_ms_per_frame)
-//		{
-//			animation_ms_per_frame = std::stoi(attr_value);
-//		}
-//		else if (attr_name == witchcraft::xml::animation_2d_sequence)
-//		{
-//			auto sv = utility::tokenize_string(attr_value, witchcraft::xml::delimiter);
-//			for (auto element : sv)
-//			{
-//				frame_index_sequence.push_back(std::stoi(element));
-//			}
-//		}
-//	}
-//
-//	PLOGV << witchcraft::log_strings::resource_manager_meta_load << 
-//		"anim: " << animation_name << "atlas_name: " << atlas_name;
-//
-//	auto anim = Animation2D(
-//		  animation_name
-//		, animation_ms_per_frame
-//		, frame_index_sequence
-//	);
-//
-//	// NOTE: there is a cast to qResource
-//	std::unique_ptr<qResource> resource = std::make_unique<AnimationResource>(anim);
-//
-//	return std::move(resource);
-//}
 
 
 std::vector<Animation2D> ResourceManager::parse_embedded_sprite_animations(XML::xml_node<> const & xml)

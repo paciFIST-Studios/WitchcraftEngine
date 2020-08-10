@@ -11,21 +11,14 @@ class Animation2D
 private:
 protected:
 	
-	std::string _name;
-	std::string const _atlas_name;
-	unsigned int const _atlas_uuid;
-	unsigned int _ms_per_frame;
-	std::vector<unsigned int> _frame_indicies;
-	unsigned int _current_idx;	
+	std::vector<unsigned int> const _frame_indicies;
+	unsigned int _current_idx;
+
 public:
 
-	std::string const & get_name() { return _name; }
+	std::string  const name;
+	unsigned int const ms_per_frame;
 
-	std::string const & get_atlas_name() { return _atlas_name; }
-	
-	unsigned int const & get_atlas_uuid() { return _atlas_uuid; }
-
-	unsigned int const & get_ms_per_frame(){ return _ms_per_frame; }
 
 	unsigned int get_next_index()
 	{
@@ -42,10 +35,8 @@ public:
 	}
 	
 	Animation2D() 
-		: _name(std::string(uninit::CSTRING))
-		, _atlas_name(uninit::CSTRING)
-		, _atlas_uuid(uninit::UINT)
-		, _ms_per_frame(uninit::UINT)
+		: name(std::string(uninit::CSTRING))
+		, ms_per_frame(uninit::UINT)
 		, _frame_indicies{uninit::UINT}
 		, _current_idx(uninit::UINT)
 	{}
@@ -54,16 +45,12 @@ public:
 	// args ---
 	(
 		  std::string  const & name
-		, std::string  const & atlas_name
-		, unsigned int const & atlas_uuid
 		, unsigned int const & ms_per_frame
 		, std::vector<unsigned int> const & frame_index_sequence
 	)
 	// initializer ---
-		: _name(std::string(name))
-		, _atlas_name(atlas_name)
-		, _atlas_uuid(atlas_uuid)
-		, _ms_per_frame(ms_per_frame)
+		: name(std::string(name))
+		, ms_per_frame(ms_per_frame)
 		, _frame_indicies(frame_index_sequence)
 	// fn body ---
 	{

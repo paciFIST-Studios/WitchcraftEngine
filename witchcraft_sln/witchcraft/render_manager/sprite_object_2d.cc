@@ -98,7 +98,7 @@ c2DSpriteObject::c2DSpriteObject(c2DSpriteObjectInitializer args)
 
 	// manually add the animations to the map.
 	for (auto anim : args.animations)
-		_animation_map.emplace(anim.get_name(), anim);
+		_animation_map.emplace(anim.name, anim);
 }
 
 

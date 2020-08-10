@@ -60,15 +60,11 @@
 
 			// specific animation
 			std::string anim_name = "test";
-			std::string atlas_name = "test_atlas";
-			unsigned int atlas_uuid = 666;
 			unsigned int anim_speed = 10;
 			std::vector<unsigned int> anim_sequence = { 1, 3, 5, 7, 2, 4, 6, 8 };
 
 			auto test_anim = Animation2D(
 				  anim_name
-				, atlas_name
-				, atlas_uuid
 				, anim_speed
 				, anim_sequence
 			);
@@ -93,10 +89,8 @@
 			REQUIRE_NOTHROW(so.set_animation(anim_name));
 			auto ca = so.get_current_animation();
 			REQUIRE(ca != nullptr);
-			REQUIRE(ca->get_name() == anim_name);
-			REQUIRE(ca->get_atlas_name() == atlas_name);
-			REQUIRE(ca->get_atlas_uuid() == atlas_uuid);
-			REQUIRE(ca->get_ms_per_frame() == anim_speed);
+			REQUIRE(ca->name == anim_name);
+			REQUIRE(ca->ms_per_frame == anim_speed);
 			REQUIRE(ca->get_next_index() == 1);
 			REQUIRE(ca->get_next_index() == 3);
 			REQUIRE(ca->get_next_index() == 5);

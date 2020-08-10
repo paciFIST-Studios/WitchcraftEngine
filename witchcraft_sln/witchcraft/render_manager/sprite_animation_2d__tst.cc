@@ -13,10 +13,8 @@
 		TEST_CASE(" Animation2D::ctor"  )
 		{
 			auto anim = Animation2D();
-			REQUIRE(anim.get_name() == uninit::CSTRING);
-			REQUIRE(anim.get_atlas_name() == uninit::CSTRING);
-			REQUIRE(anim.get_atlas_uuid() == uninit::UINT);
-			REQUIRE(anim.get_ms_per_frame() == uninit::UINT);
+			REQUIRE(anim.name == uninit::CSTRING);
+			REQUIRE(anim.ms_per_frame == uninit::UINT);
 
 			// we can't tell that it's looping the same zero,
 			// but we do know it should report a zero each time
@@ -36,16 +34,12 @@
 
 			auto anim = Animation2D(
 				  anim_name
-				, atlas_name
-				, atlas_uuid
 				, ms_per_frame
 				, anim_sequence
 			);
 
-			REQUIRE(anim.get_name() == anim_name);
-			REQUIRE(anim.get_atlas_name() == atlas_name);
-			REQUIRE(anim.get_atlas_uuid() == atlas_uuid);
-			REQUIRE(anim.get_ms_per_frame() == ms_per_frame);
+			REQUIRE(anim.name == anim_name);
+			REQUIRE(anim.ms_per_frame == ms_per_frame);
 
 			REQUIRE(anim.get_next_index() == 1);
 			REQUIRE(anim.get_next_index() == 2);

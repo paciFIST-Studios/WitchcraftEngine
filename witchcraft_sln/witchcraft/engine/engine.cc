@@ -120,14 +120,15 @@ void Engine::run()
 
 	// player
 	int player_id;
-	qSceneObject * player_scene_object = nullptr;
+	qSceneObject * player_a_scene_object = nullptr;
 	{
 		auto id = resource->load_from_xml_file("asset/soccer_game/images/player_a.asset");
 		auto rr = resource->find_resource_by_id(id);
-		auto render_resource = static_cast<qRenderResource*>(rr);
-		render_resource->bind_renderer(render->active_renderer);
-		render_resource->load();
-		player_scene_object = render->register_render_object(render_resource);
+		auto sar = static_cast<SpriteAtlasResource*>(rr);
+		sar->bind_renderer(render->active_renderer);
+		sar->load();
+		sar->set_current_animation("idle");
+		player_a_scene_object = render->register_render_object(sar);
 		player_id = id;
 	}
 
@@ -173,6 +174,11 @@ void Engine::run()
 	buddha_layer->set_is_visible(true);
 	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
 
+	// player_a
+	auto player_a_layer = scene->add_layer("player_a");
+	player_a_layer->set_is_visible(true);
+	player_a_layer->add_scene_object(static_cast<qSceneObject*>(player_a_scene_object));
+
 
 
 	// - Debug stuff ---------------------------------------------------------------------------------
@@ -183,10 +189,10 @@ void Engine::run()
 
 	// - Game Loop ---------------------------------------------------------------------------------
 
-	bool debug_emit_frame_length = false;
+	bool debug_emit_frame_length	 = false;
 	bool debug_emit_controller_count = false;
 	bool debug_emit_controller_state = false;
-	bool gameplay_loop_is_running = true;
+	bool gameplay_loop_is_running	 = true;
 	SDL_Event window_event;
 	Uint32 last_frame_time = SDL_GetTicks();
 	Uint32 current_frame_time = 0;
@@ -430,7 +436,8 @@ void Engine::run()
 
 		// - Physics Update ---------------------------------------------------------------------------------
 
-		witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
+		//witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
+		witchcraft::engine::move_object_by_vector(player_a_scene_object, player_0_x_input, player_0_y_input);
 		witchcraft::engine::move_layer_by_vector(soccer_pitch_layer, layer_0_x_offset, layer_0_y_offset);
 
 		// - Render Update ---------------------------------------------------------------------------------

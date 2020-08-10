@@ -75,7 +75,7 @@ public:
 
 	void shutdown();
 
-	void render_call();
+	void render_visible_scene_back_to_front();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 			

@@ -2,7 +2,7 @@
 
 RenderObject2D::RenderObject2D()
 	: render_resource(nullptr)
-	, render_rect{ uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR }
+	, render_source{ uninit::UCHAR, uninit::UCHAR, uninit::UCHAR, uninit::UCHAR }
 	, position_x(uninit::FLOAT)
 	, position_y(uninit::FLOAT)
 	, scale_x(uninit::FLOAT)
@@ -20,8 +20,8 @@ void RenderObject2D::set_render_resource(qRenderResource * resource)
 		
 		if (render_resource->surface)
 		{
-			render_rect.w = render_resource->surface->w;
-			render_rect.h = render_resource->surface->h;
+			render_source.w = render_resource->surface->w;
+			render_source.h = render_resource->surface->h;
 
 			// set scaling to 1:1
 			scale_x = 1.0f;

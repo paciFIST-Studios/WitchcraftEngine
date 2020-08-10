@@ -81,7 +81,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 bool RenderManager2D::update()
 {
 	SDL_RenderClear(active_renderer);
-	render_call();
+	render_visible_scene_back_to_front();
 	SDL_RenderPresent(active_renderer);
 	return true;
 }
@@ -97,10 +97,10 @@ void RenderManager2D::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void RenderManager2D::render_call()
+void RenderManager2D::render_visible_scene_back_to_front()
 {
 	if (scene_manager == nullptr)
-		return;
+		return; // error?
 
 	auto layers = scene_manager->get_layers_ptrs_vector();
 	for (auto&& layer : layers)
@@ -125,22 +125,23 @@ void RenderManager2D::render_call()
 			//// is this where the tick for the object is called? Is that okay?
 			//obj->update();
 
-			SDL_Rect dest;
+			SDL_Rect renderable_area;
+			
 			auto layer_pos = layer->get_offset();
 			auto obj_pos = obj->get_position();
 		
-			dest.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
-			dest.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
+			renderable_area.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
+			renderable_area.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
 			
 			auto scale = obj->get_scale();
-			dest.w = int(obj->render_rect.w * std::get<0>(scale));
-			dest.h = int(obj->render_rect.h * std::get<1>(scale));
+			renderable_area.w = int(obj->render_source.w * std::get<0>(scale));
+			renderable_area.h = int(obj->render_source.h * std::get<1>(scale));
 
 			SDL_RenderCopy(
 				  active_renderer
 				, obj->render_resource->texture
-				, &obj->render_rect
-				, &dest
+				, &obj->render_source
+				, &renderable_area
 			);
 		}
 	}
@@ -165,10 +166,10 @@ qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_own
 	// This SDL_Rect covers the parts of the texture we will display
 	// We're sizing it to include the entire texture (ie: no sprite atlas support)
 	auto wh = non_owner->get_width_height();
-	render_object->render_rect.w = std::get<0>(wh);
-	render_object->render_rect.h = std::get<1>(wh);
-	render_object->render_rect.x = 0;
-	render_object->render_rect.y = 0;
+	render_object->render_source.w = std::get<0>(wh);
+	render_object->render_source.h = std::get<1>(wh);
+	render_object->render_source.x = 0;
+	render_object->render_source.y = 0;
 
 	auto result = static_cast<qSceneObject*>(render_object.get());
 	render_objects.push_back(std::move(render_object));

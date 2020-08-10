@@ -128,6 +128,9 @@ void Engine::run()
 
 	int const controller_idx = 0;
 
+	float const player_speed = 0.4f;
+	float const layer_speed = 0.05f;
+
 	float player_0_x_input = 0.0f;
 	float player_0_y_input = 0.0f;
 	float layer_0_x_offset = 0.0f;
@@ -290,12 +293,12 @@ void Engine::run()
 						// left of dead zone
 						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 						{
-							player_0_x_input = -1.f;
+							player_0_x_input = -player_speed;
 						}
 						// right of deadzone
 						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 						{
-							player_0_x_input = 1.f;
+							player_0_x_input = player_speed;
 						}
 						// deadzone
 						else
@@ -309,12 +312,12 @@ void Engine::run()
 						// below dead zone
 						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 						{
-							player_0_y_input = -1.f;
+							player_0_y_input = -player_speed;
 						}
 						// above dead zone
 						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 						{
-							player_0_y_input = 1.f;
+							player_0_y_input = player_speed;
 						}
 						// deadzone
 						else
@@ -327,11 +330,11 @@ void Engine::run()
 					{
 						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 						{
-							layer_0_x_offset += -1.0f;
+							layer_0_x_offset += -layer_speed;
 						}
 						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 						{
-							layer_0_x_offset += 1.0f;
+							layer_0_x_offset += layer_speed;
 						}
 						else
 						{
@@ -343,11 +346,11 @@ void Engine::run()
 					{
 						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
 						{
-							layer_0_y_offset += -1.0f;
+							layer_0_y_offset += -layer_speed;
 						}
 						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
 						{
-							layer_0_y_offset += 1.0f;
+							layer_0_y_offset += layer_speed;
 						}
 						else
 						{

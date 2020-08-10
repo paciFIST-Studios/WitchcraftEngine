@@ -388,7 +388,7 @@ void Engine::run()
 		}
 
 		// yield for the rest of the frame
-		auto yield_time = witchcraft::configuration::frame_length_ms - (current_frame_time - last_frame_time);
+		//auto yield_time = witchcraft::configuration::frame_length_ms - (current_frame_time - last_frame_time);
 		// HACK: only has 10ms resolution, so we're just going to use it as a 10ms sleep
 		SDL_Delay(1);
 

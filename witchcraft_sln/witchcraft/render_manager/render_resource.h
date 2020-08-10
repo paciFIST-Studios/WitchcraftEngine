@@ -19,6 +19,9 @@ protected:
 	unsigned int width = 0;
 	unsigned int height = 0;
 	
+	unsigned int tile_width = 0;
+	unsigned int tile_height = 0;
+
 	SDL_Renderer * renderer = nullptr;
 
 	void attempt_load(std::string const & file_name);
@@ -36,7 +39,7 @@ public:
 
 	qRenderResource();
 	qRenderResource(
-		unsigned int ID
+		  unsigned int ID
 		, unsigned int scope
 		, std::string const & file_name
 	);
@@ -47,6 +50,12 @@ public:
 	std::tuple<int, int> get_width_height() const
 	{
 		return std::make_tuple(width, height);
+	}
+
+	void set_atlas_tiling(unsigned int width, unsigned int height)
+	{
+		tile_width = width;
+		tile_height = height;
 	}
 };
 

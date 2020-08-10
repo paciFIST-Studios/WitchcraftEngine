@@ -7,7 +7,8 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 	unsigned int	resource_scope	= uninit::UINT;
 	std::string		file_name		= std::string(uninit::CSTRING);
 
-	unsigned int sprite_atlas_tile_width = uninit::UINT;
+	bool is_sprite_atlas = false;
+	unsigned int sprite_atlas_tile_width  = uninit::UINT;
 	unsigned int sprite_atlas_tile_height = uninit::UINT;
 
 	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
@@ -35,48 +36,49 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 		else if (attribute_name == witchcraft::xml::sprite_atlas)
 		{
 			// NOTE: format is: sprite_atlas="w,h"
+			// if we find this string, and it's formatted correctly, then:
+			// we count it as a sprite atlas
+			// we extract the tile size from the string
 			auto atlas_vec = utility::tokenize_string(attribute_value, witchcraft::xml::delimiter);
 			if (atlas_vec.size() == 2)
 			{
-				auto x = std::stoi(atlas_vec[0]);
-				auto y = std::stoi(atlas_vec[1]);
-				sprite_atlas_tile_width = x;
-				sprite_atlas_tile_height = y;
+				sprite_atlas_tile_width  = std::stoi(atlas_vec[0]);
+				sprite_atlas_tile_height = std::stoi(atlas_vec[1]);
+				is_sprite_atlas = true;
 			}
 		}
 	}
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// NOTE: We're making a qRenderResource, and then moving it to a qResource ptr
-	//std::unique_ptr<qResource> resource = std::make_unique<qRenderResource>(
-	//	  resource_id
-	//	, resource_scope
-	//	, file_name
-	//	);
+	// we'll return this
+	std::unique_ptr<qResource> resource;
+
+	if (is_sprite_atlas)
+	{
+		auto sar = std::make_unique<SpriteAtlasResource>(
+			  resource_id
+			, resource_scope
+			, file_name
+			, sprite_atlas_tile_width
+			, sprite_atlas_tile_height
+			);
+
+		auto embedded_animations = parse_embedded_sprite_animations(xml);
+
+		for (auto&& anim : embedded_animations)
+		{
+			sar->add_animation(anim.name, anim);
+		}
+
+		resource = std::move(sar);
+	}
+	else // create a basic render resource
+	{
+		auto rr = std::make_unique<qRenderResource>(resource_id, resource_scope, file_name);
+		resource = std::move(rr);
+	}
 	
-	auto rr = std::make_unique<qRenderResource>(
-		  resource_id
-		, resource_scope
-		, file_name
-		);
-
-
-
-	std::vector<Animation2D> embedded_animations;
-	if (sprite_atlas_tile_width != uninit::UINT && 
-		sprite_atlas_tile_height != uninit::UINT)
-	{
-		rr->set_atlas_tiling(sprite_atlas_tile_width, sprite_atlas_tile_height);
-		embedded_animations = parse_embedded_sprite_animations(xml);
-	}
-
-	for (auto&& anim : embedded_animations)
-	{
-		rr->add_animation(anim.name, anim);
-	}
-
-	std::unique_ptr<qResource> resource = std::move(rr);
 	return std::move(resource);
 }
 

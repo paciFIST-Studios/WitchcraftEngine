@@ -12,7 +12,7 @@
 #include "../engine/engine_object.h"
 #include "resource.h"
 
-#include "../render_manager/animation_resource.h"
+#include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager_2d.h"
 
 

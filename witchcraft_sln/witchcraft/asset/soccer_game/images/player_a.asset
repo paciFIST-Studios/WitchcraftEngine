@@ -4,41 +4,41 @@
 
     <!-- animations -->
     <!-- running -->
-    <animation_2d name="run_up"         type="animation_2d" sequence="0,1,2,3"     ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_up_right"   type="animation_2d" sequence="8,9,10,11"   ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_right"      type="animation_2d" sequence="16,17,18,19" ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_down_right" type="animation_2d" sequence="24,25,26,27" ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_down"       type="animation_2d" sequence="32,33,34,35" ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_down_left"  type="animation_2d" sequence="40,41,42,43" ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_left"       type="animation_2d" sequence="48,49,50,51" ms_per_frame="10"></animation_2d>
-    <animation_2d name="run_up_left"    type="animation_2d" sequence="56,57,58,59" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_up"         sequence="0,1,2,3"     ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_up_right"   sequence="8,9,10,11"   ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_right"      sequence="16,17,18,19" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_down_right" sequence="24,25,26,27" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_down"       sequence="32,33,34,35" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_down_left"  sequence="40,41,42,43" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_left"       sequence="48,49,50,51" ms_per_frame="10"></animation_2d>
+    <animation_2d name="run_up_left"    sequence="56,57,58,59" ms_per_frame="10"></animation_2d>
 
     <!-- tackling -->
-    <animation_2d name="tackle_up"         type="animation_2d" sequence="5"  ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_up_right"   type="animation_2d" sequence="13" ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_right"      type="animation_2d" sequence="21" ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_down_right" type="animation_2d" sequence="29" ms_per_frame="10" ></animation_2d>
-    <animation_2d name="tackle_down"       type="animation_2d" sequence="37" ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_down_left"  type="animation_2d" sequence="45" ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_left"       type="animation_2d" sequence="53" ms_per_frame="10"></animation_2d>
-    <animation_2d name="tackle_up_left"    type="animation_2d" sequence="61" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_up"         sequence="5"  ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_up_right"   sequence="13" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_right"      sequence="21" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_down_right" sequence="29" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_down"       sequence="37" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_down_left"  sequence="45" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_left"       sequence="53" ms_per_frame="10"></animation_2d>
+    <animation_2d name="tackle_up_left"    sequence="61" ms_per_frame="10"></animation_2d>
 
     <!-- rolling -->
-    <animation_2d name="roll_right" type="animation_2d" sequence="64,65,66,67,68" ms_per_frame="10"></animation_2d>
-    <animation_2d name="roll_left"  type="animation_2d" sequence="72,73,74,75,76" ms_per_frame="10"></animation_2d>
+    <animation_2d name="roll_right" sequence="64,65,66,67,68" ms_per_frame="10"></animation_2d>
+    <animation_2d name="roll_left"  sequence="72,73,74,75,76" ms_per_frame="10"></animation_2d>
 
     <!-- falling -->
-    <animation_2d name="fall_right" type="animation_2d" sequence="80,81,82,83,84,85,86,87" ms_per_frame="10"></animation_2d>
-    <animation_2d name="fall_left"  type="animation_2d" sequence="88,89,90,91,92,93,94,95" ms_per_frame="10"></animation_2d>
+    <animation_2d name="fall_right" sequence="80,81,82,83,84,85,86,87" ms_per_frame="10"></animation_2d>
+    <animation_2d name="fall_left"  sequence="88,89,90,91,92,93,94,95" ms_per_frame="10"></animation_2d>
 
     <!-- idle, misc -->
-    <animation_2d name="idle_blink" type="animation_2d" sequence="96,97"                       ms_per_frame="10"></animation_2d>
-    <animation_2d  name="shout"     type="animation_2d" sequence="104,105,106,107,108,109,110" ms_per_frame="10"></animation_2d>
+    <animation_2d name="idle_blink" sequence="96,97"                       ms_per_frame="10"></animation_2d>
+    <animation_2d  name="shout"     sequence="104,105,106,107,108,109,110" ms_per_frame="10"></animation_2d>
 
     <!-- keeper animations -->
-    <animation_2d name="keeper_front_dive_left"  type="animation_2d" sequence="112,113,114,115,116" ms_per_frame="10"></animation_2d>
-    <animation_2d name="keeper_front_dive_right" type="animation_2d" sequence="112,113,114,115,116" ms_per_frame="10"></animation_2d>
-    <animation_2d name="keeper_back_dive_left"   type="animation_2d" sequence="120,121,122,123,124" ms_per_frame="10"></animation_2d>
-    <animation_2d name="keeper_back_dive_right"  type="animation_2d" sequence="120,121,122,123,124" ms_per_frame="10"></animation_2d>
+    <animation_2d name="keeper_front_dive_left"  sequence="112,113,114,115,116" ms_per_frame="10"></animation_2d>
+    <animation_2d name="keeper_front_dive_right" sequence="112,113,114,115,116" ms_per_frame="10"></animation_2d>
+    <animation_2d name="keeper_back_dive_left"   sequence="120,121,122,123,124" ms_per_frame="10"></animation_2d>
+    <animation_2d name="keeper_back_dive_right"  sequence="120,121,122,123,124" ms_per_frame="10"></animation_2d>
   </resource>
 </resources>

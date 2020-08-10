@@ -89,6 +89,10 @@ namespace witchcraft
 			auto pos = layer->get_offset();
 			auto _x = x + std::get<0>(pos);
 			auto _y = y + std::get<1>(pos);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			_x = utility::clamp_to_range(_x, -768.0f, 768.f);
+			_y = utility::clamp_to_range(_y, -768.0f, 768.f);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
 			layer->set_offset(_x, _y);
 		}
 
@@ -181,6 +185,12 @@ namespace witchcraft
 		int const default_window_y_height = 800;
 		int const default_window_x_offset = 0;
 		int const default_window_y_offset = 0;
+
+		float const default_world_boundary_top = 0.0f;
+		float const default_world_boundary_right = 768.0f;
+		float const default_world_boundary_bottom = 768.0f;
+		float const default_world_boundary_left = 0.0f;
+
 
 
 		float const screen_fps = 60.0f;

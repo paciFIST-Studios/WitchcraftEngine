@@ -9,7 +9,6 @@
 *.db
 *.opendb
 *.ipch
-*.asset
 *.clip
 *.pdf
 
@@ -43,4 +42,5 @@ witchcraft_sln/__hopes/*
 witchcraft_sln/__design/*
 
 # soccer game
-witchcraft_sln/witchcraft/asset/soccer_game/*
+witchcraft_sln/witchcraft/asset/soccer_game/bin/*
+witchcraft_sln/witchcraft/asset/soccer_game/sounds/*

@@ -40,7 +40,11 @@ witchcraft_sln/lib/SDL2/SDL2_mixer-2.0.4/*
 witchcraft_sln/lib/SDL2/SDL2_net-2.0.1/*
 witchcraft_sln/__hopes/*
 witchcraft_sln/__design/*
+witchcraft_sln/witchcraft/asset/concepts/*
 
 # soccer game
 witchcraft_sln/witchcraft/asset/soccer_game/bin/*
 witchcraft_sln/witchcraft/asset/soccer_game/sounds/*
+witchcraft_sln/witchcraft/asset/golf_game/*
+witchcraft_sln/witchcraft/asset/tennis_game/*
+witchcraft_sln/witchcraft/asset/car_game/*

@@ -35,9 +35,6 @@ protected:
 
 public:
 	qRenderResource * render_resource;
-	SDL_Rect render_source;
-
-
 
 	RenderObject2D();
 

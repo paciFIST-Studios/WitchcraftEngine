@@ -127,7 +127,7 @@ void Engine::run()
 		auto sar = static_cast<SpriteAtlasResource*>(rr);
 		sar->bind_renderer(render->active_renderer);
 		sar->load();
-		sar->set_current_animation("idle");
+		sar->set_current_animation("idle_blink");
 		player_a_scene_object = render->register_render_object(sar);
 		player_id = id;
 	}

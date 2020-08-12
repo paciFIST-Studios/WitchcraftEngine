@@ -36,7 +36,6 @@ public:
 	SpriteAtlasResource() : qRenderResource()
 	{}
 
-
 	SpriteAtlasResource(
 		  unsigned int UUID
 		, unsigned int scope

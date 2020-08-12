@@ -26,6 +26,8 @@ protected:
 
 	void attempt_load(std::string const & file_name);
 	
+	SDL_Rect current_renderable_rect;
+
 public:
 	SDL_Surface * surface = nullptr;
 	SDL_Texture * texture = nullptr;
@@ -46,6 +48,8 @@ public:
 
 	bool is_loaded() const;
 	bool renderer_is_ready() const;
+
+	SDL_Rect get_renderable_rect() const { return current_renderable_rect; }
 
 	std::tuple<int, int> get_width_height() const
 	{

@@ -25,6 +25,13 @@ void qRenderResource::attempt_load(std::string const & file_name)
 		surface_height = surface->h;
 
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+		// NOTE: this shouldn't change in a RenderableResource
+		// NOTE2: SpriteAtlasResrouce does change it
+		current_renderable_rect.x = 0;
+		current_renderable_rect.y = 0;
+		current_renderable_rect.w = surface_width;
+		current_renderable_rect.h = surface_height;
 	}
 }
 

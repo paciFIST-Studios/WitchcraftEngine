@@ -15,6 +15,21 @@ protected:
 
 	std::map<std::string, Animation2D> animations;
 	std::string current_animation;
+
+	SDL_Rect calculate_renderable_rect(unsigned int idx)
+	{
+		int columns = surface_width / sprite_width;
+		int row = idx / columns;
+		int col = idx % columns;
+
+		SDL_Rect rect;
+		rect.x = (col * sprite_width);
+		rect.y = (row * sprite_height);
+		rect.w = (col * sprite_width) + sprite_width;
+		rect.h = (row * sprite_height) + sprite_height;
+		return rect;
+	}
+
 public:
 	   
 	// also init base class
@@ -45,13 +60,14 @@ public:
 
 	void set_current_animation(std::string const & name)
 	{
-		auto anim = &animations.find(name);
-		if (anim)
+		// if the animation is present in the map
+		auto anim = animations.find(name);
+		if (anim != animations.end())
 		{
-			current_animation = name;
-
-			// set renderable area, based on current animation
-		} // else error?
+			current_animation = anim->first;
+			int index = animations[current_animation].get_next_index();			
+			current_renderable_rect = calculate_renderable_rect(index);
+		}
 	}
 
 	std::string const & get_current_animation() { return current_animation; }
@@ -68,7 +84,12 @@ public:
 		return result;
 	}
 
-	// SDL_Rect get_next_animation_frame()
+	SDL_Rect const & get_next_animation_frame()
+	{
+		unsigned int index = animations[current_animation].get_next_index();
+		current_renderable_rect = calculate_renderable_rect(index);
+		return current_renderable_rect;
+	}
 };
 
 

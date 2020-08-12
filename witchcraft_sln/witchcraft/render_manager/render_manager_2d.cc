@@ -125,23 +125,24 @@ void RenderManager2D::render_visible_scene_back_to_front()
 			//// is this where the tick for the object is called? Is that okay?
 			//obj->update();
 
-			SDL_Rect renderable_area;
+			SDL_Rect dest_rect;
+			SDL_Rect src_rect = obj->render_resource->get_renderable_rect();
 			
 			auto layer_pos = layer->get_offset();
 			auto obj_pos = obj->get_position();
 		
-			renderable_area.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
-			renderable_area.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
+			dest_rect.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
+			dest_rect.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
 			
 			auto scale = obj->get_scale();
-			renderable_area.w = int(obj->render_source.w * std::get<0>(scale));
-			renderable_area.h = int(obj->render_source.h * std::get<1>(scale));
+			dest_rect.w = int(src_rect.w * std::get<0>(scale));
+			dest_rect.h = int(src_rect.h * std::get<1>(scale));
 
 			SDL_RenderCopy(
 				  active_renderer
 				, obj->render_resource->texture
-				, &obj->render_source
-				, &renderable_area
+				, &src_rect
+				, &dest_rect
 			);
 		}
 	}
@@ -159,17 +160,12 @@ void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned i
 
 qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
+	// note the cast
 	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
 	render_object->set_is_visible(is_visible);
 	render_object->set_render_resource(non_owner);
 
-	// This SDL_Rect covers the parts of the texture we will display
-	// We're sizing it to include the entire texture (ie: no sprite atlas support)
-	auto wh = non_owner->get_width_height();
-	render_object->render_source.w = std::get<0>(wh);
-	render_object->render_source.h = std::get<1>(wh);
-	render_object->render_source.x = 0;
-	render_object->render_source.y = 0;
+	//
 
 	auto result = static_cast<qSceneObject*>(render_object.get());
 	render_objects.push_back(std::move(render_object));

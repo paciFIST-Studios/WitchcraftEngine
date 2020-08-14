@@ -25,7 +25,7 @@ protected:
 		SDL_Rect rect;
 		rect.x = (col * sprite_width);
 		rect.y = (row * sprite_height);
-		rect.w = (col * sprite_width) + sprite_width;
+		rect.w = (col * sprite_width)  + sprite_width;
 		rect.h = (row * sprite_height) + sprite_height;
 		return rect;
 	}

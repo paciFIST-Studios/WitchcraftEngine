@@ -58,6 +58,7 @@ public:
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
+	, tm_early_exit(false)
 	{}
 
 	Engine(EngineInitializer init) 

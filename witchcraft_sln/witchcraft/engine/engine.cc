@@ -334,6 +334,7 @@ void Engine::run()
 							auto x = std::get<0>(scale) * 1.1f;
 							auto y = std::get<1>(scale) * 1.1f;
 							soccer_pitch_scene_object->set_scale(x, y);
+							player_a_scene_object->set_scale(x, y);
 						}
 						else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
 						{
@@ -341,6 +342,7 @@ void Engine::run()
 							auto x = std::get<0>(scale) * 0.9f;
 							auto y = std::get<1>(scale) * 0.9f;
 							soccer_pitch_scene_object->set_scale(x, y);
+							player_a_scene_object->set_scale(x, y);							
 						}
 
 						// click sticks

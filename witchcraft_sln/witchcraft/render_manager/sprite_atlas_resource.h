@@ -25,8 +25,8 @@ protected:
 		SDL_Rect rect;
 		rect.x = (col * sprite_width);
 		rect.y = (row * sprite_height);
-		rect.w = (col * sprite_width)  + sprite_width;
-		rect.h = (row * sprite_height) + sprite_height;
+		rect.w = sprite_width;
+		rect.h = sprite_height;
 		return rect;
 	}
 
@@ -34,8 +34,9 @@ public:
 	   
 	// also init base class
 	SpriteAtlasResource() : qRenderResource()
+	, sprite_width(uninit::UINT)
+	, sprite_height(uninit::UINT)
 	{}
-
 	SpriteAtlasResource(
 		  unsigned int UUID
 		, unsigned int scope

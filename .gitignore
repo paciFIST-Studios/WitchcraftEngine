@@ -11,6 +11,7 @@
 *.ipch
 *.clip
 *.pdf
+*.lastcodeanalysissucceeded
 
 # other dirs
 16_Games/*
@@ -43,8 +44,10 @@ witchcraft_sln/__design/*
 witchcraft_sln/witchcraft/asset/concepts/*
 
 # soccer game
+witchcraft_sln/witchcraft/asset/fonts/*
 witchcraft_sln/witchcraft/asset/soccer_game/bin/*
 witchcraft_sln/witchcraft/asset/soccer_game/sounds/*
 witchcraft_sln/witchcraft/asset/golf_game/*
 witchcraft_sln/witchcraft/asset/tennis_game/*
 witchcraft_sln/witchcraft/asset/car_game/*
+witchcraft_sln/witchcraft/asset/smalltown/*

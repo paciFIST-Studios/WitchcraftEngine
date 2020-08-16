@@ -76,6 +76,7 @@ void qRenderResource::bind_renderer(SDL_Renderer * renderer)
 }
 
 qRenderResource::qRenderResource() 
+: current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 {}
 
 qRenderResource::qRenderResource(
@@ -84,6 +85,7 @@ qRenderResource::qRenderResource(
 	, std::string const & file_name)
 	// -- end args
 	: qResource(ID, scope, file_name, EResourceType::RESOURCE_GRAPHIC)
+	, current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 	// -- end initializer
 {
 }

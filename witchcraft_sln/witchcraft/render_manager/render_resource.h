@@ -10,19 +10,24 @@
 // witchcraft
 #include "../utility/utility.h"
 #include "../resource_manager/resource.h"
+#include "../render_manager/sprite_animation_2d.h"
+
 
 // Render == "Graphical" == "Graphics"
 class qRenderResource : public qResource
 {
 private:
 protected:
-	unsigned int width = 0;
-	unsigned int height = 0;
+	unsigned int surface_width = 0;
+	unsigned int surface_height = 0;
 	
+
 	SDL_Renderer * renderer = nullptr;
 
 	void attempt_load(std::string const & file_name);
 	
+	SDL_Rect current_renderable_rect;
+
 public:
 	SDL_Surface * surface = nullptr;
 	SDL_Texture * texture = nullptr;
@@ -36,7 +41,7 @@ public:
 
 	qRenderResource();
 	qRenderResource(
-		unsigned int ID
+		  unsigned int ID
 		, unsigned int scope
 		, std::string const & file_name
 	);
@@ -44,10 +49,12 @@ public:
 	bool is_loaded() const;
 	bool renderer_is_ready() const;
 
+	SDL_Rect get_renderable_rect() const { return current_renderable_rect; }
+
 	std::tuple<int, int> get_width_height() const
 	{
-		return std::make_tuple(width, height);
-	}
+		return std::make_tuple(surface_width, surface_height);
+	}	
 };
 
 #endif // RENDER_RESOURCE_H

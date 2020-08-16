@@ -1,38 +1,53 @@
+# extensions
 *.tlog
 *.idb
-_LoveEngine-master.zip
 *.iobj
 *.ipdb
 *.aps
-Witchcraft/lib/rapidxml/rapidxml-1.13/*
 *.zip
 *.del
 *.db
 *.opendb
 *.ipch
-*.asset
-asset_lib/*
-witchcraft_sln/witchcraft/asset/neko.png
-witchcraft_sln/witchcraft/asset/whirlwind.png
-16_Games/*
 *.clip
+*.pdf
+*.lastcodeanalysissucceeded
+
+# other dirs
+16_Games/*
+research/*
+art_style/*
+asset_lib/*
+design_space/*
+zip/*
+
+# direct files
+371c10da0b42e35bfffb5c9ea1d14196.jpg
+desmos-graph.png
 diablo_pitch.pdf
+thematic_target - build a game mechanic around this.jpg
+tilesets/bubble emotes july update.png
+
+# engine dirs
+Witchcraft/lib/rapidxml/rapidxml-1.13/*
+witchcraft_sln/witchcraft/asset/neko.png
 witchcraft_sln/visible ram values.png
 witchcraft_sln/witchcraft/Debug/*
-research/*
+witchcraft_sln/witchcraft/asset/whirlwind.png
 witchcraft_sln/witchcraft/scene_manager/__scene_listener.h
 witchcraft_sln/witchcraft/scene_manager/__2d_scene_manager.h
-*.pdf
 witchcraft_sln/__hopes/Untitled (Recovered).bmp
-
 witchcraft_sln/lib/SDL2/SDL2_mixer-2.0.4/*
 witchcraft_sln/lib/SDL2/SDL2_net-2.0.1/*
-zip/*
-art_style/*
-design_space/*
 witchcraft_sln/__hopes/*
 witchcraft_sln/__design/*
-thematic_target - build a game mechanic around this.jpg
-desmos-graph.png
-371c10da0b42e35bfffb5c9ea1d14196.jpg
-tilesets/bubble emotes july update.png
+witchcraft_sln/witchcraft/asset/concepts/*
+
+# soccer game
+witchcraft_sln/witchcraft/asset/fonts/*
+witchcraft_sln/witchcraft/asset/soccer_game/bin/*
+witchcraft_sln/witchcraft/asset/soccer_game/sounds/*
+witchcraft_sln/witchcraft/asset/golf_game/*
+witchcraft_sln/witchcraft/asset/tennis_game/*
+witchcraft_sln/witchcraft/asset/car_game/*
+witchcraft_sln/witchcraft/asset/smalltown/*

@@ -1,0 +1,3 @@
+<resources>
+  <resource UUID="5" type="graphic" file="asset/soccer_game/images/stadium.png" scope="1">Stadium</resource>
+</resources>

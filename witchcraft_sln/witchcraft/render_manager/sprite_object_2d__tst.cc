@@ -59,10 +59,16 @@
 			soi.frame_position_y = 16;
 
 			// specific animation
-			std::vector<unsigned int> anim_sequence = { 1, 3, 5, 7, 2, 4, 6, 8 };
 			std::string anim_name = "test";
 			unsigned int anim_speed = 10;
-			auto test_anim = Animation2D(anim_name, anim_sequence, anim_speed);
+			std::vector<unsigned int> anim_sequence = { 1, 3, 5, 7, 2, 4, 6, 8 };
+
+			auto test_anim = Animation2D(
+				  anim_name
+				, anim_speed
+				, anim_sequence
+			);
+
 			soi.animations.push_back(test_anim);
 
 			// initialized object
@@ -83,8 +89,8 @@
 			REQUIRE_NOTHROW(so.set_animation(anim_name));
 			auto ca = so.get_current_animation();
 			REQUIRE(ca != nullptr);
-			REQUIRE(ca->get_name() == anim_name);
-			REQUIRE(ca->get_frame_advance_timing() == anim_speed);
+			REQUIRE(ca->name == anim_name);
+			REQUIRE(ca->ms_per_frame == anim_speed);
 			REQUIRE(ca->get_next_index() == 1);
 			REQUIRE(ca->get_next_index() == 3);
 			REQUIRE(ca->get_next_index() == 5);

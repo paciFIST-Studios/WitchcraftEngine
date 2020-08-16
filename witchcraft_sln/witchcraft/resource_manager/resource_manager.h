@@ -12,7 +12,7 @@
 #include "../engine/engine_object.h"
 #include "resource.h"
 
-#include "../render_manager/animation_resource.h"
+#include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager_2d.h"
 
 
@@ -39,8 +39,10 @@ protected:
 	ResourceMapType resource_map;
 
 	ResourcePtr build_render_resource_from_xml(XML::xml_node<> const & xml);
-	ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
+	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
+	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
 public:
 

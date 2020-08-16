@@ -2,7 +2,7 @@
 
 Layer2D * SceneManager2D::add_layer(std::string const & name)
 {
-	auto found = find_layer(name);
+	auto found = find_layer(name);// if found {return} else {construct, return}
 
 	if (found == nullptr)
 	{

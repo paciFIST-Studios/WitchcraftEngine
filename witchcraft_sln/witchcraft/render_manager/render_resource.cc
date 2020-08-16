@@ -16,14 +16,22 @@ void qRenderResource::attempt_load(std::string const & file_name)
 
 	//texture = IMG_LoadTexture(renderer, file_name.c_str());
 
+	// this requires the c_str
 	surface = IMG_Load(file_name.c_str());
 
 	if (surface)
 	{
-		width = surface->w;
-		height = surface->h;
+		surface_width = surface->w;
+		surface_height = surface->h;
 
 		texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+		// NOTE: this shouldn't change in a RenderableResource
+		// NOTE2: SpriteAtlasResrouce does change it
+		current_renderable_rect.x = 0;
+		current_renderable_rect.y = 0;
+		current_renderable_rect.w = surface_width;
+		current_renderable_rect.h = surface_height;
 	}
 }
 
@@ -33,7 +41,7 @@ qRenderResource::~qRenderResource()
 void qRenderResource::load()
 {
 	unload();
-	attempt_load(_file_name.c_str());
+	attempt_load(_file_name);
 }
 
 void qRenderResource::unload()
@@ -54,6 +62,13 @@ void qRenderResource::unload()
 
 void qRenderResource::bind_renderer(SDL_Renderer * renderer)
 {
+	if (this == nullptr)
+	{
+		PLOGE << "WARNING: RENDER RESOURCE IS NOT FULLY INITIALIZED";
+		// todo: print callstack so we know what happened here
+		return;
+	}
+
 	if (renderer != nullptr)
 	{
 		this->renderer = renderer;
@@ -61,6 +76,7 @@ void qRenderResource::bind_renderer(SDL_Renderer * renderer)
 }
 
 qRenderResource::qRenderResource() 
+: current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 {}
 
 qRenderResource::qRenderResource(
@@ -68,7 +84,8 @@ qRenderResource::qRenderResource(
 	, unsigned int scope
 	, std::string const & file_name)
 	// -- end args
-	: qResource(ID, scope, file_name, RESOURCE_TYPE::RESOURCE_GRAPHIC)
+	: qResource(ID, scope, file_name, EResourceType::RESOURCE_GRAPHIC)
+	, current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 	// -- end initializer
 {
 }

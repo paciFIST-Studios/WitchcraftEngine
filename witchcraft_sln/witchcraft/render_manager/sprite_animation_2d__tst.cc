@@ -13,8 +13,8 @@
 		TEST_CASE(" Animation2D::ctor"  )
 		{
 			auto anim = Animation2D();
-			REQUIRE(anim.get_name() == uninit::CSTRING);
-			REQUIRE(anim.get_frame_advance_timing() == uninit::UINT);
+			REQUIRE(anim.name == uninit::CSTRING);
+			REQUIRE(anim.ms_per_frame == uninit::UINT);
 
 			// we can't tell that it's looping the same zero,
 			// but we do know it should report a zero each time
@@ -26,12 +26,20 @@
 		TEST_CASE(" Animation2D::Animation2D(name, sequence, timing)")
 		{
 			std::string anim_name = "walk";
+			std::string atlas_name = "sprite_atlas_player_1";
+			unsigned int atlas_uuid = 666;
+			unsigned int ms_per_frame = 500;
 			std::vector<unsigned int> anim_sequence = { 1, 2, 3 };
-			unsigned int anim_timing = 500;
 
-			auto anim = Animation2D(anim_name, anim_sequence, anim_timing);
-			REQUIRE(anim.get_name() == anim_name);
-			REQUIRE(anim.get_frame_advance_timing() == anim_timing);
+
+			auto anim = Animation2D(
+				  anim_name
+				, ms_per_frame
+				, anim_sequence
+			);
+
+			REQUIRE(anim.name == anim_name);
+			REQUIRE(anim.ms_per_frame == ms_per_frame);
 
 			REQUIRE(anim.get_next_index() == 1);
 			REQUIRE(anim.get_next_index() == 2);

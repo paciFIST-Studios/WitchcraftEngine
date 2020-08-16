@@ -7,6 +7,8 @@ namespace witchcraft
 {
 	namespace xml
 	{
+		static std::string const delimiter = ",";
+
 		static std::string const resource_list = "resources";
 		static std::string const resource = "resource";
 
@@ -17,8 +19,15 @@ namespace witchcraft
 		static std::string const file_name = "file";
 		static std::string const resource_scope = "scope";
 
-		static std::string const two_d_animation_timing_ms = "timing_ms";
-		static std::string const two_d_animation_sequence = "sequence";
+		// NOTE: valid data for sprite atlas is: "int width, int height";
+		// these refer to the standard width and height of tiles in this atlas
+		static std::string const sprite_atlas = "sprite_atlas";
+		static std::string const atlas_uuid = "atlas_uuid";
+		static std::string const atlas_name = "atlas_name";
+
+		static std::string const animation_2d_type = "animation_2d";
+		static std::string const animation_2d_ms_per_frame = "ms_per_frame";
+		static std::string const animation_2d_sequence = "sequence";
 	}
 
 	namespace configuration

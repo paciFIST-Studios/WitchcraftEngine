@@ -11,20 +11,22 @@
 #include "../engine/engine_object.h"
 
 #define POSITION_TUPLE std::tuple<float, float>
+#define SCALE_TUPLE std::tuple<float, float>
 
 // 2D render object; each instance represents a unique renderable item
 // in a 2d scene. It contains position, scale, & rotation, and these
 // characteristics will allow the render manager to perform culling.
 class RenderObject2D : public qEngineObject
 {
-public:
-	//typedef std::tuple<float, float> PositionTuple;
-
 private:
 protected:
 
 	float position_x;
 	float position_y;
+
+	float scale_x;
+	float scale_y;
+
 
 	bool visible;
 
@@ -33,7 +35,6 @@ protected:
 
 public:
 	qRenderResource * render_resource;
-	SDL_Rect render_rect;
 
 	RenderObject2D();
 
@@ -42,6 +43,11 @@ public:
 	// position
 	POSITION_TUPLE get_position() const;
 	void set_position(float x, float y);
+
+	// scale
+	SCALE_TUPLE get_scale() const;
+	void set_scale(float x, float y);
+
 
 	// visibility
 	bool is_visible() const;

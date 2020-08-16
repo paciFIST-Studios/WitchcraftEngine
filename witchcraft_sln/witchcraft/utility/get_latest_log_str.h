@@ -44,7 +44,7 @@ namespace witchcraft
 				std::string end_name(vec.begin(), vec.end());
 				end_name += start_name;
 
-				// TODO: consider dropping the algorithm dependency
+				// TODO: consider dropping the <algorithm> dependency (std::replace)
 				char const swapping = ':';
 				char const swap_to = '`';
 				std::replace(end_name.begin(), end_name.end(), swapping, swap_to);

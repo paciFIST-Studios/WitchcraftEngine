@@ -23,7 +23,7 @@ enum class EEngineState : unsigned char
 struct EngineInitializer
 {
 	unsigned int id;
-	bool tm_early_exit;
+	bool tm_early_exit; // tm = testing mode
 };
 
 
@@ -43,16 +43,22 @@ protected:
 	bool tm_early_exit;
 
 
+	int const JOYSTICK_DEAD_ZONE = 8000;
+	SDL_GameController * gameController = nullptr;
+
+
+
 public:
 	
 	void startup();
 	void run();
 	void shutdown();
 
-	EEngineState get_current_state() const { return current_engine_state; }
+	EEngineState const get_current_state() const { return current_engine_state; }
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
+	, tm_early_exit(false)
 	{}
 
 	Engine(EngineInitializer init) 
@@ -67,20 +73,28 @@ namespace witchcraft
 {
 	namespace engine
 	{
-		static void move_object_by_vector(RenderObject2D * object, int x, int y)
+		static void move_object_by_vector(RenderObject2D * object, float x, float y)
 		{
-			auto wh = object->get_position();
-			auto _x = x + int(std::get<0>(wh));
-			auto _y = y + int(std::get<1>(wh));
-			object->set_position(static_cast<float>(_x), static_cast<float>(_y));
+			auto pos = object->get_position();
+			auto _x = x + std::get<0>(pos);
+			auto _y = y + std::get<1>(pos);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			_x = utility::clamp_to_range(_x, 0.0f, 768.f);
+			_y = utility::clamp_to_range(_y, 0.0f, 768.f);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			object->set_position(_x, _y);
 		}
 
-		static void move_layer_by_vector(Layer2D * layer, int x, int y)
+		static void move_layer_by_vector(Layer2D * layer, float x, float y)
 		{
-			auto wh = layer->get_offset();
-			auto _x = x + int(std::get<0>(wh));
-			auto _y = y + int(std::get<1>(wh));
-			layer->set_offset(static_cast<float>(_x), static_cast<float>(_y));
+			auto pos = layer->get_offset();
+			auto _x = x + std::get<0>(pos);
+			auto _y = y + std::get<1>(pos);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			_x = utility::clamp_to_range(_x, -768.0f, 768.f);
+			_y = utility::clamp_to_range(_y, -768.0f, 768.f);
+			// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			layer->set_offset(_x, _y);
 		}
 
 		static Uint32 get_delta_time()
@@ -110,12 +124,78 @@ namespace witchcraft
 			out << "\nfps: " << 1.f / delta_time;
 			return out.str();
 		}
+
+		static int connnected_controller_count()
+		{
+			return SDL_NumJoysticks();
+		}
+
+		static SDL_GameController * get_controller(int idx)
+		{
+			if (idx < 0) return nullptr;
+
+			if (connnected_controller_count() > 0)
+				return SDL_GameControllerOpen(idx);
+
+			return nullptr;
+		}
+
+
+		static bool is_keyboard_event(SDL_Event const & e)
+		{
+			if (e.type == SDL_KEYDOWN ||
+				e.type == SDL_KEYUP
+			)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		static bool is_gamepad_event(SDL_Event const & e)
+		{			
+			if (e.type == SDL_CONTROLLERBUTTONDOWN ||
+				e.type == SDL_CONTROLLERBUTTONUP   ||
+				e.type == SDL_CONTROLLERAXISMOTION ||
+				e.type == SDL_CONTROLLERDEVICEADDED   ||
+				e.type == SDL_CONTROLLERDEVICEREMOVED ||
+				e.type == SDL_CONTROLLERDEVICEREMAPPED
+				)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		static void toggle_layer_visibility(Layer2D * layer)
+		{
+			bool is_visible = layer->get_is_visible();
+			is_visible = !is_visible;
+			layer->set_is_visible(is_visible);
+		}
 	}
+
+
 
 	namespace configuration
 	{
-		int const screen_fps = 60;
-		float const frame_length_ms = 1000/screen_fps;
+		bool const default_window_start_fullscreen = false;
+		int const default_window_x_width = 800;
+		int const default_window_y_height = 800;
+		int const default_window_x_offset = 0;
+		int const default_window_y_offset = 0;
+
+		float const default_world_boundary_top = 0.0f;
+		float const default_world_boundary_right = 768.0f;
+		float const default_world_boundary_bottom = 768.0f;
+		float const default_world_boundary_left = 0.0f;
+
+
+
+		float const screen_fps = 60.0f;
+		float const frame_length_ms = (screen_fps * 0.001f); // same as division by 1000
 	}
 }
 

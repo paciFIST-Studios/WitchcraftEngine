@@ -12,6 +12,9 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	// use for setting flag options
 	if (true)
 	{
+		// we shouldn't do joystick stuff in the renderer
+		// but this is where we're initializing SDL right now
+		//flags = flags | SDL_INIT_JOYSTICK;
 		flags = flags | SDL_INIT_EVERYTHING;
 	}
 
@@ -78,7 +81,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 bool RenderManager2D::update()
 {
 	SDL_RenderClear(active_renderer);
-	render_call();
+	render_visible_scene_back_to_front();
 	SDL_RenderPresent(active_renderer);
 	return true;
 }
@@ -94,10 +97,10 @@ void RenderManager2D::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void RenderManager2D::render_call()
+void RenderManager2D::render_visible_scene_back_to_front()
 {
 	if (scene_manager == nullptr)
-		return;
+		return; // error?
 
 	auto layers = scene_manager->get_layers_ptrs_vector();
 	for (auto&& layer : layers)
@@ -118,23 +121,28 @@ void RenderManager2D::render_call()
 			if (obj->is_visible() == false)
 				continue;
 
-			// is this where the tick for the object is called? Is that okay?
-			obj->update();
+			// NOTE: we should move this out of the rendering area
+			//// is this where the tick for the object is called? Is that okay?
+			//obj->update();
 
-			SDL_Rect dest;
+			SDL_Rect dest_rect;
+			SDL_Rect src_rect = obj->render_resource->get_renderable_rect();
+			
 			auto layer_pos = layer->get_offset();
 			auto obj_pos = obj->get_position();
 		
-			dest.x = int(std::get<0>(layer_pos)) + int(std::get<0>(obj_pos));
-			dest.y = int(std::get<1>(layer_pos)) + int(std::get<1>(obj_pos));
-			dest.w = obj->render_rect.w;
-			dest.h = obj->render_rect.h;
+			dest_rect.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
+			dest_rect.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
+			
+			auto scale = obj->get_scale();
+			dest_rect.w = int(src_rect.w * std::get<0>(scale));
+			dest_rect.h = int(src_rect.h * std::get<1>(scale));
 
 			SDL_RenderCopy(
 				  active_renderer
 				, obj->render_resource->texture
-				, &obj->render_rect
-				, &dest
+				, &src_rect
+				, &dest_rect
 			);
 		}
 	}
@@ -142,9 +150,9 @@ void RenderManager2D::render_call()
 
 void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
-	r = utility::clamp_value_to_uint8(r);
-	g = utility::clamp_value_to_uint8(g);
-	b = utility::clamp_value_to_uint8(b);
+	r = utility::clamp_to_0_255(r);
+	g = utility::clamp_to_0_255(g);
+	b = utility::clamp_to_0_255(b);
 
 	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
 	SDL_UpdateWindowSurface(program_window);
@@ -152,17 +160,12 @@ void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned i
 
 qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
+	// note the cast
 	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
 	render_object->set_is_visible(is_visible);
 	render_object->set_render_resource(non_owner);
 
-	// This SDL_Rect covers the parts of the texture we will display
-	// We're sizing it to include the entire texture
-	auto wh = non_owner->get_width_height();
-	render_object->render_rect.w = std::get<0>(wh);
-	render_object->render_rect.h = std::get<1>(wh);
-	render_object->render_rect.x = 0;
-	render_object->render_rect.y = 0;
+	//
 
 	auto result = static_cast<qSceneObject*>(render_object.get());
 	render_objects.push_back(std::move(render_object));

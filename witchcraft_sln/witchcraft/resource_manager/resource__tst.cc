@@ -14,7 +14,7 @@
 			unsigned int resource_id = 666;
 			unsigned int resource_scope = 667;
 			std::string file_name = "668";
-			RESOURCE_TYPE resource_type = RESOURCE_TYPE::RESOURCE_GRAPHIC;
+			EResourceType resource_type = EResourceType::RESOURCE_GRAPHIC;
 		
 			auto resource = qResource(resource_id, resource_scope, file_name, resource_type);
 			REQUIRE(resource.get_resource_id() == resource_id);
@@ -41,8 +41,8 @@
 			REQUIRE(resource_id == uninit::UINT);
 
 			// resource type
-			REQUIRE(typeid(resource_type) == typeid(RESOURCE_TYPE));
-			REQUIRE(resource_type == RESOURCE_TYPE::RESOURCE_NULL);
+			REQUIRE(typeid(resource_type) == typeid(EResourceType));
+			REQUIRE(resource_type == EResourceType::RESOURCE_NULL);
 
 			// resource scope
 			REQUIRE(typeid(resource_scope) == typeid(unsigned int));

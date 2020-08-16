@@ -1,0 +1,4 @@
+<resources>
+	<resource UUID="4" type="graphic" file="asset / person.png" scope="2"></resource>
+	<resource UUID="100" type="2d_animation" name="idle" timing_ms="250" sequence="1 2 3 1 2 3 1 2 3 3 3 4 4"></resource>
+</resources>

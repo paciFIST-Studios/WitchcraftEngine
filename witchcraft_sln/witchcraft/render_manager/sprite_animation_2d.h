@@ -1,5 +1,5 @@
-#ifndef SPRITE_ANIMATION_TWO_D_H
-#define SPRITE_ANIMATION_TWO_D_H
+#ifndef ANIMATION_TWO_D_H
+#define ANIMATION_TWO_D_H
 
 #include <string>
 #include <vector>
@@ -11,65 +11,54 @@ class Animation2D
 private:
 protected:
 	
-	// element 0 = ms until frame change
-	// other elements indicate frame index
-	std::vector<unsigned int> _animation_vector;
-
+	std::vector<unsigned int> const _frame_indicies;
 	unsigned int _current_idx;
-
-	std::string _name;
 
 public:
 
-	std::string const & get_name() { return _name; }
+	std::string  const name;
+	unsigned int const ms_per_frame;
 
-	unsigned int get_frame_advance_timing(){return _animation_vector[0];}
 
 	unsigned int get_next_index()
 	{
-		if (_current_idx == _animation_vector.size() - 1)
+		if (_current_idx == _frame_indicies.size() - 1)
 		{
-			// reset to index 1, b/c index 0 holds timing
-			_current_idx = 1;
+			_current_idx = 0;
 		}
 		else
 		{
 			_current_idx++;
 		}
 
-		return _animation_vector[_current_idx];
+		return _frame_indicies[_current_idx];
 	}
 	
 	Animation2D() 
-		: _name(std::string(uninit::CSTRING))
+		: name(std::string(uninit::CSTRING))
+		, ms_per_frame(uninit::UINT)
+		, _frame_indicies{uninit::UINT}
 		, _current_idx(uninit::UINT)
-		, _animation_vector{uninit::UINT, uninit::UINT}
 	{}
 
 	Animation2D
 	// args ---
 	(
-		  std::string const & name
-		, std::vector<unsigned int> animation_sequence
-		, unsigned int timing_ms
+		  std::string  const & name
+		, unsigned int const & ms_per_frame
+		, std::vector<unsigned int> const & frame_index_sequence
 	)
 	// initializer ---
-		: _name(std::string(name))
-
-		// NOTE: we start at zero, so the first time we call get_next_index,
-		// it advances to the correct number.  This is also why we're squishing
-		// timing_ms into the frame vector, so we can use it as a -1 position, 
-		// for an unsigned int type variable
-		, _current_idx(0)
-
+		: name(std::string(name))
+		, ms_per_frame(ms_per_frame)
+		, _frame_indicies(frame_index_sequence)
 	// fn body ---
 	{
-		_animation_vector.reserve(animation_sequence.size() + 1);
-		_animation_vector.push_back(timing_ms);
-		for (auto element : animation_sequence)
-			_animation_vector.push_back(element);
+		// set current index as the last once, b/c when we call
+		// next_index it will advance
+		_current_idx = _frame_indicies.size() - 1;
 	}
 
 };
 
-#endif // !SPRITE_ANIMATION_TWO_D_H
+#endif // !ANIMATION_TWO_D_H

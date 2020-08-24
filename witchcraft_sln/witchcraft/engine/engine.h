@@ -5,26 +5,10 @@
 
 #include "../engine/engine_object.h"
 
+#include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/render_manager_2d.h"
 
-enum class EEngineState : unsigned char
-{
-	  UNINIT		= 0x01
-	, CONSTRUCTED	= 0x02
-	, STARTUP		= 0x04
-	, RUNNING		= 0x08
-	, SHUTDOWN		= 0x10
-	// 0x20
-	// 0x40
-	// 0x80
-};
-
-struct EngineInitializer
-{
-	unsigned int id;
-	bool tm_early_exit; // tm = testing mode
-};
 
 struct TestMode
 {
@@ -45,26 +29,40 @@ struct DebugOptions
 	bool emit_controller_state;
 };
 
+
+enum class EEngineState : unsigned char
+{
+	  UNINIT		= 0x01
+	, CONSTRUCTED	= 0x02
+	, STARTUP		= 0x04
+	, RUNNING		= 0x08
+	, SHUTDOWN		= 0x10
+	// 0x20
+	// 0x40
+	// 0x80
+};
+
+struct EngineInitializer
+{
+	unsigned int id;
+	TestMode test_mode;
+};
+
 class Engine : public qEngineObject
 {
 private:
 protected:
 
-	//std::unique_ptr<MessageManager> message;
+	std::unique_ptr<MessageBus> message;
 	std::unique_ptr<ResourceManager> resource;
 	std::unique_ptr<RenderManager2D> render;
 	std::unique_ptr<SceneManager2D> scene;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
-
-	TestMode testing_mode;
-
-
+	TestMode test_mode;
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
-
-
 
 public:
 	
@@ -76,12 +74,12 @@ public:
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
-		, testing_mode({ false })
+		, test_mode({ false })
 	{}
 
 	Engine(EngineInitializer init) 
 	: qEngineObject(init.id)
-		, testing_mode({ init.tm_early_exit , })
+		, test_mode(init.test_mode)
 	, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };
@@ -157,7 +155,6 @@ namespace witchcraft
 
 			return nullptr;
 		}
-
 
 		static bool is_keyboard_event(SDL_Event const & e)
 		{

@@ -71,6 +71,10 @@ namespace witchcraft
 		static std::string const engine_unit_tests_start = "engine unit tests start";
 		static std::string const engine_unit_tests_stop = "engine unit tests stop";
 
+		static std::string const message_bus_start = "message bus start";
+		static std::string const message_but_stop = "message bus stop";
+		static std::string const message_bus_init_failure = "FAILURE! Could not initialize message bus.  Exiting program.";
+
 		static std::string const resource_manager_start = "resource manager start";
 		static std::string const resource_manager_stop = "resource manager stop";
 		static std::string const resource_manager_meta_load = "metadata loaded ";

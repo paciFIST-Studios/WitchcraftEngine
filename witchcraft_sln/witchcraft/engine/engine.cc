@@ -5,15 +5,15 @@ void Engine::startup()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
 	current_engine_state = EEngineState::STARTUP;
-	if (testing_mode.early_exit) return;
+	if (test_mode.early_exit) return;
 
 	// project loader runs here, so we have access to our config info and save files
 	{}
 
-	// messaging layer
-	{}
-
 	// engine components
+	PLOGI << witchcraft::log_strings::message_bus_start;
+	message = std::make_unique<MessageBus>();
+
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>();
 
@@ -32,7 +32,7 @@ void Engine::run()
 {
 	PLOGI << witchcraft::log_strings::engine_running;
 	current_engine_state = EEngineState::RUNNING;
-	if (testing_mode.early_exit) return;
+	if (test_mode.early_exit) return;
 
 	// todo: use initializer struct
 	bool init_successful = render->init(
@@ -476,7 +476,7 @@ void Engine::shutdown()
 {
 	PLOGI << witchcraft::log_strings::engine_shutdown;
 	current_engine_state = EEngineState::SHUTDOWN;
-	if (testing_mode.early_exit) return;
+	if (test_mode.early_exit) return;
 
 	// we're going to shut down SDL in the renderer, so all SDL components
 	// have to be closed by then

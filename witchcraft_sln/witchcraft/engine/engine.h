@@ -26,6 +26,24 @@ struct EngineInitializer
 	bool tm_early_exit; // tm = testing mode
 };
 
+struct TestMode
+{
+	// steps through the function calls involved in running the
+	// game engine, but early-outs as soon as the fn is called
+	bool early_exit;
+};
+
+struct DebugOptions
+{
+	// prints the processing time for current frame, in ms
+	bool emit_frame_length;
+
+	// shows the number of connected controllers
+	bool emit_controller_count;
+
+	// shows the current state of controller-0
+	bool emit_controller_state;
+};
 
 class Engine : public qEngineObject
 {
@@ -39,8 +57,8 @@ protected:
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
 
-	// testing modes
-	bool tm_early_exit;
+	TestMode testing_mode;
+
 
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
@@ -58,12 +76,12 @@ public:
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
-	, tm_early_exit(false)
+		, testing_mode({ false })
 	{}
 
 	Engine(EngineInitializer init) 
 	: qEngineObject(init.id)
-	, tm_early_exit(init.tm_early_exit)
+		, testing_mode({ init.tm_early_exit , })
 	, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };

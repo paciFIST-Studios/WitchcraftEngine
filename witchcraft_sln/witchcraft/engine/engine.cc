@@ -5,7 +5,7 @@ void Engine::startup()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
 	current_engine_state = EEngineState::STARTUP;
-	if (tm_early_exit) return;
+	if (testing_mode.early_exit) return;
 
 	// project loader runs here, so we have access to our config info and save files
 	{}
@@ -32,7 +32,7 @@ void Engine::run()
 {
 	PLOGI << witchcraft::log_strings::engine_running;
 	current_engine_state = EEngineState::RUNNING;
-	if (tm_early_exit) return;
+	if (testing_mode.early_exit) return;
 
 	// todo: use initializer struct
 	bool init_successful = render->init(
@@ -131,7 +131,7 @@ void Engine::run()
 		player_a_scene_object = render->register_render_object(sar);
 		player_id = id;
 	}
-
+	
 	// player shadow
 	int player_shadow_id;
 	qSceneObject * player_shadow_scene_object = nullptr;
@@ -189,9 +189,12 @@ void Engine::run()
 
 	// - Game Loop ---------------------------------------------------------------------------------
 
-	bool debug_emit_frame_length	 = false;
-	bool debug_emit_controller_count = false;
-	bool debug_emit_controller_state = false;
+	DebugOptions debug{
+		  false	// emit frame len
+		, false	// emit controller count
+		, false	// emit controller state
+	};
+
 	bool gameplay_loop_is_running	 = true;
 	SDL_Event window_event;
 	Uint32 last_frame_time = SDL_GetTicks();
@@ -264,18 +267,18 @@ void Engine::run()
 
 					// Numeric
 					case SDLK_1:
-						debug_emit_frame_length = !debug_emit_frame_length;
+						debug.emit_frame_length = !debug.emit_frame_length;
 						break;
 					case SDLK_2:
 						buddha_scene_object->set_position(100.f, 100.f);
 						buddha_layer->set_offset(0.0f, 0.0f);
 						break;
 					case SDLK_3:
-						debug_emit_controller_count = true;
+						debug.emit_controller_count = true;
 						gameController = witchcraft::engine::get_controller(0);
 						break;
 					case SDLK_4:
-						debug_emit_controller_state = !debug_emit_controller_state;
+						debug.emit_controller_state = !debug.emit_controller_state;
 						break;
 					case SDLK_5:
 						break;
@@ -449,12 +452,12 @@ void Engine::run()
 
 		// - Debug ---------------------------------------------------------------------------------
 
-		if (debug_emit_controller_state)
+		if (debug.emit_controller_state)
 		{
 			std::cout << "Controller[0](x,y): " << player_0_x_input << ", " << player_0_y_input << std::endl;
 		}
 
-		if (debug_emit_frame_length)
+		if (debug.emit_frame_length)
 		{
 			std::cout << "frame_len: " << (current_frame_time - last_frame_time) << " ms\n";
 		}
@@ -473,7 +476,7 @@ void Engine::shutdown()
 {
 	PLOGI << witchcraft::log_strings::engine_shutdown;
 	current_engine_state = EEngineState::SHUTDOWN;
-	if (tm_early_exit) return;
+	if (testing_mode.early_exit) return;
 
 	// we're going to shut down SDL in the renderer, so all SDL components
 	// have to be closed by then

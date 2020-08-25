@@ -31,6 +31,9 @@
     <Filter Include="Source Files\scene_manager">
       <UniqueIdentifier>{43058c49-566f-4a8e-b1a8-0d21130f51ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\message_bus">
+      <UniqueIdentifier>{e78b962b-757c-4f78-93de-b2e7fbd52d2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -126,6 +129,9 @@
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="message_bus\message_bus__tst.cc">
+      <Filter>Source Files\message_bus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -198,7 +204,13 @@
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="message_bus\message_bus.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\message_bus</Filter>
+    </ClInclude>
+    <ClInclude Include="message_bus\ICanSendMessages.h">
+      <Filter>Source Files\message_bus</Filter>
+    </ClInclude>
+    <ClInclude Include="message_bus\ICanReceiveMessages.h">
+      <Filter>Source Files\message_bus</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

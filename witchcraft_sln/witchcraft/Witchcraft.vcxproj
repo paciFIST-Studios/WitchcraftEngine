@@ -131,6 +131,7 @@
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
+    <ClCompile Include="message_bus\message_bus__tst.cc" />
     <ClCompile Include="render_manager\render_manager_2d.cc" />
     <ClCompile Include="render_manager\render_manager_2d__tst.cc" />
     <ClCompile Include="render_manager\render_object_2d.cc" />
@@ -161,6 +162,8 @@
     <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\exception.h" />
     <ClInclude Include="logging\error_log_manager.h" />
+    <ClInclude Include="message_bus\ICanReceiveMessages.h" />
+    <ClInclude Include="message_bus\ICanSendMessages.h" />
     <ClInclude Include="message_bus\message_bus.h" />
     <ClInclude Include="render_manager\render_manager_2d.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />

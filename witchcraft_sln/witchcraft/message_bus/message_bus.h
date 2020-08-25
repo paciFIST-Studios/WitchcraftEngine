@@ -49,22 +49,21 @@ public:
 	~MessageBus()
 	{}
 
-	// TODO: Replace this ID arg with some kind of "channel" concept
-	void subscribe(unsigned int ID, void(*cb)(Message))
+	void subscribe(unsigned int channel, void(*cb)(Message))
 	{
-		if (registered_callbacks.find(ID) != registered_callbacks.end())
+		if (registered_callbacks.find(channel) != registered_callbacks.end())
 		{
-			registered_callbacks[ID].push_back(cb);
+			registered_callbacks[channel].push_back(cb);
 		}
 		else
 		{
-			registered_callbacks[ID] = std::vector<void(*)(Message)>{ cb };
+			registered_callbacks[channel] = std::vector<void(*)(Message)>{ cb };
 		}
 	}
 
-	void unsubscribe(unsigned int ID, void(*cb)(Message))
+	void unsubscribe(unsigned int channel, void(*cb)(Message))
 	{		
-		if (registered_callbacks.find(ID) == registered_callbacks.end())
+		if (registered_callbacks.find(channel) == registered_callbacks.end())
 		{
 			return; // none found
 		}
@@ -72,12 +71,12 @@ public:
 		// see algorithm example near bottom of article
 		// https://www.techiedelight.com/remove-elements-vector-inside-loop-cpp/
 
-		auto iter = registered_callbacks[ID].begin();
-		while (iter != registered_callbacks[ID].end())
+		auto iter = registered_callbacks[channel].begin();
+		while (iter != registered_callbacks[channel].end())
 		{
 			if (*iter == cb)
 			{
-				iter = registered_callbacks[ID].erase(iter);
+				iter = registered_callbacks[channel].erase(iter);
 			}
 			else
 			{
@@ -85,8 +84,6 @@ public:
 			}
 		}
 	}
-
-	// un-subscribe
 
 	void push_message(Message m)
 	{

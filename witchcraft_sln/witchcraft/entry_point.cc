@@ -13,6 +13,7 @@
 // our logging lib
 #include <plog/Log.h>
 
+
 // witchcraft
 #include "string_constants.h"
 #include "utility/get_latest_log_str.h"
@@ -99,6 +100,7 @@ int main(int argc, char** argv[])
 	init_logging();
 
 	run_unit_tests();
+
 
 	auto init = EngineInitializer{ get_engine_id() };
 	auto engine = Engine(init);

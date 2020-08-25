@@ -168,7 +168,6 @@ void Engine::run()
 	soccer_pitch_layer->set_is_visible(true);
 	soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
 
-
 	// buddha
 	auto buddha_layer = scene->add_layer("buddha");
 	buddha_layer->set_is_visible(true);

@@ -98,9 +98,6 @@ public:
 	}
 
 
-	// send interrupting message
-	// send delayed message
-
 	int peek_subscriber_count(unsigned int id)
 	{
 		if (registered_callbacks.find(id) == registered_callbacks.end())

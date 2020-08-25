@@ -19,8 +19,7 @@
 			REQUIRE(a < b);
 
 			auto m = Message{
-				  0	// message id
-				, 1	// recipient
+				  1	// recipient
 				, 2	// sender
 				, MessageType::TESTING
 				// cast a fn ptr to a void*
@@ -49,8 +48,7 @@
 			auto test_data = FourIntStruct{ 1, 3, 5, 7 };
 
 			auto m = Message{
-				  0	// message id
-				, 1	// recipient
+				  1	// recipient
 				, 2 // sender
 				, MessageType::TESTING
 				, &test_data 
@@ -84,8 +82,7 @@
 
 			auto mb = MessageBus();
 			auto m = Message{
-				  1	// message id
-				, RECIPIENT_ID
+				  RECIPIENT_ID
 				, 3	// sender
 				, MessageType::TESTING
 				, &data
@@ -102,7 +99,7 @@
 
 		TEST_CASE(" MessageBus    keeps track of several different recipients")
 		{
-			auto m = Message{ 0, 1, 0, MessageType::TESTING, nullptr };
+			auto m = Message{ 1, 0, MessageType::TESTING, nullptr };
 			auto mb = MessageBus();
 
 			m.recipient = 1;
@@ -121,6 +118,60 @@
 			REQUIRE(mb.peek_message_count(2) == 2);
 			REQUIRE(mb.peek_message_count(3) == 3);
 		}
+
+
+		void mock_OnMessage(Message m){}
+		TEST_CASE(" MessageBus::subscribe    allows objects to subscribe to updates    by supplying callback ptr")
+		{
+			auto mb = MessageBus();
+
+			REQUIRE(mb.peek_subscriber_count(1) == -1);
+			mb.subscribe(1, mock_OnMessage);
+			REQUIRE(mb.peek_subscriber_count(1) == 1);
+			mb.subscribe(1, mock_OnMessage);
+			REQUIRE(mb.peek_subscriber_count(1) == 2);
+			mb.subscribe(1, mock_OnMessage);
+			REQUIRE(mb.peek_subscriber_count(1) == 3);
+		}
+
+		void mock_a(Message m) {}
+		void mock_b(Message m) {}
+		void mock_c(Message m) {}
+		TEST_CASE(" MessageBus::subscribe    allows subscription to different ids")
+		{
+			auto mb = MessageBus();
+
+			int const UNINIT = -1;
+			int const ONE = 1;
+			int const TWO = 2;
+			int const THREE = 3;
+
+			REQUIRE(mb.peek_subscriber_count(ONE) == UNINIT);
+			REQUIRE(mb.peek_subscriber_count(TWO) == UNINIT);
+			REQUIRE(mb.peek_subscriber_count(THREE) == UNINIT);
+
+			// add to channel one
+			mb.subscribe(ONE, mock_a);
+			REQUIRE(mb.peek_subscriber_count(ONE) == 1);
+			mb.subscribe(ONE, mock_b);
+			REQUIRE(mb.peek_subscriber_count(ONE) == 2);
+
+			// other channels remain empty
+			REQUIRE(mb.peek_subscriber_count(TWO) == UNINIT);
+			REQUIRE(mb.peek_subscriber_count(THREE) == -1);
+
+			// add to channel 2	
+			mb.subscribe(TWO, mock_c);
+			REQUIRE(mb.peek_subscriber_count(TWO) == 1);
+
+			// three remains empty
+			REQUIRE(mb.peek_subscriber_count(THREE) == UNINIT);
+
+			// add to channel 3
+			mb.subscribe(THREE, mock_c);
+			REQUIRE(mb.peek_subscriber_count(THREE) == 1);
+		}
+
 
 	#endif // RUN_UNIT_TESTS
 

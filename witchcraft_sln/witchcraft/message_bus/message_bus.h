@@ -18,7 +18,6 @@ enum MessageType
 struct Message
 {
 public:
-	unsigned int message_id;
 	unsigned int recipient;
 	unsigned int sender;
 	MessageType type;
@@ -35,44 +34,93 @@ private:
 protected:
 
 	// ID, vec<recipient's messages>
-	std::map <unsigned int, std::vector<Message>> message_map;
+	std::map <unsigned int, std::vector<Message>> waiting_messages;
 
-	virtual void onMessage(Message m){}
+	// ID, vec<callbacks>
+	std::map<unsigned int, std::vector<void(*)(Message)>> registered_callbacks;
 
 public:
 
 	MessageBus()
-		: message_map({})
+		: waiting_messages({})
+		, registered_callbacks({})
 	{}
 
 	~MessageBus()
 	{}
 
-	// subscribe
+	// TODO: Replace this ID arg with some kind of "channel" concept
+	void subscribe(unsigned int ID, void(*cb)(Message))
+	{
+		if (registered_callbacks.find(ID) != registered_callbacks.end())
+		{
+			registered_callbacks[ID].push_back(cb);
+		}
+		else
+		{
+			registered_callbacks[ID] = std::vector<void(*)(Message)>{ cb };
+		}
+	}
+
+	void unsubscribe(unsigned int ID, void(*cb)(Message))
+	{		
+		if (registered_callbacks.find(ID) == registered_callbacks.end())
+		{
+			return; // none found
+		}
+
+		// see algorithm example near bottom of article
+		// https://www.techiedelight.com/remove-elements-vector-inside-loop-cpp/
+
+		auto iter = registered_callbacks[ID].begin();
+		while (iter != registered_callbacks[ID].end())
+		{
+			if (*iter == cb)
+			{
+				iter = registered_callbacks[ID].erase(iter);
+			}
+			else
+			{
+				iter++;
+			}
+		}
+	}
+
 	// un-subscribe
 
 	void push_message(Message m)
 	{
-		bool result = false;
-		if (message_map.find(m.recipient) != message_map.end())
+		if (waiting_messages.find(m.recipient) != waiting_messages.end())
 		{
-			message_map[m.recipient].push_back(m);
+			waiting_messages[m.recipient].push_back(m);
 		}
 		else // add new key & vector
 		{
-			message_map[m.recipient] = std::vector<Message>{ m };
+			waiting_messages[m.recipient] = std::vector<Message>{ m };
 		}
 	}
 
-	//bool push_interrupt_message(Message m);
+
 	// send interrupting message
 	// send delayed message
 
+	int peek_subscriber_count(unsigned int id)
+	{
+		if (registered_callbacks.find(id) == registered_callbacks.end())
+		{
+			return -1;
+		}
+		else
+		{
+			return registered_callbacks[id].size();
+		}
+	}
+
 	int peek_message_count(unsigned int id)
 	{
-		if (message_map.find(id) != message_map.end())
+		if (waiting_messages.find(id) != waiting_messages.end())
 		{
-			return message_map[id].size();
+			return waiting_messages[id].size();
 		}
 		else
 		{
@@ -84,12 +132,12 @@ public:
 	{
 		std::vector<Message> result;
 
-		for (auto m : message_map[id])
+		for (auto m : waiting_messages[id])
 		{
 			result.push_back(m);
 		}
 		
-		message_map[id] = std::vector<Message>();
+		waiting_messages[id] = std::vector<Message>();
 
 		return result;
 	}
@@ -114,6 +162,8 @@ namespace witchcraft
 			static unsigned int count = 0;
 			return ++count;
 		}
+
+		static void get_nothing() {}
 
 	}
 

@@ -98,7 +98,28 @@
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == 2);
 			mb.push_message(m);
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == 3);
+		}
 
+		TEST_CASE(" MessageBus    keeps track of several different recipients")
+		{
+			auto m = Message{ 0, 1, 0, MessageType::TESTING, nullptr };
+			auto mb = MessageBus();
+
+			m.recipient = 1;
+			mb.push_message(m);
+
+			m.recipient = 2;
+			mb.push_message(m);
+			mb.push_message(m);
+
+			m.recipient = 3;
+			mb.push_message(m);
+			mb.push_message(m);
+			mb.push_message(m);
+
+			REQUIRE(mb.peek_message_count(1) == 1);
+			REQUIRE(mb.peek_message_count(2) == 2);
+			REQUIRE(mb.peek_message_count(3) == 3);
 		}
 
 	#endif // RUN_UNIT_TESTS

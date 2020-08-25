@@ -173,6 +173,37 @@
 		}
 
 
+		TEST_CASE(" MessageBus::unsubscribe    allows a callback to be removed from a single channel")
+		{
+			auto mb = MessageBus();
+
+			int const ONE = 1;
+			int const TWO = 2;
+
+			// in this test, mock_a is going to represent our object's onMessage() fn
+			mb.subscribe(ONE, mock_a);
+
+			// other people are subscribed to the same channel
+			mb.subscribe(ONE, mock_b);
+			mb.subscribe(ONE, mock_c);
+
+			// and out object is subscribed to a different channel
+			mb.subscribe(TWO, mock_a);
+
+			REQUIRE(mb.peek_subscriber_count(ONE) == 3);
+
+			// Now, we want to remove our object's subscription from channel ONE
+			// but we don't want to alter the subscription to channel TWO
+			mb.unsubscribe(ONE, mock_a);
+
+			// if you unregister something which doesn't exist, then
+			// it should not crash
+			REQUIRE_NOTHROW(mb.unsubscribe(ONE, mock_a));
+
+			REQUIRE(mb.peek_subscriber_count(ONE) == 2);
+			REQUIRE(mb.peek_subscriber_count(TWO) == 1);
+		}
+
 	#endif // RUN_UNIT_TESTS
 
 #endif // !MESSAGE_BUS__TST_CC

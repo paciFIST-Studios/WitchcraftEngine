@@ -11,7 +11,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		return false;
 	}
 
-	PLOGD << "SDL OPENGL WINDOW INIT";
+	PLOGD << "sdl-opengl window init";
 	program_window = SDL_CreateWindow(
 		  WindowTitle
 		, xOffset
@@ -22,8 +22,12 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	);
 	if (program_window == nullptr)
 	{
-		PLOGF << "could not init SDL OpenGL";
+		PLOGF << "could not init sdl opengl";
 		return false;
+	}
+	else
+	{
+		PLOGV << "sdl window created";
 	}
 
 
@@ -36,11 +40,15 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	opengl_context = SDL_GL_CreateContext(program_window);
 	if (opengl_context == nullptr)
 	{
-		PLOGF << "could not init OpenGL context";
+		PLOGF << "could not init opengl context";
 		SDL_DestroyWindow(program_window);
 		program_window = nullptr;
 		SDL_Quit();
 		return false;
+	}
+	else
+	{
+		PLOGV << "opengl context created";
 	}
 
 	SDL_GL_SetSwapInterval(1); // use VSYNC
@@ -57,6 +65,21 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		program_window = nullptr;
 		SDL_Quit();
 		return false;
+	}
+	else
+	{
+		auto render_str = glGetString(GL_RENDERER);
+		auto ver_str = glGetString(GL_VERSION);
+
+		PLOGV << "glew helper lib for opengl, initialized";
+		{
+			bool log_personal_data = true;
+			if (log_personal_data)
+			{
+				PLOGV << "hardware info: " << render_str;
+			}
+		}
+		PLOGV << "opengl version: " << ver_str;
 	}
 
 	int flags = 0;

@@ -1,6 +1,6 @@
-#include "render_manager_2d.h"
+#include "render_manager.h"
 
-bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
 
@@ -109,7 +109,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	return true;
 }
 
-bool RenderManager2D::init_shaders()
+bool RenderManager::init_shaders()
 {
 	GLint status;
 	char err_buff[512];
@@ -154,7 +154,7 @@ bool RenderManager2D::init_shaders()
 	return true;
 }
 
-bool RenderManager2D::init_geometry()
+bool RenderManager::init_geometry()
 {
 	// populate vertex buffer
 	glGenBuffers(1, &vbo);
@@ -179,7 +179,7 @@ bool RenderManager2D::init_geometry()
 	return true;
 }
 
-bool RenderManager2D::update()
+bool RenderManager::update()
 {
 	//SDL_RenderClear(active_renderer);
 	//render_visible_scene_back_to_front();
@@ -193,7 +193,7 @@ bool RenderManager2D::update()
 	return true;
 }
 
-void RenderManager2D::shutdown()
+void RenderManager::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
@@ -208,7 +208,7 @@ void RenderManager2D::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }
 
-void RenderManager2D::render_visible_scene_back_to_front()
+void RenderManager::render_visible_scene_back_to_front()
 {
 	if (scene_manager == nullptr)
 		return; // error?
@@ -259,7 +259,7 @@ void RenderManager2D::render_visible_scene_back_to_front()
 	}
 }
 
-void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
+void RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
 {
 	r = utility::clamp_to_0_255(r);
 	g = utility::clamp_to_0_255(g);
@@ -269,7 +269,7 @@ void RenderManager2D::set_surface_RGB(unsigned int r, unsigned int g, unsigned i
 	SDL_UpdateWindowSurface(program_window);
 }
 
-qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_owner, bool is_visible)
+qSceneObject * RenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
 {
 	// note the cast
 	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
@@ -283,7 +283,7 @@ qSceneObject * RenderManager2D::register_render_object(qRenderResource * non_own
 	return result;
 }
 
-RenderObject2D * RenderManager2D::get_render_object(int id)
+RenderObject2D * RenderManager::get_render_object(int id)
 {
 	for (auto&& object : render_objects)
 	{

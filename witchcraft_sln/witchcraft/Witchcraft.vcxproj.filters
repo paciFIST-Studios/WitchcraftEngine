@@ -96,12 +96,6 @@
     <ClCompile Include="utility\get_latest_log_str__tst.cc">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\render_manager_2d.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\render_manager_2d__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\render_object_2d.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -131,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="message_bus\message_bus__tst.cc">
       <Filter>Source Files\message_bus</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_manager.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_manager__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +182,6 @@
     <ClInclude Include="utility\get_latest_log_str.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\render_manager_2d.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\render_object_2d.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
@@ -211,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="message_bus\ICanReceiveMessages.h">
       <Filter>Source Files\message_bus</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\render_manager.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,7 +7,8 @@
 
 #include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
-#include "../render_manager/render_manager_2d.h"
+#include "../render_manager/render_manager.h"
+
 
 
 struct TestMode
@@ -55,7 +56,7 @@ protected:
 
 	std::unique_ptr<MessageBus> message;
 	std::unique_ptr<ResourceManager> resource;
-	std::unique_ptr<RenderManager2D> render;
+	std::unique_ptr<RenderManager> render;
 	std::unique_ptr<SceneManager2D> scene;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;

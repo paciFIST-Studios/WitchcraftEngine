@@ -11,13 +11,13 @@
 
 #include "../engine/engine_object.h"
 
-#include "../render_manager/render_manager_2d.h"
+#include "../render_manager/render_manager.h"
 
 #include "layer_2d.h"
 #include "scene_listener.h"
 #include "timer.h"
 
-class RenderManager2D;
+class RenderManager;
 
 class SceneManager2D : public qEngineObject
 {
@@ -37,7 +37,7 @@ protected:
 	//TickTimerType timers;
 	//SceneListenerType listeners;
 
-	RenderManager2D * render_manager = nullptr;
+	RenderManager * render_manager = nullptr;
 
 public:
 
@@ -50,7 +50,7 @@ public:
 	//void add_listener(qSceneListener * listener);
 
 
-	void set_render_manager(RenderManager2D * rm) { render_manager = rm; }
+	void set_render_manager(RenderManager * rm) { render_manager = rm; }
 
 	std::vector<Layer2D*> get_layers_ptrs_vector() const
 	{

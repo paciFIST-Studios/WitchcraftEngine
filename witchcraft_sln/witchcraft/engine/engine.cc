@@ -18,7 +18,7 @@ void Engine::startup()
 	resource = std::make_unique<ResourceManager>();
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<RenderManager2D>();
+	render = std::make_unique<RenderManager>();
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>();

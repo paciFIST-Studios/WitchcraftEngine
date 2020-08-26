@@ -1,5 +1,5 @@
-#ifndef RENDER_MANAGER_TWO_D_H
-#define RENDER_MANAGER_TWO_D_H
+#ifndef RENDER_MANAGER_H
+#define RENDER_MANAGER_H
 
 // stdlib
 #include <iomanip>
@@ -38,7 +38,7 @@
 class SceneManager2D;
 class qSceneObject;
 
-class RenderManager2D : public qEngineObject
+class RenderManager : public qEngineObject
 {
 public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
@@ -82,7 +82,7 @@ void main()										\n\
 
 
 protected:
-	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
+	static std::unique_ptr<RenderManager> SDL2_2D_render_manager;
 
 	SDL_RendererInfo renderer_info;
 
@@ -107,7 +107,7 @@ protected:
 
 
 public:
-	RenderManager2D() {}
+	RenderManager() {}
 	
 	SDL_Window * program_window = nullptr;
 
@@ -155,4 +155,4 @@ namespace witchcraft
 }
 
 
-#endif // RENDER_MANAGER_TWO_D_H
+#endif // RENDER_MANAGER_H

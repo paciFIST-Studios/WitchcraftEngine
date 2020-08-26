@@ -13,7 +13,7 @@
 #include "resource.h"
 
 #include "../render_manager/sprite_atlas_resource.h"
-#include "../render_manager/render_manager_2d.h"
+#include "../render_manager/render_manager.h"
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 

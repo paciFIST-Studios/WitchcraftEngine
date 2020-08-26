@@ -24,7 +24,13 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
-
+	else
+	{
+		// set opengl profile and version
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, witchcraft::rendering::OPENGL_PROFILE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, witchcraft::rendering::OPENGL_MAJOR_VERSION);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, witchcraft::rendering::OPENGL_MINOR_VERSION);	
+	}
 
 	flags = 0;
 	// use for setting SDL_Image flag options
@@ -44,6 +50,29 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		return false;
 	}
 
+	flags = 0;
+	if (true) // opengl
+	{
+		flags = flags | SDL_WINDOW_OPENGL;
+		flags = flags | SDL_WINDOW_SHOWN;
+	}
+
+	PLOGD << "SDL OPENGL WINDOW INIT";
+	auto win = SDL_CreateWindow("Test OpenGL", 0, 0, 600, 800, flags);
+	if (win == nullptr)
+	{
+		PLOGF << "coult not init SDL OpenGL";
+		return false;
+	}
+
+	auto context = SDL_GL_CreateContext(win);
+	if (context == nullptr)
+	{
+		PLOGF << "could not init OpenGL context";
+		return false;
+	}
+
+	SDL_GL_SetSwapInterval(1);
 
 	flags = 0;
 	if (fullScreen)
@@ -69,6 +98,9 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
+
+	SDL_GetRendererInfo(active_renderer, &renderer_info);
+
 
 	SDL_SetWindowTitle(program_window, WindowTitle);
 

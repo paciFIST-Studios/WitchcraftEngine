@@ -16,6 +16,7 @@
 #include <SDL_image.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>
+#include <SDL_opengl.h>
 
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
@@ -45,6 +46,8 @@ public:
 private:
 protected:
 	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
+
+	SDL_RendererInfo renderer_info;
 
 	RenderObjectsVector render_objects;
 
@@ -85,5 +88,19 @@ public:
 	
 	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 };
+
+
+namespace witchcraft
+{
+	namespace rendering
+	{
+		int constexpr OPENGL_MAJOR_VERSION = 2;
+		int constexpr OPENGL_MINOR_VERSION = 1;
+
+		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
+
+	}
+}
+
 
 #endif // RENDER_MANAGER_TWO_D_H

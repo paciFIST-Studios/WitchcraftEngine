@@ -3,20 +3,8 @@
 bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
-	screen_width = Width;
-	screen_height = Height;
 
-
-	int flags = 0;
-
-	// use for setting flag options
-	if (true)
-	{
-		// we shouldn't do joystick stuff in the renderer
-		// but this is where we're initializing SDL right now
-		//flags = flags | SDL_INIT_JOYSTICK;
-		flags = flags | SDL_INIT_EVERYTHING;
-	}
+	int flags = 0 | SDL_INIT_EVERYTHING;
 
 	// SDL_Init() returns 0 on success, and a negative number on error
 	if (SDL_Init(flags) < 0)
@@ -24,17 +12,88 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
-	else
+
+	flags = 0 | SDL_WINDOW_OPENGL;
+	flags = flags | SDL_WINDOW_SHOWN;
+
+
+	PLOGD << "SDL OPENGL WINDOW INIT";
+	program_window = SDL_CreateWindow(WindowTitle, xOffset, yOffset, Width, Height, flags);
+	if (program_window == nullptr)
 	{
-		// set opengl profile and version
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, witchcraft::rendering::OPENGL_PROFILE);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, witchcraft::rendering::OPENGL_MAJOR_VERSION);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, witchcraft::rendering::OPENGL_MINOR_VERSION);	
+		PLOGF << "could not init SDL OpenGL";
+		return false;
 	}
+
+
+	// OpenGL 3.2 rendering context
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, witchcraft::rendering::OPENGL_MAJOR_VERSION);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, witchcraft::rendering::OPENGL_MINOR_VERSION);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, witchcraft::rendering::OPENGL_PROFILE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	opengl_context = SDL_GL_CreateContext(program_window);
+	if (opengl_context == nullptr)
+	{
+		PLOGF << "could not init OpenGL context";
+		SDL_DestroyWindow(program_window);
+		program_window = nullptr;
+		SDL_Quit();
+		return false;
+	}
+
+	SDL_GL_SetSwapInterval(1); // use VSYNC
+
+
+	// set glew for opengl 3+
+	glewExperimental = GL_TRUE;
+	auto error = glewInit();
+
+	if (error != GLEW_OK)
+	{
+		PLOGF << "Failed to init GLEW!";
+		SDL_GL_DeleteContext(opengl_context);
+		SDL_DestroyWindow(program_window);
+		program_window = nullptr;
+		SDL_Quit();
+		return false;
+	}
+
+	//SDL_GetRendererInfo(active_renderer, &renderer_info);
+
+
+	//flags = 0;
+	//if (fullScreen)
+	//{
+	//	flags = flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
+	//}
+	//
+	//flags = flags | SDL_WINDOW_SHOWN;
+
+	//// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
+	//// sdl chooses the renderer, use the 
+	//PLOGD << witchcraft::log_strings::sdl_window_init;
+	//SDL_CreateWindowAndRenderer(
+	//	  in.width
+	//	, in.height
+	//	, static_cast<SDL_WindowFlags>(flags)
+	//	, &program_window
+	//	, &active_renderer
+	//);
+
+	//if (program_window == NULL)
+	//{
+	//	PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
+	//	return false;
+	//}
+
+	//SDL_SetWindowTitle(program_window, in.programTitle);
+
+
 
 	flags = 0;
 	// use for setting SDL_Image flag options
-	if(true)
+	if (true)
 	{
 		flags = flags | IMG_INIT_JPG;
 		flags = flags | IMG_INIT_PNG;
@@ -44,67 +103,15 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	if ((icode & flags) != flags)
 	{
 		// failed to init
-		PLOGF << witchcraft::log_strings::sdl_init_failure 
-			  << "\nError: Could not initialize PNG + JPG support!\n" 
-			  << IMG_GetError();
+		PLOGF << witchcraft::log_strings::sdl_init_failure
+			<< "\nError: Could not initialize PNG + JPG support!\n"
+			<< IMG_GetError();
 		return false;
 	}
 
-	flags = 0;
-	if (true) // opengl
-	{
-		flags = flags | SDL_WINDOW_OPENGL;
-		flags = flags | SDL_WINDOW_SHOWN;
-	}
-
-	PLOGD << "SDL OPENGL WINDOW INIT";
-	auto win = SDL_CreateWindow("Test OpenGL", 0, 0, 600, 800, flags);
-	if (win == nullptr)
-	{
-		PLOGF << "coult not init SDL OpenGL";
-		return false;
-	}
-
-	auto context = SDL_GL_CreateContext(win);
-	if (context == nullptr)
-	{
-		PLOGF << "could not init OpenGL context";
-		return false;
-	}
-
-	SDL_GL_SetSwapInterval(1);
-
-	flags = 0;
-	if (fullScreen)
-	{
-		flags = flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
-	}
-
-	flags = flags | SDL_WINDOW_SHOWN;
-
-	// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
-	// sdl chooses the renderer, use the 
-	PLOGD << witchcraft::log_strings::sdl_window_init;
-	SDL_CreateWindowAndRenderer(
-		  Width
-		, Height
-		, static_cast<SDL_WindowFlags>(flags)
-		, &program_window
-		, &active_renderer
-	);
-
-	if (program_window == NULL)
-	{
-		PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
-		return false;
-	}
-
-	SDL_GetRendererInfo(active_renderer, &renderer_info);
 
 
-	SDL_SetWindowTitle(program_window, WindowTitle);
-
-	rendering_surface = SDL_GetWindowSurface(program_window);
+	//rendering_surface = SDL_GetWindowSurface(program_window);
 	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
 	return true;
@@ -112,9 +119,15 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 
 bool RenderManager2D::update()
 {
-	SDL_RenderClear(active_renderer);
-	render_visible_scene_back_to_front();
-	SDL_RenderPresent(active_renderer);
+	//SDL_RenderClear(active_renderer);
+	//render_visible_scene_back_to_front();
+	//SDL_RenderPresent(active_renderer);
+
+	//glViewport(0, 0, 100, 100);
+	//glClearColor(1.f, 1.f, 1.f, 1.f);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	//SDL_GL_SwapWindow(program_window);
+
 	return true;
 }
 
@@ -122,9 +135,13 @@ void RenderManager2D::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
+	
+	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
-	SDL_FreeSurface(rendering_surface);
-	SDL_DestroyRenderer(active_renderer);
+	program_window = nullptr;
+
+	//SDL_FreeSurface(rendering_surface);
+	//SDL_DestroyRenderer(active_renderer);
 	SDL_Quit();
 	PLOGV << witchcraft::log_strings::sdl_stop;
 }

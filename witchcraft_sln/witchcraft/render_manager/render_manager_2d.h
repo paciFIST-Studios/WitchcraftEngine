@@ -16,7 +16,7 @@
 #include <SDL_image.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>
-#include <SDL_opengl.h>
+#include <GL/glew.h>
 
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
@@ -42,8 +42,32 @@ class RenderManager2D : public qEngineObject
 {
 public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
-	
+
 private:
+
+	char const * vertex_shader_src = "\
+#version 150 core								\n\
+in vec2 in_Position;							\n\
+in vec2 in_Texcoord;							\n\
+out vec2 Texcoord;								\n\
+void main()										\n\
+{												\n\
+	Texcoord = in_Texcoord						\n\
+	gl_Position = vec4(in_Position, 0.0, 1.0);	\n\
+}												\n\
+";
+
+	char const * fragment_shader_src = "\
+#version 150 core								\n\
+in vec2 Texcoord								\n\
+out vec4 out_Color								\n\
+uniform sampler2D tex;							\n\
+void main()										\n\
+{												\n\
+	out_Color = texture(tex, Texcoord);			\n\
+}												\n\
+";
+
 protected:
 	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
 
@@ -60,6 +84,8 @@ public:
 	RenderManager2D() {}
 	
 	SDL_Window * program_window = nullptr;
+
+	SDL_GLContext opengl_context;
 
 	SDL_Renderer * active_renderer = nullptr;
 
@@ -94,8 +120,8 @@ namespace witchcraft
 {
 	namespace rendering
 	{
-		int constexpr OPENGL_MAJOR_VERSION = 2;
-		int constexpr OPENGL_MINOR_VERSION = 1;
+		int constexpr OPENGL_MAJOR_VERSION = 3;
+		int constexpr OPENGL_MINOR_VERSION = 2;
 
 		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
 

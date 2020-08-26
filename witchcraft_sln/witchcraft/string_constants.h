@@ -94,7 +94,7 @@ namespace witchcraft
 		static std::string const sdl_init_failure = "FAILURE! Could not initialize SDL";
 
 		static std::string const sdl_window_init = "sdl window init";
-		static std::string const sdl_window_init_success = "sdl window created";
+		static std::string const sdl_window_init_success = "sdl-opengl window fully initialized";
 		static std::string const sdl_window_init_failure = "FAILURE! Could not initialize an SDL window!";
 
 		static std::string const game_loop_start = "game loop start";

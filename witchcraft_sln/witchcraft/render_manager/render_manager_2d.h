@@ -68,6 +68,19 @@ void main()										\n\
 }												\n\
 ";
 
+	GLfloat const verts[6][4] = {
+		//  x      y      s      t
+		{ -1.0f, -1.0f,  0.0f,  1.0f }, // BL
+		{ -1.0f,  1.0f,  0.0f,  0.0f }, // TL
+		{  1.0f,  1.0f,  1.0f,  0.0f }, // TR
+		{  1.0f, -1.0f,  1.0f,  1.0f }, // BR
+		{  0.0f,  0.0f,  0.0f,  0.0f,},
+		{  0.0f,  0.0f,  0.0f,  0.0f,}
+	};
+	
+	GLint const indicies[6] = {0, 1, 2, 0, 2, 3};
+
+
 protected:
 	static std::unique_ptr<RenderManager2D> SDL2_2D_render_manager;
 
@@ -79,6 +92,19 @@ protected:
 	
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
+
+	GLuint vao;
+	GLuint vbo;
+	GLuint ebo;
+	GLuint tex;
+	GLuint vertex_shader;
+	GLuint fragment_shader;
+	GLuint shader_program;
+
+	bool init_shaders();
+	bool init_geometry();
+	bool init_textures();
+
 
 public:
 	RenderManager2D() {}

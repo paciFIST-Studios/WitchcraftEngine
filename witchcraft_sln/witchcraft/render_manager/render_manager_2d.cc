@@ -4,21 +4,22 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 {
 	PLOGV << witchcraft::log_strings::sdl_start;
 
-	int flags = 0 | SDL_INIT_EVERYTHING;
-
-	// SDL_Init() returns 0 on success, and a negative number on error
-	if (SDL_Init(flags) < 0)
+	// -1 == error, 0 == success
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
 
-	flags = 0 | SDL_WINDOW_OPENGL;
-	flags = flags | SDL_WINDOW_SHOWN;
-
-
 	PLOGD << "SDL OPENGL WINDOW INIT";
-	program_window = SDL_CreateWindow(WindowTitle, xOffset, yOffset, Width, Height, flags);
+	program_window = SDL_CreateWindow(
+		  WindowTitle
+		, xOffset
+		, yOffset
+		, Width
+		, Height
+		, SDL_WINDOW_OPENGL
+	);
 	if (program_window == nullptr)
 	{
 		PLOGF << "could not init SDL OpenGL";
@@ -27,9 +28,9 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 
 
 	// OpenGL 3.2 rendering context
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, witchcraft::rendering::OPENGL_MAJOR_VERSION);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, witchcraft::rendering::OPENGL_MINOR_VERSION);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, witchcraft::rendering::OPENGL_PROFILE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	opengl_context = SDL_GL_CreateContext(program_window);
@@ -48,7 +49,6 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 	// set glew for opengl 3+
 	glewExperimental = GL_TRUE;
 	auto error = glewInit();
-
 	if (error != GLEW_OK)
 	{
 		PLOGF << "Failed to init GLEW!";
@@ -59,39 +59,7 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		return false;
 	}
 
-	//SDL_GetRendererInfo(active_renderer, &renderer_info);
-
-
-	//flags = 0;
-	//if (fullScreen)
-	//{
-	//	flags = flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
-	//}
-	//
-	//flags = flags | SDL_WINDOW_SHOWN;
-
-	//// NOTE: DO NOT use the flag SDL_WINDOW_OPENGL
-	//// sdl chooses the renderer, use the 
-	//PLOGD << witchcraft::log_strings::sdl_window_init;
-	//SDL_CreateWindowAndRenderer(
-	//	  in.width
-	//	, in.height
-	//	, static_cast<SDL_WindowFlags>(flags)
-	//	, &program_window
-	//	, &active_renderer
-	//);
-
-	//if (program_window == NULL)
-	//{
-	//	PLOGF << witchcraft::log_strings::sdl_window_init_failure << "\nError: " << SDL_GetError();
-	//	return false;
-	//}
-
-	//SDL_SetWindowTitle(program_window, in.programTitle);
-
-
-
-	flags = 0;
+	int flags = 0;
 	// use for setting SDL_Image flag options
 	if (true)
 	{
@@ -109,10 +77,81 @@ bool RenderManager2D::init(unsigned int xOffset, unsigned int yOffset, unsigned 
 		return false;
 	}
 
+	//init_shaders();
+	//init_geometry();
+	//init_textures();
 
-
-	//rendering_surface = SDL_GetWindowSurface(program_window);
 	PLOGV << witchcraft::log_strings::sdl_window_init_success;
+
+	return true;
+}
+
+bool RenderManager2D::init_shaders()
+{
+	GLint status;
+	char err_buff[512];
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// compile vertex shader
+	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
+	glCompileShader(vertex_shader);
+	glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE)
+	{
+		glGetShaderInfoLog(vertex_shader, sizeof(err_buff), NULL, err_buff);
+		err_buff[sizeof(err_buff)-1] = '\0';
+		PLOGF << "FAILURE: Vertex Shader Compile: " << err_buff << std::endl;
+		return false;
+	}
+
+	// compile fragment shader
+	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
+	glCompileShader(fragment_shader);
+	glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE)
+	{
+		glGetShaderInfoLog(fragment_shader, sizeof(err_buff), NULL, err_buff);
+		err_buff[sizeof(err_buff) - 1] = '\0';
+		PLOGF << "FAILURE: Fragment Shader Compile: " << err_buff << std::endl;
+		return false;
+	}
+	
+	// link vertex and fragment shaders
+	shader_program = glCreateProgram();
+	glAttachShader(shader_program, vertex_shader);
+	glAttachShader(shader_program, fragment_shader);
+	glBindFragDataLocation(shader_program, 0, "out_Color");
+	glLinkProgram(shader_program);
+	glUseProgram(shader_program);
+
+	return true;
+}
+
+bool RenderManager2D::init_geometry()
+{
+	// populate vertex buffer
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
+	// populate element buffer
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+
+	// bind vertex position attribute
+	GLint pos_attrib_loc = glGetAttribLocation(shader_program, "in_Position");
+	glVertexAttribPointer(pos_attrib_loc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(pos_attrib_loc);
+
+	// bind vertex texture coordinate attribute
+	GLint tex_attrib_loc = glGetAttribLocation(shader_program, "in_Texcoord");
+	glVertexAttribPointer(tex_attrib_loc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_attrib_loc);
 
 	return true;
 }

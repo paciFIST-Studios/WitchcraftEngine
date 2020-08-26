@@ -51,9 +51,6 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		PLOGV << "opengl context created";
 	}
 
-	SDL_GL_SetSwapInterval(1); // use VSYNC
-
-
 	// set glew for opengl 3+
 	glewExperimental = GL_TRUE;
 	auto error = glewInit();
@@ -81,6 +78,13 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		}
 		PLOGV << "opengl version: " << ver_str;
 	}
+
+
+
+	SDL_GL_SetSwapInterval(1); // use VSYNC
+	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
+	glDepthFunc(GL_LESS);	// for depth test, smaller == closer
+
 
 	int flags = 0;
 	// use for setting SDL_Image flag options
@@ -181,6 +185,14 @@ bool RenderManager::init_geometry()
 
 bool RenderManager::update()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glUseProgram(shader_program);
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	SDL_GL_SwapWindow(program_window);
+
+
+
 	//SDL_RenderClear(active_renderer);
 	//render_visible_scene_back_to_front();
 	//SDL_RenderPresent(active_renderer);
@@ -198,6 +210,7 @@ void RenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
 	
+
 	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
 	program_window = nullptr;

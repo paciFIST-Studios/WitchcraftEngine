@@ -147,7 +147,7 @@ namespace witchcraft
 	namespace rendering
 	{
 		int constexpr OPENGL_MAJOR_VERSION = 3;
-		int constexpr OPENGL_MINOR_VERSION = 2;
+		int constexpr OPENGL_MINOR_VERSION = 3;
 
 		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
 

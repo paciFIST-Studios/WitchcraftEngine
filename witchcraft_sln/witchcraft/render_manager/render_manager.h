@@ -45,40 +45,13 @@ public:
 
 private:
 
-	char const * vertex_shader_src = "\
-#version 150 core								\n\
-in vec2 in_Position;							\n\
-in vec2 in_Texcoord;							\n\
-out vec2 Texcoord;								\n\
-void main()										\n\
-{												\n\
-	Texcoord = in_Texcoord						\n\
-	gl_Position = vec4(in_Position, 0.0, 1.0);	\n\
-}												\n\
-";
 
-	char const * fragment_shader_src = "\
-#version 150 core								\n\
-in vec2 Texcoord								\n\
-out vec4 out_Color								\n\
-uniform sampler2D tex;							\n\
-void main()										\n\
-{												\n\
-	out_Color = texture(tex, Texcoord);			\n\
-}												\n\
-";
-
-	GLfloat const verts[6][4] = {
-		//  x      y      s      t
-		{ -1.0f, -1.0f,  0.0f,  1.0f }, // BL
-		{ -1.0f,  1.0f,  0.0f,  0.0f }, // TL
-		{  1.0f,  1.0f,  1.0f,  0.0f }, // TR
-		{  1.0f, -1.0f,  1.0f,  1.0f }, // BR
-		{  0.0f,  0.0f,  0.0f,  0.0f,},
-		{  0.0f,  0.0f,  0.0f,  0.0f,}
+	GLfloat const verticies[9] = {
+		 -0.5f, -0.5f, 0.0f
+		, 0.5f, -0.5f, 0.0f
+		, 0.0f,  0.5f, 0.0f
 	};
-	
-	GLint const indicies[6] = {0, 1, 2, 0, 2, 3};
+
 
 
 protected:
@@ -101,9 +74,6 @@ protected:
 	GLuint fragment_shader;
 	GLuint shader_program;
 
-	bool init_shaders();
-	bool init_geometry();
-	bool init_textures();
 
 
 public:

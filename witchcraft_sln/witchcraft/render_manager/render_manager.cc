@@ -105,84 +105,12 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		return false;
 	}
 
-	//init_shaders();
-	//init_geometry();
-	//init_textures();
 
 	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
 	return true;
 }
 
-bool RenderManager::init_shaders()
-{
-	GLint status;
-	char err_buff[512];
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// compile vertex shader
-	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, &vertex_shader_src, NULL);
-	glCompileShader(vertex_shader);
-	glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE)
-	{
-		glGetShaderInfoLog(vertex_shader, sizeof(err_buff), NULL, err_buff);
-		err_buff[sizeof(err_buff)-1] = '\0';
-		PLOGF << "FAILURE: Vertex Shader Compile: " << err_buff << std::endl;
-		return false;
-	}
-
-	// compile fragment shader
-	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, &fragment_shader_src, NULL);
-	glCompileShader(fragment_shader);
-	glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE)
-	{
-		glGetShaderInfoLog(fragment_shader, sizeof(err_buff), NULL, err_buff);
-		err_buff[sizeof(err_buff) - 1] = '\0';
-		PLOGF << "FAILURE: Fragment Shader Compile: " << err_buff << std::endl;
-		return false;
-	}
-	
-	// link vertex and fragment shaders
-	shader_program = glCreateProgram();
-	glAttachShader(shader_program, vertex_shader);
-	glAttachShader(shader_program, fragment_shader);
-	glBindFragDataLocation(shader_program, 0, "out_Color");
-	glLinkProgram(shader_program);
-	glUseProgram(shader_program);
-
-	return true;
-}
-
-bool RenderManager::init_geometry()
-{
-	// populate vertex buffer
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-
-	// populate element buffer
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
-
-	// bind vertex position attribute
-	GLint pos_attrib_loc = glGetAttribLocation(shader_program, "in_Position");
-	glVertexAttribPointer(pos_attrib_loc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(pos_attrib_loc);
-
-	// bind vertex texture coordinate attribute
-	GLint tex_attrib_loc = glGetAttribLocation(shader_program, "in_Texcoord");
-	glVertexAttribPointer(tex_attrib_loc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(tex_attrib_loc);
-
-	return true;
-}
 
 bool RenderManager::update()
 {
@@ -190,11 +118,6 @@ bool RenderManager::update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	SDL_GL_SwapWindow(program_window);
 
-	//glUseProgram(shader_program);
-	//glBindVertexArray(vao);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//SDL_GL_SwapWindow(program_window);
-	
 
 	//SDL_RenderClear(active_renderer);
 	//render_visible_scene_back_to_front();

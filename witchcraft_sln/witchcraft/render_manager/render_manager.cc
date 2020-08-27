@@ -31,10 +31,12 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	}
 
 
-	// OpenGL 3.2 rendering context
+	// OpenGL 3.3 rendering context
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	// mac osx
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	opengl_context = SDL_GL_CreateContext(program_window);
@@ -51,7 +53,9 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		PLOGV << "opengl context created";
 	}
 
-	// set glew for opengl 3+
+
+
+	// glew
 	glewExperimental = GL_TRUE;
 	auto error = glewInit();
 	if (error != GLEW_OK)
@@ -79,12 +83,9 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		PLOGV << "opengl version: " << ver_str;
 	}
 
-
-
 	SDL_GL_SetSwapInterval(1); // use VSYNC
 	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
 	glDepthFunc(GL_LESS);	// for depth test, smaller == closer
-
 
 	int flags = 0;
 	// use for setting SDL_Image flag options
@@ -185,23 +186,19 @@ bool RenderManager::init_geometry()
 
 bool RenderManager::update()
 {
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shader_program);
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
 	SDL_GL_SwapWindow(program_window);
 
-
+	//glUseProgram(shader_program);
+	//glBindVertexArray(vao);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//SDL_GL_SwapWindow(program_window);
+	
 
 	//SDL_RenderClear(active_renderer);
 	//render_visible_scene_back_to_front();
 	//SDL_RenderPresent(active_renderer);
-
-	//glViewport(0, 0, 100, 100);
-	//glClearColor(1.f, 1.f, 1.f, 1.f);
-	//glClear(GL_COLOR_BUFFER_BIT);
-	//SDL_GL_SwapWindow(program_window);
-
 	return true;
 }
 
@@ -210,7 +207,6 @@ void RenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	IMG_Quit();
 	
-
 	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
 	program_window = nullptr;

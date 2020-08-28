@@ -4,19 +4,19 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
 
-	if (!init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
+	if (false == init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
 	{
 		// couldn't init sdl
 		return false;
 	}
 
-	if (!init_sdl_image())
+	if (false == init_sdl_image())
 	{
 		// couldn't init sdl_image (the lib for PNG files, etc)
 		return false;
 	}
 
-	if (!init_opengl())
+	if (false == init_opengl())
 	{
 		// couldn't init opengl
 		return false;
@@ -28,11 +28,11 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
 
 	
-	//if (!init_shaders()) 
-	//{ 
-	//	return false; 
-	//}
-	//if (!init_geometry()) 
+	if (false == init_shaders()) 
+	{ 
+		return false; 
+	}
+	//if (false == init_geometry()) 
 	//{ 
 	//	return false; 
 	//}
@@ -162,19 +162,19 @@ bool RenderManager::init_shaders()
 {
 
 	// Vertex Shader
-	if (!compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
+	if (false== compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
 	{
 		return false;
 	}
 
 	// Fragment Shader
-	if (!compile_shader(fragment_shader_id, GL_FRAGMENT_SHADER, fragment_shader_src))
+	if (false == compile_shader(fragment_shader_id, GL_FRAGMENT_SHADER, fragment_shader_src))
 	{
 		return false;
 	}
 
 	// shader program
-	if (link_shader_program(vertex_shader_id, fragment_shader_id, shader_program_id))
+	if (false == link_shader_program(vertex_shader_id, fragment_shader_id, shader_program_id))
 	{
 		return false;
 	}

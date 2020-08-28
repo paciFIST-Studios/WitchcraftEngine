@@ -34,7 +34,7 @@ void Engine::run()
 	current_engine_state = EEngineState::RUNNING;
 	if (test_mode.early_exit) return;
 
-	bool init_successful = render->init(
+	bool init_successful = render->init_system(
 		  witchcraft::configuration::default_window_x_offset
 		, witchcraft::configuration::default_window_y_offset
 		, witchcraft::configuration::default_window_x_width

@@ -69,33 +69,24 @@ private:
 
 	char const * vertex_shader_src =
 		"#version 330 core\n"
-		"layout(location=0) in vec2 posAttr;\n"
+		"layout(location=0) in vec3 vertex_position;\n"
 		"void main(){\n"
-		"gl_Position = vec4(posAttr, 0.0, 1.0); }";
+		"gl_Position.xyz = vertex_position;"
+		"gl_Position.w = 1.0; }";
 
 	// fragment shaders process pixel color
 	char const * fragment_shader_src =
 		"#version 330 core\n"
-		"out vec4 col;\n"
+		"out vec3 color;\n"
 		"void main(){\n"
-		"col = vec4(1.0, 0.0, 0.0, 1.0); }";
+		"color = vec3(1.0, 0.0, 0.0); }";
 
 	GLfloat const verticies[9] = {
-		 -0.5f, -0.5f, 0.0f
-		, 0.5f, -0.5f, 0.0f
-		, 0.0f,  0.5f, 0.0f
+		//  x	   y	z
+		 -0.5f, -0.5f, 0.0f		// 0
+		, 0.5f, -0.5f, 0.0f		// 1
+		, 0.0f,  0.5f, 0.0f		// 2
 	};
-
-	//GLfloat const verts2[4][4] = {
-	//	  { -1.0f, -1.0f, 0.0f, 1.0f }
-	//	, { -1.0f,  1.0f, 0.0f, 0.0f }
-	//	, {  1.0f,  1.0f, 1.0f, 0.0f }
-	//	, {  1.0f, -1.0f, 1.0f, 1.0f }
-	//};
-	//
-	//GLfloat const idxes2[6] = {
-	//	0, 1, 2, 0, 2, 3
-	//};
 
 protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;

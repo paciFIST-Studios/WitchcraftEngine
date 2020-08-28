@@ -179,10 +179,11 @@ bool RenderManager::init_shaders()
 		return false;
 	}
 
-	//glDetachShader(shader_program_id, vertex_shader_id);
-	//glDetachShader(shader_program_id, fragment_shader_id);
-	//glDeleteShader(vertex_shader_id);
-	//glDeleteShader(fragment_shader_id);
+	// from here, we'll just rely on the shader program
+	glDetachShader(shader_program_id, vertex_shader_id);
+	glDetachShader(shader_program_id, fragment_shader_id);
+	glDeleteShader(vertex_shader_id);
+	glDeleteShader(fragment_shader_id);
 	
 	return true;
 }
@@ -211,15 +212,15 @@ bool RenderManager::compile_shader(GLuint id, GLenum type, char const * src)
 	glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
 	if (len > 0)
 	{
-		msg = std::string(len, '\0');
+		msg = std::string(len+1, '\0');
 		glGetShaderInfoLog(id, len, &len, &msg[0]);
 	}
 
 	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
 	if(status == FALSE)
 	{
-		PLOGF << "FAILURE: shader compile: " << Glenum_to_str[type];
-		if (len > 0) { PLOGF << msg; }
+		PLOGF << "FAIL: shader compile: " << Glenum_to_str[type];
+		if (len > 0) { PLOGF << "FAIL: shader compile: " << msg; }
 		return false;
 	}
 
@@ -243,15 +244,15 @@ bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint p
 	glGetProgramiv(prog_id, GL_INFO_LOG_LENGTH, &len);
 	if (len > 0)
 	{
-		msg = std::string(len, '\0');
+		msg = std::string(len+1, '\0');
 		glGetProgramInfoLog(prog_id, len, &len, &msg[0]);
 	}
 
 	glGetProgramiv(prog_id, GL_COMPILE_STATUS, &status);
 	if (status == FALSE)
 	{
-		PLOGF << "FAILED: shader-program compile";
-		if (len > 0) { PLOGF << msg; }
+		PLOGF << "FAIL: shader-program compile";
+		if (len > 0) { PLOGF << "FAIL: shader-program compile: " << msg; }
 		return false;
 	}
 	else
@@ -266,13 +267,9 @@ bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint p
 
 bool RenderManager::update()
 {
-	glUseProgram(shader_program_id);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//
-	//SDL_GL_SwapWindow(program_window);
+	glUseProgram(shader_program_id);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
@@ -285,8 +282,7 @@ bool RenderManager::update()
 		,(void*)0	// buffer offset
 	);
 	
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	
+	glDrawArrays(GL_TRIANGLES, 0, 3);	
 	glDisableVertexAttribArray(0);
 
 	SDL_GL_SwapWindow(program_window);

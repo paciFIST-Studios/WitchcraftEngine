@@ -72,7 +72,7 @@ void Engine::run()
 		auto id = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
 		auto rr = resource->find_resource_by_id(id);
 		auto render_resource = static_cast<qRenderResource*>(rr);
-		render_resource->bind_renderer(render->active_renderer);
+		render_resource->bind_renderer(render->get_active_renderer());
 		render_resource->load();
 		buddha_scene_object = render->register_render_object(render_resource);
 		buddha_resource_id = id;

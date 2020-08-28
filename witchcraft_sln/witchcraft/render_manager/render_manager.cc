@@ -32,10 +32,10 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	{ 
 		return false; 
 	}
-	//if (false == init_geometry()) 
-	//{ 
-	//	return false; 
-	//}
+	if (false == init_geometry()) 
+	{ 
+		return false; 
+	}
 
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
@@ -179,8 +179,6 @@ bool RenderManager::init_shaders()
 		return false;
 	}
 
-
-
 	//glDetachShader(shader_program_id, vertex_shader_id);
 	//glDetachShader(shader_program_id, fragment_shader_id);
 	//glDeleteShader(vertex_shader_id);
@@ -194,10 +192,9 @@ bool RenderManager::init_geometry()
 	glGenVertexArrays(1, &vertex_array_id);
 	glBindVertexArray(vertex_array_id);
 
-	int vertex_count = 9;
 	glGenBuffers(1, &vertex_buffer_id);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, vertex_count * sizeof(GLfloat), &verticies[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies[0], GL_STATIC_DRAW);
 	return true;
 }
 
@@ -272,11 +269,27 @@ bool RenderManager::update()
 	glUseProgram(shader_program_id);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//
+	//SDL_GL_SwapWindow(program_window);
 
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
+	glVertexAttribPointer(
+		  0			// ?
+		, 3			// size
+		, GL_FLOAT	// type
+		, GL_FALSE	// normalized
+		, 0			// stride
+		,(void*)0	// buffer offset
+	);
+	
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	
+	glDisableVertexAttribArray(0);
 
 	SDL_GL_SwapWindow(program_window);
-
 	return true;
 }
 

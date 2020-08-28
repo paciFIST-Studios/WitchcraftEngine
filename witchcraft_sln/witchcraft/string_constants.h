@@ -81,6 +81,8 @@ namespace witchcraft
 
 		static std::string const render_manager_start = "render manager start";
 		static std::string const render_manager_stop = "render manager stop";
+		static std::string const render_manager_system_init_start = "render manager system init start";
+		static std::string const render_manager_system_init_end = "render manager system init end";
 		static std::string const render_manager_init_failure = "FAILURE! Could not initialize render manager.  Exiting Program";
 
 		static std::string const scene_manager_start = "scene manager start";
@@ -88,14 +90,25 @@ namespace witchcraft
 		static std::string const scene_manager_init_failure = "FAILURE! Could not initialize scene manager.  Exiting Program.";
 
 		static std::string const sdl_start = "sdl start";
-		static std::string const sdl_stop = "sdl stop";
+		static std::string const sdl_ok	   = "sdl ok";
+		static std::string const sdl_stop  = "sdl stop";
 		static std::string const sdl_break_event_polling = "breaking out of sdl event polling";
 		static std::string const sdl_begin_shutdown = "begin sdl shutdown";
 		static std::string const sdl_init_failure = "FAILURE! Could not initialize SDL";
 
-		static std::string const sdl_window_init = "sdl window init";
-		static std::string const sdl_window_init_success = "sdl-opengl window fully initialized";
+		static std::string const sdl_window_create = "sdl window create";
+		static std::string const sdl_window_ok = "sdl window ok";	
+		static std::string const sdl_window_fail = "FAILURE: sdl window: could not create sdl window";	
 		static std::string const sdl_window_init_failure = "FAILURE! Could not initialize an SDL window!";
+
+		static std::string const opengl_context_create = "opengl context create";
+		static std::string const opengl_context_ok = "opengl context ok";
+
+		static std::string const opengl_glew_start = "glew (opengl), start";
+		static std::string const opengl_glew_ok = "glew (opengl), ok";
+		static std::string const opengl_glew_init_failure = "FAILURE: glew (opengl): could not initialize glew";
+
+
 
 		static std::string const game_loop_start = "game loop start";
 		static std::string const game_loop_stop = "game loop stop";

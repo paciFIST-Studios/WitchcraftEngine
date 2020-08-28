@@ -39,6 +39,7 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+	// context is automatically attached to window here
 	opengl_context = SDL_GL_CreateContext(program_window);
 	if (opengl_context == nullptr)
 	{
@@ -77,7 +78,7 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 			bool log_personal_data = true;
 			if (log_personal_data)
 			{
-				PLOGV << "hardware info: " << render_str;
+				PLOGV << "gfx card info: " << render_str;
 			}
 		}
 		PLOGV << "opengl version: " << ver_str;
@@ -105,23 +106,146 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		return false;
 	}
 
+	// these return false if they fail
+	if (!init_shaders()) { return false; }
+	//if (!init_geometry()) { return false; }
 
 	PLOGV << witchcraft::log_strings::sdl_window_init_success;
 
 	return true;
 }
 
+bool RenderManager::init_shaders()
+{
+	GLint status;
+	GLint msg_len;
+	std::string msg;
+
+	// Vertex Shader -----------------------------------------------------------------------
+
+	// create shader
+	vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader_id, 1, &vertex_shader_src, nullptr);
+	glCompileShader(vertex_shader_id);
+
+	// error handling	
+	{
+		glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &msg_len);
+		if (msg_len > 0)
+		{
+			msg = std::string(msg_len, '\0');
+			glGetShaderInfoLog(vertex_shader_id, msg_len, &msg_len, &msg.front());
+		}
+
+		glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &status);
+		if (status == FALSE)
+		{
+			PLOGF << "FAILED: vertex shader compile";
+			if (msg_len > 0) { PLOGF << msg; }
+		}
+		else
+		{
+			PLOGV << "vertex shader compile success";
+			if (msg_len > 0) { PLOGV << msg; }
+		}
+	}
+
+	// Fragment Shader -----------------------------------------------------------------------
+
+	// create shader
+	fragment_shader_id = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(fragment_shader_id, 1, &fragment_shader_src, nullptr);
+	glCompileShader(fragment_shader_id);
+
+	// error handling	
+	{
+		glGetShaderiv(fragment_shader_id, GL_INFO_LOG_LENGTH, &msg_len);
+		if (msg_len > 0)
+		{
+			msg = std::string(msg_len, '\0');
+			glGetShaderInfoLog(fragment_shader_id, msg_len, &msg_len, &msg.front());
+		}
+
+		glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &status);
+		if (status == FALSE)
+		{
+			PLOGF << "FAILED: fragment shader compile";
+			if (msg_len > 0) { PLOGF << msg; }
+		}
+		else
+		{
+			PLOGV << "fragment shader compile success";
+			if (msg_len > 0) { PLOGV << msg; }
+		}
+	}
+
+	// Shader Program -----------------------------------------------------------------------
+
+	// create shader
+	shader_program_id = glCreateProgram();
+	glAttachShader(shader_program_id, vertex_shader_id);
+	glAttachShader(shader_program_id, fragment_shader_id);
+	//glBindAttribLocation(shader_program_id, 0, "in_Position");
+	//glBindAttribLocation(shader_program_id, 1, "in_Color");
+
+	// copy shaders to gpu
+	glLinkProgram(shader_program_id);
+	// end copy shaders
+
+	// error handling
+	{
+		glGetProgramiv(shader_program_id, GL_INFO_LOG_LENGTH, &msg_len);
+		if (msg_len > 0)
+		{
+			msg = std::string(msg_len, '\0');
+			glGetProgramInfoLog(shader_program_id, msg_len, &msg_len, &msg.front());
+		}
+
+		glGetProgramiv(shader_program_id, GL_COMPILE_STATUS, &status);
+		if (status == FALSE)
+		{
+			PLOGF << "FAILED: shader program compile";
+			if (msg_len > 0) { PLOGF << msg; }
+		}
+		else
+		{
+			PLOGV << "shader program compile success";
+			if (msg_len > 0) { PLOGV << msg; }
+		}
+	}
+
+
+	glDetachShader(shader_program_id, vertex_shader_id);
+	glDetachShader(shader_program_id, fragment_shader_id);
+	glDeleteShader(vertex_shader_id);
+	glDeleteShader(fragment_shader_id);
+	
+	return true;
+}
+
+bool RenderManager::init_geometry()
+{
+	glGenVertexArrays(1, &vertex_array_id);
+	glBindVertexArray(vertex_array_id);
+
+	int vertex_count = 9;
+	glGenBuffers(1, &vertex_buffer_id);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
+	glBufferData(GL_ARRAY_BUFFER, vertex_count * sizeof(GLfloat), &verticies[0], GL_STATIC_DRAW);
+	return true;
+}
+
 
 bool RenderManager::update()
 {
+	glUseProgram(shader_program_id);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
 	SDL_GL_SwapWindow(program_window);
 
-
-	//SDL_RenderClear(active_renderer);
-	//render_visible_scene_back_to_front();
-	//SDL_RenderPresent(active_renderer);
 	return true;
 }
 

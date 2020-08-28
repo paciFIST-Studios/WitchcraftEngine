@@ -200,8 +200,8 @@ namespace witchcraft
 		bool const default_window_start_fullscreen = false;
 		int const default_window_x_width = 800;
 		int const default_window_y_height = 800;
-		int const default_window_x_offset = 0;
-		int const default_window_y_offset = 0;
+		int const default_window_x_offset = 32;
+		int const default_window_y_offset = 48;
 
 		float const default_world_boundary_top = 0.0f;
 		float const default_world_boundary_right = 768.0f;

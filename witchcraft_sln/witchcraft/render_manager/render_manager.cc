@@ -1,8 +1,52 @@
 #include "render_manager.h"
 
-bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned int Width, unsigned int Height, bool fullScreen, char const * WindowTitle)
+bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, bool fullScreen, char const * WindowTitle)
 {
-	PLOGV << witchcraft::log_strings::sdl_start;
+	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
+
+	if (!init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
+	{
+		// couldn't init sdl
+		return false;
+	}
+
+	if (!init_sdl_image())
+	{
+		// couldn't init sdl_image (the lib for PNG files, etc)
+		return false;
+	}
+
+	if (!init_opengl())
+	{
+		// couldn't init opengl
+		return false;
+	}
+
+
+	SDL_GL_SetSwapInterval(1);	// use VSYNC
+	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
+	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
+
+	
+	//if (!init_shaders()) 
+	//{ 
+	//	return false; 
+	//}
+	//if (!init_geometry()) 
+	//{ 
+	//	return false; 
+	//}
+
+
+	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
+
+	renderer_state = ERendererState::UPDATE_OK;
+	return true;
+}
+
+bool RenderManager::init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle)
+{
+	PLOGI << witchcraft::log_strings::sdl_start;
 
 	// -1 == error, 0 == success
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -10,8 +54,12 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return false;
 	}
+	else
+	{
+		PLOGV << witchcraft::log_strings::sdl_ok;
+	}
 
-	PLOGD << "sdl-opengl window init";
+	PLOGV << witchcraft::log_strings::sdl_window_create;
 	program_window = SDL_CreateWindow(
 		  WindowTitle
 		, xOffset
@@ -22,14 +70,22 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	);
 	if (program_window == nullptr)
 	{
-		PLOGF << "could not init sdl opengl";
+		PLOGF << witchcraft::log_strings::sdl_window_fail;
 		return false;
 	}
 	else
 	{
-		PLOGV << "sdl window created";
+		PLOGV << witchcraft::log_strings::sdl_window_ok;
 	}
 
+	renderer_state = ERendererState::SDL_INIT_OK;
+
+	return true;
+}
+
+bool RenderManager::init_opengl()
+{
+	PLOGI << witchcraft::log_strings::opengl_context_create;
 
 	// OpenGL 3.3 rendering context
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -43,7 +99,7 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	opengl_context = SDL_GL_CreateContext(program_window);
 	if (opengl_context == nullptr)
 	{
-		PLOGF << "could not init opengl context";
+		PLOGF << "FAILURE: opengl context: could not create context!";
 		SDL_DestroyWindow(program_window);
 		program_window = nullptr;
 		SDL_Quit();
@@ -51,17 +107,19 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	}
 	else
 	{
-		PLOGV << "opengl context created";
+		PLOGV << witchcraft::log_strings::opengl_context_ok;
 	}
 
-
+	// not technically part of opengl, but we'll initialize it here, b/c it 
+	// won't relate to anything other than opengl, in our system
 
 	// glew
+	PLOGV << witchcraft::log_strings::opengl_glew_start;
 	glewExperimental = GL_TRUE;
 	auto error = glewInit();
 	if (error != GLEW_OK)
 	{
-		PLOGF << "Failed to init GLEW!";
+		PLOGF << witchcraft::log_strings::opengl_glew_init_failure;
 		SDL_GL_DeleteContext(opengl_context);
 		SDL_DestroyWindow(program_window);
 		program_window = nullptr;
@@ -70,31 +128,22 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 	}
 	else
 	{
-		auto render_str = glGetString(GL_RENDERER);
-		auto ver_str = glGetString(GL_VERSION);
-
-		PLOGV << "glew helper lib for opengl, initialized";
-		{
-			bool log_personal_data = true;
-			if (log_personal_data)
-			{
-				PLOGV << "gfx card info: " << render_str;
-			}
-		}
-		PLOGV << "opengl version: " << ver_str;
+		PLOGV << witchcraft::log_strings::opengl_glew_ok;
+		PLOGV << "gfx card info: " << glGetString(GL_RENDERER);
+		PLOGV << "opengl version: " << glGetString(GL_VERSION);
 	}
 
-	SDL_GL_SetSwapInterval(1); // use VSYNC
-	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
-	glDepthFunc(GL_LESS);	// for depth test, smaller == closer
+	renderer_state = ERendererState::OPENGL_INIT_OK;
 
+	return true;
+}
+
+bool RenderManager::init_sdl_image()
+{
 	int flags = 0;
-	// use for setting SDL_Image flag options
-	if (true)
-	{
-		flags = flags | IMG_INIT_JPG;
-		flags = flags | IMG_INIT_PNG;
-	}
+	flags = flags | IMG_INIT_JPG;
+	flags = flags | IMG_INIT_PNG;
+
 	// not sure what this returns, actually
 	int icode = IMG_Init(flags);
 	if ((icode & flags) != flags)
@@ -106,119 +155,36 @@ bool RenderManager::init(unsigned int xOffset, unsigned int yOffset, unsigned in
 		return false;
 	}
 
-	// these return false if they fail
-	if (!init_shaders()) { return false; }
-	//if (!init_geometry()) { return false; }
-
-	PLOGV << witchcraft::log_strings::sdl_window_init_success;
-
 	return true;
 }
 
 bool RenderManager::init_shaders()
 {
-	GLint status;
-	GLint msg_len;
-	std::string msg;
 
-	// Vertex Shader -----------------------------------------------------------------------
-
-	// create shader
-	vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader_id, 1, &vertex_shader_src, nullptr);
-	glCompileShader(vertex_shader_id);
-
-	// error handling	
+	// Vertex Shader
+	if (!compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
 	{
-		glGetShaderiv(vertex_shader_id, GL_INFO_LOG_LENGTH, &msg_len);
-		if (msg_len > 0)
-		{
-			msg = std::string(msg_len, '\0');
-			glGetShaderInfoLog(vertex_shader_id, msg_len, &msg_len, &msg.front());
-		}
-
-		glGetShaderiv(vertex_shader_id, GL_COMPILE_STATUS, &status);
-		if (status == FALSE)
-		{
-			PLOGF << "FAILED: vertex shader compile";
-			if (msg_len > 0) { PLOGF << msg; }
-		}
-		else
-		{
-			PLOGV << "vertex shader compile success";
-			if (msg_len > 0) { PLOGV << msg; }
-		}
+		return false;
 	}
 
-	// Fragment Shader -----------------------------------------------------------------------
-
-	// create shader
-	fragment_shader_id = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(fragment_shader_id, 1, &fragment_shader_src, nullptr);
-	glCompileShader(fragment_shader_id);
-
-	// error handling	
+	// Fragment Shader
+	if (!compile_shader(fragment_shader_id, GL_FRAGMENT_SHADER, fragment_shader_src))
 	{
-		glGetShaderiv(fragment_shader_id, GL_INFO_LOG_LENGTH, &msg_len);
-		if (msg_len > 0)
-		{
-			msg = std::string(msg_len, '\0');
-			glGetShaderInfoLog(fragment_shader_id, msg_len, &msg_len, &msg.front());
-		}
-
-		glGetShaderiv(fragment_shader_id, GL_COMPILE_STATUS, &status);
-		if (status == FALSE)
-		{
-			PLOGF << "FAILED: fragment shader compile";
-			if (msg_len > 0) { PLOGF << msg; }
-		}
-		else
-		{
-			PLOGV << "fragment shader compile success";
-			if (msg_len > 0) { PLOGV << msg; }
-		}
+		return false;
 	}
 
-	// Shader Program -----------------------------------------------------------------------
-
-	// create shader
-	shader_program_id = glCreateProgram();
-	glAttachShader(shader_program_id, vertex_shader_id);
-	glAttachShader(shader_program_id, fragment_shader_id);
-	//glBindAttribLocation(shader_program_id, 0, "in_Position");
-	//glBindAttribLocation(shader_program_id, 1, "in_Color");
-
-	// copy shaders to gpu
-	glLinkProgram(shader_program_id);
-	// end copy shaders
-
-	// error handling
+	// shader program
+	if (link_shader_program(vertex_shader_id, fragment_shader_id, shader_program_id))
 	{
-		glGetProgramiv(shader_program_id, GL_INFO_LOG_LENGTH, &msg_len);
-		if (msg_len > 0)
-		{
-			msg = std::string(msg_len, '\0');
-			glGetProgramInfoLog(shader_program_id, msg_len, &msg_len, &msg.front());
-		}
-
-		glGetProgramiv(shader_program_id, GL_COMPILE_STATUS, &status);
-		if (status == FALSE)
-		{
-			PLOGF << "FAILED: shader program compile";
-			if (msg_len > 0) { PLOGF << msg; }
-		}
-		else
-		{
-			PLOGV << "shader program compile success";
-			if (msg_len > 0) { PLOGV << msg; }
-		}
+		return false;
 	}
 
 
-	glDetachShader(shader_program_id, vertex_shader_id);
-	glDetachShader(shader_program_id, fragment_shader_id);
-	glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
+
+	//glDetachShader(shader_program_id, vertex_shader_id);
+	//glDetachShader(shader_program_id, fragment_shader_id);
+	//glDeleteShader(vertex_shader_id);
+	//glDeleteShader(fragment_shader_id);
 	
 	return true;
 }
@@ -232,6 +198,71 @@ bool RenderManager::init_geometry()
 	glGenBuffers(1, &vertex_buffer_id);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
 	glBufferData(GL_ARRAY_BUFFER, vertex_count * sizeof(GLfloat), &verticies[0], GL_STATIC_DRAW);
+	return true;
+}
+
+bool RenderManager::compile_shader(GLuint id, GLenum type, char const * src)
+{
+	id = glCreateShader(type);
+	glShaderSource(id, 1, &src, nullptr);
+	glCompileShader(id);
+
+	GLint status;
+	GLint len;
+	std::string msg;
+
+	glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
+	if (len > 0)
+	{
+		msg = std::string(len, '\0');
+		glGetShaderInfoLog(id, len, &len, &msg[0]);
+	}
+
+	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
+	if(status == FALSE)
+	{
+		PLOGF << "FAILURE: shader compile: " << Glenum_to_str[type];
+		if (len > 0) { PLOGF << msg; }
+		return false;
+	}
+
+	PLOGV << "shader compile: success: " << Glenum_to_str[type];
+	if (len > 0) { PLOGV << msg; }
+	return true;
+}
+
+bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint prog_id)
+{
+	prog_id = glCreateProgram();
+	glAttachShader(prog_id, vert_id);
+	glAttachShader(prog_id, frag_id);
+
+	glLinkProgram(prog_id);
+
+	GLint status;
+	GLint len;
+	std::string msg;
+
+	glGetProgramiv(prog_id, GL_INFO_LOG_LENGTH, &len);
+	if (len > 0)
+	{
+		msg = std::string(len, '\0');
+		glGetProgramInfoLog(prog_id, len, &len, &msg[0]);
+	}
+
+	glGetProgramiv(prog_id, GL_COMPILE_STATUS, &status);
+	if (status == FALSE)
+	{
+		PLOGF << "FAILED: shader-program compile";
+		if (len > 0) { PLOGF << msg; }
+		return false;
+	}
+	else
+	{
+		PLOGV << "shader-program compile: success";
+		if (len > 0) { PLOGV << msg; }
+	}
+
 	return true;
 }
 
@@ -252,6 +283,7 @@ bool RenderManager::update()
 void RenderManager::shutdown()
 {
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
+	renderer_state = ERendererState::SHUTDOWN_START;
 	IMG_Quit();
 	
 	SDL_GL_DeleteContext(opengl_context);
@@ -261,7 +293,9 @@ void RenderManager::shutdown()
 	//SDL_FreeSurface(rendering_surface);
 	//SDL_DestroyRenderer(active_renderer);
 	SDL_Quit();
+	renderer_state = ERendererState::SDL_QUIT_OK;
 	PLOGV << witchcraft::log_strings::sdl_stop;
+	renderer_state = ERendererState::SHUTDOWN_OK;
 }
 
 void RenderManager::render_visible_scene_back_to_front()

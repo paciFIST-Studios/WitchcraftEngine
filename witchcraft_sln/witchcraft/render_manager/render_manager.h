@@ -6,6 +6,7 @@
 #include <iostream>
 #include <list>
 #include <math.h>
+#include <map>
 #include <memory>
 #include <string>
 #include <sstream>
@@ -38,12 +39,33 @@
 class SceneManager2D;
 class qSceneObject;
 
+enum class ERendererState : unsigned char
+{
+	  UNINIT		= 0x01
+	, CONSTRUCTED	= 0x02
+	, SDL_INIT_OK	= 0x04
+	, OPENGL_INIT_OK= 0x08
+	, UPDATE_OK		= 0x10
+	, SHUTDOWN_START= 0x20
+	, SDL_QUIT_OK	= 0x40
+	, SHUTDOWN_OK	= 0x80
+};
+
+
 class RenderManager : public qEngineObject
 {
 public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
 
 private:
+	ERendererState renderer_state = ERendererState::UNINIT;
+
+	std::map<GLenum, std::string> Glenum_to_str {
+		  { GL_VERTEX_SHADER	, "GL_VERTEX_SHADER"	}
+		, { GL_FRAGMENT_SHADER	, "GL_FRAGMENT_SHADER"	}
+	};
+
+
 
 	char const * vertex_shader_src =
 		"#version 330 core\n"
@@ -106,18 +128,27 @@ protected:
 	GLuint fragment_shader_id;
 	GLuint shader_program_id;
 
+	bool init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
+	bool init_opengl();
+	bool init_sdl_image();
+
 	bool init_shaders();
 	bool init_geometry();
 
+	bool compile_shader(GLuint id, GLenum type, char const * src);
+	bool link_shader_program(GLuint vertx_id, GLuint frag_id, GLuint program_id);
+
 public:
-	RenderManager() {}
+	RenderManager()
+		: renderer_state(ERendererState::CONSTRUCTED)	
+	{}
 	
 
-	bool init(
-		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
-		, unsigned int yOffset = SDL_WINDOWPOS_UNDEFINED
-		, unsigned int Width   = 0
-		, unsigned int Height  = 0
+	bool init_system(
+		  unsigned xOffset = SDL_WINDOWPOS_UNDEFINED
+		, unsigned yOffset = SDL_WINDOWPOS_UNDEFINED
+		, unsigned Width   = 0
+		, unsigned Height  = 0
 		, bool fullScreen	   = false
 		, char const * WindowTitle = 0
 	);
@@ -137,6 +168,8 @@ public:
 	RenderObject2D * get_render_object(int id);
 	
 	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
+
+	ERendererState const get_renderer_state() const { return renderer_state; }
 };
 
 

@@ -45,6 +45,18 @@ public:
 
 private:
 
+	char const * vertex_shader_src =
+		"#version 330 core\n"
+		"layout(location=0) in vec2 posAttr;\n"
+		"void main(){\n"
+		"gl_Position = vec4(posAttr, 0.0, 1.0); }";
+
+	// fragment shaders process pixel color
+	char const * fragment_shader_src =
+		"#version 330 core\n"
+		"out vec4 col;\n"
+		"void main(){\n"
+		"col = vec4(1.0, 0.0, 0.0, 1.0); }";
 
 	GLfloat const verticies[9] = {
 		 -0.5f, -0.5f, 0.0f
@@ -52,40 +64,54 @@ private:
 		, 0.0f,  0.5f, 0.0f
 	};
 
-
+	//GLfloat const verts2[4][4] = {
+	//	  { -1.0f, -1.0f, 0.0f, 1.0f }
+	//	, { -1.0f,  1.0f, 0.0f, 0.0f }
+	//	, {  1.0f,  1.0f, 1.0f, 0.0f }
+	//	, {  1.0f, -1.0f, 1.0f, 1.0f }
+	//};
+	//
+	//GLfloat const idxes2[6] = {
+	//	0, 1, 2, 0, 2, 3
+	//};
 
 protected:
-	static std::unique_ptr<RenderManager> SDL2_2D_render_manager;
+	static std::unique_ptr<RenderManager> SDL2_render_manager;
+
+	SDL_Window * program_window		= nullptr;
+
+	SDL_GLContext opengl_context	= nullptr;
+
+	SDL_Renderer * active_renderer	= nullptr;
+
+	SDL_Surface * rendering_surface = nullptr;
+
+	SceneManager2D * scene_manager	= nullptr;
 
 	SDL_RendererInfo renderer_info;
 
 	RenderObjectsVector render_objects;
-
-	SceneManager2D * scene_manager = nullptr;
 	
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
 
-	GLuint vao;
-	GLuint vbo;
-	GLuint ebo;
-	GLuint tex;
-	GLuint vertex_shader;
-	GLuint fragment_shader;
-	GLuint shader_program;
+	// stores info on state of vertex data, (& format)
+	GLuint vertex_array_id;
 
+	// stores the vertex data
+	GLuint vertex_buffer_id;
 
+	// handles for shaders
+	GLuint vertex_shader_id;
+	GLuint fragment_shader_id;
+	GLuint shader_program_id;
+
+	bool init_shaders();
+	bool init_geometry();
 
 public:
 	RenderManager() {}
 	
-	SDL_Window * program_window = nullptr;
-
-	SDL_GLContext opengl_context;
-
-	SDL_Renderer * active_renderer = nullptr;
-
-	SDL_Surface * rendering_surface = nullptr;
 
 	bool init(
 		  unsigned int xOffset = SDL_WINDOWPOS_UNDEFINED
@@ -99,6 +125,8 @@ public:
 	bool update();
 
 	void shutdown();
+
+	SDL_Renderer * get_active_renderer() { return active_renderer; }
 
 	void render_visible_scene_back_to_front();
 
@@ -120,7 +148,6 @@ namespace witchcraft
 		int constexpr OPENGL_MINOR_VERSION = 3;
 
 		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
-
 	}
 }
 

@@ -5,8 +5,31 @@
 
 #include "../engine/engine_object.h"
 
+#include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
-#include "../render_manager/render_manager_2d.h"
+#include "../render_manager/render_manager.h"
+
+
+
+struct TestMode
+{
+	// steps through the function calls involved in running the
+	// game engine, but early-outs as soon as the fn is called
+	bool early_exit;
+};
+
+struct DebugOptions
+{
+	// prints the processing time for current frame, in ms
+	bool emit_frame_length;
+
+	// shows the number of connected controllers
+	bool emit_controller_count;
+
+	// shows the current state of controller-0
+	bool emit_controller_state;
+};
+
 
 enum class EEngineState : unsigned char
 {
@@ -23,30 +46,24 @@ enum class EEngineState : unsigned char
 struct EngineInitializer
 {
 	unsigned int id;
-	bool tm_early_exit; // tm = testing mode
+	TestMode test_mode;
 };
-
 
 class Engine : public qEngineObject
 {
 private:
 protected:
 
-	//std::unique_ptr<MessageManager> message;
+	std::unique_ptr<MessageBus> message;
 	std::unique_ptr<ResourceManager> resource;
-	std::unique_ptr<RenderManager2D> render;
+	std::unique_ptr<RenderManager> render;
 	std::unique_ptr<SceneManager2D> scene;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
-
-	// testing modes
-	bool tm_early_exit;
-
+	TestMode test_mode;
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
-
-
 
 public:
 	
@@ -58,12 +75,12 @@ public:
 
 	Engine() 
 	: current_engine_state(EEngineState::CONSTRUCTED) 
-	, tm_early_exit(false)
+		, test_mode({ false })
 	{}
 
 	Engine(EngineInitializer init) 
 	: qEngineObject(init.id)
-	, tm_early_exit(init.tm_early_exit)
+		, test_mode(init.test_mode)
 	, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };
@@ -140,7 +157,6 @@ namespace witchcraft
 			return nullptr;
 		}
 
-
 		static bool is_keyboard_event(SDL_Event const & e)
 		{
 			if (e.type == SDL_KEYDOWN ||
@@ -184,8 +200,8 @@ namespace witchcraft
 		bool const default_window_start_fullscreen = false;
 		int const default_window_x_width = 800;
 		int const default_window_y_height = 800;
-		int const default_window_x_offset = 0;
-		int const default_window_y_offset = 0;
+		int const default_window_x_offset = 32;
+		int const default_window_y_offset = 48;
 
 		float const default_world_boundary_top = 0.0f;
 		float const default_world_boundary_right = 768.0f;

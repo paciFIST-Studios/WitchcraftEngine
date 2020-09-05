@@ -95,7 +95,10 @@ private:
 		, 0.0f,  0.5f, 0.0f		// 2
 	};
 
+	bool draw_imgui_main_menu_bar = true;
 	bool draw_imgui_debug_window = false;
+
+	void paint_imgui_main_menu_bar();
 
 protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;

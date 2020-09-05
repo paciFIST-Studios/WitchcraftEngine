@@ -303,12 +303,43 @@ bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint p
 	return true;
 }
 
+void RenderManager::paint_imgui_main_menu_bar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Editor"))
+		{
+			if (ImGui::MenuItem("Load Level"))
+			{
+
+			}
+			if (ImGui::MenuItem("Load Asset"))
+			{
+
+			}
+			if (ImGui::MenuItem("Exit Program", "Esc"))
+			{
+				// request exit here
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Settings"))
+		{
+			ImGui::EndMenu();
+		}
+
+	}
+	ImGui::EndMainMenuBar();
+
+
+}
+
 
 bool RenderManager::update()
 {
 	// base background color
 	glClearColor(
-		  (GLclampf)scc.x
+		(GLclampf)scc.x
 		, (GLclampf)scc.y
 		, (GLclampf)scc.z
 		, (GLclampf)scc.w
@@ -326,16 +357,19 @@ bool RenderManager::update()
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
 	glVertexAttribPointer(
-		  0			// ?
+		0			// ?
 		, 3			// size
 		, GL_FLOAT	// type
 		, GL_FALSE	// normalized
 		, 0			// stride
-		,(void*)0	// buffer offset
+		, (void*)0	// buffer offset
 	);
-	
-	glDrawArrays(GL_TRIANGLES, 0, 3);	
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	glDisableVertexAttribArray(0);
+
+	paint_imgui_main_menu_bar();
+
 
 	// debug window
 	if (draw_imgui_debug_window)

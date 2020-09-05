@@ -52,5 +52,5 @@ witchcraft_sln/witchcraft/asset/tennis_game/*
 witchcraft_sln/witchcraft/asset/car_game/*
 witchcraft_sln/witchcraft/asset/smalltown/*
 witchcraft_sln/lib/imgui/*
-witchcraft_sln/lib/kissgui/*
-witchcraft_sln/lib/SDL2/glew-2.1.0/*
+witchcraft_sln/lib/SDL2/*
+witchcraft_sln/witchcraft/imgui/*

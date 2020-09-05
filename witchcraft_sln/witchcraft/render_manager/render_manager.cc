@@ -338,9 +338,10 @@ bool RenderManager::update()
 	glDisableVertexAttribArray(0);
 
 	// debug window
+	if (draw_imgui_debug_window)
 	{
 		// draw imgui, after drawing the rest of the program for this frame
-		ImGui::Begin("Witchcraft");
+		ImGui::Begin("Debug Menu");
 		ImGui::ColorEdit3("bg color", (float*)&scc);
 		ImGui::End();
 	}

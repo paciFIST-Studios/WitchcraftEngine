@@ -95,6 +95,8 @@ private:
 		, 0.0f,  0.5f, 0.0f		// 2
 	};
 
+	bool draw_imgui_debug_window = false;
+
 protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
@@ -175,6 +177,8 @@ public:
 	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 
 	ERendererState const get_renderer_state() const { return renderer_state; }
+
+	void toggle_imgui_debug_window() { draw_imgui_debug_window = !draw_imgui_debug_window; }
 };
 
 

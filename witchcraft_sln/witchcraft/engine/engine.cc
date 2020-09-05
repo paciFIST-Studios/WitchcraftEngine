@@ -270,6 +270,10 @@ void Engine::run()
 					//	witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
 					//	break;
 
+					case SDLK_F1:
+						render->toggle_imgui_debug_window();
+						break;
+
 					// Numeric
 					case SDLK_1:
 						debug.emit_frame_length = !debug.emit_frame_length;

@@ -24,6 +24,12 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
+// imgui
+#include "../imgui/imgui.h"
+#include "../imgui/imgui_impl_sdl.h"
+#include "../imgui/imgui_impl_opengl3.h"
+
+
 // witchcraft
 #include "../engine/engine_object.h"
 
@@ -66,6 +72,7 @@ private:
 	};
 
 
+	char const * open_gl_version = "#version 330 core";
 
 	char const * vertex_shader_src =
 		"#version 330 core\n"
@@ -104,7 +111,12 @@ protected:
 	SDL_RendererInfo renderer_info;
 
 	RenderObjectsVector render_objects;
-	
+
+
+	// screen clear color
+	ImVec4 scc;
+	//GLClampf scc[4] = {0.2f, 0.3f, 0.3f, 1.0f}
+
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
 
@@ -125,6 +137,8 @@ protected:
 
 	bool init_shaders();
 	bool init_geometry();
+
+	bool init_imgui();
 
 	bool compile_shader(GLuint id, GLenum type, char const * src);
 	bool link_shader_program(GLuint vertx_id, GLuint frag_id, GLuint program_id);

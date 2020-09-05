@@ -353,7 +353,6 @@ void Engine::run()
 						//{
 						//	buddha_scene_object->set_scale(1.f, 1.f);
 						//}
-
 					}
 				}
 				// gamepad axes

@@ -26,6 +26,9 @@ void Engine::startup()
 	// this will be replaced by messaging system
 	render->set_scene_manager(scene.get());
 	scene->set_render_manager(render.get());
+
+
+
 }
 
 void Engine::run()
@@ -224,6 +227,10 @@ void Engine::run()
 				break;
 			}
 
+			ImGui_ImplSDL2_ProcessEvent(&window_event);
+
+
+
 			// Keyboard events
 			if (witchcraft::engine::is_keyboard_event(window_event))
 			{
@@ -236,18 +243,18 @@ void Engine::run()
 						break;
 
 					// WASD
-					case SDLK_w:
-						witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
-						break;
-					case SDLK_s:
-						witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
-						break;
-					case SDLK_a:
-						witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
-						break;
-					case SDLK_d:
-						witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
-						break;
+					//case SDLK_w:
+					//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
+					//	break;
+					//case SDLK_s:
+					//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
+					//	break;
+					//case SDLK_a:
+					//	witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
+					//	break;
+					//case SDLK_d:
+					//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
+					//	break;
 
 					//// Arrows
 					//case SDLK_UP:
@@ -295,145 +302,144 @@ void Engine::run()
 			} // end keyboard events
 
 			// - Gamepad Events ------------------------------------------------------------------------
-			else if (witchcraft::engine::is_gamepad_event(window_event))
-			{
-				// gamepad start button -> quit
-				if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
-				{
-					PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-					gameplay_loop_is_running = false;
-				}
-				// gamepad button down
-				if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
-				{
-					if (window_event.caxis.which == controller_idx)
-					{
-						//// 'nintendo' buttons
-						//if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-						//{
-						//	std::cout << "controller: [A]\ttoggle_layer_visibility\n";
-						//	witchcraft::engine::toggle_layer_visibility(buddha_layer);
-						//}
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-						//{
-						//	std::cout << "controller: [B]\ttoggle_layer_visibility\n";
-						//	witchcraft::engine::toggle_layer_visibility(soccer_pitch_layer);
-						//}
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-						//{
-						//	std::cout << "controller: [X]\n";
-						//}
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
-						//{
-						//	std::cout << "controller: [Y]\n";
-						//}
-						//
-						//// shoulder bumpers
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
-						//{
-						//	auto scale = soccer_pitch_scene_object->get_scale();
-						//	auto x = std::get<0>(scale) * 1.1f;
-						//	auto y = std::get<1>(scale) * 1.1f;
-						//	soccer_pitch_scene_object->set_scale(x, y);
-						//}
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
-						//{
-						//	auto scale = soccer_pitch_scene_object->get_scale();
-						//	auto x = std::get<0>(scale) * 0.9f;
-						//	auto y = std::get<1>(scale) * 0.9f;
-						//	soccer_pitch_scene_object->set_scale(x, y);
-						//}
-						//
-						//// click sticks
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSTICK)
-						//{
-						//	soccer_pitch_scene_object->set_scale(1.f, 1.f);
-						//}
-						//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
-						//{
-						//	buddha_scene_object->set_scale(1.f, 1.f);
-						//}
-					}
-				}
-				// gamepad axes
-				else if (window_event.caxis.which == controller_idx)
-				{
-					// left_stick x-axis
-					if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
-					{
-						// left of dead zone
-						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-						{
-							player_0_x_input = -player_speed;
-						}
-						// right of deadzone
-						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-						{
-							player_0_x_input = player_speed;
-						}
-						// deadzone
-						else
-						{
-							player_0_x_input = 0.0f;
-						}
-					}
-					// left_stick y-axis
-					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
-					{
-						// below dead zone
-						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-						{
-							player_0_y_input = -player_speed;
-						}
-						// above dead zone
-						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-						{
-							player_0_y_input = player_speed;
-						}
-						// deadzone
-						else
-						{
-							player_0_y_input = 0.0f;
-						}
-					}
-					// right_stick x-axis
-					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
-					{
-						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-						{
-							layer_0_x_offset += -layer_speed;
-						}
-						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-						{
-							layer_0_x_offset += layer_speed;
-						}
-						else
-						{
-							layer_0_x_offset = 0.0f;
-						}
-					}
-					// right_stick y-axis
-					else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
-					{
-						if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-						{
-							layer_0_y_offset += -layer_speed;
-						}
-						else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-						{
-							layer_0_y_offset += layer_speed;
-						}
-						else
-						{
-							layer_0_y_offset = 0.0f;
-						}
-					}
-
-				} // end gamepad axis events
-			} // end gamepad events
-		}	// end event update loop
+			//else if (witchcraft::engine::is_gamepad_event(window_event))
+			//{
+			//	// gamepad start button -> quit
+			//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
+			//	{
+			//		PLOGI << witchcraft::log_strings::sdl_break_event_polling;
+			//		gameplay_loop_is_running = false;
+			//	}
+			//	// gamepad button down
+			//	if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
+			//	{
+			//		if (window_event.caxis.which == controller_idx)
+			//		{
+			//			//// 'nintendo' buttons
+			//			//if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+			//			//{
+			//			//	std::cout << "controller: [A]\ttoggle_layer_visibility\n";
+			//			//	witchcraft::engine::toggle_layer_visibility(buddha_layer);
+			//			//}
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
+			//			//{
+			//			//	std::cout << "controller: [B]\ttoggle_layer_visibility\n";
+			//			//	witchcraft::engine::toggle_layer_visibility(soccer_pitch_layer);
+			//			//}
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+			//			//{
+			//			//	std::cout << "controller: [X]\n";
+			//			//}
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
+			//			//{
+			//			//	std::cout << "controller: [Y]\n";
+			//			//}
+			//			//
+			//			//// shoulder bumpers
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
+			//			//{
+			//			//	auto scale = soccer_pitch_scene_object->get_scale();
+			//			//	auto x = std::get<0>(scale) * 1.1f;
+			//			//	auto y = std::get<1>(scale) * 1.1f;
+			//			//	soccer_pitch_scene_object->set_scale(x, y);
+			//			//}
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
+			//			//{
+			//			//	auto scale = soccer_pitch_scene_object->get_scale();
+			//			//	auto x = std::get<0>(scale) * 0.9f;
+			//			//	auto y = std::get<1>(scale) * 0.9f;
+			//			//	soccer_pitch_scene_object->set_scale(x, y);
+			//			//}
+			//			//
+			//			//// click sticks
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSTICK)
+			//			//{
+			//			//	soccer_pitch_scene_object->set_scale(1.f, 1.f);
+			//			//}
+			//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
+			//			//{
+			//			//	buddha_scene_object->set_scale(1.f, 1.f);
+			//			//}
+			//		}
+			//	}
+			//	// gamepad axes
+			//	else if (window_event.caxis.which == controller_idx)
+			//	{
+			//		// left_stick x-axis
+			//		if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
+			//		{
+			//			// left of dead zone
+			//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+			//			{
+			//				player_0_x_input = -player_speed;
+			//			}
+			//			// right of deadzone
+			//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+			//			{
+			//				player_0_x_input = player_speed;
+			//			}
+			//			// deadzone
+			//			else
+			//			{
+			//				player_0_x_input = 0.0f;
+			//			}
+			//		}
+			//		// left_stick y-axis
+			//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
+			//		{
+			//			// below dead zone
+			//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+			//			{
+			//				player_0_y_input = -player_speed;
+			//			}
+			//			// above dead zone
+			//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+			//			{
+			//				player_0_y_input = player_speed;
+			//			}
+			//			// deadzone
+			//			else
+			//			{
+			//				player_0_y_input = 0.0f;
+			//			}
+			//		}
+			//		// right_stick x-axis
+			//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
+			//		{
+			//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+			//			{
+			//				layer_0_x_offset += -layer_speed;
+			//			}
+			//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+			//			{
+			//				layer_0_x_offset += layer_speed;
+			//			}
+			//			else
+			//			{
+			//				layer_0_x_offset = 0.0f;
+			//			}
+			//		}
+			//		// right_stick y-axis
+			//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+			//		{
+			//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
+			//			{
+			//				layer_0_y_offset += -layer_speed;
+			//			}
+			//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
+			//			{
+			//				layer_0_y_offset += layer_speed;
+			//			}
+			//			else
+			//			{
+			//				layer_0_y_offset = 0.0f;
+			//			}
+			//		}
+			//
+			//	} // end gamepad axis events
+			//} // end gamepad events
+		}	// end event loop for frame
 	
-
 		// - Physics Update ---------------------------------------------------------------------------------
 
 		//witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
@@ -443,6 +449,7 @@ void Engine::run()
 		// - Render Update ---------------------------------------------------------------------------------
 
 		render->update();
+
 
 		// - Sound Update ---------------------------------------------------------------------------------
 

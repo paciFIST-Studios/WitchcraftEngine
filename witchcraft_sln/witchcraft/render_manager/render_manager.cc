@@ -22,11 +22,18 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 		return false;
 	}
 
+	// NOTE: this initialization has to come AFTER the opengl init
+	if (false == init_imgui())
+	{
+		return false;
+	}
+
+	// not sure where to set this, actually
+	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
 
 	SDL_GL_SetSwapInterval(1);	// use VSYNC
 	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
-
 	
 	if (false == init_shaders()) 
 	{ 
@@ -36,7 +43,6 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	{ 
 		return false; 
 	}
-
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
 
@@ -158,6 +164,39 @@ bool RenderManager::init_sdl_image()
 	return true;
 }
 
+bool RenderManager::init_imgui()
+{
+	// NOTE: these early-out returns are basically
+	// only present for style, several of these fns never
+	// return false
+
+	IMGUI_CHECKVERSION();
+	
+	auto imgui_context = ImGui::CreateContext();
+	if (imgui_context == nullptr)
+	{
+		return false;
+	}
+
+	ImGuiIO &io = ImGui::GetIO();
+	
+	auto sdl_init = ImGui_ImplSDL2_InitForOpenGL(program_window, opengl_context);
+	if (sdl_init == false)
+	{
+		return false;
+	}
+
+	auto opengl_init = ImGui_ImplOpenGL3_Init(open_gl_version);
+	if (opengl_init == false)
+	{
+		return false;
+	}
+
+	ImGui::StyleColorsDark();
+
+	return true;
+}
+
 bool RenderManager::init_shaders()
 {
 
@@ -267,9 +306,22 @@ bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint p
 
 bool RenderManager::update()
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	// base background color
+	glClearColor(
+		  (GLclampf)scc.x
+		, (GLclampf)scc.y
+		, (GLclampf)scc.z
+		, (GLclampf)scc.w
+	);
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader_program_id);
+
+	// imgui prepare for draw 
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(program_window);
+	ImGui::NewFrame();
+	// imgui; note: they have to be in this order
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
@@ -285,6 +337,19 @@ bool RenderManager::update()
 	glDrawArrays(GL_TRIANGLES, 0, 3);	
 	glDisableVertexAttribArray(0);
 
+	// debug window
+	{
+		// draw imgui, after drawing the rest of the program for this frame
+		ImGui::Begin("Witchcraft");
+		ImGui::ColorEdit3("bg color", (float*)&scc);
+		ImGui::End();
+	}
+
+
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	// swapping the buffer is always last step in render update
 	SDL_GL_SwapWindow(program_window);
 	return true;
 }
@@ -294,10 +359,14 @@ void RenderManager::shutdown()
 	PLOGV << witchcraft::log_strings::sdl_begin_shutdown;
 	renderer_state = ERendererState::SHUTDOWN_START;
 	IMG_Quit();
-	
+
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
 	program_window = nullptr;
+
 
 	//SDL_FreeSurface(rendering_surface);
 	//SDL_DestroyRenderer(active_renderer);

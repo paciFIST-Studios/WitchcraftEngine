@@ -26,6 +26,9 @@ void Engine::startup()
 	// this will be replaced by messaging system
 	render->set_scene_manager(scene.get());
 	scene->set_render_manager(render.get());
+
+
+
 }
 
 void Engine::run()
@@ -431,7 +434,7 @@ void Engine::run()
 
 				} // end gamepad axis events
 			} // end gamepad events
-		}	// end event update loop
+		}	// end event loop for frame
 	
 
 		// - Physics Update ---------------------------------------------------------------------------------
@@ -443,6 +446,7 @@ void Engine::run()
 		// - Render Update ---------------------------------------------------------------------------------
 
 		render->update();
+
 
 		// - Sound Update ---------------------------------------------------------------------------------
 

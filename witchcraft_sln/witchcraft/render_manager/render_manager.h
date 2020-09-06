@@ -97,8 +97,10 @@ private:
 
 	bool draw_imgui_main_menu_bar = true;
 	bool draw_imgui_debug_window = false;
+	bool draw_imgui_debug_console = false;
 
 	void paint_imgui_main_menu_bar();
+	void paint_imgui_console_window();
 
 protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
@@ -182,6 +184,7 @@ public:
 	ERendererState const get_renderer_state() const { return renderer_state; }
 
 	void toggle_imgui_debug_window() { draw_imgui_debug_window = !draw_imgui_debug_window; }
+	void toggle_imgui_debug_console() { draw_imgui_debug_console = !draw_imgui_debug_console; }
 };
 
 

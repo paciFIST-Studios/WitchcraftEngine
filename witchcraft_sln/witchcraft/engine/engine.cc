@@ -273,6 +273,8 @@ void Engine::run()
 					case SDLK_F1:
 						render->toggle_imgui_debug_window();
 						break;
+					case SDLK_F2:
+						render->toggle_imgui_debug_console();
 
 					// Numeric
 					case SDLK_1:

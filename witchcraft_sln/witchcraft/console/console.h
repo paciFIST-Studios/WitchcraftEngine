@@ -29,6 +29,24 @@ protected:
 	bool use_auto_scroll = true;
 	bool scroll_to_bottom = false;
 	
+
+	//inline std::string trim_in_place(std::string & str)
+	//{
+	//	// https://stackoverflow.com/a/6500499
+	//	char const * WS = " \t\r\v\n";
+	//	str.erase(0, str.find_first_not_of(WS));
+	//	str.erase(str.find_last_not_of(WS)+1);
+	//	return str;
+	//}
+
+	static void  Strtrim(char* s) 
+	{ 
+		char* str_end = s + strlen(s);
+		while (str_end > s && str_end[-1] == ' ') str_end--; 
+		*str_end = 0; 
+	}
+
+
 public:
 	Console()
 	{
@@ -176,27 +194,58 @@ public:
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		bool reclaim_focus = false;
-		ImGuiInputTextFlags input_text_flags = (
-			  ImGuiInputTextFlags_EnterReturnsTrue 
-			| ImGuiInputTextFlags_CallbackCompletion 
-			| ImGuiInputTextFlags_CallbackHistory
-		);
-
-		if (ImGui::InputText(
-				"Input"
-				, input_buffer
-				, sizeof(input_buffer)
-				, input_text_flags
-				, 0
-				, 0
-		))
-		{
-
-		}
+		//bool reclaim_focus = false;
+		//ImGuiInputTextCallback cb = nullptr;
+		//ImGuiInputTextFlags input_text_flags = (
+		//	  ImGuiInputTextFlags_EnterReturnsTrue 
+		//	| ImGuiInputTextFlags_CallbackCompletion 
+		//	| ImGuiInputTextFlags_CallbackHistory
+		//);
+		//if (ImGui::InputText(
+		//		"Input"
+		//		, input_buffer
+		//		, sizeof(input_buffer)
+		//		, input_text_flags
+		//		, 0
+		//		, (void*)this
+		//))
+		//{
+		//	char * s = input_buffer;
+		//	Strtrim(s);
+		//	if (s[0])
+		//	{
+		//		execute_command(s);
+		//	}
+		//	
+		//	for (int i = 0; i < 256; i++)
+		//	{
+		//		input_buffer[i] = ' ';
+		//	}
+		//	
+		//	reclaim_focus = true;
+		//}
+		//
+		//ImGui::SetItemDefaultFocus();
+		//
+		//if (reclaim_focus)
+		//{
+		//	// focus previous
+		//	ImGui::SetKeyboardFocusHere(-1);
+		//}
 
 		ImGui::End();
 	}
+
+
+	void execute_command(char const * command)
+	{
+		std::stringstream ss;
+		ss << "# " << command << "\n";
+		add_log(ss.str());
+
+
+	}
+
 };
 
 namespace witchcraft

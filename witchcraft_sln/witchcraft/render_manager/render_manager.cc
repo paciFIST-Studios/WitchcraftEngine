@@ -418,13 +418,13 @@ bool RenderManager::update()
 
 	paint_imgui_main_menu_bar();
 
-	if (draw_imgui_debug_console)
+	// todo: this check should move inside the console class
+	if (debug_console->get_is_visible())
 	{
-		paint_imgui_console_window();
+		debug_console->draw("Debug Console");
 	}
 
-
-	// debug window
+	// debug window6
 	if (draw_imgui_debug_window)
 	{
 		// draw imgui, after drawing the rest of the program for this frame

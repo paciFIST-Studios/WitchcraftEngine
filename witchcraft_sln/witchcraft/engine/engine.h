@@ -8,7 +8,7 @@
 #include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/render_manager.h"
-
+#include "../console/console.h"
 
 
 struct TestMode
@@ -58,6 +58,7 @@ protected:
 	std::unique_ptr<ResourceManager> resource;
 	std::unique_ptr<RenderManager> render;
 	std::unique_ptr<SceneManager2D> scene;
+	std::unique_ptr<Console> console;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
 	TestMode test_mode;

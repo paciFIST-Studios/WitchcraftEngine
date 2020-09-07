@@ -23,11 +23,13 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>();
 
+	PLOGI << "debug console start";
+	console = std::make_unique<Console>();
+
 	// this will be replaced by messaging system
+	render->set_debug_console(console.get());
 	render->set_scene_manager(scene.get());
 	scene->set_render_manager(render.get());
-
-
 
 }
 
@@ -274,7 +276,11 @@ void Engine::run()
 						render->toggle_imgui_debug_window();
 						break;
 					case SDLK_F2:
-						render->toggle_imgui_debug_console();
+						console->toggle_visibility();
+						break;
+					case SDLK_F3:
+						//console->draw("");
+						break;
 
 					// Numeric
 					case SDLK_1:

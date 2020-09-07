@@ -42,8 +42,11 @@
 #include "../scene_manager/scene_manager_2d.h"
 #include "../scene_manager/scene_object.h"
 
+#include "../console/console.h"
+
 class SceneManager2D;
 class qSceneObject;
+class Console;
 
 enum class ERendererState : unsigned char
 {
@@ -97,12 +100,12 @@ private:
 
 	bool draw_imgui_main_menu_bar = true;
 	bool draw_imgui_debug_window = false;
-	bool draw_imgui_debug_console = false;
 
 	void paint_imgui_main_menu_bar();
 	void paint_imgui_console_window();
 
 protected:
+
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
 	SDL_Window * program_window		= nullptr;
@@ -114,6 +117,8 @@ protected:
 	SDL_Surface * rendering_surface = nullptr;
 
 	SceneManager2D * scene_manager	= nullptr;
+
+	Console * debug_console			= nullptr;
 
 	SDL_RendererInfo renderer_info;
 
@@ -184,7 +189,8 @@ public:
 	ERendererState const get_renderer_state() const { return renderer_state; }
 
 	void toggle_imgui_debug_window() { draw_imgui_debug_window = !draw_imgui_debug_window; }
-	void toggle_imgui_debug_console() { draw_imgui_debug_console = !draw_imgui_debug_console; }
+	
+	void set_debug_console(Console * con) { debug_console = con; }
 };
 
 

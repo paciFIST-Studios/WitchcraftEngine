@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="console\console__tst.cc" />
     <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />
     <ClCompile Include="engine\engine__tst.cc" />
@@ -164,6 +165,7 @@
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="console\console.h" />
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\exception.h" />

@@ -37,6 +37,9 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{f873f48a-aa90-41c2-8b33-0c5d860579ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\console">
+      <UniqueIdentifier>{baf74073-905b-4d32-ac3e-9054cdda1bf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -153,6 +156,9 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="console\console__tst.cc">
+      <Filter>Source Files\console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -256,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="console\console.h">
+      <Filter>Source Files\console</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

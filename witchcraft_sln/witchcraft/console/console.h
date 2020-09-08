@@ -56,6 +56,7 @@ public:
 		commands.push_back("HELP");
 		commands.push_back("HISTORY");
 		commands.push_back("CLEAR");
+		commands.push_back("CLOSE");
 	}
 	~Console() {}
 	
@@ -149,8 +150,7 @@ public:
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4,1));
 
-		// copy log to clipboard
-
+		
 		for (auto && item : contents)
 		{
 			if (!filter.PassFilter(item.c_str()))
@@ -194,44 +194,43 @@ public:
 		ImGui::EndChild();
 		ImGui::Separator();
 
-		//bool reclaim_focus = false;
-		//ImGuiInputTextCallback cb = nullptr;
-		//ImGuiInputTextFlags input_text_flags = (
-		//	  ImGuiInputTextFlags_EnterReturnsTrue 
-		//	| ImGuiInputTextFlags_CallbackCompletion 
-		//	| ImGuiInputTextFlags_CallbackHistory
-		//);
-		//if (ImGui::InputText(
-		//		"Input"
-		//		, input_buffer
-		//		, sizeof(input_buffer)
-		//		, input_text_flags
-		//		, 0
-		//		, (void*)this
-		//))
-		//{
-		//	char * s = input_buffer;
-		//	Strtrim(s);
-		//	if (s[0])
-		//	{
-		//		execute_command(s);
-		//	}
-		//	
-		//	for (int i = 0; i < 256; i++)
-		//	{
-		//		input_buffer[i] = ' ';
-		//	}
-		//	
-		//	reclaim_focus = true;
-		//}
-		//
-		//ImGui::SetItemDefaultFocus();
-		//
-		//if (reclaim_focus)
-		//{
-		//	// focus previous
-		//	ImGui::SetKeyboardFocusHere(-1);
-		//}
+		bool reclaim_focus = false;
+		ImGuiInputTextFlags input_text_flags = (
+			  ImGuiInputTextFlags_EnterReturnsTrue 
+			| ImGuiInputTextFlags_CallbackCompletion 
+			| ImGuiInputTextFlags_CallbackHistory
+		);
+		if (ImGui::InputText(
+				"Input"
+				, input_buffer
+				, sizeof(input_buffer)
+				, input_text_flags
+				, &text_edit_callback_stub
+				, (void*)this
+		))
+		{
+			char * s = input_buffer;
+			Strtrim(s);
+			if (s[0]) 
+			{	
+				execute_command(s); 
+			}
+			
+			for (int i = 0; i < 256; i++)
+			{
+				input_buffer[i] = '\0';
+			}
+			
+			reclaim_focus = true;
+		}
+		
+		ImGui::SetItemDefaultFocus();
+		
+		if (reclaim_focus)
+		{
+			// focus previous
+			ImGui::SetKeyboardFocusHere(-1);
+		}
 
 		ImGui::End();
 	}
@@ -243,7 +242,56 @@ public:
 		ss << "# " << command << "\n";
 		add_log(ss.str());
 
+		if (_stricmp(command, "CLEAR") == 0)
+		{
+			clear_contents();
+		}
+		else if (_stricmp(command, "HELP") == 0)
+		{
+			add_log("Commands: ");
+			for (auto cmd : commands)
+			{
+				ss = std::stringstream();
+				ss << "- " << cmd;
+				add_log(ss.str());
+			}
+		}
+		else if (_stricmp(command, "HISTORY") == 0)
+		{
+			// todo
+		}
+		else if (_stricmp(command, "CLOSE") == 0)
+		{
+			draw_console = false;
+		}
+		else
+		{
+			ss = std::stringstream();
+			ss << "Unknown command: " << command << "\n";
+			add_log(ss.str());
+		}
 
+		scroll_to_bottom = true;
+	}
+
+	static int text_edit_callback_stub(ImGuiInputTextCallbackData * data)
+	{
+		Console * c = (Console*)data->UserData;
+		return c->text_edit_callback(data);
+	}
+
+	int text_edit_callback(ImGuiInputTextCallbackData * data)
+	{
+		if (data->EventFlag == ImGuiInputTextFlags_CallbackCompletion)
+		{
+			// see: https://github.com/ocornut/imgui/blob/docking/imgui_demo.cpp
+		}
+		else if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory)
+		{
+
+		}
+
+		return 0;
 	}
 
 };

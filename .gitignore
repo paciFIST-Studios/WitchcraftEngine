@@ -55,3 +55,4 @@ witchcraft_sln/lib/imgui/*
 witchcraft_sln/lib/SDL2/*
 witchcraft_sln/witchcraft/imgui/*
 witchcraft_sln/witchcraft/imgui.ini
+witchcraft_sln/profiling/*

@@ -20,7 +20,7 @@ public:
 
 	unsigned int shader_id() { return shader_id; }
 
-	OpenGlShader &Use();
+	OpenGlShader & Use();
 
 	void compile(char const * vertex_src, char const * fragment_src, char const * geometry_src = nullptr);
 

@@ -172,11 +172,11 @@ namespace witchcraft
 
 		static bool is_gamepad_event(SDL_Event const & e)
 		{			
-			if (e.type == SDL_CONTROLLERBUTTONDOWN ||
-				e.type == SDL_CONTROLLERBUTTONUP   ||
-				e.type == SDL_CONTROLLERAXISMOTION ||
-				e.type == SDL_CONTROLLERDEVICEADDED   ||
-				e.type == SDL_CONTROLLERDEVICEREMOVED ||
+			if (e.type == SDL_CONTROLLERBUTTONDOWN		||
+				e.type == SDL_CONTROLLERBUTTONUP		||
+				e.type == SDL_CONTROLLERAXISMOTION		||
+				e.type == SDL_CONTROLLERDEVICEADDED		||
+				e.type == SDL_CONTROLLERDEVICEREMOVED	||
 				e.type == SDL_CONTROLLERDEVICEREMAPPED
 				)
 			{

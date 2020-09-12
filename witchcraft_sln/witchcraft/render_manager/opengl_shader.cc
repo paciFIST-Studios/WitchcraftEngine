@@ -14,7 +14,7 @@ GLuint OpenGlShaderProgram::compile_vertex_shader(char const * src)
 	vert = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vert, 1, &src, NULL);
 	glCompileShader(vert);
-	check_compile_errors(vert, witchcraft::shader::VERTEX);
+	check_compile_errors(vert, VERTEX);
 	return vert;
 }
 
@@ -25,7 +25,7 @@ GLuint OpenGlShaderProgram::compile_fragment_shader(char const * src)
 	GLuint frag = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(frag, 1, &src, NULL);
 	glCompileShader(frag);
-	check_compile_errors(frag, witchcraft::shader::FRAGMENT);
+	check_compile_errors(frag, FRAGMENT);
 	return frag;
 }
 
@@ -36,7 +36,7 @@ GLuint OpenGlShaderProgram::compile_geometry_shader(char const * src)
 	GLuint geo = glCreateShader(GL_GEOMETRY_SHADER);
 	glShaderSource(geo, 1, &src, NULL);
 	glCompileShader(geo);
-	check_compile_errors(geo, witchcraft::shader::GEOMETRY);
+	check_compile_errors(geo, GEOMETRY);
 	return geo;
 }
 
@@ -51,7 +51,7 @@ GLuint OpenGlShaderProgram::link_program(GLuint vert, GLuint frag, GLuint geo)
 	}
 
 	glLinkProgram(this->shader_program_id);
-	check_compile_errors(this->shader_program_id, witchcraft::shader::PROGRAM);
+	check_compile_errors(this->shader_program_id, PROGRAM);
 
 	glDetachShader(this->shader_program_id, vert);
 	glDetachShader(this->shader_program_id, frag);
@@ -88,9 +88,7 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 	// NOTE: don't compare success to true or GL_TRUE, as per
 	// https://gamedev.stackexchange.com/a/156583
 
-	if (   type == witchcraft::shader::VERTEX 
-		|| type == witchcraft::shader::FRAGMENT 
-		|| type == witchcraft::shader::GEOMETRY)
+	if (type == VERTEX || type == FRAGMENT || type == GEOMETRY)
 	{
 		glGetShaderiv(obj, GL_COMPILE_STATUS, &success);
 		if (!success)
@@ -105,7 +103,7 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 		}
 	}
 	// else if (type == witchcraft::shader::compute)
-	else if (type == witchcraft::shader::PROGRAM)
+	else if (type == PROGRAM)
 	{
 		glGetProgramiv(obj, GL_LINK_STATUS, &success);
 		if (!success)

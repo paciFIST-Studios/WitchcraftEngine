@@ -36,13 +36,10 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
 
 	// init shaders
-	shader = std::make_unique<OpenGlShaderProgram>();
-	shader->compile(vertex_shader_src, fragment_shader_src);
-
-	//if (false == init_shaders()) 
-	//{ 
-	//	return false; 
-	//}
+	if (false == init_shaders()) 
+	{ 
+		return false; 
+	}
 	if (false == init_geometry()) 
 	{ 
 		return false; 
@@ -203,30 +200,10 @@ bool RenderManager::init_imgui()
 
 bool RenderManager::init_shaders()
 {
-	// Vertex Shader
-	if (false== compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
-	{
-		return false;
-	}
+	basic_shader = std::make_unique<OpenGlShaderProgram>();
+	basic_shader->compile(vertex_shader_src, fragment_shader_src);
+	active_shader_program_id = basic_shader->get_shader_program_id();
 
-	// Fragment Shader
-	if (false == compile_shader(fragment_shader_id, GL_FRAGMENT_SHADER, fragment_shader_src))
-	{
-		return false;
-	}
-
-	// shader program
-	if (false == link_shader_program(vertex_shader_id, fragment_shader_id, shader_program_id))
-	{
-		return false;
-	}
-
-	// from here, we'll just rely on the shader program
-	glDetachShader(shader_program_id, vertex_shader_id);
-	glDetachShader(shader_program_id, fragment_shader_id);
-	glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
-	
 	return true;
 }
 
@@ -238,71 +215,6 @@ bool RenderManager::init_geometry()
 	glGenBuffers(1, &vertex_buffer_id);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies[0], GL_STATIC_DRAW);
-	return true;
-}
-
-bool RenderManager::compile_shader(GLuint id, GLenum type, char const * src)
-{
-	id = glCreateShader(type);
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	GLint status;
-	GLint len;
-	std::string msg;
-
-	glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
-	if (len > 0)
-	{
-		msg = std::string(len+1, '\0');
-		glGetShaderInfoLog(id, len, &len, &msg[0]);
-	}
-
-	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-	if(status == FALSE)
-	{
-		PLOGF << "FAIL: shader compile: " << Glenum_to_str[type];
-		if (len > 0) { PLOGF << "FAIL: shader compile: " << msg; }
-		return false;
-	}
-
-	PLOGV << "shader compile: success: " << Glenum_to_str[type];
-	if (len > 0) { PLOGV << msg; }
-	return true;
-}
-
-bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint prog_id)
-{
-	prog_id = glCreateProgram();
-	glAttachShader(prog_id, vert_id);
-	glAttachShader(prog_id, frag_id);
-
-	glLinkProgram(prog_id);
-
-	GLint status;
-	GLint len;
-	std::string msg;
-
-	glGetProgramiv(prog_id, GL_INFO_LOG_LENGTH, &len);
-	if (len > 0)
-	{
-		msg = std::string(len+1, '\0');
-		glGetProgramInfoLog(prog_id, len, &len, &msg[0]);
-	}
-
-	glGetProgramiv(prog_id, GL_COMPILE_STATUS, &status);
-	if (status == FALSE)
-	{
-		PLOGF << "FAIL: shader-program compile";
-		if (len > 0) { PLOGF << "FAIL: shader-program compile: " << msg; }
-		return false;
-	}
-	else
-	{
-		PLOGV << "shader-program compile: success";
-		if (len > 0) { PLOGV << msg; }
-	}
-
 	return true;
 }
 
@@ -398,7 +310,7 @@ bool RenderManager::update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glUseProgram(shader_program_id);
-	glUseProgram(shader->get_shader_program_id());
+	glUseProgram(active_shader_program_id);
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();

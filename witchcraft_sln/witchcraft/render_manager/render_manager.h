@@ -110,7 +110,8 @@ protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
-	std::unique_ptr<OpenGlShaderProgram> shader;
+	std::unique_ptr<OpenGlShaderProgram> basic_shader;
+	GLuint active_shader_program_id = NULL;
 
 	SDL_Window * program_window		= nullptr;
 
@@ -155,9 +156,6 @@ protected:
 	bool init_geometry();
 
 	bool init_imgui();
-
-	bool compile_shader(GLuint id, GLenum type, char const * src);
-	bool link_shader_program(GLuint vertx_id, GLuint frag_id, GLuint program_id);
 
 public:
 	RenderManager()

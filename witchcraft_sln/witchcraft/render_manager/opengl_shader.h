@@ -18,16 +18,13 @@ private:
 	// not assignable
 	OpenGlShaderProgram& operator=(OpenGlShaderProgram const &) = delete;
 
+	~OpenGlShaderProgram() { if(this->shader_program_id > 0)	glDeleteProgram(this->shader_program_id); }
+
 protected:
 	unsigned int shader_program_id = 0;
 
 	bool check_compile_errors(unsigned int id, char const * type);
 
-	// constants used for messaging state inside the class
-	char const * VERTEX		= "VERTEX";
-	char const * FRAGMENT	= "FRAGMENT";
-	char const * GEOMETRY	= "GEOMETRY";
-	char const * PROGRAM	= "PROGRAM";
 
 	GLuint compile_vertex_shader(char const * src);
 	GLuint compile_fragment_shader(char const * src);
@@ -37,21 +34,26 @@ protected:
 public:
 
 	OpenGlShaderProgram(){}
-	~OpenGlShaderProgram() { if(this->shader_program_id > 0)	glDeleteProgram(this->shader_program_id); }
-
-
 
 	unsigned int get_shader_program_id() { return shader_program_id; }
 
 	OpenGlShaderProgram & SetActive();
 
 	void compile(char const * vertex_src, char const * fragment_src, char const * geometry_src = nullptr);
-
-	void set_float(char const * name, float value, bool use_shader = false);
-	void set_int(char const * name, int value, bool use_shader = false);
-	void set_vec2f(char const * name, float x, float y, bool use_shader = false);
-
 };
+
+namespace witchcraft
+{
+	namespace shader
+	{
+		// constants used for messaging state inside the class
+		char const * VERTEX		= "VERTEX";
+		char const * FRAGMENT	= "FRAGMENT";
+		char const * GEOMETRY	= "GEOMETRY";
+		char const * COMPUTE	= "COMPUTE";
+		char const * PROGRAM	= "PROGRAM";
+	}
+}
 
 
 #endif // !OPENGL_SHADER_H

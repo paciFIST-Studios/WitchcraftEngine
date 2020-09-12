@@ -37,7 +37,7 @@ protected:
 public:
 
 	OpenGlShaderProgram(){}
-	~OpenGlShaderProgram() { glDeleteProgram(this->shader_program_id); }
+	~OpenGlShaderProgram() { if(this->shader_program_id > 0)	glDeleteProgram(this->shader_program_id); }
 
 
 

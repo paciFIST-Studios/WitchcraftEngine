@@ -131,8 +131,7 @@ protected:
 
 
 	// screen clear color
-	ImVec4 scc;
-	//GLClampf scc[4] = {0.2f, 0.3f, 0.3f, 1.0f}
+	ImVec4 scc;  //{0.2f, 0.3f, 0.3f, 1.0f}
 
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
@@ -142,11 +141,6 @@ protected:
 
 	// stores the vertex data
 	GLuint vertex_buffer_id;
-
-	// handles for shaders
-	GLuint vertex_shader_id;
-	GLuint fragment_shader_id;
-	GLuint shader_program_id;
 
 	bool init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
 	bool init_opengl();

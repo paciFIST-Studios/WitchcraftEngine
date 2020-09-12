@@ -202,8 +202,13 @@ bool RenderManager::init_shaders()
 {
 	basic_shader = std::make_unique<OpenGlShaderProgram>();
 	basic_shader->compile(vertex_shader_src, fragment_shader_src);
-	active_shader_program_id = basic_shader->get_shader_program_id();
+	
+	// wireframe shader
+	// heatmap shader
+	// greybox shader
+	// toon shader
 
+	active_shader_program_id = basic_shader->get_shader_program_id();
 	return true;
 }
 
@@ -309,7 +314,6 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glUseProgram(shader_program_id);
 	glUseProgram(active_shader_program_id);
 
 	// imgui; prepare for draw 

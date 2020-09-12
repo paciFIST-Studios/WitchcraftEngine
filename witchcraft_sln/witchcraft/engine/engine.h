@@ -66,6 +66,8 @@ protected:
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
 
+	bool continue_gameplay_loop(SDL_Event const & e);
+	void process_window_event(SDL_Event const & e);
 public:
 	
 	void startup();

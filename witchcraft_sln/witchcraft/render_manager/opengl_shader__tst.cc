@@ -12,10 +12,16 @@
 		class test_OpenGLShaderProgram : public OpenGlShaderProgram
 		{
 		public:
-			char const * passing_vert_src = "void main(void){}";
+			char const * passing_vert_src = "#version 330 core\n"
+				"layout ( location = 0 ) in vec3 pos;\n"
+				"void main(){\n"
+				"gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);}";
 			char const * failing_vert_src = "";
 
-			char const * passing_frag_src = "";
+			char const * passing_frag_src = "#version 330 core\n"
+				"out vec4 color;\n"
+				"void main(void){\n"
+				"color = vec4(1.0f, 1.0f, 1.0f, 1.0f)}\n";
 			char const * failing_frag_src = "";
 
 			char const * passing_geo_src = "";

@@ -252,57 +252,6 @@ void RenderManager::paint_imgui_main_menu_bar()
 	ImGui::EndMainMenuBar();
 }
 
-void RenderManager::paint_imgui_console_window()
-{
-	static int items_added = -1;
-
-	static std::vector<std::string> history;
-
-	ImGui::Begin("Debug Console");
-	ImGui::TextWrapped(
-		"This is an implementation of a debug console"
-	);
-	ImGui::TextWrapped("Type \"help\" for help, press [TAB] to use text completion");
-
-	if (ImGui::SmallButton("Add Line"))
-	{
-		std::stringstream ss;
-		ss << "line " << items_added++;
-		history.push_back(ss.str());
-	}
-
-	ImGui::Separator();
-
-	ImGui::BeginChild("Scroll Region", ImVec2(0, -30), false, ImGuiWindowFlags_AlwaysVerticalScrollbar);
-
-	for (auto item : history)
-	{
-		ImVec4 color;
-		if (item == "ERROR") 
-		{
-			color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f);
-		}
-		else
-		{
-			color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f);
-		}
-
-		ImGui::Text(item.c_str());
-	}
-
-	ImGui::EndChild();
-	ImGui::Separator();
-
-	static char buf[1024];
-	ImGui::InputText("Input", buf, IM_ARRAYSIZE(buf));
-	
-	ImGui::SetItemDefaultFocus();
-
-	ImGui::End();
-
-}
-
-
 bool RenderManager::update()
 {
 	// base background color

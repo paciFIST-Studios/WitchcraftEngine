@@ -104,7 +104,6 @@ private:
 	bool draw_imgui_debug_window = false;
 
 	void paint_imgui_main_menu_bar();
-	void paint_imgui_console_window();
 
 protected:
 

@@ -213,7 +213,7 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 	doc.parse<0>(config_file.data());
 
 	// Top node is also called the "resource tree"
-	XML::xml_node<> * top_node = doc.first_node(witchcraft::xml::resource_list.c_str());
+	XML::xml_node<> * top_node = doc.first_node(witchcraft::xml::resource_list);
 
 	if (top_node)
 	{

@@ -65,7 +65,7 @@ void init_logging()
 	// This is set to append to any existing file
 	plog::init(
 		  static_cast<plog::Severity>(witchcraft::configuration::logging_severity)
-		, witchcraft::file_strings::engine_log_file_name.c_str()
+		, witchcraft::file_strings::engine_log_file_name
 		, witchcraft::configuration::log_file_max_size_bytes
 		, witchcraft::configuration::log_file_max_logs
 	);

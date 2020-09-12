@@ -159,6 +159,12 @@
     <ClCompile Include="console\console__tst.cc">
       <Filter>Source Files\console</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -265,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="console\console.h">
       <Filter>Source Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\opengl_shader.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

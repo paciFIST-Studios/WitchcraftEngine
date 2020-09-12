@@ -63,7 +63,6 @@ GLuint OpenGlShaderProgram::link_program(GLuint vert, GLuint frag, GLuint geo)
 	return this->shader_program_id;
 }
 
-
 void OpenGlShaderProgram::compile(char const * vertex_src, char const * fragment_src, char const * geometry_src)
 {
 	GLuint vert, frag, geo;
@@ -78,7 +77,6 @@ void OpenGlShaderProgram::compile(char const * vertex_src, char const * fragment
 	glDeleteShader(frag);
 	glDeleteShader(geo);
 }
-
 
 bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * type)
 {

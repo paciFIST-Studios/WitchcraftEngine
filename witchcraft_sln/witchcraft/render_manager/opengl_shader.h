@@ -14,7 +14,6 @@ private:
 	// not assignable
 	OpenGlShaderProgram& operator=(OpenGlShaderProgram const &) = delete;
 
-
 protected:
 	// constants used for messaging state inside the class
 	char const * VERTEX		= "VERTEX";
@@ -27,7 +26,6 @@ protected:
 
 	bool check_compile_errors(unsigned int id, char const * type);
 
-
 	GLuint compile_vertex_shader(char const * src);
 	GLuint compile_fragment_shader(char const * src);
 	GLuint compile_geometry_shader(char const * src);
@@ -36,7 +34,7 @@ protected:
 public:
 
 	OpenGlShaderProgram(){}
-	~OpenGlShaderProgram() { if(this->shader_program_id > 0)	glDeleteProgram(this->shader_program_id); }
+	~OpenGlShaderProgram() { if(this->shader_program_id != 0) glDeleteProgram(this->shader_program_id); }
 
 	unsigned int get_shader_program_id() { return shader_program_id; }
 

@@ -42,6 +42,8 @@
 #include "../scene_manager/scene_manager_2d.h"
 #include "../scene_manager/scene_object.h"
 
+#include "opengl_shader.h"
+
 #include "../console/console.h"
 
 class SceneManager2D;
@@ -107,6 +109,8 @@ private:
 protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
+
+	std::unique_ptr<OpenGlShaderProgram> shader;
 
 	SDL_Window * program_window		= nullptr;
 

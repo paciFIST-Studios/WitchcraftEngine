@@ -34,11 +34,15 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	SDL_GL_SetSwapInterval(1);	// use VSYNC
 	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
-	
-	if (false == init_shaders()) 
-	{ 
-		return false; 
-	}
+
+	// init shaders
+	shader = std::make_unique<OpenGlShaderProgram>();
+	shader->compile(vertex_shader_src, fragment_shader_src);
+
+	//if (false == init_shaders()) 
+	//{ 
+	//	return false; 
+	//}
 	if (false == init_geometry()) 
 	{ 
 		return false; 
@@ -199,7 +203,6 @@ bool RenderManager::init_imgui()
 
 bool RenderManager::init_shaders()
 {
-
 	// Vertex Shader
 	if (false== compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
 	{
@@ -394,9 +397,10 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shader_program_id);
+	//glUseProgram(shader_program_id);
+	glUseProgram(shader->get_shader_program_id());
 
-	// imgui prepare for draw 
+	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(program_window);
 	ImGui::NewFrame();
@@ -424,7 +428,7 @@ bool RenderManager::update()
 		debug_console->draw("Debug Console");
 	}
 
-	// debug window6
+	// debug window
 	if (draw_imgui_debug_window)
 	{
 		// draw imgui, after drawing the rest of the program for this frame

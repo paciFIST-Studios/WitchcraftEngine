@@ -1,6 +1,6 @@
 #include "opengl_shader.h"
 
-OpenGlShaderProgram & OpenGlShaderProgram::Use()
+OpenGlShaderProgram & OpenGlShaderProgram::SetActive()
 {
 	glUseProgram(this->shader_program_id);
 	return *this;
@@ -76,7 +76,7 @@ void OpenGlShaderProgram::compile(char const * vertex_src, char const * fragment
 bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * type)
 {
 	int success;
-	char info_log[1024];
+	std::unique_ptr<char[]> info_log(new char[1024]);
 
 	// NOTE: don't compare success to true or GL_TRUE, as per
 	// https://gamedev.stackexchange.com/a/156583
@@ -86,8 +86,8 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 		glGetShaderiv(obj, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			glGetShaderInfoLog(obj, 1024, NULL, info_log);
-			PLOGF << "FAIL: shader compile: [" << type << "]\n\t" << info_log;
+			glGetShaderInfoLog(obj, 1024, NULL, info_log.get());
+			PLOGF << "FAIL: shader compile: [" << type << "]\n\t" << info_log.get();
 			return false;
 		}
 		else
@@ -101,8 +101,8 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 		glGetProgramiv(obj, GL_LINK_STATUS, &success);
 		if (!success)
 		{
-			glGetProgramInfoLog(obj, 1024, NULL, info_log);
-			PLOGF << "FAIL: shader program link:\n\t" << info_log;
+			glGetProgramInfoLog(obj, 1024, NULL, info_log.get());
+			PLOGF << "FAIL: shader program link:\n\t" << info_log.get();
 			return false;
 		}
 		else

@@ -13,6 +13,11 @@
 class OpenGlShaderProgram : public qEngineObject
 {
 private:
+	// not copyable
+	OpenGlShaderProgram(OpenGlShaderProgram const &) = delete;
+	// not assignable
+	OpenGlShaderProgram& operator=(OpenGlShaderProgram const &) = delete;
+
 protected:
 	unsigned int shader_program_id = 0;
 
@@ -31,17 +36,14 @@ protected:
 
 public:
 
-	OpenGlShaderProgram()
-	{
-		if (glewInit() != GLEW_OK)
-		{
+	OpenGlShaderProgram(){}
+	~OpenGlShaderProgram() { glDeleteProgram(this->shader_program_id); }
 
-		}
-	}
+
 
 	unsigned int get_shader_program_id() { return shader_program_id; }
 
-	OpenGlShaderProgram & Use();
+	OpenGlShaderProgram & SetActive();
 
 	void compile(char const * vertex_src, char const * fragment_src, char const * geometry_src = nullptr);
 

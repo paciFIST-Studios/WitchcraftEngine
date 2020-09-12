@@ -195,7 +195,6 @@ namespace witchcraft
 	}
 
 
-
 	namespace configuration
 	{
 		bool const default_window_start_fullscreen = false;
@@ -208,7 +207,6 @@ namespace witchcraft
 		float const default_world_boundary_right = 768.0f;
 		float const default_world_boundary_bottom = 768.0f;
 		float const default_world_boundary_left = 0.0f;
-
 
 
 		float const screen_fps = 60.0f;

@@ -1,5 +1,37 @@
 #include "engine.h"
 
+void Engine::startup()
+{
+	PLOGI << witchcraft::log_strings::engine_startup;
+	current_engine_state = EEngineState::STARTUP;
+	if (test_mode.early_exit) return;
+
+	// project loader runs here, so we have access to our config info and save files
+	{}
+
+	// engine components
+	PLOGI << witchcraft::log_strings::message_bus_start;
+	message = std::make_unique<MessageBus>();
+
+	PLOGI << witchcraft::log_strings::resource_manager_start;
+	resource = std::make_unique<ResourceManager>();
+
+	PLOGI << witchcraft::log_strings::render_manager_start;
+	render = std::make_unique<RenderManager>();
+
+	PLOGI << witchcraft::log_strings::scene_manager_start;
+	scene = std::make_unique<SceneManager2D>();
+
+	PLOGI << witchcraft::log_strings::debug_console;
+	console = std::make_unique<Console>();
+
+	// this will be replaced by messaging system
+	render->set_debug_console(console.get());
+	render->set_scene_manager(scene.get());
+	scene->set_render_manager(render.get());
+
+}
+
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
 {
 	if (   SDL_QUIT    == e.type
@@ -231,38 +263,6 @@ void Engine::process_window_event(SDL_Event const & e)
 
 }
 
-void Engine::startup()
-{
-	PLOGI << witchcraft::log_strings::engine_startup;
-	current_engine_state = EEngineState::STARTUP;
-	if (test_mode.early_exit) return;
-
-	// project loader runs here, so we have access to our config info and save files
-	{}
-
-	// engine components
-	PLOGI << witchcraft::log_strings::message_bus_start;
-	message = std::make_unique<MessageBus>();
-
-	PLOGI << witchcraft::log_strings::resource_manager_start;
-	resource = std::make_unique<ResourceManager>();
-
-	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<RenderManager>();
-
-	PLOGI << witchcraft::log_strings::scene_manager_start;
-	scene = std::make_unique<SceneManager2D>();
-
-	PLOGI << "debug console start";
-	console = std::make_unique<Console>();
-
-	// this will be replaced by messaging system
-	render->set_debug_console(console.get());
-	render->set_scene_manager(scene.get());
-	scene->set_render_manager(render.get());
-
-}
-
 void Engine::run()
 {
 	PLOGI << witchcraft::log_strings::engine_running;
@@ -275,7 +275,7 @@ void Engine::run()
 		, witchcraft::configuration::default_window_x_width
 		, witchcraft::configuration::default_window_y_height
 		, witchcraft::configuration::default_window_start_fullscreen
-		, witchcraft::configuration::witchcraft_program_title.c_str()
+		, witchcraft::configuration::witchcraft_program_title
 		);
 	
 	if (init_successful == false)

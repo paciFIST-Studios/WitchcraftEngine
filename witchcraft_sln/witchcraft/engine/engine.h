@@ -195,7 +195,7 @@ namespace witchcraft
 			layer->set_is_visible(is_visible);
 		}
 	}
-
+	
 
 	namespace configuration
 	{

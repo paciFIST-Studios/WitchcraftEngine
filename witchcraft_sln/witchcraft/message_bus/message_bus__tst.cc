@@ -123,9 +123,17 @@
 		void mock_OnMessage(Message m){}
 		TEST_CASE(" MessageBus::subscribe    allows objects to subscribe to updates    by supplying callback ptr")
 		{
+			// note: this is explicitly allowing duplicates right now
 			auto mb = MessageBus();
 
+			// uninit
 			REQUIRE(mb.peek_subscriber_count(1) == -1);
+
+			// +, -, 0
+			mb.subscribe(1, mock_OnMessage);
+			mb.unsubscribe(1, mock_OnMessage);
+			REQUIRE(mb.peek_subscriber_count(1) == 0);
+
 			mb.subscribe(1, mock_OnMessage);
 			REQUIRE(mb.peek_subscriber_count(1) == 1);
 			mb.subscribe(1, mock_OnMessage);

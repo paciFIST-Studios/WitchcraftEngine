@@ -33,6 +33,8 @@
 // witchcraft
 #include "../engine/engine_object.h"
 
+#include "../message_bus/message_bus.h"
+
 #include "../resource_manager/resource.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
@@ -124,6 +126,8 @@ protected:
 
 	Console * debug_console			= nullptr;
 
+	MessageBus * message_bus		= nullptr;
+
 	SDL_RendererInfo renderer_info;
 
 	RenderObjectsVector render_objects;
@@ -154,7 +158,12 @@ public:
 	RenderManager()
 		: renderer_state(ERendererState::CONSTRUCTED)	
 	{}
-	
+
+	RenderManager(MessageBus * mb)
+		: renderer_state(ERendererState::CONSTRUCTED)
+		, message_bus(mb)
+	{}
+
 
 	bool init_system(
 		  unsigned xOffset = SDL_WINDOWPOS_UNDEFINED

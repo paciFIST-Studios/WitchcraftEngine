@@ -14,21 +14,23 @@ void Engine::startup()
 	message = std::make_unique<MessageBus>();
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
-	resource = std::make_unique<ResourceManager>();
+	resource = std::make_unique<ResourceManager>(message.get());
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<RenderManager>();
+	render = std::make_unique<RenderManager>(message.get());
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
-	scene = std::make_unique<SceneManager2D>();
+	scene = std::make_unique<SceneManager2D>(message.get());
 
 	PLOGI << witchcraft::log_strings::debug_console;
-	console = std::make_unique<Console>();
+	console = std::make_unique<Console>(message.get());
 
 	// this will be replaced by messaging system
 	render->set_debug_console(console.get());
 	render->set_scene_manager(scene.get());
 	scene->set_render_manager(render.get());
+
+
 
 }
 

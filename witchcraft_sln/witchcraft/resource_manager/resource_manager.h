@@ -12,12 +12,15 @@
 #include "../engine/engine_object.h"
 #include "resource.h"
 
+#include "../message_bus/message_bus.h"
+
 #include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager.h"
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
+class MessageBus;
 
 // resource manager, to manage the resource objects
 class ResourceManager : public qEngineObject
@@ -38,11 +41,13 @@ protected:
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
 	ResourceMapType resource_map;
 
-	ResourcePtr build_render_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<qResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
 	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
+
+	MessageBus * message_bus = nullptr;
 
 public:
 
@@ -59,6 +64,7 @@ public:
 	bool set_current_scope(unsigned int scope);
 
 	ResourceManager();
+	ResourceManager(MessageBus * mb);
 
 	// Simple getters
 	int get_current_scope() const;

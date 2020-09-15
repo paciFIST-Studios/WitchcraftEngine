@@ -10,6 +10,7 @@
 #define XML rapidxml
 
 #include "../engine/engine_object.h"
+#include "../message_bus/message_bus.h"
 
 #include "../render_manager/render_manager.h"
 
@@ -17,6 +18,7 @@
 #include "scene_listener.h"
 #include "timer.h"
 
+class MessageBus;
 class RenderManager;
 
 class SceneManager2D : public qEngineObject
@@ -37,9 +39,13 @@ protected:
 	//TickTimerType timers;
 	//SceneListenerType listeners;
 
+	MessageBus * message_bus = nullptr;
 	RenderManager * render_manager = nullptr;
 
 public:
+	SceneManager2D() {}
+	SceneManager2D(MessageBus * mb) : message_bus(mb) {}
+
 
 	Layer2D * add_layer(std::string const & name);
 	Layer2D * find_layer(std::string const & name);

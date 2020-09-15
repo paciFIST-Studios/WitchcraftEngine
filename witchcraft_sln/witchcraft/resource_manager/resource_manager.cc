@@ -308,6 +308,12 @@ ResourceManager::ResourceManager()
 	, current_scope(witchcraft::configuration::global_resource_scope)
 {}
 
+ResourceManager::ResourceManager(MessageBus * mb)
+	: resource_count(0)
+	, current_scope(witchcraft::configuration::global_resource_scope)
+	, message_bus(mb)
+{}
+
 int ResourceManager::get_current_scope() const
 {
 	return current_scope;

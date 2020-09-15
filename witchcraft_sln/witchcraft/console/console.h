@@ -5,13 +5,18 @@
 #include <string>
 
 #include "../engine/engine_object.h"
+#include "../message_bus/message_bus.h"
 
 #include "../imgui/imgui.h"
+
+class MessageBus;
 
 class Console : public qEngineObject
 {
 private:
 protected:
+
+	MessageBus * message_bus = nullptr;
 
 	char const * COMMENT_MARK = "# ";
 	char const * ERROR_TAG = "[error]";
@@ -46,9 +51,7 @@ protected:
 		*str_end = 0; 
 	}
 
-
-public:
-	Console()
+	void add_default_commands()
 	{
 		// sets all values in buffer to 0
 		memset(input_buffer, 0, sizeof(input_buffer));
@@ -58,6 +61,18 @@ public:
 		commands.push_back("CLEAR");
 		commands.push_back("CLOSE");
 	}
+
+public:
+	Console()
+	{
+		add_default_commands();
+	}
+
+	Console(MessageBus * mb) : message_bus(mb)
+	{
+		add_default_commands();
+	}
+
 	~Console() {}
 	
 	std::vector<std::string> const & get_commands() { return commands; }

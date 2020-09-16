@@ -19,6 +19,8 @@
 #include <SDL_video.h>
 #include <GL/glew.h>
 
+#include <glm/vec3.hpp>
+
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
@@ -73,7 +75,7 @@ public:
 private:
 	ERendererState renderer_state = ERendererState::UNINIT;
 
-	std::map<GLenum, std::string> Glenum_to_str {
+	std::map<GLenum, std::string> Glenum_to_str{
 		  { GL_VERTEX_SHADER	, "GL_VERTEX_SHADER"	}
 		, { GL_FRAGMENT_SHADER	, "GL_FRAGMENT_SHADER"	}
 	};
@@ -95,12 +97,47 @@ private:
 		"void main(){\n"
 		"color = vec3(1.0, 0.0, 0.0); }";
 
+	char const * sprite_vertex_shader_src =
+		"#version 330 core/n"
+		"layout(location=0) in vec4 vertex; // <vec2 pos, vec2 textCoord>"
+		"out vec2 texture_coordinates;\n"
+		"uniform mat4 model;\n"
+		"uniform mat4 projection;\n"
+		"void main(){"
+		"texture_coordinates = vertex.zw;\n"
+		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);\n}";
+
+	char const * sprite_fragment_shader_src =
+		"#version 330 core\n"
+		"in vec2 texture_coordinates;\n"
+		"out vec3 color;\n"
+		"uniform sampler2D image;\n"
+		"uniform vec3 sprite_color;"
+		"void main(){\n"
+		"color = vec4(sprite_color, 1.0) * texture(image, texture_coordinates);\n}";
+
+
 	GLfloat const verticies[9] = {
 		//  x	   y	z
 		 -0.5f, -0.5f, 0.0f		// 0
 		, 0.5f, -0.5f, 0.0f		// 1
 		, 0.0f,  0.5f, 0.0f		// 2
 	};
+
+	// this is two triangles
+	GLfloat const sprite_verticies[24] = {
+		// pos			// texture
+		  0.0f, 1.0f	, 0.0f, 1.0f
+		, 1.0f, 0.0f	, 1.0f, 0.0f
+		, 0.0f, 0.0f	, 0.0f, 0.0f
+
+		, 0.0f, 1.0f	, 0.0f, 1.0f
+		, 1.0f, 1.0f	, 1.0f, 1.0f
+		, 1.0f, 0.0f	, 1.0f, 0.0f
+	};
+	GLuint sprite_quad_vao;
+	GLuint sprite_vbo;
+
 
 	bool draw_imgui_main_menu_bar = true;
 	bool draw_imgui_debug_window = false;
@@ -112,6 +149,7 @@ protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
 	std::unique_ptr<OpenGlShaderProgram> basic_shader;
+	std::unique_ptr<OpenGlShaderProgram> sprite_shader;
 	GLuint active_shader_program_id = NULL;
 
 	SDL_Window * program_window		= nullptr;
@@ -153,6 +191,8 @@ protected:
 	bool init_geometry();
 
 	bool init_imgui();
+
+
 
 public:
 	RenderManager()

@@ -14,7 +14,7 @@
 
 
 // Render == "Graphical" == "Graphics"
-class qRenderResource : public qResource
+class SDLRenderResource : public qResource
 {
 private:
 protected:
@@ -30,17 +30,17 @@ protected:
 
 public:
 	SDL_Surface * surface = nullptr;
-	SDL_Texture * texture = nullptr;
+	SDL_Texture * sdl_texture = nullptr;
 
 	// provided by qResource
-	~qRenderResource() override;
+	~SDLRenderResource() override;
 	void load() override;
 	void unload() override;
 
 	void bind_renderer(SDL_Renderer * renderer);
 
-	qRenderResource();
-	qRenderResource(
+	SDLRenderResource();
+	SDLRenderResource(
 		  unsigned int ID
 		, unsigned int scope
 		, std::string const & file_name

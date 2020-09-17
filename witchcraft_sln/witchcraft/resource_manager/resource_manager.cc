@@ -83,7 +83,7 @@ ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML
 	}
 	else // create a basic render resource
 	{
-		auto rr = std::make_unique<qRenderResource>(resource_id, resource_scope, file_name);
+		auto rr = std::make_unique<SDLRenderResource>(resource_id, resource_scope, file_name);
 		resource = std::move(rr);
 	}
 	

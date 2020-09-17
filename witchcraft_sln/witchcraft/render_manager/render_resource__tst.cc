@@ -9,9 +9,9 @@
 		
 		#include "render_resource.h"
 			
-		TEST_CASE(" qRenderResource::RenderResource()")
+		TEST_CASE(" SDLRenderResource::RenderResource()")
 		{
-			auto rr = &qRenderResource();
+			auto rr = &SDLRenderResource();
 			REQUIRE(rr != nullptr);
 
 			REQUIRE_NOTHROW(rr->get_file_name());
@@ -23,15 +23,15 @@
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
-		TEST_CASE(" qRenderResource::qRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
+		TEST_CASE(" SDLRenderResource::SDLRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
 			unsigned int const resource_id = 666;
 			unsigned int const resource_scope = 667;
 			std::string const file_name = witchcraft::configuration::buddha_png;
 			EResourceType resource_type = EResourceType::RESOURCE_GRAPHIC;
 
-			// the qRenderResource sets its own resource type
-			auto rr = qRenderResource(resource_id, resource_scope, file_name);
+			// the SDLRenderResource sets its own resource type
+			auto rr = SDLRenderResource(resource_id, resource_scope, file_name);
 
 			REQUIRE_NOTHROW(rr.get_file_name());
 			REQUIRE(rr.get_file_name() == file_name);
@@ -49,9 +49,9 @@
 			REQUIRE_NOTHROW(rr.unload());
 		}
 		
-		TEST_CASE(" qRenderResource::is_loaded()")
+		TEST_CASE(" SDLRenderResource::is_loaded()")
 		{
-			auto rr = qRenderResource();
+			auto rr = SDLRenderResource();
 
 			REQUIRE_NOTHROW(rr.is_loaded());
 			REQUIRE(rr.is_loaded() == false);

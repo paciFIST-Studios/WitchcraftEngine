@@ -5,7 +5,7 @@
 
 #include "../render_manager/render_resource.h"
 
-class SpriteAtlasResource : public qRenderResource
+class SpriteAtlasResource : public SDLRenderResource
 {
 private:
 protected:
@@ -33,7 +33,7 @@ protected:
 public:
 	   
 	// also init base class
-	SpriteAtlasResource() : qRenderResource()
+	SpriteAtlasResource() : SDLRenderResource()
 	, sprite_width(uninit::UINT)
 	, sprite_height(uninit::UINT)
 	{}
@@ -45,7 +45,7 @@ public:
 		, unsigned int tile_height
 	)
 		// initializer list
-		: qRenderResource(UUID, scope, file_name)
+		: SDLRenderResource(UUID, scope, file_name)
 		, sprite_width(tile_width)
 		, sprite_height(tile_height)
 	{

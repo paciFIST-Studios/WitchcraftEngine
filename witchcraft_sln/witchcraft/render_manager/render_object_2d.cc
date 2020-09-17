@@ -11,7 +11,7 @@ RenderObject2D::RenderObject2D()
 	, color_key_enabled(uninit::BOOL)
 {}
 
-void RenderObject2D::set_render_resource(qRenderResource * resource)
+void RenderObject2D::set_render_resource(SDLRenderResource * resource)
 {
 	if(resource)
 	{
@@ -62,6 +62,15 @@ void RenderObject2D::set_scale(float x, float y)
 	scale_y = y;
 }
 
+float RenderObject2D::get_rotation() const
+{
+	return rotation_radians;
+}
+
+void RenderObject2D::set_rotation(float radians)
+{
+	rotation_radians = radians;
+}
 
 bool RenderObject2D::is_visible() const
 {

@@ -308,7 +308,7 @@ void Engine::run()
 
 		auto id = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
 		auto rr = resource->find_resource_by_id(id);
-		auto render_resource = static_cast<qRenderResource*>(rr);
+		auto render_resource = static_cast<SDLRenderResource*>(rr);
 		render_resource->bind_renderer(render->get_active_renderer());
 		render_resource->load();
 		buddha_scene_object = render->register_render_object(render_resource);
@@ -321,7 +321,7 @@ void Engine::run()
 	//{
 	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/stadium.asset");
 	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
 	//	render_resource->bind_renderer(render->active_renderer);
 	//	render_resource->load();
 	//	soccer_pitch_scene_object = render->register_render_object(render_resource);
@@ -334,7 +334,7 @@ void Engine::run()
 	//{
 	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/ball.asset");
 	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
 	//	render_resource->bind_renderer(render->active_renderer);
 	//	render_resource->load();
 	//	ball_scene_object = render->register_render_object(render_resource);
@@ -347,7 +347,7 @@ void Engine::run()
 	//{
 	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/ball_shadow.asset");
 	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
 	//	render_resource->bind_renderer(render->active_renderer);
 	//	render_resource->load();
 	//	ball_shadow_scene_object = render->register_render_object(render_resource);
@@ -374,7 +374,7 @@ void Engine::run()
 	//{
 	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/player_shadow.asset");
 	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
 	//	render_resource->bind_renderer(render->active_renderer);
 	//	render_resource->load();
 	//	player_shadow_scene_object = render->register_render_object(render_resource);
@@ -387,7 +387,7 @@ void Engine::run()
 	//{
 	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/cursor.asset");
 	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<qRenderResource*>(rr);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
 	//	render_resource->bind_renderer(render->active_renderer);
 	//	render_resource->load();
 	//	cursor_scene_object = render->register_render_object(render_resource);
@@ -404,11 +404,11 @@ void Engine::run()
 	//soccer_pitch_layer->set_is_visible(true);
 	//soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
 	//
-	//// buddha
-	//auto buddha_layer = scene->add_layer("buddha");
-	//buddha_layer->set_is_visible(true);
-	//buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
-	//
+	// buddha
+	auto buddha_layer = scene->add_layer("buddha");
+	buddha_layer->set_is_visible(true);
+	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
+	
 	//// player_a
 	//auto player_a_layer = scene->add_layer("player_a");
 	//player_a_layer->set_is_visible(true);

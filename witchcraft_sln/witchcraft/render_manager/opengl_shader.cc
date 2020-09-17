@@ -1,6 +1,6 @@
 #include "opengl_shader.h"
 
-OpenGlShaderProgram & OpenGlShaderProgram::SetActive()
+OpenGlShaderProgram & OpenGlShaderProgram::set_active()
 {
 	glUseProgram(this->shader_program_id);
 	return *this;

@@ -38,7 +38,7 @@ public:
 
 	unsigned int get_shader_program_id() { return shader_program_id; }
 
-	OpenGlShaderProgram & SetActive();
+	OpenGlShaderProgram & set_active();
 
 	void compile(char const * vertex_src, char const * fragment_src, char const * geometry_src = nullptr);
 };

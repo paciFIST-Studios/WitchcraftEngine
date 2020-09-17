@@ -24,7 +24,7 @@ protected:					// uninit values
 	unsigned char * data = nullptr;
 public:
 	OpenGLTexture(){}
-	~OpenGLTexture(){}
+	~OpenGLTexture() { glDeleteTextures(1, &texture_id); }
 
 	OpenGLTexture(const char & filepath)
 	{

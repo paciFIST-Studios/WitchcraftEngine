@@ -145,8 +145,8 @@
     <ClCompile Include="render_manager\render_manager__tst.cc" />
     <ClCompile Include="render_manager\render_object_2d.cc" />
     <ClCompile Include="render_manager\render_object_2d__tst.cc" />
-    <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
+    <ClCompile Include="render_manager\sld_render_resource.cc" />
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc" />
     <ClCompile Include="render_manager\sprite_animation_2d__tst.cc" />
     <ClCompile Include="render_manager\sprite_object_2d.cc" />
@@ -184,10 +184,11 @@
     <ClInclude Include="message_bus\ICanSendMessages.h" />
     <ClInclude Include="message_bus\message_bus.h" />
     <ClInclude Include="render_manager\opengl_shader.h" />
+    <ClInclude Include="render_manager\opengl_texture.h" />
     <ClInclude Include="render_manager\render_manager.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
     <ClInclude Include="render_manager\render_object_2d.h" />
-    <ClInclude Include="render_manager\render_resource.h" />
+    <ClInclude Include="render_manager\sdl_render_resource.h" />
     <ClInclude Include="render_manager\sprite_atlas_resource.h" />
     <ClInclude Include="render_manager\sprite_animation_2d.h" />
     <ClInclude Include="render_manager\sprite_object_2d.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="scene_manager\scene_manager_2d.h" />
     <ClInclude Include="scene_manager\scene_object.h" />
     <ClInclude Include="scene_manager\timer.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />

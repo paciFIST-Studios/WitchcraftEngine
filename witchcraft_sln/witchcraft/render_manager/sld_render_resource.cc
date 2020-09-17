@@ -1,4 +1,4 @@
-#include "render_resource.h"
+#include "sdl_render_resource.h"
 
 void SDLRenderResource::attempt_load(std::string const & file_name)
 {

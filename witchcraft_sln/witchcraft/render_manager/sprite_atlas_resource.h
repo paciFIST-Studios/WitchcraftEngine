@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "../render_manager/render_resource.h"
+#include "../render_manager/sdl_render_resource.h"
 
 class SpriteAtlasResource : public SDLRenderResource
 {

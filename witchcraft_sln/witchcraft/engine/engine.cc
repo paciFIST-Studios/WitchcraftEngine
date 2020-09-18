@@ -92,6 +92,10 @@ void Engine::process_window_event(SDL_Event const & e)
 				break;
 			case SDLK_F3:
 				//console->draw("");
+				render->toggle_wireframe_rendering();
+				break;
+			case SDLK_F4:
+				render->switch_triangle_and_quad();
 				break;
 
 				// Numeric

@@ -203,23 +203,100 @@ bool RenderManager::init_shaders()
 	basic_shader = std::make_unique<OpenGlShaderProgram>();
 	basic_shader->compile(vertex_shader_src, fragment_shader_src);
 	
+	sprite_shader = std::make_unique<OpenGlShaderProgram>();
+	sprite_shader->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
+
 	// wireframe shader
 	// heatmap shader
 	// greybox shader
 	// toon shader
 
 	active_shader_program_id = basic_shader->get_shader_program_id();
+	//active_shader_program_id = sprite_shader->get_shader_program_id();
 	return true;
 }
 
 bool RenderManager::init_geometry()
 {
-	glGenVertexArrays(1, &vertex_array_id);
-	glBindVertexArray(vertex_array_id);
+	// setup the quad used to display sprites
+	{	
+		// handles
+		glGenVertexArrays(1, &sprite_quad_vao);
+		glGenBuffers(1, &sprite_quad_vbo);
+		glGenBuffers(1, &sprite_quad_ebo);
 
-	glGenBuffers(1, &vertex_buffer_id);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies[0], GL_STATIC_DRAW);
+		// start work on sprite quad
+		glBindVertexArray(sprite_quad_vao);
+
+		// send data
+		glBindBuffer(GL_ARRAY_BUFFER, sprite_quad_vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER
+			, sizeof(sprite_verticies)
+			, &sprite_verticies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// send data
+		// ebo == element buffer object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad_ebo);
+		glBufferData(
+			GL_ELEMENT_ARRAY_BUFFER
+			, sizeof(sprite_indicies)
+			, &sprite_indicies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// configure for use in shader
+		glVertexAttribPointer(
+			  0					// attribute index
+			, 3					// size
+			, GL_FLOAT			// datatype of elements
+			, GL_FALSE			// normalized
+			, 3 * sizeof(float) // data row breadth: aka: stride
+			, (void*) 0			// start at offset
+		);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
+		glBindVertexArray(0);				// unbind vao
+		// note: do not unbind the ebo while vao is active
+	}
+
+	projection_matrix = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
+
+	// setup the triangle
+	{
+		// handles
+		glGenVertexArrays(1, &triangle_vao);
+		glGenBuffers(1, &triangle_vbo);
+
+		// start work on triangle
+		glBindVertexArray(triangle_vao);
+
+		// send data
+		glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER
+			, sizeof(triangle_verticies)
+			, &triangle_verticies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// configure for use in shader
+		glVertexAttribPointer(
+			  0					// attribute index
+			, 3					// size
+			, GL_FLOAT			// element datatype
+			, GL_FALSE			// is normalized
+			, 3 * sizeof(float)	// stride
+			, (void*)0			// offset
+		);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
+		glBindVertexArray(0);				// unbind vao
+	}
 	return true;
 }
 
@@ -271,19 +348,36 @@ bool RenderManager::update()
 	ImGui::NewFrame();
 	// imgui; note: they have to be in this order
 
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
-	glVertexAttribPointer(
-		0			// ?
-		, 3			// size
-		, GL_FLOAT	// type
-		, GL_FALSE	// normalized
-		, 0			// stride
-		, (void*)0	// buffer offset
-	);
 
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glDisableVertexAttribArray(0);
+	if (use_wireframe_rendering)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+
+
+	
+	// draw triangle
+	if (draw_triangle_not_quad)
+	{
+		glBindVertexArray(triangle_vao);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
+	}
+	else
+	{
+		glBindVertexArray(sprite_quad_vao);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0); // unset
+	}
+
+	//render_visible_sprites_back_to_front();
+
+
+
 
 	paint_imgui_main_menu_bar();
 
@@ -333,6 +427,44 @@ void RenderManager::shutdown()
 	renderer_state = ERendererState::SHUTDOWN_OK;
 }
 
+
+void RenderManager::render_visible_sprites_back_to_front()
+{
+	if (scene_manager == nullptr)
+	{
+		PLOGE << "ERROR:  No scene manager detected!";
+		return;
+	}
+
+	auto layers = scene_manager->get_layers_ptrs_vector();
+	for (auto&& layer : layers)
+	{
+		if (layer == nullptr)
+			continue;
+
+		if (layer->get_is_visible() == false)
+		{
+			continue;
+		}
+
+		auto objects = layer->get_layer_objects();
+
+		for (auto&& obj : objects)
+		{
+			if (obj == nullptr)
+				continue;
+
+			if (obj->is_visible() == false)
+				continue;
+
+			//draw_sprite(*obj);
+		}
+	}
+
+}
+
+
+
 void RenderManager::render_visible_scene_back_to_front()
 {
 	if (scene_manager == nullptr)
@@ -374,12 +506,12 @@ void RenderManager::render_visible_scene_back_to_front()
 			dest_rect.w = int(src_rect.w * std::get<0>(scale));
 			dest_rect.h = int(src_rect.h * std::get<1>(scale));
 
-			SDL_RenderCopy(
-				  active_renderer
-				, obj->render_resource->texture
-				, &src_rect
-				, &dest_rect
-			);
+			//SDL_RenderCopy(
+			//	  active_renderer
+			//	, obj->render_resource->texture
+			//	, &src_rect
+			//	, &dest_rect
+			//);
 		}
 	}
 }
@@ -394,7 +526,7 @@ void RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int
 	SDL_UpdateWindowSurface(program_window);
 }
 
-qSceneObject * RenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+qSceneObject * RenderManager::register_render_object(SDLRenderResource * non_owner, bool is_visible)
 {
 	// note the cast
 	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();

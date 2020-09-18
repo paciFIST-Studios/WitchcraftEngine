@@ -19,7 +19,10 @@
 #include <SDL_video.h>
 #include <GL/glew.h>
 
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 // rapidxml
 #include "../../lib/rapidxml/rapidxml.hpp"
@@ -41,7 +44,7 @@
 #include "../string_constants.h"
 #include "../utility/utility.h"
 #include "render_object_2d.h"
-#include "render_resource.h"
+#include "sdl_render_resource.h"
 
 #include "../scene_manager/scene_manager_2d.h"
 #include "../scene_manager/scene_object.h"
@@ -85,39 +88,39 @@ private:
 
 	char const * vertex_shader_src =
 		"#version 330 core\n"
-		"layout(location=0) in vec3 vertex_position;\n"
+		"layout(location=0) in vec3 position;\n"
 		"void main(){\n"
-		"gl_Position.xyz = vertex_position;"
-		"gl_Position.w = 1.0; }";
+		"gl_Position.xyz = position;"
+		"gl_Position.w = 1.0f; }";
 
 	// fragment shaders process pixel color
 	char const * fragment_shader_src =
 		"#version 330 core\n"
-		"out vec3 color;\n"
+		"out vec4 color;\n"
 		"void main(){\n"
-		"color = vec3(1.0, 0.0, 0.0); }";
+		"color = vec4(1.0f, 0.0f, 0.0f, 1.0f); }";
 
 	char const * sprite_vertex_shader_src =
 		"#version 330 core/n"
-		"layout(location=0) in vec4 vertex; // <vec2 pos, vec2 textCoord>"
-		"out vec2 texture_coordinates;\n"
-		"uniform mat4 model;\n"
-		"uniform mat4 projection;\n"
+		"layout(location=0) in vec4 vertex;" // <vec2 pos, vec2 textureCoordinate>
+		"out vec2 texture_coordinates;"
+		"uniform mat4 model;"
+		"uniform mat4 projection;"
 		"void main(){"
-		"texture_coordinates = vertex.zw;\n"
-		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);\n}";
+		"texture_coordinates = vertex.zw;"
+		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);}";
 
 	char const * sprite_fragment_shader_src =
 		"#version 330 core\n"
-		"in vec2 texture_coordinates;\n"
-		"out vec3 color;\n"
-		"uniform sampler2D image;\n"
+		"in vec2 texture_coordinates;"
+		"out vec3 color;"
+		"uniform sampler2D image;"
 		"uniform vec3 sprite_color;"
-		"void main(){\n"
-		"color = vec4(sprite_color, 1.0) * texture(image, texture_coordinates);\n}";
+		"void main(){"
+		"color = vec4(sprite_color, 1.0) * texture(image, texture_coordinates);}";
 
 
-	GLfloat const verticies[9] = {
+	GLfloat const triangle_verticies[9] = {
 		//  x	   y	z
 		 -0.5f, -0.5f, 0.0f		// 0
 		, 0.5f, -0.5f, 0.0f		// 1
@@ -125,19 +128,36 @@ private:
 	};
 
 	// this is two triangles
-	GLfloat const sprite_verticies[24] = {
-		// pos			// texture
-		  0.0f, 1.0f	, 0.0f, 1.0f
-		, 1.0f, 0.0f	, 1.0f, 0.0f
-		, 0.0f, 0.0f	, 0.0f, 0.0f
+	//GLfloat const sprite_verticies[24] = {
+	//	// pos			// texture
+	//	  0.0f, 1.0f	, 0.0f, 1.0f
+	//	, 1.0f, 0.0f	, 1.0f, 0.0f
+	//	, 0.0f, 0.0f	, 0.0f, 0.0f
+	//
+	//	, 0.0f, 1.0f	, 0.0f, 1.0f
+	//	, 1.0f, 1.0f	, 1.0f, 1.0f
+	//	, 1.0f, 0.0f	, 1.0f, 0.0f
+	//};
 
-		, 0.0f, 1.0f	, 0.0f, 1.0f
-		, 1.0f, 1.0f	, 1.0f, 1.0f
-		, 1.0f, 0.0f	, 1.0f, 0.0f
+	GLfloat const sprite_verticies[12] = {
+		   0.5f,  0.5f, 0.0f // top right
+		,  0.5f, -0.5f, 0.0f // bottom right
+		, -0.5f, -0.5f, 0.0f // bottom left
+		, -0.5f,  0.5f, 0.0f // top left
 	};
-	GLuint sprite_quad_vao;
-	GLuint sprite_vbo;
+	GLuint const sprite_indicies[6] = {
+		  0, 1, 3 // t1
+		, 1, 2, 3 // t2
+	};
 
+	GLuint sprite_quad_vao;	// vertex array object
+	GLuint sprite_quad_vbo;	// vertex buffer object
+	GLuint sprite_quad_ebo; // element buffer object
+
+	glm::mat4 projection_matrix;
+
+	bool use_wireframe_rendering = false;
+	bool draw_triangle_not_quad = false;
 
 	bool draw_imgui_main_menu_bar = true;
 	bool draw_imgui_debug_window = false;
@@ -178,10 +198,10 @@ protected:
 	unsigned int screen_height = 0;
 
 	// stores info on state of vertex data, (& format)
-	GLuint vertex_array_id;
+	GLuint triangle_vao;
 
 	// stores the vertex data
-	GLuint vertex_buffer_id;
+	GLuint triangle_vbo;
 
 	bool init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
 	bool init_opengl();
@@ -192,7 +212,72 @@ protected:
 
 	bool init_imgui();
 
-
+	//void draw_sprite(qSceneObject const & so)
+	//{
+	//	sprite_shader->SetActive();
+	//
+	//	glm::mat4 model_transform = glm::mat4(1.0f);
+	//	
+	//	// translate
+	//	auto pos = so.get_position();
+	//	model_transform = glm::translate(
+	//		model_transform
+	//		, glm::vec3(
+	//			  std::get<0>(pos)
+	//			, std::get<1>(pos), 1.0f
+	//		)
+	//	);
+	//
+	//
+	//	auto wh = so.render_resource->get_width_height();
+	//	// move model, such that it's pivot point is in the middle
+	//	model_transform = glm::translate(
+	//		model_transform
+	//		, glm::vec3(
+	//			  0.5f * std::get<0>(wh)
+	//			, 0.5f * std::get<1>(wh)
+	//			, 0.0f)
+	//	);
+	//
+	//	// rotate
+	//	model_transform = glm::rotate(
+	//		model_transform
+	//		, glm::radians(so.get_rotation())
+	//		, glm::vec3(0.0f, 0.0f, 1.0f)
+	//	);
+	//
+	//	// move model, such that it's pivot point is in the corner again
+	//	model_transform = glm::translate(
+	//		model_transform
+	//		, glm::vec3(
+	//			  -0.5f * std::get<0>(wh)
+	//			, -0.5f * std::get<1>(wh)
+	//			,  0.0f)
+	//	);
+	//
+	//
+	//
+	//	// scale
+	//	auto scale = so.get_scale();
+	//	model_transform = glm::translate(
+	//		model_transform
+	//		, glm::vec3(
+	//			  std::get<0>(scale)
+	//			, std::get<1>(scale)
+	//			, 0.0f
+	//		)
+	//	);
+	//
+	//	//sprite_shader->SetMatrix4("model", model_transform);
+	//	//sprite_shader->SetVector3f("sprite_color", color);
+	//
+	//	glActiveTexture(GL_TEXTURE0);
+	//	//glBindTexture(GL_TEXTURE_2D, so.render_resource->texture);
+	//
+	//	glBindVertexArray(this->sprite_quad_ebo);
+	//	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//	glBindArray(0);
+	//}
 
 public:
 	RenderManager()
@@ -220,11 +305,13 @@ public:
 
 	SDL_Renderer * get_active_renderer() { return active_renderer; }
 
+	void render_visible_sprites_back_to_front();
+
 	void render_visible_scene_back_to_front();
 
 	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
 			
-	qSceneObject * register_render_object(qRenderResource * non_owner, bool is_visible = true);
+	qSceneObject * register_render_object(SDLRenderResource * non_owner, bool is_visible = true);
 
 	RenderObject2D * get_render_object(int id);
 	
@@ -235,6 +322,10 @@ public:
 	void toggle_imgui_debug_window() { draw_imgui_debug_window = !draw_imgui_debug_window; }
 	
 	void set_debug_console(Console * con) { debug_console = con; }
+
+	void toggle_wireframe_rendering() { use_wireframe_rendering = !use_wireframe_rendering; }
+
+	void switch_triangle_and_quad() { draw_triangle_not_quad = !draw_triangle_not_quad; }
 };
 
 

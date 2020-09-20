@@ -19,7 +19,7 @@ protected:					// uninit values
 	int width				= -1;
 	int height				= -1;
 	int color_channels		= -1;
-	unsigned int texture_id = 0;
+	unsigned int texture_id =  0;
 
 	unsigned char * data = nullptr;
 public:
@@ -39,10 +39,20 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
 		// file load
-		data = stbi_load(&filepath, &width, &height, &color_channels, 0);
+		//data = stbi_load(&filepath, &width, &height, &color_channels, 0);
 		if (data != nullptr)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(
+				GL_TEXTURE_2D		//  can also make 1d or 3d textures
+				, 0					//	mipmap level (default=0)
+				, GL_RGB			//	storage format
+				, width				//	image width
+				, height			//	image height
+				, 0					//	legacy-unused
+				, GL_RGB			//	source format
+				, GL_UNSIGNED_BYTE	//	source format
+				, data				//
+			);
 			glGenerateMipmap(GL_TEXTURE_2D);
 			PLOGV << "Texture Loaded: " << filepath << "\n\twidth: " << width
 				<< "\theight: " << height << " \tdata size: " << sizeof(data);
@@ -52,8 +62,8 @@ public:
 			PLOGE << "'FAILURE! Texture Not Loaded: " << filepath << "\n\t" << stbi_failure_reason();
 		}
 
-		// free loaded texture (is still on video card)
-		stbi_image_free(data);
+		// free loaded texture from ram (is still on video card)
+		//stbi_image_free(data);
 	}
 
 	unsigned int bind()

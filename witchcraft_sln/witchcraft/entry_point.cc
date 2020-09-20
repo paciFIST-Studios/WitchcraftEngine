@@ -103,6 +103,8 @@ int main(int argc, char** argv[])
 
 
 	auto init = EngineInitializer{ get_engine_id() };
+	// todo: give this to the engine using args
+	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
 	auto engine = Engine(init);
 
 	engine.startup();

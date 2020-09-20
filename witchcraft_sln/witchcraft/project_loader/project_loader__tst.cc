@@ -12,18 +12,16 @@
 		class TestProjectLoader : public ProjectLoader
 		{
 		public:
-			TestProjectLoader(MessageBus * mb)
-				: ProjectLoader(mb)
+			TestProjectLoader(std::string path)
+				: ProjectLoader(path)
 			{}
 
-			bool has_ptr_to_message_bus(){
-				return message_bus != nullptr; }
-
-			bool has_ptr_to_project_file() {
-				return project_file != nullptr; }
+			bool has_project_file() {
+				return project_file != ""; }
 
 		};
 
+		struct ProjectSettings;
 		
 
 		TEST_CASE("ProjectLoader::  is constructible  without args")
@@ -32,22 +30,21 @@
 			REQUIRE(pl != nullptr);
 		}
 
-		TEST_CASE("ProjectLoader:: can get MessageBus ptr")
+		TEST_CASE("ProjectLoader:: has no project file, if given blank string as starting arg")
 		{
-			auto mb = MessageBus();
-			auto pl = TestProjectLoader(&mb);
-			REQUIRE(pl.has_ptr_to_message_bus());
+			auto pl = TestProjectLoader("");
+			REQUIRE_FALSE(pl.has_project_file());
 		}
 
 		TEST_CASE("ProjectLoader can set project file, when given")
 		{
-			auto mb = MessageBus();
-			auto pl = TestProjectLoader(&mb);
+			auto pl = TestProjectLoader("");
 			char const * fake_file = "test file path";
 
-			pl.set_project(fake_file);
-			REQUIRE_FALSE(pl.has_ptr_to_project_file());
+			REQUIRE_FALSE(pl.has_project_file());
 
+			pl.set_project(fake_file);
+			REQUIRE_FALSE(pl.has_project_file());
 
 			char const * real_file = "deleteme.delete";
 			std::ofstream outfile(real_file);
@@ -55,9 +52,43 @@
 			outfile.close();
 
 			pl.set_project(real_file);
-			REQUIRE(pl.has_ptr_to_project_file());
+			REQUIRE(pl.has_project_file());
 
 			std::remove(real_file);
+		}
+
+		TEST_CASE("ProjectLoader parses test file correctly")
+		{
+			auto pl = TestProjectLoader("");
+
+			char const * cfg_file = "deleteme.delete";
+			std::ofstream outfile(cfg_file);
+			outfile << "// comment marks are okay\n";
+			outfile << " \n";
+			outfile << "window_pos: 1, 2 \n";
+			outfile << "window_wh: 300, 400 \n";
+			outfile << "window_fullscreen: true \n";
+			outfile << "window_capture_mouse: true \n";
+			outfile << "use_vsync: true \n";
+			outfile << " \n";
+			outfile.close();
+
+			REQUIRE_NOTHROW(pl.set_project(cfg_file));
+			REQUIRE_NOTHROW(pl.parse_project_file());			
+			ProjectSettings ps = pl.get_project_settings();
+
+			REQUIRE(ps.window_x == 1);
+			REQUIRE(ps.window_y == 2);
+			REQUIRE(ps.window_w == 300);
+			REQUIRE(ps.window_h == 400);
+
+			REQUIRE(ps.use_fullscreen);
+			REQUIRE(ps.capture_mouse);
+			REQUIRE(ps.use_vsync);
+
+			REQUIRE(ps.file_paths.size() == 0);
+
+			std::remove(cfg_file);
 		}
 
 

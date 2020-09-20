@@ -1,10 +1,11 @@
 // this is a comment mark
 // comment marks ALL, MUST be on their own line
+// also, be sure to only use lower case for variable names or values
 
 // configuration
 window_pos: 0, 0
 window_wh: 800, 600
-window_fullscreen: false
+window_fullscreen: true
 window_capture_mouse: false
 use_vsync: false
 

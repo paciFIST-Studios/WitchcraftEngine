@@ -27,7 +27,6 @@ class ResourceManager : public qEngineObject
 {
 public:
 	typedef std::unique_ptr<qResource> ResourcePtr;
-	typedef std::map<unsigned int, std::vector<ResourcePtr>> ResourceMapType;
 
 private:
 protected:
@@ -39,7 +38,7 @@ protected:
 	unsigned int resource_count = 0;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
-	ResourceMapType resource_map;
+	std::map<unsigned int, std::vector<ResourcePtr>> resource_map;
 
 	std::unique_ptr<qResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);

@@ -139,6 +139,7 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="message_bus\message_bus__tst.cc" />
+    <ClCompile Include="project_loader\project_loader__tst.cc" />
     <ClCompile Include="render_manager\opengl_shader.cc" />
     <ClCompile Include="render_manager\opengl_shader__tst.cc" />
     <ClCompile Include="render_manager\render_manager.cc" />
@@ -183,6 +184,7 @@
     <ClInclude Include="message_bus\ICanReceiveMessages.h" />
     <ClInclude Include="message_bus\ICanSendMessages.h" />
     <ClInclude Include="message_bus\message_bus.h" />
+    <ClInclude Include="project_loader\project_loader.h" />
     <ClInclude Include="render_manager\opengl_shader.h" />
     <ClInclude Include="render_manager\opengl_texture.h" />
     <ClInclude Include="render_manager\render_manager.h" />

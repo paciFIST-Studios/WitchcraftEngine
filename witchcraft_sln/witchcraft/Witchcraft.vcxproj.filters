@@ -40,6 +40,9 @@
     <Filter Include="Source Files\console">
       <UniqueIdentifier>{baf74073-905b-4d32-ac3e-9054cdda1bf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\project_loader">
+      <UniqueIdentifier>{195da37c-2847-4597-81d5-40d2606fe9ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -165,6 +168,9 @@
     <ClCompile Include="render_manager\sld_render_resource.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="project_loader\project_loader__tst.cc">
+      <Filter>Source Files\project_loader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -280,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="project_loader\project_loader.h">
+      <Filter>Source Files\project_loader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

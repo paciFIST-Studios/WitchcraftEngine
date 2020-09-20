@@ -1,0 +1,13 @@
+// this is a comment mark
+// comment marks ALL, MUST be on their own line
+
+// configuration
+window_pos: 0, 0
+window_wh: 800, 600
+window_fullscreen: false
+window_capture_mouse: false
+use_vsync: false
+
+
+// project files
+[path]:

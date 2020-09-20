@@ -6,8 +6,12 @@ void Engine::startup()
 	current_engine_state = EEngineState::STARTUP;
 	if (test_mode.early_exit) return;
 
-	// project loader runs here, so we have access to our config info and save files
-	{}
+
+	PLOGI << "Project Loader Start";
+	project_loader = std::make_unique<ProjectLoader>(project_file_path);
+	project_loader->parse_project_file();
+	project_settings = project_loader->get_project_settings();
+	
 
 	// engine components
 	PLOGI << witchcraft::log_strings::message_bus_start;

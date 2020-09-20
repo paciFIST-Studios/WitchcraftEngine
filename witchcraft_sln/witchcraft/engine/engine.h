@@ -5,6 +5,7 @@
 
 #include "../engine/engine_object.h"
 
+#include "../project_loader/project_loader.h"
 #include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/render_manager.h"
@@ -47,12 +48,17 @@ struct EngineInitializer
 {
 	unsigned int id;
 	TestMode test_mode;
+	std::string project_file_path;
 };
 
 class Engine : public qEngineObject
 {
 private:
 protected:
+	std::string project_file_path;
+	ProjectSettings project_settings;
+	
+	std::unique_ptr<ProjectLoader> project_loader;
 
 	std::unique_ptr<MessageBus> message;
 	std::unique_ptr<ResourceManager> resource;
@@ -84,6 +90,7 @@ public:
 	Engine(EngineInitializer init) 
 	: qEngineObject(init.id)
 		, test_mode(init.test_mode)
+		, project_file_path(init.project_file_path)
 	, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };

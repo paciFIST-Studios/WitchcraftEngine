@@ -1,0 +1,57 @@
+<resources>
+	<resource UUID="200" type="dialogue" scope="2">
+		<conversation>
+			<!-- people who will be in this conversation -->
+			<speaker name="a" portrait="example.png"/>
+			<speaker name="b" portrait="example2.png"/>
+
+			<!-- actual conversation text -->
+			<says speaker="b" text="" />
+			<!-- convention, player is asked if conversation may start -->
+			<says speaker="a" choose_start="sure" choose_no_start="Sorry, I've got to go"/>
+
+			<choose_no_start/>
+
+			<choose_start>
+				<says speaker="b" portrait=true text="I went to Cambodia once. I was a tourist."/>
+				<says speaker="b" text="I stopped to eat at this restaurant--it was a touristy place near Angkor Wat."/>
+				<says speaker="b" text="A kid came up to me and asked me to buy some trinkets they were selling."/>
+				<says speaker="b" text="I was so tired and hungry, that I just couldn't handle another conversation."/>
+				<says speaker="b" text="So I asked them to leave, and come back when I had eaten."/>
+				<says speaker="b" text="They said, if I was gonna buy something I just should, because tourists mostly lied to them to get them to leave."/>
+				<says speaker="b" text="I promised I was different though.  I promised that I would buy something when they came back"/>
+				<says speaker="b" text="and I promised I wouldn't buy from anyone else."/>
+				<says speaker="b" text="And the kid was happy about that.  They believed me."/>
+
+				<!-- kid comes back, I buy something, I feel good about myself -->
+				<!-- but it was some other kid.  The first kid came back and saw my new trinket -->
+				<!-- they looked apprehensive.  they asked me to buy something. -->
+				<!-- and I didn't.  -->
+				<!-- they said I had promised -->
+				<!-- and I said I was sorry -->
+				<!-- and they left, angry and crying -->
+				<!-- and I did have enough money to buy another trinket -->
+				<!-- but I didn't want to, because I wanted to spend the money at a shooting range in town -->
+				<!-- the shooting range had hand grenades, and I thought I'd never have another opportunity to throw a hand grenade -->
+				<!-- so I went to the shooting range, and when I got there, the prices had gone up, and I couldn't afford it -->
+				<!-- it made me so ashamed of myself.  The kid was a beggar, trying to do a job in order to survive-->
+				<!-- and I wanted to spend my money on 8 seconds of a new experience-->
+				<!-- they trusted me -->
+				<!-- and I lied to them -->
+				<!-- and I even had a chance to fix my mistake, but I didn't take it -->
+				<!-- and now it makes me wish I had killed myself at the shooting range -->
+				<!-- I'll never see that kid again -->
+				<!-- In their life, I am one of the worst liars who set upon them -->
+				<!-- because I made them trust me, and then simply refused to help when I could -->
+				<!-- and in my life, I carry the shame of knowing I am a villain -->
+				<!-- (portrait=true) I am selfish.  I don't pay attention to others.  I don't help. -->
+				<!-- (portrait=true) It makes me wish I was dead.  People deserve so much better than me. -->
+				<!-- (portrait=true) But I am the only thing I can offer to them. -->
+
+				<says speaker="b" text=""/>
+
+			</choose_start>
+
+		</conversation>
+	</resource>
+</resources>

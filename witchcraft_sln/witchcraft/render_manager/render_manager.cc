@@ -172,6 +172,7 @@ bool RenderManager::init_imgui()
 	return true;
 }
 
+
 bool RenderManager::init_shaders()
 {
 	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
@@ -272,6 +273,25 @@ bool RenderManager::init_geometry()
 	return true;
 }
 
+void RenderManager::handle_message(Message m)
+{
+	PLOGV << "RenderManager has received a request";
+	Message response;
+	response.recipient = m.sender;
+	response.sender = id;
+	response.type = MessageType::TESTING;
+	response.data = nullptr;
+
+	PLOGV	<< "RenderManager is sending a test response:"
+			<< "\n\tsender: " << response.sender
+			<< "\n\trecipient: " << response.recipient
+			<< "\n\ttype: " << response.type
+			<< "\n\tdata: " << response.data
+			;
+
+	message_bus->send_message(response);
+}
+
 void RenderManager::paint_imgui_main_menu_bar()
 {
 	if (ImGui::BeginMainMenuBar())
@@ -354,10 +374,10 @@ bool RenderManager::update()
 	paint_imgui_main_menu_bar();
 
 	// todo: this check should move inside the console class
-	if (debug_console->get_is_visible())
-	{
-		debug_console->draw("Debug Console");
-	}
+	//if (debug_console->get_is_visible())
+	//{
+	//	debug_console->draw("Debug Console");
+	//}
 
 	// debug window
 	if (draw_imgui_debug_window)

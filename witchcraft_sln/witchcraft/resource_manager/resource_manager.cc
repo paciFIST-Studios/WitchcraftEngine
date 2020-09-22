@@ -313,11 +313,11 @@ ResourceManager::ResourceManager(MessageBus * mb)
 	, current_scope(witchcraft::configuration::global_resource_scope)
 	, message_bus(mb)
 {
-	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_resource_request, this, std::placeholders::_1);
+	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_message, this, std::placeholders::_1);
 	mb->subscribe("resource", cb);
 }
 
-void ResourceManager::handle_resource_request(Message m)
+void ResourceManager::handle_message(Message m)
 {
 	PLOGV << "ResourceManager has received a request";
 	Message response;
@@ -332,8 +332,7 @@ void ResourceManager::handle_resource_request(Message m)
 			<< "\n\ttype: " << response.type
 			<< "\n\tdata: " << response.data
 			;
-
-
+	
 	message_bus->send_message(response);
 }
 

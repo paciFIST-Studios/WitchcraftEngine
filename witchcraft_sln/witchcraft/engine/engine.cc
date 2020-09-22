@@ -16,25 +16,25 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
 
-	{
-		Message test;
-		test.sender = id;
-		test.recipient = message->channel_lookup("render");
-		test.type = MessageType::TESTING;
-		test.data = nullptr;
-		message->send_direct_message(test);
-	}
-
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());
 
 	PLOGI << witchcraft::log_strings::debug_console;
 	console = std::make_unique<Console>(message.get());
 
+	{
+		Message test;
+		test.sender = id;
+		test.recipient = message->channel_lookup("console");
+		test.type = MessageType::TESTING;
+		test.data = nullptr;
+		message->send_direct_message(test);
+	}
+
 	// this will be replaced by messaging system
-	render->set_debug_console(console.get());
-	render->set_scene_manager(scene.get());
-	scene->set_render_manager(render.get());
+	//render->set_debug_console(console.get());
+	//render->set_scene_manager(scene.get());
+	//scene->set_render_manager(render.get());
 
 	// project loader runs once, and then it's done.  If we need more
 	// things to happen, we can tie it in to the message bus, but

@@ -43,22 +43,23 @@ protected:
 
 	// name, channel #
 	std::map<char const *, unsigned int> name_to_channel_number {
-		  { "ai"		, 1  }
-		, { "animation"	, 2  }
-		, { "audio"		, 3  }
-		, { "camera"	, 4  }
-		, { "cinematic"	, 5  }		
-		, { "collision"	, 6  }
-		, { "console"	, 7  }
+	//	  { "ai"		, 1  }
+	//	, { "animation"	, 2  }
+	//	, { "audio"		, 3  }
+	//	, { "camera"	, 4  }
+	//	, { "cinematic"	, 5  }		
+	//	, { "collision"	, 6  }
+		  { "console"	, 7  }
 		, { "debug"		, 8  }
 		, { "engine"	, 9  }
-		, { "input"		, 10 }
-		, { "log"		, 11 }
-		, { "physics"	, 12 }
-		, { "player"	, 13 }
+	//	, { "input"		, 10 }
+	//	, { "log"		, 11 }
+	//	, { "physics"	, 12 }
+	//	, { "player"	, 13 }
 		, { "render"	, 14 }
 		, { "resource"	, 15 }
-		, { "ui"		, 16 }
+		, { "scene"		, 16 }
+	//	, { "ui"		, 17 }
 	};
 
 	bool is_same_fn_address(CallbackType const & fn_a, CallbackType const & fn_b) const
@@ -106,8 +107,7 @@ public:
 		auto channel_number = name_to_channel_number[channel_name];
 		unsubscribe(channel_number, cb);
 	}
-
-
+	
 	void unsubscribe(unsigned int channel_num, CallbackType cb)
 	{
 		if (registered_callbacks.find(channel_num) == registered_callbacks.end())

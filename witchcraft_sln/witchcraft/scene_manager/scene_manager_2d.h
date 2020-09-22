@@ -40,11 +40,17 @@ protected:
 	//SceneListenerType listeners;
 
 	MessageBus * message_bus = nullptr;
-	RenderManager * render_manager = nullptr;
 
+	void handle_message(Message m);
+	
 public:
 	SceneManager2D() {}
-	SceneManager2D(MessageBus * mb) : message_bus(mb) {}
+	SceneManager2D(MessageBus * mb) 
+		: message_bus(mb) 
+	{
+		std::function<void(Message)> cb = std::bind(&SceneManager2D::handle_message, this, std::placeholders::_1);
+		message_bus->subscribe("scene", cb);
+	}
 
 
 	Layer2D * add_layer(std::string const & name);
@@ -56,7 +62,7 @@ public:
 	//void add_listener(qSceneListener * listener);
 
 
-	void set_render_manager(RenderManager * rm) { render_manager = rm; }
+	void set_render_manager(RenderManager * rm) { /*render_manager = rm;*/ }
 
 	std::vector<Layer2D*> get_layers_ptrs_vector() const
 	{

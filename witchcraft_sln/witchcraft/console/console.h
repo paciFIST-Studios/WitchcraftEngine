@@ -62,6 +62,25 @@ protected:
 		commands.push_back("CLOSE");
 	}
 
+	void handle_message(Message m)
+	{
+		PLOGV << "Console has received a request";
+		Message response;
+		response.recipient = m.sender;
+		response.sender = id;
+		response.type = MessageType::TESTING;
+		response.data = nullptr;
+
+		PLOGV << "Console is sending a test response:"
+			<< "\n\tsender: " << response.sender
+			<< "\n\trecipient: " << response.recipient
+			<< "\n\ttype: " << response.type
+			<< "\n\tdata: " << response.data
+			;
+
+		message_bus->send_message(response);
+	}
+
 public:
 	Console()
 	{
@@ -71,6 +90,9 @@ public:
 	Console(MessageBus * mb) : message_bus(mb)
 	{
 		add_default_commands();
+
+		std::function<void(Message)> cb = std::bind(&Console::handle_message, this, std::placeholders::_1);
+		message_bus->subscribe("console", cb);
 	}
 
 	~Console() {}

@@ -211,6 +211,8 @@ protected:
 
 	bool init_imgui();
 
+	void handle_message(Message m);
+
 public:
 	RenderManager()
 		: renderer_state(ERendererState::CONSTRUCTED)	
@@ -219,7 +221,10 @@ public:
 	RenderManager(MessageBus * mb)
 		: renderer_state(ERendererState::CONSTRUCTED)
 		, message_bus(mb)
-	{}
+	{
+		std::function<void(Message)> cb = std::bind(&RenderManager::handle_message, this, std::placeholders::_1);
+		message_bus->subscribe("render", cb);
+	}
 
 	bool init_system(
 		  unsigned xOffset = SDL_WINDOWPOS_UNDEFINED

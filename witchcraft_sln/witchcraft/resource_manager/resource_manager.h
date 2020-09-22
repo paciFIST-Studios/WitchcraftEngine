@@ -45,7 +45,7 @@ protected:
 
 	MessageBus * message_bus = nullptr;
 
-	void handle_resource_request(Message m);
+	void handle_message(Message m);
 
 public:
 

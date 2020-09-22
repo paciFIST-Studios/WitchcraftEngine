@@ -173,7 +173,7 @@ public:
 			result.push_back(m);
 		}
 		
-		waiting_messages[channel] = std::vector<Message>();
+		waiting_messages[channel].clear();
 
 		return result;
 	}

@@ -5,29 +5,32 @@
 #include <map>
 
 #include "../engine/engine_object.h"
-//#include "../message_bus/ICanSendMessages.h"
-//#include "../message_bus/ICanReceiveMessages.h"
 
 enum MessageType
 {
 	  UNINITIALIZED = 0
-	, TESTING
+	, TESTING		= 1
+	, LOAD_RESOURCE = 2
+
+
+
+
+	, ENUM_LENGTH
 };
 
 struct Message
 {
-public:
 	unsigned int recipient;
 	unsigned int sender;
 	MessageType type;
 	void * data;
 };
 
-class MessageBus 
-	: public qEngineObject 
-	//, public ICanSendMessages
-	//, public ICanReceiveMessages
+
+class MessageBus : public qEngineObject 
 {
+public:
+	typedef std::function<void(Message m)> CallbackType;
 
 private:
 protected:
@@ -36,7 +39,7 @@ protected:
 	std::map <unsigned int, std::vector<Message>> waiting_messages;
 
 	// ID, vec<callbacks>
-	std::map<unsigned int, std::vector<void(*)(Message)>> registered_callbacks;
+	std::map<unsigned int, std::vector<CallbackType>> registered_callbacks;
 
 	// name, channel #
 	std::map<char const *, unsigned int> name_to_channel_number {
@@ -58,6 +61,13 @@ protected:
 		, { "ui"		, 16 }
 	};
 
+	bool is_same_fn_address(CallbackType const & fn_a, CallbackType const & fn_b) const
+	{
+		auto a = fn_a.target<void(*)(Message)>();
+		auto b = fn_b.target<void(*)(Message)>();
+		return (*a == *b);
+	}
+
 public:
 
 	MessageBus()
@@ -73,33 +83,34 @@ public:
 		return name_to_channel_number[channel_name];
 	}
 
-	void subscribe(char const * channel, void(*cb)(Message))
+	void subscribe(char const * channel_name, CallbackType cb)
 	{
-		auto channel_number = name_to_channel_number[channel];
+		auto channel_number = name_to_channel_number[channel_name];
 		subscribe(channel_number, cb);
 	}
 
-	void subscribe(unsigned int id, void(*cb)(Message))
+	void subscribe(unsigned int channel_num, CallbackType cb)
 	{
-		if (registered_callbacks.find(id) != registered_callbacks.end())
+		if (registered_callbacks.find(channel_num) != registered_callbacks.end())
 		{
-			registered_callbacks[id].push_back(cb);
+			registered_callbacks[channel_num].push_back(cb);
 		}
 		else
 		{
-			registered_callbacks[id] = std::vector<void(*)(Message)>{ cb };
+			registered_callbacks[channel_num] = std::vector<CallbackType>{ cb };
 		}
 	}
 
-	void unsubscribe(char const * channel, void(*cb)(Message))
+	void unsubscribe(char const * channel_name, CallbackType cb)
 	{		
-		auto channel_number = name_to_channel_number[channel];
+		auto channel_number = name_to_channel_number[channel_name];
 		unsubscribe(channel_number, cb);
 	}
 
-	void unsubscribe(unsigned int id, void(*cb)(Message))
+
+	void unsubscribe(unsigned int channel_num, CallbackType cb)
 	{
-		if (registered_callbacks.find(id) == registered_callbacks.end())
+		if (registered_callbacks.find(channel_num) == registered_callbacks.end())
 		{
 			return; // none found
 		}
@@ -107,12 +118,12 @@ public:
 		// see algorithm example near bottom of article
 		// https://www.techiedelight.com/remove-elements-vector-inside-loop-cpp/
 
-		auto iter = registered_callbacks[id].begin();
-		while (iter != registered_callbacks[id].end())
+		auto iter = registered_callbacks[channel_num].begin();
+		while (iter != registered_callbacks[channel_num].end())
 		{
-			if (*iter == cb)
+			if (is_same_fn_address(cb, *iter))
 			{
-				iter = registered_callbacks[id].erase(iter);
+				iter = registered_callbacks[channel_num].erase(iter);
 			}
 			else
 			{
@@ -121,7 +132,8 @@ public:
 		}
 	}
 
-	void push_message(Message m)
+	// sent messages accumulate in waiting messages
+	void send_message(Message m)
 	{
 		if (waiting_messages.find(m.recipient) != waiting_messages.end())
 		{
@@ -133,50 +145,27 @@ public:
 		}
 	}
 
-	int peek_subscriber_count(char const * channel)
+	// direct messages go straight to the callbacks
+	void send_direct_message(Message m)
+	{
+		auto vec = registered_callbacks[m.recipient];
+		for (auto cb : vec)
+		{
+			cb(m);
+		}
+	}
+
+
+
+	// taking the messages clears waiting messages
+	std::vector<Message> take_messages(char const * channel)
 	{
 		auto channel_number = name_to_channel_number[channel];
-		return peek_subscriber_count(channel_number);
+		return take_messages(channel_number);
 	}
 
-	int peek_subscriber_count(unsigned int channel)
-	{
-		if (registered_callbacks.find(channel) == registered_callbacks.end())
-		{
-			return -1;
-		}
-		else
-		{
-			return registered_callbacks[channel].size();
-		}
-	}
-
-
-	int peek_message_count(char const * channel)
-	{
-		auto channel_number = name_to_channel_number[channel];
-		return peek_message_count(channel_number);
-	}
-
-	int peek_message_count(unsigned int channel)
-	{
-		if (waiting_messages.find(channel) != waiting_messages.end())
-		{
-			return waiting_messages[channel].size();
-		}
-		else
-		{
-			return -1;
-		}
-	}
-
-	std::vector<Message> get_messages(char const * channel)
-	{
-		auto channel_number = name_to_channel_number[channel];
-		return get_messages(channel_number);
-	}
-
-	std::vector<Message> get_messages(unsigned int channel)
+	// taking the messages clears waiting messages
+	std::vector<Message> take_messages(unsigned int channel)
 	{
 		std::vector<Message> result;
 
@@ -191,27 +180,5 @@ public:
 	}
 };
 
-
-namespace witchcraft
-{
-	namespace testing
-	{
-		struct FourIntStruct
-		{
-			int a = 0;
-			int b = 0;
-			int c = 0;
-			int d = 0;
-		};
-
-		static unsigned int get_times_called()
-		{
-			static unsigned int count = 0;
-			return ++count;
-		}
-
-		static void get_nothing() {}
-	}
-}
 
 #endif // !MESSAGE_BUS_H

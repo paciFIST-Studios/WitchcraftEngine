@@ -9,10 +9,71 @@
 
 		#include "message_bus.h"
 
+
+		struct FourIntStruct
+		{
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			int d = 0;
+		};
+		
+		unsigned int get_times_called()
+		{
+			static unsigned int count = 0;
+			return ++count;
+		}
+		
+		void get_nothing() {}
+
+
+
+		class TestMessageBus : public MessageBus
+		{
+		public:
+			int peek_subscriber_count(char const * channel)
+			{
+				auto channel_number = name_to_channel_number[channel];
+				return peek_subscriber_count(channel_number);
+			}
+
+			int peek_subscriber_count(unsigned int channel)
+			{
+				if (registered_callbacks.find(channel) == registered_callbacks.end())
+				{
+					return -1;
+				}
+				else
+				{
+					return registered_callbacks[channel].size();
+				}
+			}
+
+
+			int peek_message_count(char const * channel)
+			{
+				auto channel_number = name_to_channel_number[channel];
+				return peek_message_count(channel_number);
+			}
+
+			int peek_message_count(unsigned int channel)
+			{
+				if (waiting_messages.find(channel) != waiting_messages.end())
+				{
+					return waiting_messages[channel].size();
+				}
+				else
+				{
+					return -1;
+				}
+			}
+		};
+
+
 		TEST_CASE("Message::data    void * can be used to hold a fn ptr")
 		{
 			//https://www.kdab.com/how-to-cast-a-function-pointer-to-a-void/
-			auto fp = &witchcraft::testing::get_times_called;
+			auto fp = &get_times_called;
 			auto a = fp();
 			auto b = fp();
 			REQUIRE_NOTHROW(fp());
@@ -44,7 +105,6 @@
 
 		TEST_CASE("Message::data    void * can be used to hold object ptr")
 		{
-			using witchcraft::testing::FourIntStruct;
 			auto test_data = FourIntStruct{ 1, 3, 5, 7 };
 
 			auto m = Message{
@@ -74,13 +134,13 @@
 		}
 
 
-		TEST_CASE(" MessageBus::push_message    pushes message onto vector   when given correct args")
+		TEST_CASE(" MessageBus::send_message    pushes message onto vector   when given correct args")
 		{
-			auto data = witchcraft::testing::FourIntStruct{ 7, 7, 7, 7 };
+			auto data = FourIntStruct{ 7, 7, 7, 7 };
 
 			int const RECIPIENT_ID = 666;
 
-			auto mb = MessageBus();
+			auto mb = TestMessageBus();
 			auto m = Message{
 				  RECIPIENT_ID
 				, 3	// sender
@@ -89,30 +149,30 @@
 			};
 
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == -1);
-			mb.push_message(m);
+			mb.send_message(m);
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == 1);
-			mb.push_message(m);
+			mb.send_message(m);
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == 2);
-			mb.push_message(m);
+			mb.send_message(m);
 			REQUIRE(mb.peek_message_count(RECIPIENT_ID) == 3);
 		}
 
 		TEST_CASE(" MessageBus    keeps track of several different recipients")
 		{
 			auto m = Message{ 1, 0, MessageType::TESTING, nullptr };
-			auto mb = MessageBus();
+			auto mb = TestMessageBus();
 
 			m.recipient = 1;
-			mb.push_message(m);
+			mb.send_message(m);
 
 			m.recipient = 2;
-			mb.push_message(m);
-			mb.push_message(m);
+			mb.send_message(m);
+			mb.send_message(m);
 
 			m.recipient = 3;
-			mb.push_message(m);
-			mb.push_message(m);
-			mb.push_message(m);
+			mb.send_message(m);
+			mb.send_message(m);
+			mb.send_message(m);
 
 			REQUIRE(mb.peek_message_count(1) == 1);
 			REQUIRE(mb.peek_message_count(2) == 2);
@@ -124,22 +184,23 @@
 		TEST_CASE(" MessageBus::subscribe    allows objects to subscribe to updates    by supplying callback ptr")
 		{
 			// note: this is explicitly allowing duplicates right now
-			auto mb = MessageBus();
+			auto mb = TestMessageBus();
+			int const channel = 1;
 
 			// uninit
-			REQUIRE(mb.peek_subscriber_count(1) == -1);
+			REQUIRE(mb.peek_subscriber_count(channel) == -1);
 
 			// +, -, 0
 			mb.subscribe(1, mock_OnMessage);
 			mb.unsubscribe(1, mock_OnMessage);
-			REQUIRE(mb.peek_subscriber_count(1) == 0);
+			REQUIRE(mb.peek_subscriber_count(channel) == 0);
 
 			mb.subscribe(1, mock_OnMessage);
-			REQUIRE(mb.peek_subscriber_count(1) == 1);
+			REQUIRE(mb.peek_subscriber_count(channel) == 1);
 			mb.subscribe(1, mock_OnMessage);
-			REQUIRE(mb.peek_subscriber_count(1) == 2);
+			REQUIRE(mb.peek_subscriber_count(channel) == 2);
 			mb.subscribe(1, mock_OnMessage);
-			REQUIRE(mb.peek_subscriber_count(1) == 3);
+			REQUIRE(mb.peek_subscriber_count(channel) == 3);
 		}
 
 		void mock_a(Message m) {}
@@ -147,7 +208,7 @@
 		void mock_c(Message m) {}
 		TEST_CASE(" MessageBus::subscribe    allows subscription to different ids")
 		{
-			auto mb = MessageBus();
+			auto mb = TestMessageBus();
 
 			int const UNINIT = -1;
 			int const ONE = 1;
@@ -183,7 +244,7 @@
 
 		TEST_CASE(" MessageBus::unsubscribe    allows a callback to be removed from a single channel")
 		{
-			auto mb = MessageBus();
+			auto mb = TestMessageBus();
 
 			int const ONE = 1;
 			int const TWO = 2;

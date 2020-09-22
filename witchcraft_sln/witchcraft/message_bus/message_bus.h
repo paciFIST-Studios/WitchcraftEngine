@@ -8,13 +8,13 @@
 
 enum MessageType
 {
-	  UNINITIALIZED = 0
-	, TESTING		= 1
-	, LOAD_RESOURCE = 2
+	  UNINITIALIZED		= 0
+	, TESTING			= 1
+	, LOAD_RESOURCE		= 2
+	, UNLOAD_RESOURCE	= 3
 
 
-
-
+	// -- this is always the last one
 	, ENUM_LENGTH
 };
 
@@ -154,7 +154,6 @@ public:
 			cb(m);
 		}
 	}
-
 
 
 	// taking the messages clears waiting messages

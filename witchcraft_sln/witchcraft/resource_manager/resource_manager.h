@@ -19,15 +19,12 @@
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
-
+struct Message;
 class MessageBus;
 
 // resource manager, to manage the resource objects
 class ResourceManager : public qEngineObject
 {
-public:
-	typedef std::unique_ptr<qResource> ResourcePtr;
-
 private:
 protected:
 
@@ -38,7 +35,7 @@ protected:
 	unsigned int resource_count = 0;
 
 	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
-	std::map<unsigned int, std::vector<ResourcePtr>> resource_map;
+	std::map<unsigned int, std::vector<std::unique_ptr<qResource>>> resource_map;
 
 	std::unique_ptr<qResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
@@ -48,7 +45,10 @@ protected:
 
 	MessageBus * message_bus = nullptr;
 
+	void handle_resource_request(Message m);
+
 public:
+
 
 	// find resource by id.  return nullptr if not found
 	qResource * find_resource_by_id(unsigned int UID);

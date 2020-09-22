@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-ResourceManager::ResourcePtr ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	resource_id		= uninit::UINT;
@@ -312,7 +312,30 @@ ResourceManager::ResourceManager(MessageBus * mb)
 	: resource_count(0)
 	, current_scope(witchcraft::configuration::global_resource_scope)
 	, message_bus(mb)
-{}
+{
+	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_resource_request, this, std::placeholders::_1);
+	mb->subscribe("resource", cb);
+}
+
+void ResourceManager::handle_resource_request(Message m)
+{
+	PLOGV << "ResourceManager has received a request";
+	Message response;
+	response.recipient = m.sender;
+	response.sender = id;
+	response.type = MessageType::TESTING;
+	response.data = nullptr;
+
+	PLOGV	<< "ResourceManager is sending a test response:"
+			<< "\n\tsender: " << response.sender
+			<< "\n\trecipient: " << response.recipient
+			<< "\n\ttype: " << response.type
+			<< "\n\tdata: " << response.data
+			;
+
+
+	message_bus->send_message(response);
+}
 
 int ResourceManager::get_current_scope() const
 {

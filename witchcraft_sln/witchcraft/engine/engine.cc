@@ -6,19 +6,21 @@ void Engine::startup()
 	current_engine_state = EEngineState::STARTUP;
 	if (test_mode.early_exit) return;
 
-
-	PLOGI << "Project Loader Start";
-	project_loader = std::make_unique<ProjectLoader>(project_file_path);
-	project_loader->parse_project_file();
-	project_settings = project_loader->get_project_settings();
-	
-
 	// engine components
 	PLOGI << witchcraft::log_strings::message_bus_start;
 	message = std::make_unique<MessageBus>();
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
+
+	{
+		Message test;
+		test.sender = id;
+		test.recipient = message->channel_lookup("resource");
+		test.type = MessageType::TESTING;
+		test.data = nullptr;
+		message->send_direct_message(test);
+	}
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
@@ -34,6 +36,13 @@ void Engine::startup()
 	render->set_scene_manager(scene.get());
 	scene->set_render_manager(render.get());
 
+	// project loader runs once, and then it's done.  If we need more
+	// things to happen, we can tie it in to the message bus, but
+	// we'll save that until some project requires it
+	PLOGI << "Project Loader Start";
+	project_loader = std::make_unique<ProjectLoader>(project_file_path);
+	project_loader->parse_project_file();
+	project_settings = project_loader->get_project_settings();
 
 
 }

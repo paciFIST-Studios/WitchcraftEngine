@@ -13,17 +13,17 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
 
+	PLOGI << witchcraft::log_strings::render_manager_start;
+	render = std::make_unique<RenderManager>(message.get());
+
 	{
 		Message test;
 		test.sender = id;
-		test.recipient = message->channel_lookup("resource");
+		test.recipient = message->channel_lookup("render");
 		test.type = MessageType::TESTING;
 		test.data = nullptr;
 		message->send_direct_message(test);
 	}
-
-	PLOGI << witchcraft::log_strings::render_manager_start;
-	render = std::make_unique<RenderManager>(message.get());
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());

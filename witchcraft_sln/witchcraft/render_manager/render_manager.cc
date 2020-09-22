@@ -4,49 +4,23 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
 
-	if (false == init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
-	{
-		// couldn't init sdl
-		return false;
-	}
+	if ( ! init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
+	{return false;}
 
-	if (false == init_sdl_image())
-	{
-		// couldn't init sdl_image (the lib for PNG files, etc)
-		return false;
-	}
-
-	if (false == init_opengl())
-	{
-		// couldn't init opengl
-		return false;
-	}
+	if ( ! init_sdl_image()){ return false; }
+	if ( ! init_opengl())	{ return false; }
 
 	// NOTE: this initialization has to come AFTER the opengl init
-	if (false == init_imgui())
-	{
-		return false;
-	}
+	if (false == init_imgui()){
+		return false;}
 
-	// not sure where to set this, actually
-	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
-
-	SDL_GL_SetSwapInterval(1);	// use VSYNC
-	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
-	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
 
 	// init shaders
-	if (false == init_shaders()) 
-	{ 
-		return false; 
-	}
-	if (false == init_geometry()) 
-	{ 
-		return false; 
-	}
+	if ( ! init_shaders()) { return false; }
+	if ( ! init_geometry()){ return false; }
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
-
+	
 	renderer_state = ERendererState::UPDATE_OK;
 	return true;
 }
@@ -140,6 +114,12 @@ bool RenderManager::init_opengl()
 		PLOGV << "opengl version: " << glGetString(GL_VERSION);
 	}
 
+	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
+
+	//SDL_GL_SetSwapInterval(1);	// use VSYNC
+	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
+	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
+
 	renderer_state = ERendererState::OPENGL_INIT_OK;
 
 	return true;
@@ -174,24 +154,18 @@ bool RenderManager::init_imgui()
 	IMGUI_CHECKVERSION();
 	
 	auto imgui_context = ImGui::CreateContext();
-	if (imgui_context == nullptr)
-	{
-		return false;
-	}
+	if (imgui_context == nullptr){
+		return false;}
 
 	ImGuiIO &io = ImGui::GetIO();
 	
 	auto sdl_init = ImGui_ImplSDL2_InitForOpenGL(program_window, opengl_context);
-	if (sdl_init == false)
-	{
-		return false;
-	}
+	if (sdl_init == false){
+		return false;}
 
 	auto opengl_init = ImGui_ImplOpenGL3_Init(open_gl_version);
-	if (opengl_init == false)
-	{
-		return false;
-	}
+	if (opengl_init == false){
+		return false;}
 
 	ImGui::StyleColorsDark();
 
@@ -200,19 +174,19 @@ bool RenderManager::init_imgui()
 
 bool RenderManager::init_shaders()
 {
-	basic_shader = std::make_unique<OpenGlShaderProgram>();
-	basic_shader->compile(vertex_shader_src, fragment_shader_src);
-	
-	sprite_shader = std::make_unique<OpenGlShaderProgram>();
-	sprite_shader->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
+	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["basic"]->compile(basic_vertex_shader_src, basic_fragment_shader_src);
 
-	// wireframe shader
+	shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
+	   
+	// wireframe shader <-- is a render mode, not a shader
 	// heatmap shader
 	// greybox shader
 	// toon shader
 
-	active_shader_program_id = basic_shader->get_shader_program_id();
-	//active_shader_program_id = sprite_shader->get_shader_program_id();
+	active_shader_program_id = shaders["sprite"]->get_shader_program_id();
+	//active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
 
@@ -262,8 +236,6 @@ bool RenderManager::init_geometry()
 		glBindVertexArray(0);				// unbind vao
 		// note: do not unbind the ebo while vao is active
 	}
-
-	projection_matrix = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
 
 	// setup the triangle
 	{

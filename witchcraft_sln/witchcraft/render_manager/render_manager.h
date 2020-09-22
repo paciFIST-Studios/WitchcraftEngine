@@ -17,11 +17,17 @@
 #include <SDL_image.h>
 #include <SDL_surface.h>
 #include <SDL_video.h>
-#include <GL/glew.h>
 
+// opengl
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+// image loader lib
+//#define STB_IMAGE_IMPLEMENTATION
+//#define STBI_FAILURE_USERMSG
+//#include "../stb_image.h"
 
 
 // rapidxml
@@ -53,6 +59,7 @@
 
 #include "../console/console.h"
 
+
 class SceneManager2D;
 class qSceneObject;
 class Console;
@@ -69,6 +76,13 @@ enum class ERendererState : unsigned char
 	, SHUTDOWN_OK	= 0x80
 };
 
+struct OpenGLTexture
+{
+	int width;
+	int height;
+	int color_channels;
+	unsigned int texture_id;
+};
 
 class RenderManager : public qEngineObject
 {
@@ -83,22 +97,8 @@ private:
 		, { GL_FRAGMENT_SHADER	, "GL_FRAGMENT_SHADER"	}
 	};
 
-
 	char const * open_gl_version = "#version 330 core";
 
-	char const * vertex_shader_src =
-		"#version 330 core\n"
-		"layout(location=0) in vec3 position;\n"
-		"void main(){\n"
-		"gl_Position.xyz = position;"
-		"gl_Position.w = 1.0f; }";
-
-	// fragment shaders process pixel color
-	char const * fragment_shader_src =
-		"#version 330 core\n"
-		"out vec4 color;\n"
-		"void main(){\n"
-		"color = vec4(1.0f, 0.0f, 0.0f, 1.0f); }";
 
 	char const * sprite_vertex_shader_src =
 		"#version 330 core/n"
@@ -168,8 +168,8 @@ protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
-	std::unique_ptr<OpenGlShaderProgram> basic_shader;
-	std::unique_ptr<OpenGlShaderProgram> sprite_shader;
+	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
+
 	GLuint active_shader_program_id = NULL;
 
 	SDL_Window * program_window		= nullptr;
@@ -189,7 +189,6 @@ protected:
 	SDL_RendererInfo renderer_info;
 
 	RenderObjectsVector render_objects;
-
 
 	// screen clear color
 	ImVec4 scc;  //{0.2f, 0.3f, 0.3f, 1.0f}
@@ -212,73 +211,6 @@ protected:
 
 	bool init_imgui();
 
-	//void draw_sprite(qSceneObject const & so)
-	//{
-	//	sprite_shader->SetActive();
-	//
-	//	glm::mat4 model_transform = glm::mat4(1.0f);
-	//	
-	//	// translate
-	//	auto pos = so.get_position();
-	//	model_transform = glm::translate(
-	//		model_transform
-	//		, glm::vec3(
-	//			  std::get<0>(pos)
-	//			, std::get<1>(pos), 1.0f
-	//		)
-	//	);
-	//
-	//
-	//	auto wh = so.render_resource->get_width_height();
-	//	// move model, such that it's pivot point is in the middle
-	//	model_transform = glm::translate(
-	//		model_transform
-	//		, glm::vec3(
-	//			  0.5f * std::get<0>(wh)
-	//			, 0.5f * std::get<1>(wh)
-	//			, 0.0f)
-	//	);
-	//
-	//	// rotate
-	//	model_transform = glm::rotate(
-	//		model_transform
-	//		, glm::radians(so.get_rotation())
-	//		, glm::vec3(0.0f, 0.0f, 1.0f)
-	//	);
-	//
-	//	// move model, such that it's pivot point is in the corner again
-	//	model_transform = glm::translate(
-	//		model_transform
-	//		, glm::vec3(
-	//			  -0.5f * std::get<0>(wh)
-	//			, -0.5f * std::get<1>(wh)
-	//			,  0.0f)
-	//	);
-	//
-	//
-	//
-	//	// scale
-	//	auto scale = so.get_scale();
-	//	model_transform = glm::translate(
-	//		model_transform
-	//		, glm::vec3(
-	//			  std::get<0>(scale)
-	//			, std::get<1>(scale)
-	//			, 0.0f
-	//		)
-	//	);
-	//
-	//	//sprite_shader->SetMatrix4("model", model_transform);
-	//	//sprite_shader->SetVector3f("sprite_color", color);
-	//
-	//	glActiveTexture(GL_TEXTURE0);
-	//	//glBindTexture(GL_TEXTURE_2D, so.render_resource->texture);
-	//
-	//	glBindVertexArray(this->sprite_quad_ebo);
-	//	glDrawArrays(GL_TRIANGLES, 0, 6);
-	//	glBindArray(0);
-	//}
-
 public:
 	RenderManager()
 		: renderer_state(ERendererState::CONSTRUCTED)	
@@ -288,7 +220,6 @@ public:
 		: renderer_state(ERendererState::CONSTRUCTED)
 		, message_bus(mb)
 	{}
-
 
 	bool init_system(
 		  unsigned xOffset = SDL_WINDOWPOS_UNDEFINED
@@ -337,8 +268,71 @@ namespace witchcraft
 		int constexpr OPENGL_MINOR_VERSION = 3;
 
 		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
-	}
-}
+
+	
+
+		//static OpenGLTexture get_opengl_texture(char const & filepath)
+		//{
+		//	struct OpenGLTexture result { -1, -1, -1, 0 };
+		//
+		//	if (!utility::file_exists(&filepath)) {
+		//		return result;
+		//	}
+		//
+		//	//unsigned char * data = stbi_load(
+		//	//	&filepath
+		//	//	, &result.width
+		//	//	, &result.height
+		//	//	, &result.color_channels
+		//	//	, 0
+		//	//);
+		//	//
+		//	//if (data != nullptr)
+		//	//{
+		//	//	glGenTextures(1, &result.texture_id);
+		//	//	glBindTexture(GL_TEXTURE_2D, result.texture_id);
+		//	//
+		//	//	// todo: set wrapping options in fn call
+		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//	//
+		//	//	glTexImage2D(
+		//	//		GL_TEXTURE_2D		// 1d and 3d textures also exist
+		//	//		, 0					// mipmap level (default=0)
+		//	//		, GL_RGB			// storage format
+		//	//		, result.width		// image width
+		//	//		, result.height		// image height
+		//	//		, 0					// legacy-unused
+		//	//		, GL_RGB			// source format
+		//	//		, GL_UNSIGNED_BYTE  // source format
+		//	//		, data				//
+		//	//	);
+		//	//	glGenerateMipmap(GL_TEXTURE_2D);
+		//	//
+		//	//	PLOGV << "Texture Loaded: " << filepath
+		//	//		<< "\n\t width: " << result.width
+		//	//		<< "\t height: " << result.height
+		//	//		<< "\n\t size: " << sizeof(data)
+		//	//		;
+		//	//
+		//	//	stbi_image_free(data);
+		//	//}
+		//	//else
+		//	//{
+		//	//	// record as error (ploge), not as fatal (plogf)
+		//	//	PLOGE << "FAILURE!: Texture not loaded"
+		//	//		<< "\n\tfilepath: " << filepath
+		//	//		<< "\n\terror: " << stbi_failure_reason()
+		//	//		;
+		//	//}
+		//
+		//	return result;
+		//}
+
+	}  // ! namespace rendering
+}  // ! namespace witchcraft
 
 
 #endif // RENDER_MANAGER_H

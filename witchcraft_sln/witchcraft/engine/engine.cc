@@ -22,20 +22,6 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::debug_console;
 	console = std::make_unique<Console>(message.get());
 
-	{
-		Message test;
-		test.sender = id;
-		test.recipient = message->channel_lookup("console");
-		test.type = MessageType::TESTING;
-		test.data = nullptr;
-		message->send_direct_message(test);
-	}
-
-	// this will be replaced by messaging system
-	//render->set_debug_console(console.get());
-	//render->set_scene_manager(scene.get());
-	//scene->set_render_manager(render.get());
-
 	// project loader runs once, and then it's done.  If we need more
 	// things to happen, we can tie it in to the message bus, but
 	// we'll save that until some project requires it
@@ -43,8 +29,6 @@ void Engine::startup()
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();
-
-
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -61,7 +45,6 @@ bool Engine::continue_gameplay_loop(SDL_Event const & e)
 
 void Engine::process_window_event(SDL_Event const & e)
 {
-
 	// Keyboard events
 	if (witchcraft::engine::is_keyboard_event(e))
 	{
@@ -104,7 +87,6 @@ void Engine::process_window_event(SDL_Event const & e)
 				console->toggle_visibility();
 				break;
 			case SDLK_F3:
-				//console->draw("");
 				render->toggle_wireframe_rendering();
 				break;
 			case SDLK_F4:
@@ -506,7 +488,7 @@ void Engine::run()
 		// yield for the rest of the frame
 		//auto yield_time = witchcraft::configuration::frame_length_ms - (current_frame_time - last_frame_time);
 		// HACK: only has 10ms resolution, so we're just going to use it as a 10ms sleep
-		SDL_Delay(1);
+		//SDL_Delay(1);
 
 	} // !game_loop
 	

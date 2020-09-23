@@ -11,13 +11,11 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	if ( ! init_opengl())	{ return false; }
 
 	// NOTE: this initialization has to come AFTER the opengl init
-	if (false == init_imgui()){
-		return false;}
-
+	if ( ! init_imgui())	{ return false; }
 
 	// init shaders
-	if ( ! init_shaders()) { return false; }
-	if ( ! init_geometry()){ return false; }
+	if ( ! init_shaders())	{ return false; }
+	if ( ! init_geometry())	{ return false; }
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
 	
@@ -350,8 +348,7 @@ bool RenderManager::update()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-
-	
+		
 	// draw triangle
 	if (draw_triangle_not_quad)
 	{
@@ -368,9 +365,7 @@ bool RenderManager::update()
 
 	//render_visible_sprites_back_to_front();
 
-
-
-
+	   
 	paint_imgui_main_menu_bar();
 
 	// todo: this check should move inside the console class
@@ -409,10 +404,7 @@ void RenderManager::shutdown()
 	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
 	program_window = nullptr;
-
-
-	//SDL_FreeSurface(rendering_surface);
-	//SDL_DestroyRenderer(active_renderer);
+	
 	SDL_Quit();
 	renderer_state = ERendererState::SDL_QUIT_OK;
 	PLOGV << witchcraft::log_strings::sdl_stop;
@@ -452,7 +444,6 @@ void RenderManager::render_visible_sprites_back_to_front()
 			//draw_sprite(*obj);
 		}
 	}
-
 }
 
 

@@ -3,8 +3,9 @@
 
 // Common includes
 #include "plog/Log.h"
-#include "../uninitialized_values.h"
+
 #include "engine_id.h"
+#include "../uninitialized_values.h"
 
 class qEngineObject
 {

@@ -4,6 +4,7 @@
 // Common includes
 #include "plog/Log.h"
 #include "../uninitialized_values.h"
+#include "engine_id.h"
 
 class qEngineObject
 {
@@ -13,11 +14,7 @@ public:
 	unsigned int const id;
 
 	qEngineObject()
-		: id(uninit::UINT)
-	{}
-
-	qEngineObject(unsigned int const & ID)
-		: id(ID)
+		: id(witchcraft::engine::get_engine_id())
 	{}
 };
 

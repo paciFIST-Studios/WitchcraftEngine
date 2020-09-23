@@ -129,8 +129,7 @@
 
 		TEST_CASE(" MessageBus::ctor    creates generic object")
 		{
-			auto mbus = MessageBus();
-			REQUIRE(mbus.id == uninit::UINT);
+			REQUIRE_NOTHROW(MessageBus());
 		}
 
 

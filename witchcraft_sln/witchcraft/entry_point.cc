@@ -18,6 +18,7 @@
 #include "string_constants.h"
 #include "utility/get_latest_log_str.h"
 
+#include "engine/engine_id.h"
 #include "engine/engine.h"
 
 
@@ -25,13 +26,6 @@ namespace witchcraft
 {
 	namespace configuration
 	{
-		// EB - 20200922 
-		// we want to allow people to send messages to and from their engine id,
-		// so in order to manager that, make sure we leave a blank spot for named
-		// message channels.  See how many we're using in message_bus.h
-		static unsigned int const engine_id_offset = 100;
-		// EB - 20200922 
-
 		static unsigned int const logging_severity = static_cast<unsigned int>(plog::verbose);
 		static unsigned int const log_file_max_size_bytes = 100000; // "marketing" 100k
 		static unsigned int const log_file_max_logs = 4;
@@ -93,12 +87,6 @@ void run_unit_tests()
 	PLOGV << "\n\n\n\n";
 }
 
-static unsigned int get_engine_id() 
-{
-	static unsigned int id = witchcraft::configuration::engine_id_offset;
-	return id++;
-}
-
 int main(int argc, char** argv[])
 {
 	// do something with arguments
@@ -109,8 +97,8 @@ int main(int argc, char** argv[])
 	run_unit_tests();
 
 
-	auto init = EngineInitializer{ get_engine_id() };
-	// todo: give this to the engine using args
+	auto init = EngineInitializer();
+	init.test_mode.early_exit = false;
 	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
 	auto engine = Engine(init);
 

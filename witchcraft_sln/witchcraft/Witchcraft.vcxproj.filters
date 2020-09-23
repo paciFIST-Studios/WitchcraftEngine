@@ -290,5 +290,8 @@
     <ClInclude Include="project_loader\project_loader.h">
       <Filter>Source Files\project_loader</Filter>
     </ClInclude>
+    <ClInclude Include="engine\engine_id.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

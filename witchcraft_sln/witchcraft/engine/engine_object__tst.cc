@@ -9,13 +9,21 @@
 
 		#include "../engine/engine_object.h"
 
-		TEST_CASE(" qEngineObject::ctor")
+		TEST_CASE(" qEngineObject::ctor   instantiates object when used")
 		{
-			auto eo = qEngineObject();
-			REQUIRE(eo.id == 0);
+			REQUIRE_NOTHROW(qEngineObject());
+			auto eo = &qEngineObject();
+			REQUIRE(eo != nullptr);
+		}
 
-			qEngineObject eo2(2);
-			REQUIRE(eo2.id == 2);
+		TEST_CASE(" qEngineObject  is instantiated with a higher ID each time")
+		{
+			auto a = qEngineObject();
+			auto b = qEngineObject();
+			auto c = qEngineObject();
+
+			REQUIRE(a.id < b.id);
+			REQUIRE(b.id < c.id);
 		}
 
 	#endif // RUN_UNIT_TESTS

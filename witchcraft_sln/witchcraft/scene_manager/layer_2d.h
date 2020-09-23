@@ -9,7 +9,6 @@
 
 struct Layer2DInitializer
 {
-	unsigned int ID;
 	unsigned int zOrder;
 	float x;
 	float y;
@@ -44,7 +43,7 @@ public:
 	{}
 
 	Layer2D(Layer2DInitializer init)
-		: qEngineObject(init.ID)
+		: qEngineObject()
 		, z_order(init.zOrder)
 		, visible(init.is_visible)
 		, pos_x(init.x)

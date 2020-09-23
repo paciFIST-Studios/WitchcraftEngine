@@ -46,7 +46,6 @@ enum class EEngineState : unsigned char
 
 struct EngineInitializer
 {
-	unsigned int id;
 	TestMode test_mode;
 	std::string project_file_path;
 };
@@ -83,15 +82,16 @@ public:
 	EEngineState const get_current_state() const { return current_engine_state; }
 
 	Engine() 
-	: current_engine_state(EEngineState::CONSTRUCTED) 
+		: qEngineObject()
+		, current_engine_state(EEngineState::CONSTRUCTED) 
 		, test_mode({ false })
 	{}
 
 	Engine(EngineInitializer init) 
-	: qEngineObject(init.id)
+		: qEngineObject()
 		, test_mode(init.test_mode)
 		, project_file_path(init.project_file_path)
-	, current_engine_state(EEngineState::CONSTRUCTED)
+		, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };
 

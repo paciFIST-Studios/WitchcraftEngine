@@ -239,12 +239,6 @@
     <ClInclude Include="message_bus\message_bus.h">
       <Filter>Source Files\message_bus</Filter>
     </ClInclude>
-    <ClInclude Include="message_bus\ICanSendMessages.h">
-      <Filter>Source Files\message_bus</Filter>
-    </ClInclude>
-    <ClInclude Include="message_bus\ICanReceiveMessages.h">
-      <Filter>Source Files\message_bus</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\render_manager.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>

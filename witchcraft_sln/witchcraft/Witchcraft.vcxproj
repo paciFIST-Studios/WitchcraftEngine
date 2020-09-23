@@ -182,8 +182,6 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="logging\error_log_manager.h" />
-    <ClInclude Include="message_bus\ICanReceiveMessages.h" />
-    <ClInclude Include="message_bus\ICanSendMessages.h" />
     <ClInclude Include="message_bus\message_bus.h" />
     <ClInclude Include="project_loader\project_loader.h" />
     <ClInclude Include="render_manager\opengl_shader.h" />

@@ -9,7 +9,24 @@
 
 #include "../imgui/imgui.h"
 
-class MessageBus;
+
+enum EConsoleState : unsigned char
+{
+	// completely uninitialized
+	  UNINIT			= 0x01
+	// ctor has been called
+	, CONSTRUCTED		= 0x02
+	// has ptr to message bus, and ! nullptr
+	, CONNECTED			= 0x04
+	// can send message succcessfully
+	, CAN_SEND			= 0x08
+	// can receive message successfully
+	, CAN_RECEIVE		= 0x10
+	// is set to draw self to screen
+	, DRAWING			= 0x20
+	// 0x40
+	// 0x80
+};
 
 class Console : public qEngineObject
 {
@@ -17,6 +34,8 @@ private:
 protected:
 
 	MessageBus * message_bus = nullptr;
+
+	EConsoleState current_console_state = EConsoleState::UNINIT;
 
 	char const * COMMENT_MARK = "# ";
 	char const * ERROR_TAG = "[error]";
@@ -62,60 +81,125 @@ protected:
 		commands.push_back("CLOSE");
 	}
 
+	inline bool contains_term(std::string const * source, char const * search)
+	{
+		return source->find(search) != std::string::npos;
+	}
+
 	void handle_message(Message m)
 	{
-		PLOGV << "Console has received a request";
-		Message response;
-		response.recipient = m.sender;
-		response.sender = id;
-		response.type = MessageType::TESTING;
-		response.data = nullptr;
+		if (m.type != MessageType::INVOKE__CONSOLE_COMMAND){ return; }
 
-		PLOGV << "Console is sending a test response:"
-			<< "\n\tsender: " << response.sender
-			<< "\n\trecipient: " << response.recipient
-			<< "\n\ttype: " << response.type
-			<< "\n\tdata: " << response.data
-			;
+		auto command_str = static_cast<std::string*>(m.data);
 
-		message_bus->send_message(response);
+		if (contains_term(command_str, "draw_console="))
+		{
+			if (contains_term(command_str, "true"))
+			{
+				draw_console = true;
+			}
+			else if (contains_term(command_str, "false"))
+			{
+				draw_console = false;
+			}
+			else if (contains_term(command_str, "toggle"))
+			{
+				draw_console = !draw_console;
+			}
+		}
+
+		// OTHER COMMANDS
+
+
 	}
+
+	
+	void execute_command(char const * command)
+	{
+		std::stringstream ss;
+		ss << "# " << command << "\n";
+		contents.push_back(ss.str());
+
+		if (_stricmp(command, "CLEAR") == 0)
+		{
+			contents.clear();
+		}
+		else if (_stricmp(command, "HELP") == 0)
+		{
+			contents.push_back("Commands: ");
+			for (auto cmd : commands)
+			{
+				ss = std::stringstream();
+				ss << "- " << cmd;
+				contents.push_back(ss.str());
+			}
+		}
+		else if (_stricmp(command, "HISTORY") == 0)
+		{
+			// todo
+		}
+		else if (_stricmp(command, "CLOSE") == 0)
+		{
+			draw_console = false;
+		}
+		else
+		{
+			ss = std::stringstream();
+			ss << "Unknown command: " << command << "\n";
+			contents.push_back(ss.str());
+		}
+
+		scroll_to_bottom = true;
+	}
+
+	static int text_edit_callback_stub(ImGuiInputTextCallbackData * data)
+	{
+		Console * c = (Console*)data->UserData;
+		return c->text_edit_callback(data);
+	}
+
+	int text_edit_callback(ImGuiInputTextCallbackData * data)
+	{
+		if (data->EventFlag == ImGuiInputTextFlags_CallbackCompletion)
+		{
+			// see: https://github.com/ocornut/imgui/blob/docking/imgui_demo.cpp
+		}
+		else if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory)
+		{
+
+		}
+
+		return 0;
+	}
+
 
 public:
-	Console()
+	Console() 
+		: qEngineObject()
 	{
 		add_default_commands();
+		current_console_state = EConsoleState::CONSTRUCTED;
 	}
 
-	Console(MessageBus * mb) : message_bus(mb)
+	Console(MessageBus * mb) 
+		: qEngineObject()
+		, message_bus(mb)
 	{
 		add_default_commands();
 
 		std::function<void(Message)> cb = std::bind(&Console::handle_message, this, std::placeholders::_1);
 		message_bus->subscribe("console", cb);
+
 	}
 
 	~Console() {}
-	
-	std::vector<std::string> const & get_commands() { return commands; }
-	std::vector<std::string> const & get_contents() { return contents; }
 
-	bool get_is_visible() { return draw_console; }
-	void set_is_visible(bool is) { draw_console = is; }
-	void toggle_visibility() { draw_console = !draw_console; }
-
-	void clear_contents()
-	{
-		contents.clear();
-	}
-	
-	void add_log(std::string s)
-	{
-		contents.push_back(s);
-	}
+	EConsoleState get_console_state() const { return current_console_state; }
 	
 	void draw(std::string title)
 	{
+		if (!draw_console) { return; }
+
 		ImGui::SetNextWindowSize(
 			ImVec2(
 				200, 100
@@ -133,28 +217,28 @@ public:
 		
 		if (ImGui::SmallButton("Add Debug Text"))
 		{
-			add_log("debug text");
+			contents.push_back("debug text");
 		}
 		
 		ImGui::SameLine();
 		
 		if (ImGui::SmallButton("Add Debug Error"))
 		{
-			add_log("[error] error text");
+			contents.push_back("[error] error text");
 		}
 		
 		ImGui::SameLine();
 
 		if (ImGui::SmallButton("Add debug comment"))
 		{
-			add_log("# comment mark");
+			contents.push_back("# comment mark");
 		}
 
 		ImGui::SameLine();
 		
 		if (ImGui::SmallButton("Clear"))
 		{
-			clear_contents();
+			contents.clear();
 		}
 		
 		ImGui::Separator();
@@ -180,7 +264,7 @@ public:
 		{
 			if (ImGui::Selectable("Clear")) 
 			{
-				clear_contents();
+				contents.clear();
 			}
 			ImGui::EndPopup();
 		}
@@ -271,66 +355,6 @@ public:
 
 		ImGui::End();
 	}
-
-
-	void execute_command(char const * command)
-	{
-		std::stringstream ss;
-		ss << "# " << command << "\n";
-		add_log(ss.str());
-
-		if (_stricmp(command, "CLEAR") == 0)
-		{
-			clear_contents();
-		}
-		else if (_stricmp(command, "HELP") == 0)
-		{
-			add_log("Commands: ");
-			for (auto cmd : commands)
-			{
-				ss = std::stringstream();
-				ss << "- " << cmd;
-				add_log(ss.str());
-			}
-		}
-		else if (_stricmp(command, "HISTORY") == 0)
-		{
-			// todo
-		}
-		else if (_stricmp(command, "CLOSE") == 0)
-		{
-			draw_console = false;
-		}
-		else
-		{
-			ss = std::stringstream();
-			ss << "Unknown command: " << command << "\n";
-			add_log(ss.str());
-		}
-
-		scroll_to_bottom = true;
-	}
-
-	static int text_edit_callback_stub(ImGuiInputTextCallbackData * data)
-	{
-		Console * c = (Console*)data->UserData;
-		return c->text_edit_callback(data);
-	}
-
-	int text_edit_callback(ImGuiInputTextCallbackData * data)
-	{
-		if (data->EventFlag == ImGuiInputTextFlags_CallbackCompletion)
-		{
-			// see: https://github.com/ocornut/imgui/blob/docking/imgui_demo.cpp
-		}
-		else if (data->EventFlag == ImGuiInputTextFlags_CallbackHistory)
-		{
-
-		}
-
-		return 0;
-	}
-
 };
 
 namespace witchcraft

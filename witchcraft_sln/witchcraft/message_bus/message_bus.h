@@ -6,17 +6,58 @@
 
 #include "../engine/engine_object.h"
 
-enum MessageType
+enum MessageType : char
 {
-	  UNINITIALIZED		= 0
-	, TESTING			= 1
-	, LOAD_RESOURCE		= 2
-	, UNLOAD_RESOURCE	= 3
+	  UNINITIALIZED
+	, TESTING
 
+	, REQUEST__LOAD_RESOURCE
+	, REQUEST__UNLOAD_RESOURCE
+	, SUPPLY__RESOURCE
+
+	// Console is given a <char const *>, containing a command
+	, INVOKE__CONSOLE_COMMAND
+	
+	// remderer is given a <char const *>, containing a command
+	, INVOKE__RENDER_COMMAND
+
+	// requests engine to return a non-owning pointer to the debug console
+	, REQUEST__CONSOLE_PTR_NON_OWNER
+
+	// engine supplies a non-owning pointer to the debug console
+	, SUPPLY__CONSOLE_PTR_NON_OWNER
+
+	// requests message bus to send a ping back w/ {data = nullptr;}
+	, REQUEST__PING_ME_BACK
 
 	// -- this is always the last one
 	, ENUM_LENGTH
 };
+
+// EB - 20200924
+// in order to convert this enum to a string, representing the variable name,
+// we either have to do something hella fancy, or we have to maintain this
+// map of enums to strings.  I have chosen the map, because I know it will work,
+// and I apologize to future engineers (including myself) who have to maintain it
+// I don't think we should do this for all enums, but I do think it's a good idea
+// for the messaging system, since that's the foundation of all engine communications
+static std::map<MessageType, char const *> const message_type_enum_to_string {
+	  { MessageType::UNINITIALIZED				, "UNINITIALIZED"				}
+	, { MessageType::TESTING					, "TESTING"						}
+	, { MessageType::REQUEST__LOAD_RESOURCE		, "REQUEST__LOAD_RESOURCE"		}
+	, { MessageType::REQUEST__UNLOAD_RESOURCE	, "REQUEST__UNLOAD_RESOURCE"	}
+	, { MessageType::SUPPLY__RESOURCE			, "SUPPLY__RESOURCE"			}
+	, { MessageType::INVOKE__CONSOLE_COMMAND	, "INVOKE__CONSOLE_COMMAND"		}
+	, { MessageType::INVOKE__RENDER_COMMAND		, "INVOKE__RENDER_COMMAND"		}
+	, { MessageType::REQUEST__CONSOLE_PTR_NON_OWNER , "REQUEST__CONSOLE_PTR_NON_OWNER"}
+	, { MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER  , "SUPPLY__CONSOLE_PTR_NON_OWNER" }
+	, { MessageType::REQUEST__PING_ME_BACK		, "REQUEST__PING_ME_BACK"		}
+
+	// -- last one ----------------------------------------------------------------
+	, { MessageType::ENUM_LENGTH				, "ENUM_LENGTH"					}
+};
+// EB - 20200924
+
 
 struct Message
 {
@@ -25,7 +66,6 @@ struct Message
 	MessageType type;
 	void * data;
 };
-
 
 class MessageBus : public qEngineObject 
 {
@@ -50,7 +90,7 @@ protected:
 	//	, { "cinematic"	, 5  }		
 	//	, { "collision"	, 6  }
 		  { "console"	, 7  }
-		, { "debug"		, 8  }
+	//	, { "debug"		, 8  }
 		, { "engine"	, 9  }
 	//	, { "input"		, 10 }
 	//	, { "log"		, 11 }
@@ -61,6 +101,7 @@ protected:
 		, { "scene"		, 16 }
 	//	, { "ui"		, 17 }
 	};
+
 
 	bool is_same_fn_address(CallbackType const & fn_a, CallbackType const & fn_b) const
 	{
@@ -82,6 +123,18 @@ public:
 	unsigned int channel_lookup(char const * channel_name)
 	{
 		return name_to_channel_number[channel_name];
+	}
+	
+	std::string channel_lookup(unsigned int id)
+	{
+		for (auto&& kvp : name_to_channel_number)
+		{
+			if (kvp.second == id)
+			{
+				return std::string(kvp.first);
+			}
+		}
+		return "";
 	}
 
 	void subscribe(char const * channel_name, CallbackType cb)
@@ -177,7 +230,70 @@ public:
 
 		return result;
 	}
-};
 
+	// prints a <Message> to the engine log
+	void log_message(Message m)
+	{
+			std::stringstream ss;
+
+			ss << "Logging Message:\nMessage{";
+
+			// sender
+			if (m.sender > witchcraft::engine::engine_id_offset)
+			{
+				ss << "\n\tsender id: " << m.sender;
+			}
+			else
+			{
+				auto channel = channel_lookup(m.sender);
+				if (channel == "")
+				{
+					ss << "\n\tsender id: " << m.sender;
+				}
+				else
+				{
+					ss << "\n\tsender channel: " << channel;
+				}
+			}
+
+			// receiver
+			if (m.recipient > witchcraft::engine::engine_id_offset)
+			{
+				ss << "\n\trecipient id: " << m.recipient;
+			}
+			else
+			{
+				auto channel = channel_lookup(m.recipient);
+				if (channel == "")
+				{
+					ss << "\n\trecipient id: " << m.recipient;
+				}
+				else
+				{
+					ss << "\n\trecipient channel: " << channel;
+				}
+			}
+
+			// type
+			auto kvp = message_type_enum_to_string.find(m.type);
+			if (kvp == message_type_enum_to_string.end())
+			{
+				ss << "\n\ttype id: " << m.type;
+			}
+			else
+			{
+				ss << "\n\ttype name: " << kvp->second;
+			}
+
+			// data
+			ss << "\n\tdata: { " << m.data << " }";
+			ss << "\n};";
+
+
+			PLOGV << ss.str();
+	}
+
+
+};
 
 #endif // !MESSAGE_BUS_H

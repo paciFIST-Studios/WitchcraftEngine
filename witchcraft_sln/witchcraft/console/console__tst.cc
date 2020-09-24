@@ -9,6 +9,19 @@
 
 		#include "../console/console.h"
 		
+		class TestConsole : public Console
+		{
+		public:
+			TestConsole() : Console() {}
+			TestConsole(MessageBus * mb) : Console(mb) {}
+
+			void add_log(std::string s){ contents.push_back(s); }
+			void clear_contents() { contents.clear(); }
+
+			std::vector<std::string> const & get_commands() const { return commands; }
+			std::vector<std::string> const & get_contents() const { return contents; }
+		};
+
 		TEST_CASE(" Console::ctor   constructs console ")
 		{
 			Console * c1 = &Console();
@@ -17,7 +30,7 @@
 	
 		TEST_CASE("  Console::get_commands()  returns command list")
 		{
-			auto c = Console();
+			auto c = TestConsole();
 			auto commands = c.get_commands();
 
 			REQUIRE(commands[0] == "HELP");
@@ -29,7 +42,7 @@
 		{
 			std::string s = "test string";
 
-			auto c = Console();
+			auto c = TestConsole();
 			c.add_log(s);
 			auto contents = c.get_contents();
 
@@ -39,7 +52,7 @@
 		TEST_CASE(" Console::clear_contents()  clears internal contents vector")
 		{
 			std::string s = "test string";
-			auto c = Console();
+			auto c = TestConsole();
 			c.add_log(s);
 
 			REQUIRE(c.get_contents().size() == 1);
@@ -52,7 +65,7 @@
 		TEST_CASE(" Console::add_log()  adds string to internal contents vector")
 		{
 			std::string s = "test string";
-			auto c = Console();
+			auto c = TestConsole();
 
 			REQUIRE(c.get_contents().size() == 0);
 			c.add_log(s);
@@ -64,5 +77,3 @@
 	#endif // RUN_UNIT_TESTS
 
 #endif // !CONSOLE__TST_CC
-
-

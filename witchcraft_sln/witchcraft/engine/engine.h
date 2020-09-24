@@ -1,7 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <SDL_ttf.h>
+#include <functional>
 
 #include "../engine/engine_object.h"
 
@@ -53,6 +53,8 @@ struct EngineInitializer
 class Engine : public qEngineObject
 {
 private:
+	std::string string_buffer;
+
 protected:
 	std::string project_file_path;
 	ProjectSettings project_settings;
@@ -60,19 +62,35 @@ protected:
 	std::unique_ptr<ProjectLoader> project_loader;
 
 	std::unique_ptr<MessageBus> message;
+	unsigned int engine_channel_id		= 0;
+	unsigned int resource_channel_id	= 0;
+	unsigned int render_channel_id		= 0;
+	unsigned int scene_channel_id		= 0;
+	unsigned int console_channel_id		= 0;
+
 	std::unique_ptr<ResourceManager> resource;
 	std::unique_ptr<RenderManager> render;
 	std::unique_ptr<SceneManager2D> scene;
 	std::unique_ptr<Console> console;
 
+
 	EEngineState current_engine_state = EEngineState::UNINIT;
 	TestMode test_mode;
+
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
 
 	bool continue_gameplay_loop(SDL_Event const & e);
 	void process_window_event(SDL_Event const & e);
+
+	// sends a command over the message bus.
+	void send_console_command(char const * command, bool send_direct = true);
+
+	void send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void* data, bool send_direct=true);
+
+	void handle_message(Message m);
+
 public:
 	
 	void startup();

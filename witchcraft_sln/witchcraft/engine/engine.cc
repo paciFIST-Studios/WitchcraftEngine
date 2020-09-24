@@ -1,17 +1,31 @@
 #include "engine.h"
 
+
 void Engine::startup()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
 	current_engine_state = EEngineState::STARTUP;
 	if (test_mode.early_exit) return;
 
-	// engine components
+	// engine components ------------------------------------------------------------------------------------------
 	PLOGI << witchcraft::log_strings::message_bus_start;
 	message = std::make_unique<MessageBus>();
+	{
+		// engine also uses the message bus
+		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
+		message->subscribe("engine", cb);
+		engine_channel_id	= message->channel_lookup("engine"	);
+		resource_channel_id = message->channel_lookup("resource");
+		render_channel_id	= message->channel_lookup("render"	);
+		scene_channel_id	= message->channel_lookup("scene"	);
+		console_channel_id	= message->channel_lookup("console"	);
+	}
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
+
+	PLOGI << witchcraft::log_strings::debug_console;
+	console = std::make_unique<Console>(message.get());
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
@@ -19,8 +33,7 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());
 
-	PLOGI << witchcraft::log_strings::debug_console;
-	console = std::make_unique<Console>(message.get());
+	// game components ------------------------------------------------------------------------------------------
 
 	// project loader runs once, and then it's done.  If we need more
 	// things to happen, we can tie it in to the message bus, but
@@ -82,12 +95,14 @@ void Engine::process_window_event(SDL_Event const & e)
 
 			case SDLK_F1:
 				render->toggle_imgui_debug_window();
+				//send_command(render, "debug_window_is_visible=true")
 				break;
 			case SDLK_F2:
-				console->toggle_visibility();
+				send_console_command("draw_console=toggle");
 				break;
 			case SDLK_F3:
 				render->toggle_wireframe_rendering();
+				//send_command(render, "wireframe_mode=true")
 				break;
 			case SDLK_F4:
 				render->switch_triangle_and_quad();
@@ -263,6 +278,50 @@ void Engine::process_window_event(SDL_Event const & e)
 	//} // end gamepad events
 
 }
+
+void Engine::send_console_command(char const * command, bool send_direct)
+{
+	string_buffer = std::string(command);
+	send_message(
+		  console_channel_id
+		, engine_channel_id
+		, MessageType::INVOKE__CONSOLE_COMMAND
+		, static_cast<void*>(&string_buffer) 
+		, send_direct
+	);
+}
+
+void Engine::send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void * data, bool send_direct)
+{
+	Message m { sendTo, sendFrom, type, data };
+	if (send_direct)
+	{
+		message->send_direct_message(m);
+	}
+	else
+	{
+		message->send_message(m);
+	}
+}
+
+void Engine::handle_message(Message m)
+{
+	if (m.type == MessageType::REQUEST__CONSOLE_PTR_NON_OWNER)
+	{
+		message->log_message(m);
+
+		// to, from, type, data
+		send_message(
+			  m.sender
+			, engine_channel_id
+			, MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER
+			, console.get()
+		);
+	}
+
+}
+
+
 
 void Engine::run()
 {

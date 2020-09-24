@@ -11,7 +11,6 @@ void Engine::startup()
 	PLOGI << witchcraft::log_strings::message_bus_start;
 	message = std::make_unique<MessageBus>();
 	{
-		// engine also uses the message bus
 		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
 		message->subscribe("engine", cb);
 		engine_channel_id	= message->channel_lookup("engine"	);

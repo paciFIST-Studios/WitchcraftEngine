@@ -86,6 +86,7 @@ protected:
 
 	// sends a command over the message bus.
 	void send_console_command(char const * command, bool send_direct = true);
+	void send_render_command(char const * command, bool send_direct = true);
 
 	void send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void* data, bool send_direct=true);
 

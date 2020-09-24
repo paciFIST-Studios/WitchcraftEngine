@@ -17,6 +17,9 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	if ( ! init_shaders())	{ return false; }
 	if ( ! init_geometry())	{ return false; }
 
+	// sends a message to engine, asking for ptr to console
+	init_get_debug_console();
+
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
 	
 	renderer_state = ERendererState::UPDATE_OK;
@@ -152,22 +155,39 @@ bool RenderManager::init_imgui()
 	IMGUI_CHECKVERSION();
 	
 	auto imgui_context = ImGui::CreateContext();
-	if (imgui_context == nullptr){
-		return false;}
+	if (imgui_context == nullptr){return false;}
 
 	ImGuiIO &io = ImGui::GetIO();
 	
 	auto sdl_init = ImGui_ImplSDL2_InitForOpenGL(program_window, opengl_context);
-	if (sdl_init == false){
-		return false;}
+	if (sdl_init == false){return false;}
 
 	auto opengl_init = ImGui_ImplOpenGL3_Init(open_gl_version);
-	if (opengl_init == false){
-		return false;}
+	if (opengl_init == false){return false;}
 
 	ImGui::StyleColorsDark();
 
 	return true;
+}
+
+void RenderManager::init_get_debug_console()
+{
+	if (message_bus == nullptr)
+	{
+		PLOGF << "error RenderManager::init_get_debug_console()";
+		return;
+	}
+
+	Message m{
+		  engine_channel_id
+		, render_channel_id
+		, MessageType::REQUEST__CONSOLE_PTR_NON_OWNER
+		, nullptr
+	};
+	
+	message_bus->send_direct_message(m);
+
+	return;
 }
 
 
@@ -273,21 +293,32 @@ bool RenderManager::init_geometry()
 
 void RenderManager::handle_message(Message m)
 {
-	PLOGV << "RenderManager has received a request";
-	Message response;
-	response.recipient = m.sender;
-	response.sender = id;
-	response.type = MessageType::TESTING;
-	response.data = nullptr;
-
-	PLOGV	<< "RenderManager is sending a test response:"
-			<< "\n\tsender: " << response.sender
-			<< "\n\trecipient: " << response.recipient
-			<< "\n\ttype: " << response.type
-			<< "\n\tdata: " << response.data
-			;
-
-	message_bus->send_message(response);
+	if (m.type == MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER)
+	{
+		message_bus->log_message(m);
+		debug_console = static_cast<Console*>(m.data);
+		return;
+	}
+	// else if()
+	else if (m.type == MessageType::INVOKE__RENDER_COMMAND)
+	{
+		auto command_str = static_cast<std::string*>(m.data);
+		if (contains_term(command_str, "render_wireframe="))
+		{
+			if (contains_term(command_str, "true"))
+			{
+				use_wireframe_rendering = true;
+			}
+			else if (contains_term(command_str, "false"))
+			{
+				use_wireframe_rendering = false;
+			}
+			else if (contains_term(command_str, "toggle"))
+			{
+				use_wireframe_rendering = !use_wireframe_rendering;
+			}
+		}
+	}
 }
 
 void RenderManager::paint_imgui_main_menu_bar()
@@ -367,12 +398,14 @@ bool RenderManager::update()
 
 	   
 	paint_imgui_main_menu_bar();
+	
+	// we call this every time, and debug console itself is responsible
+	// for perfoming an early-out, if it's not visible
+	if (debug_console != nullptr)
+	{
+		debug_console->draw("Debug Console");
+	}
 
-	// todo: this check should move inside the console class
-	//if (debug_console->get_is_visible())
-	//{
-	//	debug_console->draw("Debug Console");
-	//}
 
 	// debug window
 	if (draw_imgui_debug_window)

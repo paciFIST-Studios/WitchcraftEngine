@@ -101,8 +101,8 @@ void Engine::process_window_event(SDL_Event const & e)
 				send_console_command("draw_console=toggle");
 				break;
 			case SDLK_F3:
-				render->toggle_wireframe_rendering();
-				//send_command(render, "wireframe_mode=true")
+				//render->toggle_wireframe_rendering();
+				send_render_command("render_wireframe=toggle");
 				break;
 			case SDLK_F4:
 				render->switch_triangle_and_quad();
@@ -287,6 +287,18 @@ void Engine::send_console_command(char const * command, bool send_direct)
 		, engine_channel_id
 		, MessageType::INVOKE__CONSOLE_COMMAND
 		, static_cast<void*>(&string_buffer) 
+		, send_direct
+	);
+}
+
+void Engine::send_render_command(char const * command, bool send_direct)
+{
+	string_buffer = std::string(command);
+	send_message(
+		  render_channel_id
+		, engine_channel_id
+		, MessageType::INVOKE__RENDER_COMMAND
+		, static_cast<void*>(&string_buffer)
 		, send_direct
 	);
 }

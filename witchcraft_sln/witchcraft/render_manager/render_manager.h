@@ -211,7 +211,21 @@ protected:
 
 	bool init_imgui();
 
+	void init_get_debug_console();
+
+
+	inline bool contains_term(std::string const * source, char const * search)
+	{
+		return source->find(search) != std::string::npos;
+	}
+
+
 	void handle_message(Message m);
+
+	unsigned int engine_channel_id = 0;
+	unsigned int render_channel_id = 0;
+
+
 
 public:
 	RenderManager()
@@ -224,6 +238,10 @@ public:
 	{
 		std::function<void(Message)> cb = std::bind(&RenderManager::handle_message, this, std::placeholders::_1);
 		message_bus->subscribe("render", cb);
+
+		// cache these locally, b/c we're likely to use them very often
+		render_channel_id = message_bus->channel_lookup("render");
+		engine_channel_id = message_bus->channel_lookup("engine");
 	}
 
 	bool init_system(

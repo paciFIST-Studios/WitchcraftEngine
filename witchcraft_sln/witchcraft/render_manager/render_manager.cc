@@ -318,6 +318,13 @@ void RenderManager::handle_message(Message m)
 				use_wireframe_rendering = !use_wireframe_rendering;
 			}
 		}
+		else if (contains_term(command_str, "triangle2quad"))
+		{
+			if (contains_term(command_str, "toggle"))
+			{
+				draw_triangle_not_quad = !draw_triangle_not_quad;
+			}
+		}
 	}
 }
 
@@ -345,7 +352,6 @@ void RenderManager::paint_imgui_main_menu_bar()
 		{
 			ImGui::EndMenu();
 		}
-
 	}
 	ImGui::EndMainMenuBar();
 }

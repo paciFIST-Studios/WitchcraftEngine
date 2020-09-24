@@ -101,11 +101,10 @@ void Engine::process_window_event(SDL_Event const & e)
 				send_console_command("draw_console=toggle");
 				break;
 			case SDLK_F3:
-				//render->toggle_wireframe_rendering();
 				send_render_command("render_wireframe=toggle");
 				break;
 			case SDLK_F4:
-				render->switch_triangle_and_quad();
+				send_render_command("triangle2quad=toggle");
 				break;
 
 				// Numeric

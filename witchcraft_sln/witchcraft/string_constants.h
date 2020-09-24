@@ -79,6 +79,8 @@ namespace witchcraft
 		static char const * message_but_stop = "message bus stop";
 		static char const * message_bus_init_failure = "FAILURE! Could not initialize message bus.  Exiting program.";
 
+		static char const * project_loader_start = "project loader start";
+
 		static char const * resource_manager_start	= "resource manager start";
 		static char const * resource_manager_stop	= "resource manager stop";
 		static char const * resource_manager_meta_load = "metadata loaded ";

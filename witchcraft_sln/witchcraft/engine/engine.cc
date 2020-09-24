@@ -38,7 +38,7 @@ void Engine::startup()
 	// project loader runs once, and then it's done.  If we need more
 	// things to happen, we can tie it in to the message bus, but
 	// we'll save that until some project requires it
-	PLOGI << "Project Loader Start";
+	PLOGI << witchcraft::log_strings::project_loader_start;
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();

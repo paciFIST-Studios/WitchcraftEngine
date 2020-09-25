@@ -11,6 +11,8 @@
 #include "../render_manager/render_manager.h"
 #include "../console/console.h"
 
+#include "../gameplay/gameplay_manager.h"
+
 
 struct TestMode
 {
@@ -68,11 +70,12 @@ protected:
 	unsigned int scene_channel_id		= 0;
 	unsigned int console_channel_id		= 0;
 
-	std::unique_ptr<ResourceManager> resource;
-	std::unique_ptr<RenderManager> render;
-	std::unique_ptr<SceneManager2D> scene;
-	std::unique_ptr<Console> console;
-
+	// manager ptrs
+	std::unique_ptr<ResourceManager>	resource	= nullptr;
+	std::unique_ptr<RenderManager>		render		= nullptr;
+	std::unique_ptr<SceneManager2D>		scene		= nullptr;
+	std::unique_ptr<Console>			console		= nullptr;
+	std::unique_ptr<GameplayManager>	gameplay	= nullptr;
 
 	EEngineState current_engine_state = EEngineState::UNINIT;
 	TestMode test_mode;
@@ -80,6 +83,8 @@ protected:
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
+
+	void init_gameplay(ProjectSettings ps);
 
 	bool continue_gameplay_loop(SDL_Event const & e);
 	void process_window_event(SDL_Event const & e);
@@ -102,8 +107,8 @@ public:
 
 	Engine() 
 		: qEngineObject()
-		, current_engine_state(EEngineState::CONSTRUCTED) 
 		, test_mode({ false })
+		, current_engine_state(EEngineState::CONSTRUCTED) 
 	{}
 
 	Engine(EngineInitializer init) 

@@ -41,6 +41,15 @@ void Engine::startup()
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();
+
+	init_gameplay(project_settings);
+}
+
+void Engine::init_gameplay(ProjectSettings ps)
+{
+	PLOGI << witchcraft::log_strings::gameplay_manager_start;
+	gameplay = std::make_unique<GameplayManager>(message.get());
+
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -365,6 +374,21 @@ void Engine::run()
 
 	// - Load objects ---------------------------------------------------------------------------------
 
+	// steps:
+	// get paths from project file
+	// load all paths with resource manager
+	// if paths should be in a specific order, then order them in the manifest
+	// return some kind of package, containing pointers to the objects
+	//		asset objects are still owned by the resource manager
+	// give package to gameplay logic
+	// gameplay logic acts upon package of asset objects
+	// gameplay handles inputs, modifying positions, modifying
+	//		options
+	// when gameplay finishes, system begins shutdown
+	// since asset objects are owned by resource manager, they get torn down
+	//		when resource manager is deconstructed
+
+
 	int buddha_resource_id;
 	qSceneObject * buddha_scene_object = nullptr;
 	// once the project loader exists, we can load files, based on what it says.
@@ -505,14 +529,14 @@ void Engine::run()
 
 	int const controller_idx = 0;
 
+	// owned by gameplay object
 	float const player_speed = 0.4f;
 	float const layer_speed = 0.05f;
-
 	float player_0_x_input = 0.0f;
 	float player_0_y_input = 0.0f;
 	float layer_0_x_offset = 0.0f;
 	float layer_0_y_offset = 0.0f;
-
+	// ! owned by gameplay object
 
 	PLOGI << witchcraft::log_strings::game_loop_start;
 	while (gameplay_loop_is_running)

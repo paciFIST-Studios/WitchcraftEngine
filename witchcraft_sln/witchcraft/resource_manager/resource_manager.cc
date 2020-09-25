@@ -231,7 +231,7 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 				std::string attributeName = childAttribute->name();
 				std::string attributeValue = childAttribute->value();
 
-				// check resourece type
+				// check resource type
 				if (attributeName == witchcraft::xml::resource_type)
 				{
 					// We will allow/force resource managers to implement their own derived
@@ -259,9 +259,8 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 			if (resource)
 			{	
 				// do not add duplicates of the same file
-				if (find_resource_by_id(resource->get_resource_id()))
-					// TODO: figure out duplicates w/o completely loading the file
-					return resource->get_resource_id();
+				if (find_resource_by_id(resource->get_resource_id())) {
+					return resource->get_resource_id(); }
 
 				auto id = resource->get_resource_id();
 				// we must use std::move to change ownership of the unique_ptr
@@ -319,21 +318,7 @@ ResourceManager::ResourceManager(MessageBus * mb)
 
 void ResourceManager::handle_message(Message m)
 {
-	PLOGV << "ResourceManager has received a request";
-	Message response;
-	response.recipient = m.sender;
-	response.sender = id;
-	response.type = MessageType::TESTING;
-	response.data = nullptr;
-
-	PLOGV	<< "ResourceManager is sending a test response:"
-			<< "\n\tsender: " << response.sender
-			<< "\n\trecipient: " << response.recipient
-			<< "\n\ttype: " << response.type
-			<< "\n\tdata: " << response.data
-			;
-	
-	message_bus->send_message(response);
+	message_bus->log_message(m);
 }
 
 int ResourceManager::get_current_scope() const

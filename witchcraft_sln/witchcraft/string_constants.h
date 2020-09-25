@@ -75,6 +75,9 @@ namespace witchcraft
 		static char const * game_loop_start = "game loop start";
 		static char const * game_loop_stop = "game loop stop";
 
+		static char const * gameplay_manager_start = "gameplay manager start";
+		static char const * gameplay_manager_stop  = "gameplay manager stop";
+
 		static char const * message_bus_start = "message bus start";
 		static char const * message_but_stop = "message bus stop";
 		static char const * message_bus_init_failure = "FAILURE! Could not initialize message bus.  Exiting program.";

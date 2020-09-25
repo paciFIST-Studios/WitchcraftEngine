@@ -123,9 +123,6 @@
     <ClCompile Include="scene_manager\scene_manager_2d__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
-    <ClCompile Include="scene_manager\scene_manager_2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="project_loader\project_loader__tst.cc">
       <Filter>Source Files\project_loader</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\scene_manager_2d.cpp">
+      <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +285,9 @@
       <Filter>Source Files\project_loader</Filter>
     </ClInclude>
     <ClInclude Include="engine\engine_id.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\enum_tools.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
   </ItemGroup>

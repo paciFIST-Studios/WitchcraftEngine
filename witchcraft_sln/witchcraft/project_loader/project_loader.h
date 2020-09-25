@@ -147,7 +147,11 @@ public:
 				}
 				else if (has_tag(PL::PATH, line))
 				{
-					// todo
+					auto pos = line.find(PL::PATH) + PL::PATH.size() + 1;
+					auto s = line.substr(pos);
+					// https://www.techiedelight.com/remove-whitespaces-string-cpp/
+					s.erase(std::remove_if(s.begin(), s.end(), std::isspace), s.end());					
+					project_settings.file_paths.emplace_back(s);
 				}
 
 			} // while-loop

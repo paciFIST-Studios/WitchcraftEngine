@@ -102,13 +102,13 @@ private:
 
 	char const * sprite_vertex_shader_src =
 		"#version 330 core/n"
-		"layout(location=0) in vec4 vertex;" // <vec2 pos, vec2 textureCoordinate>
-		"out vec2 texture_coordinates;"
-		"uniform mat4 model;"
-		"uniform mat4 projection;"
-		"void main(){"
-		"texture_coordinates = vertex.zw;"
-		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);}";
+		"layout(location=0) in vec4 vertex;\n" // <vec2 pos, vec2 textureCoordinate>
+		"out vec2 texture_coordinates;\n"
+		"uniform mat4 model;\n"
+		"uniform mat4 projection;\n"
+		"void main(){\n"
+		"texture_coordinates = vertex.zw;\n"
+		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);}\n";
 
 	char const * sprite_fragment_shader_src =
 		"#version 330 core\n"

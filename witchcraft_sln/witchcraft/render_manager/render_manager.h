@@ -102,22 +102,21 @@ private:
 
 	char const * sprite_vertex_shader_src =
 		"#version 330 core/n"
-		"layout(location=0) in vec4 vertex;\n" // <vec2 pos, vec2 textureCoordinate>
-		"out vec2 texture_coordinates;\n"
-		"uniform mat4 model;\n"
-		"uniform mat4 projection;\n"
+		"layout(location=0) in vec2 vertex;\n"
+		"layout(location=1) in vec2 _uv;\n" // texture coordinate
+		"layout(location=2) in vec2 _wh;\n" // screen width and height
+		"out vec2 uv;\n"
 		"void main(){\n"
-		"texture_coordinates = vertex.zw;\n"
-		"gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);}\n";
+		"uv = _uv;\n"
+		"gl_Position = vec4(vertex.x / wh.x -1.0, vertex.y / wh.h - 1.0, 0.0, 1.0);}\n";
 
 	char const * sprite_fragment_shader_src =
 		"#version 330 core\n"
-		"in vec2 texture_coordinates;"
-		"out vec3 color;"
-		"uniform sampler2D image;"
-		"uniform vec3 sprite_color;"
+		"out vec4 color;\n"
+		"in vec2 uv;\n"
+		"uniform sampler2D tex;"
 		"void main(){"
-		"color = vec4(sprite_color, 1.0) * texture(image, texture_coordinates);}";
+		"color = texture(tex, uv);\n}\n";
 
 
 	GLfloat const triangle_verticies[9] = {

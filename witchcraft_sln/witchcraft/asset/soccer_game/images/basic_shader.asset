@@ -1,0 +1,4 @@
+<resources>
+  <resource UUID="7" type="shader" file="asset/soccer_game/images/basic.vs.glsl" scope="1"/>
+  <resource UUID="8" type="shader" file="asset/soccer_game/images/basic.fs.glsl" scope="1"/>
+</resources>

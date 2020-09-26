@@ -196,8 +196,8 @@ bool RenderManager::init_shaders()
 	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
 	//shaders["basic"]->compile(basic_vertex_shader_src, basic_fragment_shader_src);
 
-	shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
-	shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
+	//shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
 	   
 	shaders["basic_perspective"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["basic_perspective"]->compile(basic_perspective_vertex_shader_src, basic_perspective_fragment_shader_src);
@@ -207,7 +207,8 @@ bool RenderManager::init_shaders()
 	// greybox shader
 	// toon shader
 
-	active_shader_program_id = shaders["sprite"]->get_shader_program_id();
+	active_shader_program_id = shaders["basic_perspective"]->get_shader_program_id();
+	//active_shader_program_id = shaders["sprite"]->get_shader_program_id();
 	//active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
@@ -292,10 +293,102 @@ bool RenderManager::init_geometry()
 		glBindVertexArray(0);				// unbind vao
 	}
 
-	// render a 2d sprite on the quad
+	// unified sprite quad w/ texture
 	{
-		int w = 0;
-		int h = 0;
+		// -------------------------------------------------------------------
+		// verts and buffers
+
+		// handles
+		glGenVertexArrays(1, &unified_sprite_quad_vao);
+		glGenBuffers(1, &unified_sprite_quad_vbo);
+		glGenBuffers(1, &unified_sprite_quad_ebo);
+
+		// start work on sprite quad
+		glBindVertexArray(unified_sprite_quad_vao);
+
+		// send data
+		glBindBuffer(GL_ARRAY_BUFFER, unified_sprite_quad_vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER
+			, sizeof(unified_sprite_verts)
+			, &unified_sprite_verts[0]
+			, GL_STATIC_DRAW
+		);
+
+		// send elements
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, unified_sprite_quad_ebo);
+		glBufferData(
+			  GL_ELEMENT_ARRAY_BUFFER
+			, sizeof(unified_sprite_indices)
+			, unified_sprite_indices
+			, GL_STATIC_DRAW
+		);
+
+		// position attribute
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// color attribute
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
+
+		// texture coordinate attribute
+		glVertexAttribPointer(
+			  2					// attribute index
+			, 2					// size
+			, GL_FLOAT			// datatype of elements
+			, GL_FALSE			// normalized
+			, 8 * sizeof(float) // data row breadth: aka: stride
+			, (void*)(6*sizeof(float))// start at offset
+		);
+		glEnableVertexAttribArray(2);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
+		//glBindVertexArray(0);				// unbind vao
+		// note: do not unbind the ebo while vao is active
+
+
+		// ----------------------------------------------------------------
+		// texture
+
+
+
+		glGenTextures(1, &sprite_texture.id);
+		glBindTexture(GL_TEXTURE_2D, sprite_texture.id);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		int w, h, chan;
+		unsigned char * data = stbi_load("assets/buddha.png", &w, &h, &chan, 0);
+		sprite_texture.width = w;
+		sprite_texture.height = h;
+		sprite_texture.color_channels = chan;
+
+		if (data)
+		{
+			glTexImage2D(
+				GL_TEXTURE_2D
+				, 0
+				, GL_RGB
+				, sprite_texture.width
+				, sprite_texture.height
+				, 0
+				, GL_RGB
+				, GL_UNSIGNED_BYTE
+				, data
+			);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		stbi_image_free(data);
+
+
+		// ------------------------------------------------------------------
+		// matricies
+
+		w = 0;
+		h = 0;
 		SDL_GetWindowSize(program_window, &w, &h);
 
 
@@ -333,9 +426,6 @@ bool RenderManager::init_geometry()
 		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix[0][0]);
 		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
-
-
-
 	}
 
 	return true;
@@ -445,9 +535,13 @@ bool RenderManager::update()
 	}
 	else
 	{
-		glBindVertexArray(sprite_quad_vao);
+		//glBindVertexArray(sprite_quad_vao);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0); // unset
+
+		glBindTexture(GL_TEXTURE_2D, sprite_texture.id);
+		glBindVertexArray(unified_sprite_quad_vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0); // unset
 	}
 
 	//render_visible_sprites_back_to_front();

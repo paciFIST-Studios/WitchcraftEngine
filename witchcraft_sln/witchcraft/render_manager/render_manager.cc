@@ -199,6 +199,9 @@ bool RenderManager::init_shaders()
 	shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
 	   
+	shaders["basic_perspective"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["basic_perspective"]->compile(basic_perspective_vertex_shader_src, basic_perspective_fragment_shader_src);
+
 	// wireframe shader <-- is a render mode, not a shader
 	// heatmap shader
 	// greybox shader
@@ -295,15 +298,44 @@ bool RenderManager::init_geometry()
 		int h = 0;
 		SDL_GetWindowSize(program_window, &w, &h);
 
-		// orthagraphic viewing frustum
-		glm::mat4 projection = glm::ortho(
-			  0.0f
-			, (float)w
-			, (float)h
-			, 0.0f
-			,-1.0f
-			, 1.0f
+
+		orthographic_projection_matrix = glm::ortho(
+			  0.0f			//	left
+			, (float)w		//	right
+			, (float)h		//	bottom
+			, 0.0f			//	top
+			,-1.0f			//	near
+			, 1.0f			//	far
 		);
+
+		perspective_projection_matrix = glm::perspective(
+			  glm::radians(45.0f)	// fov
+			, (float)w / (float)h	// aspect ratio
+			, 0.1f					// near
+			, 100.f					// far
+		);
+
+		// start with identity matrix
+		model_matrix = glm::mat4(1.0f);
+		// rotate by -55 degrees around x+ axis
+		model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		// view matrix moves camera back
+		view_matrix = glm::mat4(1.0f);
+		view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
+
+
+		int shader_id = shaders["basic_perspective"]->get_shader_program_id();
+		int model_loc = glGetUniformLocation(shader_id, "model");
+		int view_loc = glGetUniformLocation(shader_id, "view");
+		int proj_loc = glGetUniformLocation(shader_id, "projection");
+
+		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
+		glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix[0][0]);
+		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+
+
+
 	}
 
 	return true;

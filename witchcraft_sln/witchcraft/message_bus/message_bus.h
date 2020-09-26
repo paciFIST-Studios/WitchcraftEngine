@@ -7,9 +7,9 @@
 
 #include "../engine/engine_object.h"
 
-enum MessageType : char
+enum MessageType
 {
-	  UNINITIALIZED
+	  UNINIT
 	, TESTING
 
 	, REQUEST__LOAD_RESOURCE
@@ -43,7 +43,7 @@ enum MessageType : char
 // I don't think we should do this for all enums, but I do think it's a good idea
 // for the messaging system, since that's the foundation of all engine communications
 static std::map<MessageType, char const *> const message_type_enum_to_string {
-	  { MessageType::UNINITIALIZED				, "UNINITIALIZED"				}
+	  { MessageType::UNINIT						, "UNINIT"						}
 	, { MessageType::TESTING					, "TESTING"						}
 	, { MessageType::REQUEST__LOAD_RESOURCE		, "REQUEST__LOAD_RESOURCE"		}
 	, { MessageType::REQUEST__UNLOAD_RESOURCE	, "REQUEST__UNLOAD_RESOURCE"	}

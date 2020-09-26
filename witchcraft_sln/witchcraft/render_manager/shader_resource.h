@@ -3,44 +3,26 @@
 
 #include "../resource_manager/resource.h"
 
-class ShaderResource : public qResource
+/// @file	shader_resource.h
+/// @brief	ShaderResource holds strings to shader files, and ifentifies them
+/// @note	load/unload do nothing, b/c the shader program is built/owned by RenderManager
+/// @date	20200926
+class ShaderResource : public EngineResource
 {
 private:
 protected:
 public:
-	// file type, file path
+	/// @brief	Key=Shader Type, value = filepath
 	std::map<std::string, std::string> shader_files;
 
-	ShaderResource(unsigned int uuid, unsigned int scope)
-		: qResource(uuid, scope, "", EResourceType::RESOURCE_GRAPHIC)
+	/// @note	sets EngineResource::filepath to ""
+	ShaderResource(std::string name, int scope )
+		: EngineResource(name, "", EResourceType::SHADER, scope)
 	{}
 
 	~ShaderResource() override {}
-	void load() override 
-	{ 
-		std::stringstream ss;
-
-		ss << "WARNING: cannot load() a ShaderResouce: {";
-		for (auto&& kvp : shader_files)
-		{
-			ss << "\n\t" << kvp.first << " : " << kvp.second << "";
-		}
-		ss << "};";
-		PLOGW << ss.str();
-	}
-	
-	void unload() override 
-	{
-		std::stringstream ss;
-
-		ss << "WARNING: cannot unload() a ShaderResouce: {";
-		for (auto&& kvp : shader_files)
-		{
-			ss << "\n\t" << kvp.first << " : " << kvp.second << "";
-		}
-		ss << "};";
-		PLOGW << ss.str();
-	}
+	void load() override {};
+	void unload() override {};
 };
 
 #endif // !SHADER_RESOURCE_H

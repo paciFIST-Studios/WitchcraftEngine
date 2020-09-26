@@ -14,7 +14,7 @@
 
 
 // Render == "Graphical" == "Graphics"
-class SDLRenderResource : public qResource
+class SDLRenderResource : public EngineResource
 {
 private:
 protected:
@@ -32,7 +32,7 @@ public:
 	SDL_Surface * surface = nullptr;
 	SDL_Texture * sdl_texture = nullptr;
 
-	// provided by qResource
+	// provided by EngineResource
 	~SDLRenderResource() override;
 	void load() override;
 	void unload() override;

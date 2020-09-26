@@ -3,74 +3,64 @@
 
 #include <string>
 
-#include "plog/Log.h"
-
-#include "../uninitialized_values.h"
 #include "../engine/engine_object.h"
 
-#define SAFE_DELETE(a) { delete(a); (a)=nullptr; }
 
-enum class EResourceType : unsigned char
+enum class EResourceType
 {
-	  RESOURCE_NULL			= 0x01
-	, RESOURCE_GRAPHIC		= 0x02
-	, RESOURCE_ANIMATION	= 0x04
-	, RESOURCE_MOVIE		= 0x08
-	, RESOURCE_AUDIO		= 0x10
-	, RESOURCE_TEXT			= 0x20
-	// 0x40
-	// 0x80
+	  UNINITIALIZED		
+	, IMAGE
+	, SPRITE_ATLAS
+	, SHADER
+	, ANIMATION
+	, MOVIE	
+	, AUDIO	
+	, TEXT		
+	, DIALOGUE
 };
 
-// The qResource class represents a resource object, which is managed by a resource manager
-// to be inhereted from, by other objects
-class qResource : public qEngineObject
+
+///	@file	resource.h
+///	@brief	EngineResource represents an engine resource, which can be loaded or unloaded
+///	@note	all EngineResource objects are owned by ResourceManager
+///	@author	Ellie Barrett
+///	@data	20200925
+class EngineResource : public EngineObjectBase
 {
 private:
 protected:
-	unsigned int _uuid;
-	unsigned int _scope;
-	std::string _file_name;
-	EResourceType _type;
-
 public:
-	
-	unsigned int get_resource_id() const;
-	
-	unsigned int get_scope_id() const;
 
-	std::string get_file_name() const;
-
-	EResourceType get_resource_type() const;
+	std::string   const name;
+	std::string   const filepath;
+	EResourceType const type;
+	int 		  const scope;
+	
 
 	// these are working in the fashion of an IResource interface
-	virtual ~qResource()
-	{ 
-		PLOGV 
-			<< "resource id: " << _uuid 
-			<< "  file: " << _file_name 
-			<< "  qResource::~qResource()";
-	}
-	virtual void load()   
-	{ 
-		PLOGV 
-			<< "resource id: " << _uuid 
-			<< "  file: " << _file_name 
-			<< "  qResource::load()";
-	}
-	virtual void unload() 
-	{ 
-		PLOGV
-			<< "resource id: " << _uuid
-			<< "  file: " << _file_name
-			<< "  qResource::unload()";
-	}
-	   	 
-	qResource();
+	virtual ~EngineResource() {}
+	virtual void load()  {}
+	virtual void unload(){}
 
-	qResource(unsigned int ID, unsigned int Scope, std::string const & FileName
-		, EResourceType ResourceType);
 
+	EngineResource()
+		: name("uninit")
+		, filepath("uninit")
+		, type(EResourceType::UNINITIALIZED)
+		, scope(-1)
+	{}
+
+	EngineResource(
+		  std::string const & name
+		, std::string const & filepath
+		, EResourceType type
+		, int scope
+	)
+		: name(name)
+		, filepath(filepath)
+		, type(type)
+		, scope(scope)
+	{}
 };
 
 #endif // !RESOURCE_H

@@ -21,11 +21,12 @@
 		TEST_CASE(" SDLRenderResource::SDLRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
 			int const scope = 667;
+			std::string const name = "buddha";
 			std::string const filepath = witchcraft::configuration::buddha_png;
 			EResourceType resource_type = EResourceType::IMAGE;
 
 			// the SDLRenderResource sets its own resource type
-			auto rr = SDLRenderResource(0, scope, filepath);
+			auto rr = SDLRenderResource(name, filepath, scope);
 
 			REQUIRE(rr.filepath == filepath);
 

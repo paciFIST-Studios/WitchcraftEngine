@@ -100,9 +100,31 @@ private:
 	char const * open_gl_version = "#version 330 core";
 
 
+	char const * basic_perspective_vertex_shader_src =
+		"#version 330 core\n"
+		"layout(location=0) in vec3 _pos;\n"
+		"layout(location=1) in vec2 _uv_tex;\n"
+		"out vec2 uv_tex;\n"
+		"uniform mat4 model;\n"
+		"uniform mat4 view;\n"
+		"uniform mat4 projection;\n"
+		"void main(){\n"
+		"gl_position = projection * view * model * vec4(_pos, 1.0f);\n"
+		"uv_tex = vec2(_uv_tex.x, _uv_tex.y);\n}"
+		;
+
+	char const * basic_perspective_fragment_shader_src = 
+		"#version 330 core\n"
+		"out vec4 frag_color;\n"
+		"in vec2 uv_tex;\n"
+		"uniform sampler2D tex;\n"
+		"void main(){\n"
+		"frag_color = texture(tex, uv_tex);\n}"		
+		;
+
 	char const * sprite_vertex_shader_src =
-		"#version 330 core/n"
-		"layout(location=0) in vec2 vertex;\n"
+		"#version 330 core\n"
+		"layout(location=0) in vec3 vertex;\n"
 		"layout(location=1) in vec2 _uv;\n" // texture coordinate
 		"layout(location=2) in vec2 _wh;\n" // screen width and height
 		"out vec2 uv;\n"
@@ -118,6 +140,10 @@ private:
 		"void main(){"
 		"color = texture(tex, uv);\n}\n";
 
+	glm::mat4 model_matrix;
+	glm::mat4 view_matrix;
+	glm::mat4 orthographic_projection_matrix;
+	glm::mat4 perspective_projection_matrix;
 
 	GLfloat const triangle_verticies[9] = {
 		//  x	   y	z

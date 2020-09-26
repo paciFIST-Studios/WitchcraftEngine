@@ -3,10 +3,9 @@
 std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
-	unsigned int	uuid			= 0;
 	unsigned int	scope			= 0;
-	std::string		file_name		= "";
-	std::string		friendly_name	= "";
+	std::string		filepath		= "";
+	std::string		name			= "";
 
 	bool is_sprite_atlas = false;
 	unsigned int sprite_atlas_tile_width  = 0;
@@ -17,19 +16,15 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 		std::string _name  = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::UUID)
+		if (_name == witchcraft::xml::NAME)
 		{
 			// stoi stands for string-to-integer, and is used for
 			// parsing a string to an int
-			uuid = std::stoi(_value);
+			name = _value;
 		}
-		else if (_name == witchcraft::xml::FILE)
+		else if (_name == witchcraft::xml::FILEPATH)
 		{
-			file_name = _value;
-		}
-		else if (_name == witchcraft::xml::NAME)
-		{
-			friendly_name = _value;
+			filepath = _value;
 		}
 		else if (_name == witchcraft::xml::SCOPE)
 		{
@@ -51,7 +46,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 		}
 	}
 
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << filepath;
 
 	// note: we're going to make something derived from EngineResourceBase
 	std::unique_ptr<EngineResourceBase> resource;
@@ -59,9 +54,9 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 	if (is_sprite_atlas)
 	{
 		auto sar = std::make_unique<SpriteAtlasResource>(
-			  uuid
+			  name
+			, filepath
 			, scope
-			, file_name
 			, sprite_atlas_tile_width
 			, sprite_atlas_tile_height
 			);
@@ -71,7 +66,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 		{
 			sar->add_animation(anim.name, anim);
 			PLOGV << witchcraft::log_strings::resource_manager_meta_load 
-				<< "{ atlas=\"" << friendly_name << "\"  anim=\"" << anim.name << "\" }";
+				<< "{ atlas=\"" << filepath << "\"  anim=\"" << anim.name << "\" }";
 				// NOTE: in CPP20 we can do the following, with a more python style
 				// << std::format("atlas=\"{0}\}    anim=\"{1}\"", friendly_name, anim.name);
 		}
@@ -80,7 +75,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 	}
 	else // create a basic render resource
 	{
-		auto rr = std::make_unique<SDLRenderResource>(uuid, scope, file_name);
+		auto rr = std::make_unique<SDLRenderResource>(name, filepath, scope);
 		resource = std::move(rr);
 	}
 	
@@ -126,7 +121,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 			{
 				type = _value;
 			}
-			else if (_name == witchcraft::xml::FILE)
+			else if (_name == witchcraft::xml::FILEPATH)
 			{
 				path = _value;
 			}
@@ -191,25 +186,35 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 
 
 // returns a NON-OWNING ptr
-EngineResourceBase * ResourceManager::find_resource_by_id(unsigned int id)
+EngineResourceBase * ResourceManager::find_resource(unsigned int id, int scope)
 {
 	if (resource_count == 0){ return nullptr; }
 
 	// iterate through all of the scene ids
-	for (auto&& resource_kvp : resource_map)
+	for (auto&& resource : resource_map[scope])
 	{
-		// iterate through the vector associated w/ each id
-		for (auto&& element_unique_ptr : (resource_kvp.second))
+		if (resource->id == id)
 		{
-			auto element = element_unique_ptr.get();
-			if (element->id == id)
-			{
-				return element;
-			}
+			return resource.get();
 		}
 	}
 	
 	// we went through all existing resource without finding a match
+	return nullptr;
+}
+
+EngineResourceBase * ResourceManager::find_resource(char const * name, int scope)
+{
+	if (name == nullptr) { return nullptr; }
+
+	for (auto&& resource : resource_map[scope])
+	{
+		if (resource->name.find(name) != std::string::npos)
+		{
+			return resource.get();
+		}
+	}
+
 	return nullptr;
 }
 
@@ -274,7 +279,7 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 					// versions of EngineResourceBase.  Those managers will create the resource,
 					// and then give us a unique_ptr<EngineResourceBase> pointer back, and this 
 					// scope will need to add the EngineResourceBase pointer to the resource list.
-					if (_value == "graphic")
+					if (_value == "image")
 					{
 						resource = build_render_resource_from_xml(*child);
 						break;
@@ -305,7 +310,7 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 			if (resource)
 			{	
 				// do not add duplicates of the same file
-				if (find_resource_by_id(resource->id)) {
+				if (find_resource(resource->id, resource->scope)) {
 					return resource.get(); }
 
 				auto scope = resource->scope;

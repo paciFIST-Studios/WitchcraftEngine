@@ -34,16 +34,13 @@ struct DebugOptions
 };
 
 
-enum class EEngineState : unsigned char
+enum class EEngineState
 {
-	  UNINIT		= 0x01
-	, CONSTRUCTED	= 0x02
-	, STARTUP		= 0x04
-	, RUNNING		= 0x08
-	, SHUTDOWN		= 0x10
-	// 0x20
-	// 0x40
-	// 0x80
+	  UNINITIALIZED
+	, CONSTRUCTED
+	, STARTUP
+	, RUNNING
+	, SHUTDOWN
 };
 
 struct EngineInitializer
@@ -77,7 +74,7 @@ protected:
 	std::unique_ptr<Console>			console		= nullptr;
 	std::unique_ptr<GameplayManager>	gameplay	= nullptr;
 
-	EEngineState current_engine_state = EEngineState::UNINIT;
+	EEngineState current_engine_state = EEngineState::UNINITIALIZED;
 	TestMode test_mode;
 
 

@@ -12,8 +12,10 @@
 #include "../engine/engine_object.h"
 #include "resource.h"
 
+
 #include "../message_bus/message_bus.h"
 
+#include "../render_manager/shader_resource.h"
 #include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager.h"
 
@@ -38,6 +40,7 @@ protected:
 	std::map<unsigned int, std::vector<std::unique_ptr<qResource>>> resource_map;
 
 	std::unique_ptr<qResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<qResource> build_shader_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);

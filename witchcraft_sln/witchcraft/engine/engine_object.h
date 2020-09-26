@@ -1,20 +1,18 @@
 #ifndef ENGINE_OBJECT_H
 #define ENGINE_OBJECT_H
 
-// Common includes
 #include "plog/Log.h"
 
 #include "engine_id.h"
-#include "../uninitialized_values.h"
 
-class qEngineObject
+class EngineObjectBase
 {
 private:
 protected:
 public:
 	unsigned int const id;
 
-	qEngineObject()
+	EngineObjectBase()
 		: id(witchcraft::engine::get_engine_id())
 	{}
 };

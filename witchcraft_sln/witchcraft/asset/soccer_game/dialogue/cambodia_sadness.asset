@@ -13,7 +13,7 @@
 			<choose_no_start/>
 
 			<choose_start>
-				<says speaker="b" portrait=true text="I went to Cambodia once. I was a tourist."/>
+				<says speaker="b" portrait="true" text="I went to Cambodia once. I was a tourist."/>
 				<says speaker="b" text="I stopped to eat at this restaurant--it was a touristy place near Angkor Wat."/>
 				<says speaker="b" text="A kid came up to me and asked me to buy some trinkets they were selling."/>
 				<says speaker="b" text="I was so tired and hungry, that I just couldn't handle another conversation."/>

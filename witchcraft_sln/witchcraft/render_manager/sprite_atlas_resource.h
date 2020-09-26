@@ -33,23 +33,23 @@ protected:
 public:
 	   
 	// also init base class
-	SpriteAtlasResource() : SDLRenderResource()
-	, sprite_width(uninit::UINT)
-	, sprite_height(uninit::UINT)
+	SpriteAtlasResource(
+	) 
+		: SDLRenderResource()
+		, sprite_width(0)
+		, sprite_height(0)
 	{}
 	SpriteAtlasResource(
-		  unsigned int UUID
+		  std::string const & name
+		, std::string const & filepath
 		, unsigned int scope
-		, std::string const & file_name
 		, unsigned int tile_width
 		, unsigned int tile_height
 	)
-		// initializer list
-		: SDLRenderResource(UUID, scope, file_name)
+		: SDLRenderResource(name, filepath, scope)
 		, sprite_width(tile_width)
 		, sprite_height(tile_height)
-	{
-	}
+	{}
 
 
 

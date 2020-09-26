@@ -80,11 +80,11 @@ SDLRenderResource::SDLRenderResource()
 {}
 
 SDLRenderResource::SDLRenderResource(
-	  unsigned int ID
-	, unsigned int scope
-	, std::string const & file_name)
+	  std::string const & name
+	, std::string const & filepath
+	, unsigned int scope)
 	// -- end args
-	: EngineResourceBase("" , file_name, EResourceType::IMAGE, scope)
+	: EngineResourceBase(name , filepath, EResourceType::IMAGE, scope)
 	, current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 	// -- end initializer
 {

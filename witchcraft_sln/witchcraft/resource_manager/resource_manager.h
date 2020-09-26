@@ -31,7 +31,7 @@ private:
 protected:
 
 	// Also the "scene id" of the current scene
-	unsigned int current_scope = uninit::UINT;
+	unsigned int current_scope = 0;
 
 	// total resources managed
 	unsigned int resource_count = 0;
@@ -59,8 +59,7 @@ public:
 	// clears all resources and scopes
 	void empty_cache();
 
-	// loads resources from xml
-	int load_from_xml_file(std::string const & file);
+	qResource * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

@@ -111,7 +111,7 @@ std::unique_ptr<qResource> ResourceManager::build_shader_resource_from_xml(XML::
 
 	auto resource = std::make_unique<ShaderResource>(uuid, scope);
 
-	for (XML::xml_node<>* child = xml.first_node(); child; child = child->next_sibling())
+	for (XML::xml_node<>* child = xml.first_node(); child; child =child->next_sibling())
 	{
 		std::string type = "";
 		std::string path = "";
@@ -245,12 +245,12 @@ void ResourceManager::empty_cache()
 	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-int ResourceManager::load_from_xml_file(std::string const & file)
+qResource * ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 	{
 		PLOGE << "ERROR: FILE DOES NOT EXIST; path: \"" << file << "\"";
-		return -1;
+		return nullptr;
 	}
 
 	XML::file<> config_file(file.c_str());
@@ -312,18 +312,18 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 			{	
 				// do not add duplicates of the same file
 				if (find_resource_by_id(resource->get_resource_id())) {
-					return resource->get_resource_id(); }
+					return resource.get(); }
 
-				auto id = resource->get_resource_id();
+				auto scope = resource->get_scope_id();
 				// we must use std::move to change ownership of the unique_ptr
-				resource_map[resource->get_scope_id()].push_back(std::move(resource));
+				resource_map[scope].push_back(std::move(resource));
 				resource_count++;
-				return id;
+				return resource_map[scope].back().get();
 			}
 		}
 	}
 	
-	return -1;
+	return nullptr;
 }
 
 // WARN: Must be called for each scene change

@@ -20,35 +20,33 @@
 // TODO: Create memory budgets for different scenes, systems, and data 
 
 /// @file	resource_manager.h
+/// @brief	ResourceManager owns all engine resources, and manages their loading/unloading
+///	@note	resource "scope" is used to determine which resources should be loaded when
+///	@date	20200926
 class ResourceManager : public EngineObjectBase
 {
 private:
 protected:
 
-	// Also the "scene id" of the current scene
-	unsigned int current_scope = 0;
-
-	// total resources managed
+	int current_scope = 0;
 	unsigned int resource_count = 0;
 
 	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
-	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
 	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
 	MessageBus * message_bus = nullptr;
-
 	void handle_message(Message m);
 
 public:
 
-
-	// find resource by id.  return nullptr if not found
-	EngineResourceBase * find_resource_by_id(unsigned int UID);
+	EngineResourceBase * find_resource(unsigned int ID, int scope);
+	EngineResourceBase * find_resource(char const * name, int scope);
 
 	// clears all resources and scopes
 	void empty_cache();

@@ -50,6 +50,11 @@ void Engine::init_gameplay(ProjectSettings ps)
 	PLOGI << witchcraft::log_strings::gameplay_manager_start;
 	gameplay = std::make_unique<GameplayManager>(message.get());
 
+	for (auto&& path : ps.file_paths)
+	{
+		resource->load_from_xml_file(path);
+	}
+
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -398,13 +403,12 @@ void Engine::run()
 		// and we load all the assets we'll ever use in the game, right now.
 		// any final setup work should happen here
 
-		auto id = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
-		auto rr = resource->find_resource_by_id(id);
+		auto rr = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
 		auto render_resource = static_cast<SDLRenderResource*>(rr);
 		render_resource->bind_renderer(render->get_active_renderer());
 		render_resource->load();
 		buddha_scene_object = render->register_render_object(render_resource);
-		buddha_resource_id = id;
+		buddha_resource_id = rr->id;
 	}
 
 	//// pitch (field)

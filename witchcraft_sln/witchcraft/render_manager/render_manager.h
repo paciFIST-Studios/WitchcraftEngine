@@ -25,9 +25,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 // image loader lib
-//#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 //#define STBI_FAILURE_USERMSG
-//#include "../stb_image.h"
+#include "../stb_image.h"
 
 
 // rapidxml
@@ -81,7 +81,7 @@ struct OpenGLTexture
 	int width;
 	int height;
 	int color_channels;
-	unsigned int texture_id;
+	unsigned int id;
 };
 
 class RenderManager : public EngineObjectBase
@@ -109,7 +109,7 @@ private:
 		"uniform mat4 view;\n"
 		"uniform mat4 projection;\n"
 		"void main(){\n"
-		"gl_position = projection * view * model * vec4(_pos, 1.0f);\n"
+		"gl_Position = projection * view * model * vec4(_pos, 1.0f);\n"
 		"uv_tex = vec2(_uv_tex.x, _uv_tex.y);\n}"
 		;
 
@@ -140,6 +140,7 @@ private:
 		"void main(){"
 		"color = texture(tex, uv);\n}\n";
 
+	OpenGLTexture sprite_texture;
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
 	glm::mat4 orthographic_projection_matrix;
@@ -175,9 +176,25 @@ private:
 		, 1, 2, 3 // t2
 	};
 
+	GLfloat const unified_sprite_verts[32] = {
+		  // pos				// color			// uv
+		  0.5f, 0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// top right
+		, 0.5f,-0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// bttm right
+		,-0.5f,-0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bttm left
+		,-0.5f, 0.5f, 0.0f,		1.0f, 1.0f, 0.0f,	0.0f, 1.0f	// top left
+	};
+	GLuint const unified_sprite_indices[6] = {
+		  0, 1, 3
+		, 1, 2, 3
+	};
+
 	GLuint sprite_quad_vao;	// vertex array object
 	GLuint sprite_quad_vbo;	// vertex buffer object
 	GLuint sprite_quad_ebo; // element buffer object
+
+	GLuint unified_sprite_quad_vao;
+	GLuint unified_sprite_quad_vbo;
+	GLuint unified_sprite_quad_ebo;
 
 	glm::mat4 projection_matrix;
 

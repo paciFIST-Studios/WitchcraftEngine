@@ -1,6 +1,6 @@
 <resources version="0.1">
   <!-- Sprite Atlas, animations using this atlas will refer to it by UUID -->
-  <resource UUID="9" type="graphic" file="asset/soccer_game/images/player_a.png" scope="1" name="player_a" sprite_atlas="16,16">
+  <resource name="person_a_sprite_atlas" type="image" file="asset/soccer_game/images/player_a.png" scope="1" sprite_atlas="16,16">
 
     <!-- animations -->
     <!-- running -->
@@ -33,7 +33,7 @@
 
     <!-- idle, misc -->
     <animation_2d name="idle_blink" sequence="96,97"                       ms_per_frame="10"></animation_2d>
-    <animation_2d  name="shout"     sequence="104,105,106,107,108,109,110" ms_per_frame="10"></animation_2d>
+    <animation_2d name="shout"     sequence="104,105,106,107,108,109,110" ms_per_frame="10"></animation_2d>
 
     <!-- keeper animations -->
     <animation_2d name="keeper_front_dive_left"  sequence="112,113,114,115,116" ms_per_frame="10"></animation_2d>

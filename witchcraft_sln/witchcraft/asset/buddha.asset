@@ -1,1 +1,3 @@
-<resources><resource UUID="2" type="graphic" file="asset/buddha.png" scope="0">Buddha</resource></resources>
+<resources>
+  <resource name="buddha" type="image" filepath="asset/buddha.png" scope="0"/>
+</resources>

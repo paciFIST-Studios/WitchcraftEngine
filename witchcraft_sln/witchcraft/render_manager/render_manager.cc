@@ -288,6 +288,24 @@ bool RenderManager::init_geometry()
 		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
 		glBindVertexArray(0);				// unbind vao
 	}
+
+	// render a 2d sprite on the quad
+	{
+		int w = 0;
+		int h = 0;
+		SDL_GetWindowSize(program_window, &w, &h);
+
+		// orthagraphic viewing frustum
+		glm::mat4 projection = glm::ortho(
+			  0.0f
+			, (float)w
+			, (float)h
+			, 0.0f
+			,-1.0f
+			, 1.0f
+		);
+	}
+
 	return true;
 }
 

@@ -10,22 +10,20 @@
 #include "../imgui/imgui.h"
 
 
-enum EConsoleState : unsigned char
+enum class EConsoleState : unsigned char
 {
 	// completely uninitialized
-	  UNINIT			= 0x01
+	  UNINIT
 	// ctor has been called
-	, CONSTRUCTED		= 0x02
+	, CONSTRUCTED
 	// has ptr to message bus, and ! nullptr
-	, CONNECTED			= 0x04
+	, CONNECTED
 	// can send message succcessfully
-	, CAN_SEND			= 0x08
+	, CAN_SEND
 	// can receive message successfully
-	, CAN_RECEIVE		= 0x10
+	, CAN_RECEIVE
 	// is set to draw self to screen
-	, DRAWING			= 0x20
-	// 0x40
-	// 0x80
+	, DRAWING
 };
 
 class Console : public EngineObjectBase

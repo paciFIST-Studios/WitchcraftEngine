@@ -3,48 +3,45 @@
 std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
-	unsigned int	resource_id		= uninit::UINT;
-	unsigned int	resource_scope	= uninit::UINT;
-	std::string		file_name		= std::string(uninit::CSTRING);
-	std::string		friendly_name = std::string(uninit::CSTRING);
+	unsigned int	uuid			= 0;
+	unsigned int	scope			= 0;
+	std::string		file_name		= "";
+	std::string		friendly_name	= "";
 
 	bool is_sprite_atlas = false;
-	unsigned int sprite_atlas_tile_width  = uninit::UINT;
-	unsigned int sprite_atlas_tile_height = uninit::UINT;
+	unsigned int sprite_atlas_tile_width  = 0;
+	unsigned int sprite_atlas_tile_height = 0;
 
-	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
-		element_attribute;
-		element_attribute = element_attribute->next_attribute()
-	)
+	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string attribute_name  = element_attribute->name();
-		std::string attribute_value = element_attribute->value();
+		std::string _name  = attr->name();
+		std::string _value = attr->value();
 
-		if (attribute_name == witchcraft::xml::uuid)
+		if (_name == witchcraft::xml::UUID)
 		{
 			// stoi stands for string-to-integer, and is used for
 			// parsing a string to an int
-			resource_id = std::stoi(attribute_value);
+			uuid = std::stoi(_value);
 		}
-		else if (attribute_name == witchcraft::xml::file_name)
+		else if (_name == witchcraft::xml::FILE)
 		{
-			file_name = attribute_value;
+			file_name = _value;
 		}
-		else if (attribute_name == witchcraft::xml::resource_name)
+		else if (_name == witchcraft::xml::NAME)
 		{
-			friendly_name = attribute_value;
+			friendly_name = _value;
 		}
-		else if (attribute_name == witchcraft::xml::resource_scope)
+		else if (_name == witchcraft::xml::SCOPE)
 		{
-			resource_scope = std::stoi(attribute_value);
+			scope = std::stoi(_value);
 		}
-		else if (attribute_name == witchcraft::xml::sprite_atlas)
+		else if (_name == witchcraft::xml::sprite_atlas)
 		{
 			// NOTE: format is: sprite_atlas="w,h"
 			// if we find this string, and it's formatted correctly, then:
 			// we count it as a sprite atlas
 			// we extract the tile size from the string
-			auto atlas_vec = utility::tokenize_string(attribute_value, witchcraft::xml::delimiter);
+			auto atlas_vec = utility::tokenize_string(_value, witchcraft::xml::delimiter);
 			if (atlas_vec.size() == 2)
 			{
 				sprite_atlas_tile_width  = std::stoi(atlas_vec[0]);
@@ -62,8 +59,8 @@ std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::
 	if (is_sprite_atlas)
 	{
 		auto sar = std::make_unique<SpriteAtlasResource>(
-			  resource_id
-			, resource_scope
+			  uuid
+			, scope
 			, file_name
 			, sprite_atlas_tile_width
 			, sprite_atlas_tile_height
@@ -83,11 +80,62 @@ std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::
 	}
 	else // create a basic render resource
 	{
-		auto rr = std::make_unique<SDLRenderResource>(resource_id, resource_scope, file_name);
+		auto rr = std::make_unique<SDLRenderResource>(uuid, scope, file_name);
 		resource = std::move(rr);
 	}
 	
 	return std::move(resource);
+}
+
+std::unique_ptr<qResource> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
+{
+	unsigned int uuid  = 0;
+	unsigned int scope = 0;
+
+	std::map<std::string, std::string> shader_files;
+
+	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
+	{
+		std::string _name = attr->name();
+		std::string _value = attr->value();
+
+		if (_name == witchcraft::xml::UUID)
+		{
+			uuid = std::stoi(_value);
+		}
+		else if (_name == witchcraft::xml::SCOPE)
+		{
+			scope = std::stoi(_value);
+		}
+	}
+
+	auto resource = std::make_unique<ShaderResource>(uuid, scope);
+
+	for (XML::xml_node<>* child = xml.first_node(); child; child = child->next_sibling())
+	{
+		std::string type = "";
+		std::string path = "";
+
+		for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
+		{
+			std::string _name = attr->name();
+			std::string _value = attr->value();
+
+			if (_name == witchcraft::xml::TYPE)
+			{
+				type = _value;
+			}
+			else if (_name == witchcraft::xml::FILE)
+			{
+				path = _value;
+			}
+		}
+
+		resource->shader_files[type] = path;
+	}
+
+	std::unique_ptr<qResource> shader_resource = std::move(resource);
+	return std::move(shader_resource);
 }
 
 
@@ -110,25 +158,22 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 	unsigned int				animation_ms_per_frame  = uninit::UINT;
 	std::vector<unsigned int>	frame_index_sequence    ;
 
-	for (XML::xml_attribute<> * element_attribute = xml.first_attribute();
-		element_attribute;
-		element_attribute = element_attribute->next_attribute()
-		)
+	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string attr_name = element_attribute->name();
-		std::string attr_value = element_attribute->value();
+		std::string _name = attr->name();
+		std::string _value = attr->value();
 
-		if (attr_name == witchcraft::xml::resource_name)
+		if (_name == witchcraft::xml::NAME)
 		{
-			animation_name = attr_value;
+			animation_name = _value;
 		}
-		else if (attr_name == witchcraft::xml::animation_2d_ms_per_frame)
+		else if (_name == witchcraft::xml::animation_2d_ms_per_frame)
 		{
-			animation_ms_per_frame = std::stoi(attr_value);
+			animation_ms_per_frame = std::stoi(_value);
 		}
-		else if (attr_name == witchcraft::xml::animation_2d_sequence)
+		else if (_name == witchcraft::xml::animation_2d_sequence)
 		{
-			auto sv = utility::tokenize_string(attr_value, witchcraft::xml::delimiter);
+			auto sv = utility::tokenize_string(_value, witchcraft::xml::delimiter);
 			for (auto element : sv)
 			{
 				frame_index_sequence.push_back(std::stoi(element));
@@ -223,32 +268,39 @@ int ResourceManager::load_from_xml_file(std::string const & file)
 			std::unique_ptr<qResource> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
-			for (XML::xml_attribute<> * childAttribute = child->first_attribute(); 
-				childAttribute; 
-				childAttribute = childAttribute->next_attribute()
-			)
+			for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
 			{
-				std::string attributeName = childAttribute->name();
-				std::string attributeValue = childAttribute->value();
+				std::string _name = attr->name();
+				std::string _value = attr->value();
 
 				// check resource type
-				if (attributeName == witchcraft::xml::resource_type)
+				if (_name == witchcraft::xml::TYPE)
 				{
 					// We will allow/force resource managers to implement their own derived
 					// versions of qResource.  Those managers will create the resource,
 					// and then give us a unique_ptr<qResource> pointer back, and this 
 					// scope will need to add the qResource pointer to the resource list.
-					if (attributeValue == "graphic")
+					if (_value == "graphic")
 					{
 						resource = build_render_resource_from_xml(*child);
 						break;
 					}
-					else if (attributeValue == "audio")
+					else if (_value == "shader")
+					{
+						resource = build_shader_resource_from_xml(*child);
+						break;
+					}
+					else if (_value == "audio")
 					{
 						// resource = _audio_manager->load_resource_from_xml(child);
 						// break;
 					}
-					else if (attributeValue == "text")
+					else if (_value == "dialogue")
+					{
+						// resource = build_dialogue_resource_from_xml(*child);
+						// break;
+					}
+					else if (_value == "text")
 					{
 						// resource = _config_manager->load_resource_from_xml(child);
 						// break;

@@ -1,5 +1,5 @@
-#ifndef RENDER_RESOURCE_H
-#define RENDER_RESOURCE_H
+#ifndef SDL_RENDER_RESOURCE_H
+#define SDL_RENDER_RESOURCE_H
 
 #include <tuple>
 
@@ -41,9 +41,9 @@ public:
 
 	SDLRenderResource();
 	SDLRenderResource(
-		  unsigned int ID
+		  std::string const & name
+		, std::string const & filepath
 		, unsigned int scope
-		, std::string const & file_name
 	);
 
 	bool is_loaded() const;
@@ -57,4 +57,4 @@ public:
 	}	
 };
 
-#endif // RENDER_RESOURCE_H
+#endif // !SDL_RENDER_RESOURCE_H

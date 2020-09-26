@@ -12,7 +12,7 @@
 //
 //#include "../resource_manager/resource.h"
 //
-//class OpenGLTexture : public qResource
+//class OpenGLTexture : public EngineResource
 //{
 //private:
 //protected:					// uninit values

@@ -147,12 +147,12 @@
     <ClCompile Include="render_manager\render_object_2d.cc" />
     <ClCompile Include="render_manager\render_object_2d__tst.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
+    <ClCompile Include="render_manager\shader_resource__tst.cc" />
     <ClCompile Include="render_manager\sld_render_resource.cc" />
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc" />
     <ClCompile Include="render_manager\sprite_animation_2d__tst.cc" />
     <ClCompile Include="render_manager\sprite_object_2d.cc" />
     <ClCompile Include="render_manager\sprite_object_2d__tst.cc" />
-    <ClCompile Include="resource_manager\resource.cpp" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
     <ClCompile Include="resource_manager\resource__tst.cc" />

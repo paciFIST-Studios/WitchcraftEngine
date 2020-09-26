@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<EngineResource> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	uuid			= 0;
@@ -53,8 +53,8 @@ std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// note: we're going to make something derived from qResource
-	std::unique_ptr<qResource> resource;
+	// note: we're going to make something derived from EngineResource
+	std::unique_ptr<EngineResource> resource;
 
 	if (is_sprite_atlas)
 	{
@@ -87,7 +87,7 @@ std::unique_ptr<qResource> ResourceManager::build_render_resource_from_xml(XML::
 	return std::move(resource);
 }
 
-std::unique_ptr<qResource> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<EngineResource> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
 {
 	unsigned int uuid  = 0;
 	unsigned int scope = 0;
@@ -109,7 +109,8 @@ std::unique_ptr<qResource> ResourceManager::build_shader_resource_from_xml(XML::
 		}
 	}
 
-	auto resource = std::make_unique<ShaderResource>(uuid, scope);
+
+	auto resource = std::make_unique<ShaderResource>("shader", scope);
 
 	for (XML::xml_node<>* child = xml.first_node(); child; child =child->next_sibling())
 	{
@@ -134,7 +135,7 @@ std::unique_ptr<qResource> ResourceManager::build_shader_resource_from_xml(XML::
 		resource->shader_files[type] = path;
 	}
 
-	std::unique_ptr<qResource> shader_resource = std::move(resource);
+	std::unique_ptr<EngineResource> shader_resource = std::move(resource);
 	return std::move(shader_resource);
 }
 
@@ -190,16 +191,9 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 
 
 // returns a NON-OWNING ptr
-qResource * ResourceManager::find_resource_by_id(unsigned int UUID)
+EngineResource * ResourceManager::find_resource_by_id(unsigned int id)
 {
 	if (resource_count == 0){ return nullptr; }
-
-	if (UUID == -1)
-	{ 
-		PLOGE << "NO RESOURCE FOUND!"; 
-		return nullptr;
-	}
-
 
 	// iterate through all of the scene ids
 	for (auto&& resource_kvp : resource_map)
@@ -208,7 +202,7 @@ qResource * ResourceManager::find_resource_by_id(unsigned int UUID)
 		for (auto&& element_unique_ptr : (resource_kvp.second))
 		{
 			auto element = element_unique_ptr.get();
-			if (element->get_resource_id() == UUID)
+			if (element->id == id)
 			{
 				return element;
 			}
@@ -245,7 +239,7 @@ void ResourceManager::empty_cache()
 	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-qResource * ResourceManager::load_from_xml_file(std::string const & file)
+EngineResource * ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 	{
@@ -265,7 +259,7 @@ qResource * ResourceManager::load_from_xml_file(std::string const & file)
 		// enumerate objects
 		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
 		{
-			std::unique_ptr<qResource> resource = nullptr;
+			std::unique_ptr<EngineResource> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
 			for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
@@ -277,9 +271,9 @@ qResource * ResourceManager::load_from_xml_file(std::string const & file)
 				if (_name == witchcraft::xml::TYPE)
 				{
 					// We will allow/force resource managers to implement their own derived
-					// versions of qResource.  Those managers will create the resource,
-					// and then give us a unique_ptr<qResource> pointer back, and this 
-					// scope will need to add the qResource pointer to the resource list.
+					// versions of EngineResource.  Those managers will create the resource,
+					// and then give us a unique_ptr<EngineResource> pointer back, and this 
+					// scope will need to add the EngineResource pointer to the resource list.
 					if (_value == "graphic")
 					{
 						resource = build_render_resource_from_xml(*child);
@@ -311,10 +305,10 @@ qResource * ResourceManager::load_from_xml_file(std::string const & file)
 			if (resource)
 			{	
 				// do not add duplicates of the same file
-				if (find_resource_by_id(resource->get_resource_id())) {
+				if (find_resource_by_id(resource->id)) {
 					return resource.get(); }
 
-				auto scope = resource->get_scope_id();
+				auto scope = resource->scope;
 				// we must use std::move to change ownership of the unique_ptr
 				resource_map[scope].push_back(std::move(resource));
 				resource_count++;

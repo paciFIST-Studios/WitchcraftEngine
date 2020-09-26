@@ -14,36 +14,24 @@
 			auto rr = &SDLRenderResource();
 			REQUIRE(rr != nullptr);
 
-			REQUIRE_NOTHROW(rr->get_file_name());
-			REQUIRE_NOTHROW(rr->get_resource_id());
-			REQUIRE_NOTHROW(rr->get_resource_type());
-			REQUIRE_NOTHROW(rr->get_scope_id());
-
 			REQUIRE_NOTHROW(rr->load());
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
 		TEST_CASE(" SDLRenderResource::SDLRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
-			unsigned int const resource_id = 666;
-			unsigned int const resource_scope = 667;
-			std::string const file_name = witchcraft::configuration::buddha_png;
-			EResourceType resource_type = EResourceType::RESOURCE_GRAPHIC;
+			int const scope = 667;
+			std::string const filepath = witchcraft::configuration::buddha_png;
+			EResourceType resource_type = EResourceType::IMAGE;
 
 			// the SDLRenderResource sets its own resource type
-			auto rr = SDLRenderResource(resource_id, resource_scope, file_name);
+			auto rr = SDLRenderResource(0, scope, filepath);
 
-			REQUIRE_NOTHROW(rr.get_file_name());
-			REQUIRE(rr.get_file_name() == file_name);
+			REQUIRE(rr.filepath == filepath);
 
-			REQUIRE_NOTHROW(rr.get_resource_id());
-			REQUIRE(rr.get_resource_id() == resource_id);
+			REQUIRE(rr.scope == scope);
 
-			REQUIRE_NOTHROW(rr.get_scope_id());
-			REQUIRE(rr.get_scope_id() == resource_scope);
-
-			REQUIRE_NOTHROW(rr.get_resource_type());
-			REQUIRE(rr.get_resource_type() == resource_type);
+			REQUIRE(rr.type == resource_type);
 
 			REQUIRE_NOTHROW(rr.load());
 			REQUIRE_NOTHROW(rr.unload());

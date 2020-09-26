@@ -3,15 +3,12 @@
 
 #include <functional>
 #include <map>
-#include <string>
 
 #include "../../lib/rapidxml/rapidxml.hpp"
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-#include "../engine/engine_object.h"
 #include "resource.h"
-
 
 #include "../message_bus/message_bus.h"
 
@@ -21,11 +18,9 @@
 
 
 // TODO: Create memory budgets for different scenes, systems, and data 
-struct Message;
-class MessageBus;
 
-// resource manager, to manage the resource objects
-class ResourceManager : public qEngineObject
+///
+class ResourceManager : public EngineObjectBase
 {
 private:
 protected:
@@ -36,11 +31,10 @@ protected:
 	// total resources managed
 	unsigned int resource_count = 0;
 
-	// a std::map, whose keys are <unsigned int, std::list<qResource*>>
-	std::map<unsigned int, std::vector<std::unique_ptr<qResource>>> resource_map;
+	std::map<int, std::vector<std::unique_ptr<EngineResource>>> resource_map;
 
-	std::unique_ptr<qResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
-	std::unique_ptr<qResource> build_shader_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<EngineResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<EngineResource> build_shader_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
@@ -54,12 +48,12 @@ public:
 
 
 	// find resource by id.  return nullptr if not found
-	qResource * find_resource_by_id(unsigned int UID);
+	EngineResource * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
 	void empty_cache();
 
-	qResource * load_from_xml_file(std::string const & file);
+	EngineResource * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

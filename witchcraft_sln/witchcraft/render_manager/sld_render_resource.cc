@@ -41,7 +41,7 @@ SDLRenderResource::~SDLRenderResource()
 void SDLRenderResource::load()
 {
 	unload();
-	attempt_load(_file_name);
+	attempt_load(filepath);
 }
 
 void SDLRenderResource::unload()
@@ -84,7 +84,7 @@ SDLRenderResource::SDLRenderResource(
 	, unsigned int scope
 	, std::string const & file_name)
 	// -- end args
-	: qResource(ID, scope, file_name, EResourceType::RESOURCE_GRAPHIC)
+	: EngineResource("" , file_name, EResourceType::IMAGE, scope)
 	, current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 	// -- end initializer
 {

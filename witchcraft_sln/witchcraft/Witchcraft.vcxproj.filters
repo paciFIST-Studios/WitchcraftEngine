@@ -90,9 +90,6 @@
     <ClCompile Include="engine\engine_object__tst.cc">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager\resource.cpp">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
     <ClCompile Include="engine\engine.cc">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
@@ -170,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="scene_manager\scene_manager_2d.cpp">
       <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\shader_resource__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -566,7 +566,7 @@ RenderObject2D * RenderManager::get_render_object(int id)
 {
 	for (auto&& object : render_objects)
 	{
-		if (object->render_resource->get_resource_id() == id)
+		if (object->render_resource->id == id)
 			return object.get();
 	}
 

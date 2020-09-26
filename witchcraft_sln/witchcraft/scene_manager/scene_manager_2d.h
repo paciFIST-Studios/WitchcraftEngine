@@ -21,7 +21,7 @@
 class MessageBus;
 class RenderManager;
 
-class SceneManager2D : public qEngineObject
+class SceneManager2D : public EngineObjectBase
 {
 public:
 	typedef std::vector<std::unique_ptr<Layer2D>> LayerVectorType;

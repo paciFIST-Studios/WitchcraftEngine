@@ -394,22 +394,22 @@ void Engine::run()
 	//		when resource manager is deconstructed
 
 
-	int buddha_resource_id;
-	qSceneObject * buddha_scene_object = nullptr;
-	// once the project loader exists, we can load files, based on what it says.
-	// loop over a set of strings, which are our asset paths
-	{
-		// In this iteration of the game, we set up the scene in this method,
-		// and we load all the assets we'll ever use in the game, right now.
-		// any final setup work should happen here
-
-		auto rr = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
-		auto render_resource = static_cast<SDLRenderResource*>(rr);
-		render_resource->bind_renderer(render->get_active_renderer());
-		render_resource->load();
-		buddha_scene_object = render->register_render_object(render_resource);
-		buddha_resource_id = rr->id;
-	}
+	//int buddha_resource_id;
+	//qSceneObject * buddha_scene_object = nullptr;
+	//// once the project loader exists, we can load files, based on what it says.
+	//// loop over a set of strings, which are our asset paths
+	//{
+	//	// In this iteration of the game, we set up the scene in this method,
+	//	// and we load all the assets we'll ever use in the game, right now.
+	//	// any final setup work should happen here
+	//
+	//	auto rr = resource->load_from_xml_file(witchcraft::configuration::buddha_asset);
+	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
+	//	render_resource->bind_renderer(render->get_active_renderer());
+	//	render_resource->load();
+	//	buddha_scene_object = render->register_render_object(render_resource);
+	//	buddha_resource_id = rr->id;
+	//}
 
 	//// pitch (field)
 	//int soccer_pitch_id;
@@ -501,9 +501,9 @@ void Engine::run()
 	//soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
 	//
 	// buddha
-	auto buddha_layer = scene->add_layer("buddha");
-	buddha_layer->set_is_visible(true);
-	buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
+	//auto buddha_layer = scene->add_layer("buddha");
+	//buddha_layer->set_is_visible(true);
+	//buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
 	
 	//// player_a
 	//auto player_a_layer = scene->add_layer("player_a");

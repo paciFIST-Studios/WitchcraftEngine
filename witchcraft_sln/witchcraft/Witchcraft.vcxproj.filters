@@ -290,5 +290,11 @@
     <ClInclude Include="engine\enum_tools.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay\gameplay_manager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\shader_resource.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -174,6 +174,7 @@
     <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\enum_tools.h" />
     <ClInclude Include="engine\exception.h" />
+    <ClInclude Include="gameplay\gameplay_manager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_opengl3.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="render_manager\render_manager_base.h" />
     <ClInclude Include="render_manager\render_object_2d.h" />
     <ClInclude Include="render_manager\sdl_render_resource.h" />
+    <ClInclude Include="render_manager\shader_resource.h" />
     <ClInclude Include="render_manager\sprite_atlas_resource.h" />
     <ClInclude Include="render_manager\sprite_animation_2d.h" />
     <ClInclude Include="render_manager\sprite_object_2d.h" />

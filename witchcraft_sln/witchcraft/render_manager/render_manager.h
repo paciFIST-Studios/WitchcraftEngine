@@ -66,7 +66,7 @@ class Console;
 
 enum class ERendererState : unsigned char
 {
-	  UNINIT		= 0x01
+	  UNINITIALIZED		= 0x01
 	, CONSTRUCTED	= 0x02
 	, SDL_INIT_OK	= 0x04
 	, OPENGL_INIT_OK= 0x08
@@ -90,7 +90,7 @@ public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
 
 private:
-	ERendererState renderer_state = ERendererState::UNINIT;
+	ERendererState renderer_state = ERendererState::UNINITIALIZED;
 
 	std::map<GLenum, std::string> Glenum_to_str{
 		  { GL_VERTEX_SHADER	, "GL_VERTEX_SHADER"	}

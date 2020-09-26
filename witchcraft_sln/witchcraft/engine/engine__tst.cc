@@ -9,25 +9,37 @@
 
 		#include "engine.h"
 
-		TEST_CASE(" Engine::ctor")
+		class TestEngine : public Engine
 		{
-			// default init 
+		public:
+			TestEngine(EngineInitializer ei)
+				: Engine(ei)
+			{}
+
+			std::string get_project_file_path() { return this->project_file_path; }
+		};
+
+		TEST_CASE(" Engine::ctor  contructs correctly   with default arguments")
+		{
+			REQUIRE_NOTHROW(Engine());
+
 			auto engine = Engine();
-			REQUIRE(engine.id == uninit::UINT);
 			REQUIRE(engine.get_current_state() == EEngineState::CONSTRUCTED);
+		}
 
-
+		TEST_CASE(" Engine::ctor  constructs correctly  with engine initializer")
+		{
 			// init with initializer should give the correct id
-			auto init = EngineInitializer{ 666, true };
-			auto engine2 = Engine(init);
-			REQUIRE(engine2.id == 666);
+			std::string test_path = "test_path";
+			auto init = EngineInitializer{ true, test_path };
+			auto engine = TestEngine(init);
 			REQUIRE(engine.get_current_state() == EEngineState::CONSTRUCTED);
-
+			REQUIRE(engine.get_project_file_path() == test_path);
 		}
 
 		TEST_CASE(" Engine::startup()")
 		{
-			auto init = EngineInitializer{ 1, true };
+			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
 			engine.startup();
@@ -36,7 +48,7 @@
 
 		TEST_CASE(" Engine::run()")
 		{
-			auto init = EngineInitializer{ 1, true };
+			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
 			engine.startup();
@@ -46,7 +58,7 @@
 
 		TEST_CASE(" Engine::shutdown()")
 		{
-			auto init = EngineInitializer{ 1, true };
+			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
 			engine.startup();

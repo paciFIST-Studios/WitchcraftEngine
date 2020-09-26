@@ -1,5 +1,5 @@
-#ifndef RENDER_RESOURCE_H
-#define RENDER_RESOURCE_H
+#ifndef SDL_RENDER_RESOURCE_H
+#define SDL_RENDER_RESOURCE_H
 
 #include <tuple>
 
@@ -9,12 +9,12 @@
 
 // witchcraft
 #include "../utility/utility.h"
-#include "../resource_manager/resource.h"
+#include "../resource_manager/engine_resource_base.h"
 #include "../render_manager/sprite_animation_2d.h"
 
 
 // Render == "Graphical" == "Graphics"
-class qRenderResource : public qResource
+class SDLRenderResource : public EngineResourceBase
 {
 private:
 protected:
@@ -30,20 +30,20 @@ protected:
 
 public:
 	SDL_Surface * surface = nullptr;
-	SDL_Texture * texture = nullptr;
+	SDL_Texture * sdl_texture = nullptr;
 
-	// provided by qResource
-	~qRenderResource() override;
+	// provided by EngineResourceBase
+	~SDLRenderResource() override;
 	void load() override;
 	void unload() override;
 
 	void bind_renderer(SDL_Renderer * renderer);
 
-	qRenderResource();
-	qRenderResource(
-		  unsigned int ID
+	SDLRenderResource();
+	SDLRenderResource(
+		  std::string const & name
+		, std::string const & filepath
 		, unsigned int scope
-		, std::string const & file_name
 	);
 
 	bool is_loaded() const;
@@ -57,4 +57,4 @@ public:
 	}	
 };
 
-#endif // RENDER_RESOURCE_H
+#endif // !SDL_RENDER_RESOURCE_H

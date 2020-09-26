@@ -7,51 +7,40 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 		
-		#include "render_resource.h"
+		#include "sdl_render_resource.h"
 			
-		TEST_CASE(" qRenderResource::RenderResource()")
+		TEST_CASE(" SDLRenderResource::RenderResource()")
 		{
-			auto rr = &qRenderResource();
+			auto rr = &SDLRenderResource();
 			REQUIRE(rr != nullptr);
-
-			REQUIRE_NOTHROW(rr->get_file_name());
-			REQUIRE_NOTHROW(rr->get_resource_id());
-			REQUIRE_NOTHROW(rr->get_resource_type());
-			REQUIRE_NOTHROW(rr->get_scope_id());
 
 			REQUIRE_NOTHROW(rr->load());
 			REQUIRE_NOTHROW(rr->unload());
 		}
 
-		TEST_CASE(" qRenderResource::qRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
+		TEST_CASE(" SDLRenderResource::SDLRenderResource(unsigned int ID, unsigned int scope, std::string const & fileName)")
 		{
-			unsigned int const resource_id = 666;
-			unsigned int const resource_scope = 667;
-			std::string const file_name = witchcraft::configuration::buddha_png;
-			EResourceType resource_type = EResourceType::RESOURCE_GRAPHIC;
+			int const scope = 667;
+			std::string const name = "buddha";
+			std::string const filepath = witchcraft::configuration::buddha_png;
+			EResourceType resource_type = EResourceType::IMAGE;
 
-			// the qRenderResource sets its own resource type
-			auto rr = qRenderResource(resource_id, resource_scope, file_name);
+			// the SDLRenderResource sets its own resource type
+			auto rr = SDLRenderResource(name, filepath, scope);
 
-			REQUIRE_NOTHROW(rr.get_file_name());
-			REQUIRE(rr.get_file_name() == file_name);
+			REQUIRE(rr.filepath == filepath);
 
-			REQUIRE_NOTHROW(rr.get_resource_id());
-			REQUIRE(rr.get_resource_id() == resource_id);
+			REQUIRE(rr.scope == scope);
 
-			REQUIRE_NOTHROW(rr.get_scope_id());
-			REQUIRE(rr.get_scope_id() == resource_scope);
-
-			REQUIRE_NOTHROW(rr.get_resource_type());
-			REQUIRE(rr.get_resource_type() == resource_type);
+			REQUIRE(rr.type == resource_type);
 
 			REQUIRE_NOTHROW(rr.load());
 			REQUIRE_NOTHROW(rr.unload());
 		}
 		
-		TEST_CASE(" qRenderResource::is_loaded()")
+		TEST_CASE(" SDLRenderResource::is_loaded()")
 		{
-			auto rr = qRenderResource();
+			auto rr = SDLRenderResource();
 
 			REQUIRE_NOTHROW(rr.is_loaded());
 			REQUIRE(rr.is_loaded() == false);

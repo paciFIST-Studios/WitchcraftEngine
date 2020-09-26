@@ -4,48 +4,24 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
 
-	if (false == init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
-	{
-		// couldn't init sdl
-		return false;
-	}
+	if ( ! init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
+	{return false;}
 
-	if (false == init_sdl_image())
-	{
-		// couldn't init sdl_image (the lib for PNG files, etc)
-		return false;
-	}
-
-	if (false == init_opengl())
-	{
-		// couldn't init opengl
-		return false;
-	}
+	if ( ! init_sdl_image()){ return false; }
+	if ( ! init_opengl())	{ return false; }
 
 	// NOTE: this initialization has to come AFTER the opengl init
-	if (false == init_imgui())
-	{
-		return false;
-	}
+	if ( ! init_imgui())	{ return false; }
 
-	// not sure where to set this, actually
-	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
+	// init shaders
+	if ( ! init_shaders())	{ return false; }
+	if ( ! init_geometry())	{ return false; }
 
-	SDL_GL_SetSwapInterval(1);	// use VSYNC
-	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
-	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
-	
-	if (false == init_shaders()) 
-	{ 
-		return false; 
-	}
-	if (false == init_geometry()) 
-	{ 
-		return false; 
-	}
+	// sends a message to engine, asking for ptr to console
+	init_get_debug_console();
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
-
+	
 	renderer_state = ERendererState::UPDATE_OK;
 	return true;
 }
@@ -139,6 +115,12 @@ bool RenderManager::init_opengl()
 		PLOGV << "opengl version: " << glGetString(GL_VERSION);
 	}
 
+	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
+
+	//SDL_GL_SetSwapInterval(1);	// use VSYNC
+	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
+	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
+
 	renderer_state = ERendererState::OPENGL_INIT_OK;
 
 	return true;
@@ -173,169 +155,281 @@ bool RenderManager::init_imgui()
 	IMGUI_CHECKVERSION();
 	
 	auto imgui_context = ImGui::CreateContext();
-	if (imgui_context == nullptr)
-	{
-		return false;
-	}
+	if (imgui_context == nullptr){return false;}
 
 	ImGuiIO &io = ImGui::GetIO();
 	
 	auto sdl_init = ImGui_ImplSDL2_InitForOpenGL(program_window, opengl_context);
-	if (sdl_init == false)
-	{
-		return false;
-	}
+	if (sdl_init == false){return false;}
 
 	auto opengl_init = ImGui_ImplOpenGL3_Init(open_gl_version);
-	if (opengl_init == false)
-	{
-		return false;
-	}
+	if (opengl_init == false){return false;}
 
 	ImGui::StyleColorsDark();
 
 	return true;
 }
 
+void RenderManager::init_get_debug_console()
+{
+	if (message_bus == nullptr)
+	{
+		PLOGF << "error RenderManager::init_get_debug_console()";
+		return;
+	}
+
+	Message m{
+		  engine_channel_id
+		, render_channel_id
+		, MessageType::REQUEST__CONSOLE_PTR_NON_OWNER
+		, nullptr
+	};
+	
+	message_bus->send_direct_message(m);
+
+	return;
+}
+
+
 bool RenderManager::init_shaders()
 {
+	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["basic"]->compile(basic_vertex_shader_src, basic_fragment_shader_src);
 
-	// Vertex Shader
-	if (false== compile_shader(vertex_shader_id, GL_VERTEX_SHADER, vertex_shader_src))
-	{
-		return false;
-	}
+	shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
+	   
+	// wireframe shader <-- is a render mode, not a shader
+	// heatmap shader
+	// greybox shader
+	// toon shader
 
-	// Fragment Shader
-	if (false == compile_shader(fragment_shader_id, GL_FRAGMENT_SHADER, fragment_shader_src))
-	{
-		return false;
-	}
-
-	// shader program
-	if (false == link_shader_program(vertex_shader_id, fragment_shader_id, shader_program_id))
-	{
-		return false;
-	}
-
-	// from here, we'll just rely on the shader program
-	glDetachShader(shader_program_id, vertex_shader_id);
-	glDetachShader(shader_program_id, fragment_shader_id);
-	glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
-	
+	active_shader_program_id = shaders["sprite"]->get_shader_program_id();
+	//active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
 
 bool RenderManager::init_geometry()
 {
-	glGenVertexArrays(1, &vertex_array_id);
-	glBindVertexArray(vertex_array_id);
+	// setup the quad used to display sprites
+	{	
+		// handles
+		glGenVertexArrays(1, &sprite_quad_vao);
+		glGenBuffers(1, &sprite_quad_vbo);
+		glGenBuffers(1, &sprite_quad_ebo);
 
-	glGenBuffers(1, &vertex_buffer_id);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies[0], GL_STATIC_DRAW);
+		// start work on sprite quad
+		glBindVertexArray(sprite_quad_vao);
+
+		// send data
+		glBindBuffer(GL_ARRAY_BUFFER, sprite_quad_vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER
+			, sizeof(sprite_verticies)
+			, &sprite_verticies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// send data
+		// ebo == element buffer object
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad_ebo);
+		glBufferData(
+			GL_ELEMENT_ARRAY_BUFFER
+			, sizeof(sprite_indicies)
+			, &sprite_indicies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// configure for use in shader
+		glVertexAttribPointer(
+			  0					// attribute index
+			, 3					// size
+			, GL_FLOAT			// datatype of elements
+			, GL_FALSE			// normalized
+			, 3 * sizeof(float) // data row breadth: aka: stride
+			, (void*) 0			// start at offset
+		);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
+		glBindVertexArray(0);				// unbind vao
+		// note: do not unbind the ebo while vao is active
+	}
+
+	// setup the triangle
+	{
+		// handles
+		glGenVertexArrays(1, &triangle_vao);
+		glGenBuffers(1, &triangle_vbo);
+
+		// start work on triangle
+		glBindVertexArray(triangle_vao);
+
+		// send data
+		glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
+		glBufferData(
+			GL_ARRAY_BUFFER
+			, sizeof(triangle_verticies)
+			, &triangle_verticies[0]
+			, GL_STATIC_DRAW
+		);
+
+		// configure for use in shader
+		glVertexAttribPointer(
+			  0					// attribute index
+			, 3					// size
+			, GL_FLOAT			// element datatype
+			, GL_FALSE			// is normalized
+			, 3 * sizeof(float)	// stride
+			, (void*)0			// offset
+		);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
+		glBindVertexArray(0);				// unbind vao
+	}
+
+	// render a 2d sprite on the quad
+	{
+		int w = 0;
+		int h = 0;
+		SDL_GetWindowSize(program_window, &w, &h);
+
+		// orthagraphic viewing frustum
+		glm::mat4 projection = glm::ortho(
+			  0.0f
+			, (float)w
+			, (float)h
+			, 0.0f
+			,-1.0f
+			, 1.0f
+		);
+	}
+
 	return true;
 }
 
-bool RenderManager::compile_shader(GLuint id, GLenum type, char const * src)
+void RenderManager::handle_message(Message m)
 {
-	id = glCreateShader(type);
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	GLint status;
-	GLint len;
-	std::string msg;
-
-	glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
-	if (len > 0)
+	if (m.type == MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER)
 	{
-		msg = std::string(len+1, '\0');
-		glGetShaderInfoLog(id, len, &len, &msg[0]);
+		message_bus->log_message(m);
+		debug_console = static_cast<Console*>(m.data);
+		return;
 	}
-
-	glGetShaderiv(id, GL_COMPILE_STATUS, &status);
-	if(status == FALSE)
+	// else if()
+	else if (m.type == MessageType::INVOKE__RENDER_COMMAND)
 	{
-		PLOGF << "FAIL: shader compile: " << Glenum_to_str[type];
-		if (len > 0) { PLOGF << "FAIL: shader compile: " << msg; }
-		return false;
+		auto command_str = static_cast<std::string*>(m.data);
+		if (contains_term(command_str, "render_wireframe="))
+		{
+			if (contains_term(command_str, "true"))
+			{
+				use_wireframe_rendering = true;
+			}
+			else if (contains_term(command_str, "false"))
+			{
+				use_wireframe_rendering = false;
+			}
+			else if (contains_term(command_str, "toggle"))
+			{
+				use_wireframe_rendering = !use_wireframe_rendering;
+			}
+		}
+		else if (contains_term(command_str, "triangle2quad"))
+		{
+			if (contains_term(command_str, "toggle"))
+			{
+				draw_triangle_not_quad = !draw_triangle_not_quad;
+			}
+		}
 	}
-
-	PLOGV << "shader compile: success: " << Glenum_to_str[type];
-	if (len > 0) { PLOGV << msg; }
-	return true;
 }
 
-bool RenderManager::link_shader_program(GLuint vert_id, GLuint frag_id, GLuint prog_id)
+void RenderManager::paint_imgui_main_menu_bar()
 {
-	prog_id = glCreateProgram();
-	glAttachShader(prog_id, vert_id);
-	glAttachShader(prog_id, frag_id);
-
-	glLinkProgram(prog_id);
-
-	GLint status;
-	GLint len;
-	std::string msg;
-
-	glGetProgramiv(prog_id, GL_INFO_LOG_LENGTH, &len);
-	if (len > 0)
+	if (ImGui::BeginMainMenuBar())
 	{
-		msg = std::string(len+1, '\0');
-		glGetProgramInfoLog(prog_id, len, &len, &msg[0]);
-	}
+		if (ImGui::BeginMenu("Editor"))
+		{
+			if (ImGui::MenuItem("Load Level"))
+			{
 
-	glGetProgramiv(prog_id, GL_COMPILE_STATUS, &status);
-	if (status == FALSE)
-	{
-		PLOGF << "FAIL: shader-program compile";
-		if (len > 0) { PLOGF << "FAIL: shader-program compile: " << msg; }
-		return false;
-	}
-	else
-	{
-		PLOGV << "shader-program compile: success";
-		if (len > 0) { PLOGV << msg; }
-	}
+			}
+			if (ImGui::MenuItem("Load Asset"))
+			{
 
-	return true;
+			}
+			if (ImGui::MenuItem("Exit Program", "Esc"))
+			{
+				// request exit here
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Settings"))
+		{
+			ImGui::EndMenu();
+		}
+	}
+	ImGui::EndMainMenuBar();
 }
-
 
 bool RenderManager::update()
 {
 	// base background color
 	glClearColor(
-		  (GLclampf)scc.x
+		(GLclampf)scc.x
 		, (GLclampf)scc.y
 		, (GLclampf)scc.z
 		, (GLclampf)scc.w
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(shader_program_id);
+	glUseProgram(active_shader_program_id);
 
-	// imgui prepare for draw 
+	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(program_window);
 	ImGui::NewFrame();
 	// imgui; note: they have to be in this order
 
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_array_id);
-	glVertexAttribPointer(
-		  0			// ?
-		, 3			// size
-		, GL_FLOAT	// type
-		, GL_FALSE	// normalized
-		, 0			// stride
-		,(void*)0	// buffer offset
-	);
+
+	if (use_wireframe_rendering)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+
+		
+	// draw triangle
+	if (draw_triangle_not_quad)
+	{
+		glBindVertexArray(triangle_vao);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
+	}
+	else
+	{
+		glBindVertexArray(sprite_quad_vao);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0); // unset
+	}
+
+	//render_visible_sprites_back_to_front();
+
+	   
+	paint_imgui_main_menu_bar();
 	
-	glDrawArrays(GL_TRIANGLES, 0, 3);	
-	glDisableVertexAttribArray(0);
+	// we call this every time, and debug console itself is responsible
+	// for perfoming an early-out, if it's not visible
+	if (debug_console != nullptr)
+	{
+		debug_console->draw("Debug Console");
+	}
+
 
 	// debug window
 	if (draw_imgui_debug_window)
@@ -367,15 +461,49 @@ void RenderManager::shutdown()
 	SDL_GL_DeleteContext(opengl_context);
 	SDL_DestroyWindow(program_window);
 	program_window = nullptr;
-
-
-	//SDL_FreeSurface(rendering_surface);
-	//SDL_DestroyRenderer(active_renderer);
+	
 	SDL_Quit();
 	renderer_state = ERendererState::SDL_QUIT_OK;
 	PLOGV << witchcraft::log_strings::sdl_stop;
 	renderer_state = ERendererState::SHUTDOWN_OK;
 }
+
+
+void RenderManager::render_visible_sprites_back_to_front()
+{
+	if (scene_manager == nullptr)
+	{
+		PLOGE << "ERROR:  No scene manager detected!";
+		return;
+	}
+
+	auto layers = scene_manager->get_layers_ptrs_vector();
+	for (auto&& layer : layers)
+	{
+		if (layer == nullptr)
+			continue;
+
+		if (layer->get_is_visible() == false)
+		{
+			continue;
+		}
+
+		auto objects = layer->get_layer_objects();
+
+		for (auto&& obj : objects)
+		{
+			if (obj == nullptr)
+				continue;
+
+			if (obj->is_visible() == false)
+				continue;
+
+			//draw_sprite(*obj);
+		}
+	}
+}
+
+
 
 void RenderManager::render_visible_scene_back_to_front()
 {
@@ -418,12 +546,12 @@ void RenderManager::render_visible_scene_back_to_front()
 			dest_rect.w = int(src_rect.w * std::get<0>(scale));
 			dest_rect.h = int(src_rect.h * std::get<1>(scale));
 
-			SDL_RenderCopy(
-				  active_renderer
-				, obj->render_resource->texture
-				, &src_rect
-				, &dest_rect
-			);
+			//SDL_RenderCopy(
+			//	  active_renderer
+			//	, obj->render_resource->texture
+			//	, &src_rect
+			//	, &dest_rect
+			//);
 		}
 	}
 }
@@ -438,7 +566,7 @@ void RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int
 	SDL_UpdateWindowSurface(program_window);
 }
 
-qSceneObject * RenderManager::register_render_object(qRenderResource * non_owner, bool is_visible)
+qSceneObject * RenderManager::register_render_object(SDLRenderResource * non_owner, bool is_visible)
 {
 	// note the cast
 	std::unique_ptr<RenderObject2D> render_object = std::make_unique<qSceneObject>();
@@ -456,7 +584,7 @@ RenderObject2D * RenderManager::get_render_object(int id)
 {
 	for (auto&& object : render_objects)
 	{
-		if (object->render_resource->get_resource_id() == id)
+		if (object->render_resource->id == id)
 			return object.get();
 	}
 

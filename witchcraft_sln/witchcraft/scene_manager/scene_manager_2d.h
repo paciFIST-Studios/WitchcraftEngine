@@ -10,6 +10,7 @@
 #define XML rapidxml
 
 #include "../engine/engine_object.h"
+#include "../message_bus/message_bus.h"
 
 #include "../render_manager/render_manager.h"
 
@@ -17,9 +18,10 @@
 #include "scene_listener.h"
 #include "timer.h"
 
+class MessageBus;
 class RenderManager;
 
-class SceneManager2D : public qEngineObject
+class SceneManager2D : public EngineObjectBase
 {
 public:
 	typedef std::vector<std::unique_ptr<Layer2D>> LayerVectorType;
@@ -37,9 +39,19 @@ protected:
 	//TickTimerType timers;
 	//SceneListenerType listeners;
 
-	RenderManager * render_manager = nullptr;
+	MessageBus * message_bus = nullptr;
 
+	void handle_message(Message m);
+	
 public:
+	SceneManager2D() {}
+	SceneManager2D(MessageBus * mb) 
+		: message_bus(mb) 
+	{
+		std::function<void(Message)> cb = std::bind(&SceneManager2D::handle_message, this, std::placeholders::_1);
+		message_bus->subscribe("scene", cb);
+	}
+
 
 	Layer2D * add_layer(std::string const & name);
 	Layer2D * find_layer(std::string const & name);
@@ -50,7 +62,7 @@ public:
 	//void add_listener(qSceneListener * listener);
 
 
-	void set_render_manager(RenderManager * rm) { render_manager = rm; }
+	void set_render_manager(RenderManager * rm) { /*render_manager = rm;*/ }
 
 	std::vector<Layer2D*> get_layers_ptrs_vector() const
 	{

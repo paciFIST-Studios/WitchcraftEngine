@@ -25,6 +25,8 @@
 
 		TEST_CASE(" Layer2D::ctor")
 		{
+			REQUIRE_NOTHROW(Layer2D());
+
 			unsigned int const test_id = 666;
 			bool const test_visibility = true;
 			std::string const test_name = "background_1";
@@ -33,7 +35,6 @@
 			unsigned int const test_z_order = 1;
 
 			Layer2DInitializer init;
-			init.ID = test_id;
 			init.is_visible = test_visibility;
 			init.name = test_name;
 			init.x = test_x;
@@ -42,7 +43,6 @@
 
 			auto layer = Layer2D(init);
 
-			REQUIRE(layer.id == test_id);
 			REQUIRE(layer.get_is_visible() == test_visibility);
 			REQUIRE(layer.get_name() == test_name);
 

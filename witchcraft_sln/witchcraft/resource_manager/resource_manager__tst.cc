@@ -25,12 +25,9 @@
 
 			// starts w/ global scope
 			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
-			
-			// find by id does not throw error, even before anthing is loaded
-			REQUIRE_NOTHROW(rm.find_resource_by_id(0));
 
 			// find by id returns nullptr, if no match is found
-			REQUIRE(rm.find_resource_by_id(0) == nullptr);
+			REQUIRE(rm.find_resource(1, 1) == nullptr);
 
 			// empty_cache does not throw, even before anything is loaded
 			REQUIRE_NOTHROW(rm.empty_cache());
@@ -39,7 +36,7 @@
 			REQUIRE_NOTHROW(rm.load_from_xml_file("fake"));
 
 			// load_from_xml_file returns false if file not found 
-			REQUIRE(rm.load_from_xml_file("fake") == -1);
+			REQUIRE(rm.load_from_xml_file("fake") == nullptr);
 
 			// set_current_scope does not throw, even before anything is loaded
 			REQUIRE_NOTHROW(rm.set_current_scope(1));
@@ -60,7 +57,7 @@
 			REQUIRE(rm.get_resource_count() == 0);
 
 			// Load returns true on success
-			REQUIRE(rm.load_from_xml_file(buddha) == 2);
+			REQUIRE(rm.load_from_xml_file(buddha)->id > 0);
 			
 			REQUIRE(rm.get_resource_count() == 1);
 
@@ -77,33 +74,33 @@
 			REQUIRE(rm.get_resource_count() == 3);
 
 			// loading the same file again (as defined by resource_id) returns false
-			REQUIRE(rm.load_from_xml_file(person) == 4);
-			REQUIRE(rm.load_from_xml_file(bird) == 1);
+			REQUIRE(rm.load_from_xml_file(person)->id > 0);
+			REQUIRE(rm.load_from_xml_file(bird)->id > 0);
 		}
 
-		TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
-		{
-			auto rm = ResourceManager();
-			witchcraft::configuration::create_config_files();
-
-			// does not throw, even if nothing has been loaded yet
-			REQUIRE_NOTHROW(rm.find_resource_by_id(MAXUINT32));
-
-			auto resource = rm.find_resource_by_id(MAXUINT32);
-			// returns nullptr if no resource found
-			REQUIRE(resource == nullptr);
-
-			// actual load
-			rm.load_from_xml_file(bird);
-
-			resource = rm.find_resource_by_id(1);
-			// Returns active ptr, if object is loaded
-			REQUIRE(resource != nullptr);
-			// ID actually matches our request
-			REQUIRE(resource->get_resource_id() == 1);
-			// returned resource exists in its own scope, as defined by file
-			REQUIRE(resource->get_scope_id() != witchcraft::configuration::global_resource_scope);
-		}
+		//TEST_CASE(" ResourceManager::find_resource_by_id(unsigned int UUID)")
+		//{
+		//	auto rm = ResourceManager();
+		//	witchcraft::configuration::create_config_files();
+		//
+		//	// does not throw, even if nothing has been loaded yet
+		//	REQUIRE_NOTHROW(rm.find_resource_by_id(MAXUINT32));
+		//
+		//	auto resource = rm.find_resource_by_id(MAXUINT32);
+		//	// returns nullptr if no resource found
+		//	REQUIRE(resource == nullptr);
+		//
+		//	// actual load
+		//	rm.load_from_xml_file(bird);
+		//
+		//	resource = rm.find_resource_by_id(1);
+		//	// Returns active ptr, if object is loaded
+		//	REQUIRE(resource != nullptr);
+		//	// ID actually matches our request
+		//	REQUIRE(resource->id > 0);
+		//	// returned resource exists in its own scope, as defined by file
+		//	REQUIRE(resource->scope != witchcraft::configuration::global_resource_scope);
+		//}
 
 		TEST_CASE(" ResourceManager:: get_current_scope() / set_current_scope(unsigned int)")
 		{

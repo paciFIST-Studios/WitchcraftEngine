@@ -1,0 +1,59 @@
+// this is a comment mark
+// comment marks ALL, MUST be on their own line
+// also, be sure to only use lower case for variable names or values
+// NOTE: anything that starts with "path:" has all whitespace cleared
+
+
+// configuration
+// holds general information used by the project
+window_pos: 0, 0
+window_wh: 800, 600
+window_fullscreen: true
+window_capture_mouse: false
+use_vsync: false
+
+
+// project files
+// a list of asset files (not technically assets)
+// asset files contain information for how different assets
+// should be processed
+
+// a monologue about lying to a kid in cambodia
+path: asset/soccer_game/dialogue/cambodia_sadness.asset
+
+// graphics
+path: asset/soccer_game/images/basic_shader.asset
+
+path: asset/soccer_game/images/ball.asset
+path: asset/soccer_game/images/ball_shadow.asset
+path: asset/soccer_game/images/cursor.asset
+path: asset/soccer_game/images/player_shadow.asset
+path: asset/soccer_game/images/stadium.asset
+
+// this file contains animations
+path: asset/soccer_game/images/player_a.asset
+
+
+// sfx
+// Ellie's note: not sure if we should really have a different <.asset>
+// file for each sfx file.  I mean, we can, but I think all the sfx are
+// just "play now" kind of interactions, and we'll be delivering the whole
+// lot of them to the audio manager anyway
+// TODO: figure out a reasonable, concise way to do that
+//path: asset/soccer_game/sounds/jump_p1.asset
+//path: asset/soccer_game/sounds/jump_p2.asset
+//path: asset/soccer_game/sounds/jump_p3.asset
+//path: asset/soccer_game/sounds/jump_p4.asset
+//path: asset/soccer_game/sounds/kick_a.asset
+//path: asset/soccer_game/sounds/kick_b.asset
+//path: asset/soccer_game/sounds/menu_p1.asset
+//path: asset/soccer_game/sounds/menu_p2.asset
+//path: asset/soccer_game/sounds/menu_p3.asset
+//path: asset/soccer_game/sounds/menu_p4.asset
+//path: asset/soccer_game/sounds/menu_selection_click.asset
+//path: asset/soccer_game/sounds/open_00.asset
+//path: asset/soccer_game/sounds/open_01.asset
+//path: asset/soccer_game/sounds/phone.asset
+//path: asset/soccer_game/sounds/pickup.asset
+//path: asset/soccer_game/sounds/success.asset
+//path: asset/soccer_game/sounds/win.asset

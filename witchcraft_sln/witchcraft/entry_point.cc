@@ -18,6 +18,7 @@
 #include "string_constants.h"
 #include "utility/get_latest_log_str.h"
 
+#include "engine/engine_id.h"
 #include "engine/engine.h"
 
 
@@ -65,7 +66,7 @@ void init_logging()
 	// This is set to append to any existing file
 	plog::init(
 		  static_cast<plog::Severity>(witchcraft::configuration::logging_severity)
-		, witchcraft::file_strings::engine_log_file_name.c_str()
+		, witchcraft::file_strings::engine_log_file_name
 		, witchcraft::configuration::log_file_max_size_bytes
 		, witchcraft::configuration::log_file_max_logs
 	);
@@ -86,12 +87,6 @@ void run_unit_tests()
 	PLOGV << "\n\n\n\n";
 }
 
-static unsigned int get_engine_id() 
-{
-	static unsigned int id = 0;
-	return id++;
-}
-
 int main(int argc, char** argv[])
 {
 	// do something with arguments
@@ -102,7 +97,9 @@ int main(int argc, char** argv[])
 	run_unit_tests();
 
 
-	auto init = EngineInitializer{ get_engine_id() };
+	auto init = EngineInitializer();
+	init.test_mode.early_exit = false;
+	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
 	auto engine = Engine(init);
 
 	engine.startup();

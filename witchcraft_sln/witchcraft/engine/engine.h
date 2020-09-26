@@ -1,14 +1,17 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <SDL_ttf.h>
+#include <functional>
 
 #include "../engine/engine_object.h"
 
+#include "../project_loader/project_loader.h"
 #include "../message_bus/message_bus.h"
 #include "../resource_manager/resource_manager.h"
 #include "../render_manager/render_manager.h"
+#include "../console/console.h"
 
+#include "../gameplay/gameplay_manager.h"
 
 
 struct TestMode
@@ -31,39 +34,65 @@ struct DebugOptions
 };
 
 
-enum class EEngineState : unsigned char
+enum class EEngineState
 {
-	  UNINIT		= 0x01
-	, CONSTRUCTED	= 0x02
-	, STARTUP		= 0x04
-	, RUNNING		= 0x08
-	, SHUTDOWN		= 0x10
-	// 0x20
-	// 0x40
-	// 0x80
+	  UNINITIALIZED
+	, CONSTRUCTED
+	, STARTUP
+	, RUNNING
+	, SHUTDOWN
 };
 
 struct EngineInitializer
 {
-	unsigned int id;
 	TestMode test_mode;
+	std::string project_file_path;
 };
 
-class Engine : public qEngineObject
+class Engine : public EngineObjectBase
 {
 private:
+	std::string string_buffer;
+
 protected:
+	std::string project_file_path;
+	ProjectSettings project_settings;
+	
+	std::unique_ptr<ProjectLoader> project_loader;
 
 	std::unique_ptr<MessageBus> message;
-	std::unique_ptr<ResourceManager> resource;
-	std::unique_ptr<RenderManager> render;
-	std::unique_ptr<SceneManager2D> scene;
+	unsigned int engine_channel_id		= 0;
+	unsigned int resource_channel_id	= 0;
+	unsigned int render_channel_id		= 0;
+	unsigned int scene_channel_id		= 0;
+	unsigned int console_channel_id		= 0;
 
-	EEngineState current_engine_state = EEngineState::UNINIT;
+	// manager ptrs
+	std::unique_ptr<ResourceManager>	resource	= nullptr;
+	std::unique_ptr<RenderManager>		render		= nullptr;
+	std::unique_ptr<SceneManager2D>		scene		= nullptr;
+	std::unique_ptr<Console>			console		= nullptr;
+	std::unique_ptr<GameplayManager>	gameplay	= nullptr;
+
+	EEngineState current_engine_state = EEngineState::UNINITIALIZED;
 	TestMode test_mode;
+
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
+
+	void init_gameplay(ProjectSettings ps);
+
+	bool continue_gameplay_loop(SDL_Event const & e);
+	void process_window_event(SDL_Event const & e);
+
+	// sends a command over the message bus.
+	void send_console_command(char const * command, bool send_direct = true);
+	void send_render_command(char const * command, bool send_direct = true);
+
+	void send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void* data, bool send_direct=true);
+
+	void handle_message(Message m);
 
 public:
 	
@@ -74,14 +103,16 @@ public:
 	EEngineState const get_current_state() const { return current_engine_state; }
 
 	Engine() 
-	: current_engine_state(EEngineState::CONSTRUCTED) 
+		: EngineObjectBase()
 		, test_mode({ false })
+		, current_engine_state(EEngineState::CONSTRUCTED) 
 	{}
 
 	Engine(EngineInitializer init) 
-	: qEngineObject(init.id)
+		: EngineObjectBase()
 		, test_mode(init.test_mode)
-	, current_engine_state(EEngineState::CONSTRUCTED)
+		, project_file_path(init.project_file_path)
+		, current_engine_state(EEngineState::CONSTRUCTED)
 	{}
 };
 
@@ -171,11 +202,11 @@ namespace witchcraft
 
 		static bool is_gamepad_event(SDL_Event const & e)
 		{			
-			if (e.type == SDL_CONTROLLERBUTTONDOWN ||
-				e.type == SDL_CONTROLLERBUTTONUP   ||
-				e.type == SDL_CONTROLLERAXISMOTION ||
-				e.type == SDL_CONTROLLERDEVICEADDED   ||
-				e.type == SDL_CONTROLLERDEVICEREMOVED ||
+			if (e.type == SDL_CONTROLLERBUTTONDOWN		||
+				e.type == SDL_CONTROLLERBUTTONUP		||
+				e.type == SDL_CONTROLLERAXISMOTION		||
+				e.type == SDL_CONTROLLERDEVICEADDED		||
+				e.type == SDL_CONTROLLERDEVICEREMOVED	||
 				e.type == SDL_CONTROLLERDEVICEREMAPPED
 				)
 			{
@@ -192,8 +223,7 @@ namespace witchcraft
 			layer->set_is_visible(is_visible);
 		}
 	}
-
-
+	
 
 	namespace configuration
 	{
@@ -207,7 +237,6 @@ namespace witchcraft
 		float const default_world_boundary_right = 768.0f;
 		float const default_world_boundary_bottom = 768.0f;
 		float const default_world_boundary_left = 0.0f;
-
 
 
 		float const screen_fps = 60.0f;

@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glm;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\lib\Release\Win32;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="console\console__tst.cc" />
     <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />
     <ClCompile Include="engine\engine__tst.cc" />
@@ -138,20 +139,23 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="message_bus\message_bus__tst.cc" />
+    <ClCompile Include="project_loader\project_loader__tst.cc" />
+    <ClCompile Include="render_manager\opengl_shader.cc" />
+    <ClCompile Include="render_manager\opengl_shader__tst.cc" />
     <ClCompile Include="render_manager\render_manager.cc" />
     <ClCompile Include="render_manager\render_manager__tst.cc" />
     <ClCompile Include="render_manager\render_object_2d.cc" />
     <ClCompile Include="render_manager\render_object_2d__tst.cc" />
-    <ClCompile Include="render_manager\render_resource.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
+    <ClCompile Include="render_manager\shader_resource__tst.cc" />
+    <ClCompile Include="render_manager\sld_render_resource.cc" />
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc" />
     <ClCompile Include="render_manager\sprite_animation_2d__tst.cc" />
     <ClCompile Include="render_manager\sprite_object_2d.cc" />
     <ClCompile Include="render_manager\sprite_object_2d__tst.cc" />
-    <ClCompile Include="resource_manager\resource.cpp" />
+    <ClCompile Include="resource_manager\engine_resource_base__tst.cc" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
-    <ClCompile Include="resource_manager\resource__tst.cc" />
     <ClCompile Include="scene_manager\layer_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_listener__tst.cc" />
     <ClCompile Include="scene_manager\scene_manager_2d.cpp" />
@@ -164,9 +168,13 @@
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="console\console.h" />
     <ClInclude Include="engine\engine.h" />
+    <ClInclude Include="engine\engine_id.h" />
     <ClInclude Include="engine\engine_object.h" />
+    <ClInclude Include="engine\enum_tools.h" />
     <ClInclude Include="engine\exception.h" />
+    <ClInclude Include="gameplay\gameplay_manager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_opengl3.h" />
@@ -176,23 +184,26 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="logging\error_log_manager.h" />
-    <ClInclude Include="message_bus\ICanReceiveMessages.h" />
-    <ClInclude Include="message_bus\ICanSendMessages.h" />
     <ClInclude Include="message_bus\message_bus.h" />
+    <ClInclude Include="project_loader\project_loader.h" />
+    <ClInclude Include="render_manager\opengl_shader.h" />
+    <ClInclude Include="render_manager\opengl_texture.h" />
     <ClInclude Include="render_manager\render_manager.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
     <ClInclude Include="render_manager\render_object_2d.h" />
-    <ClInclude Include="render_manager\render_resource.h" />
+    <ClInclude Include="render_manager\sdl_render_resource.h" />
+    <ClInclude Include="render_manager\shader_resource.h" />
     <ClInclude Include="render_manager\sprite_atlas_resource.h" />
     <ClInclude Include="render_manager\sprite_animation_2d.h" />
     <ClInclude Include="render_manager\sprite_object_2d.h" />
-    <ClInclude Include="resource_manager\resource.h" />
+    <ClInclude Include="resource_manager\engine_resource_base.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="scene_manager\layer_2d.h" />
     <ClInclude Include="scene_manager\scene_listener.h" />
     <ClInclude Include="scene_manager\scene_manager_2d.h" />
     <ClInclude Include="scene_manager\scene_object.h" />
     <ClInclude Include="scene_manager\timer.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="string_constants.h" />
     <ClInclude Include="uninitialized_values.h" />
     <ClInclude Include="unit_testing_switch.h" />

@@ -77,3 +77,23 @@ void SceneManager2D::sort_layers()
 		i += 1;
 	}
 }
+
+void SceneManager2D::handle_message(Message m)
+{
+	PLOGV << "SceneManager has received a request";
+	Message response;
+	response.recipient = m.sender;
+	response.sender = id;
+	response.type = MessageType::TESTING;
+	response.data = nullptr;
+
+	PLOGV	<< "SceneManager is sending a test response:"
+			<< "\n\tsender: " << response.sender
+			<< "\n\trecipient: " << response.recipient
+			<< "\n\ttype: " << response.type
+			<< "\n\tdata: " << response.data
+			;
+
+	message_bus->send_message(response);
+}
+

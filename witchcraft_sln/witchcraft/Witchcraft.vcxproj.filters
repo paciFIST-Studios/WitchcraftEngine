@@ -37,6 +37,15 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{f873f48a-aa90-41c2-8b33-0c5d860579ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\console">
+      <UniqueIdentifier>{baf74073-905b-4d32-ac3e-9054cdda1bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\project_loader">
+      <UniqueIdentifier>{195da37c-2847-4597-81d5-40d2606fe9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\render_manager\opengl">
+      <UniqueIdentifier>{09cfa2f2-7eca-45d0-b534-1f408db39ebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -63,12 +72,6 @@
     <ClCompile Include="utility\tests_utility.cc">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\render_resource.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="resource_manager\resource__tst.cc">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager\resource_manager__tst.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
@@ -86,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="engine\engine_object__tst.cc">
       <Filter>Source Files\engine</Filter>
-    </ClCompile>
-    <ClCompile Include="resource_manager\resource.cpp">
-      <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
     <ClCompile Include="engine\engine.cc">
       <Filter>Source Files\engine</Filter>
@@ -120,9 +120,6 @@
     <ClCompile Include="scene_manager\scene_manager_2d__tst.cc">
       <Filter>Source Files\scene_manager</Filter>
     </ClCompile>
-    <ClCompile Include="scene_manager\scene_manager_2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\sprite_atlas_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -153,6 +150,30 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="console\console__tst.cc">
+      <Filter>Source Files\console</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\sld_render_resource.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="project_loader\project_loader__tst.cc">
+      <Filter>Source Files\project_loader</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_manager\scene_manager_2d.cpp">
+      <Filter>Source Files\scene_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\shader_resource__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="resource_manager\engine_resource_base__tst.cc">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader.cc">
+      <Filter>Source Files\render_manager\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader__tst.cc">
+      <Filter>Source Files\render_manager\opengl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -170,16 +191,10 @@
     <ClInclude Include="resource_manager\resource_manager.h">
       <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager\resource.h">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClInclude>
     <ClInclude Include="string_constants.h">
       <Filter>Source Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="render_manager\render_manager_base.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\render_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager\scene_object.h">
@@ -224,12 +239,6 @@
     <ClInclude Include="message_bus\message_bus.h">
       <Filter>Source Files\message_bus</Filter>
     </ClInclude>
-    <ClInclude Include="message_bus\ICanSendMessages.h">
-      <Filter>Source Files\message_bus</Filter>
-    </ClInclude>
-    <ClInclude Include="message_bus\ICanReceiveMessages.h">
-      <Filter>Source Files\message_bus</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\render_manager.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
@@ -256,6 +265,39 @@
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>Source Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="console\console.h">
+      <Filter>Source Files\console</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\sdl_render_resource.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="project_loader\project_loader.h">
+      <Filter>Source Files\project_loader</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\engine_id.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\enum_tools.h">
+      <Filter>Source Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\gameplay_manager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\shader_resource.h">
+      <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager\engine_resource_base.h">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\opengl_shader.h">
+      <Filter>Source Files\render_manager\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\opengl_texture.h">
+      <Filter>Source Files\render_manager\opengl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

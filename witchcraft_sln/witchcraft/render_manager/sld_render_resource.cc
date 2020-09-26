@@ -1,6 +1,6 @@
-#include "render_resource.h"
+#include "sdl_render_resource.h"
 
-void qRenderResource::attempt_load(std::string const & file_name)
+void SDLRenderResource::attempt_load(std::string const & file_name)
 {
 	if (false == utility::file_exists(file_name))
 	{
@@ -14,7 +14,7 @@ void qRenderResource::attempt_load(std::string const & file_name)
 		PLOGW << "\t\tfile_name: " << file_name;
 	}
 
-	//texture = IMG_LoadTexture(renderer, file_name.c_str());
+	//texture = IMG_LoadTexture(renderer, FILE.c_str());
 
 	// this requires the c_str
 	surface = IMG_Load(file_name.c_str());
@@ -24,7 +24,7 @@ void qRenderResource::attempt_load(std::string const & file_name)
 		surface_width = surface->w;
 		surface_height = surface->h;
 
-		texture = SDL_CreateTextureFromSurface(renderer, surface);
+		sdl_texture = SDL_CreateTextureFromSurface(renderer, surface);
 
 		// NOTE: this shouldn't change in a RenderableResource
 		// NOTE2: SpriteAtlasResrouce does change it
@@ -35,21 +35,21 @@ void qRenderResource::attempt_load(std::string const & file_name)
 	}
 }
 
-qRenderResource::~qRenderResource()
+SDLRenderResource::~SDLRenderResource()
 {}
 
-void qRenderResource::load()
+void SDLRenderResource::load()
 {
 	unload();
-	attempt_load(_file_name);
+	attempt_load(filepath);
 }
 
-void qRenderResource::unload()
+void SDLRenderResource::unload()
 {
-	if (texture)
+	if (sdl_texture)
 	{
-		SDL_DestroyTexture(texture);
-		texture = nullptr;
+		SDL_DestroyTexture(sdl_texture);
+		sdl_texture = nullptr;
 	}
 
 	if (surface)
@@ -60,7 +60,7 @@ void qRenderResource::unload()
 
 }
 
-void qRenderResource::bind_renderer(SDL_Renderer * renderer)
+void SDLRenderResource::bind_renderer(SDL_Renderer * renderer)
 {
 	if (this == nullptr)
 	{
@@ -75,27 +75,27 @@ void qRenderResource::bind_renderer(SDL_Renderer * renderer)
 	}
 }
 
-qRenderResource::qRenderResource() 
+SDLRenderResource::SDLRenderResource() 
 : current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 {}
 
-qRenderResource::qRenderResource(
-	  unsigned int ID
-	, unsigned int scope
-	, std::string const & file_name)
+SDLRenderResource::SDLRenderResource(
+	  std::string const & name
+	, std::string const & filepath
+	, unsigned int scope)
 	// -- end args
-	: qResource(ID, scope, file_name, EResourceType::RESOURCE_GRAPHIC)
+	: EngineResourceBase(name , filepath, EResourceType::IMAGE, scope)
 	, current_renderable_rect({ uninit::UINT, uninit::UINT, uninit::UINT, uninit::UINT })
 	// -- end initializer
 {
 }
 
-bool qRenderResource::is_loaded() const
+bool SDLRenderResource::is_loaded() const
 {
-	return (texture != nullptr);
+	return (sdl_texture != nullptr);
 }
 
-bool qRenderResource::renderer_is_ready() const
+bool SDLRenderResource::renderer_is_ready() const
 {
 	return (renderer != nullptr);
 }

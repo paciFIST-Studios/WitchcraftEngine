@@ -5,7 +5,7 @@
 #include <windows.h>
 
 
-class TickTimer : public qEngineObject
+class TickTimer : public EngineObjectBase
 {
 private:
 protected:

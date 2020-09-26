@@ -9,21 +9,27 @@
 
 		#include "../engine/engine_object.h"
 
-		TEST_CASE(" qEngineObject::ctor   instantiates object when used")
+		TEST_CASE(" EngineObjectBase::ctor   instantiates object when used")
 		{
-			REQUIRE_NOTHROW(qEngineObject());
-			auto eo = &qEngineObject();
+			REQUIRE_NOTHROW(EngineObjectBase());
+			auto eo = &EngineObjectBase();
 			REQUIRE(eo != nullptr);
 		}
 
-		TEST_CASE(" qEngineObject  is instantiated with a higher ID each time")
+		TEST_CASE(" EngineObjectBase  is instantiated with a higher ID each time")
 		{
-			auto a = qEngineObject();
-			auto b = qEngineObject();
-			auto c = qEngineObject();
+			auto a = EngineObjectBase();
+			auto b = EngineObjectBase();
+			auto c = EngineObjectBase();
 
 			REQUIRE(a.id < b.id);
 			REQUIRE(b.id < c.id);
+		}
+
+		TEST_CASE(" EngineObjectBase  is instantiated higher that offset")
+		{
+			auto eo = EngineObjectBase();
+			REQUIRE(eo.id > witchcraft::engine::engine_id_offset);
 		}
 
 	#endif // RUN_UNIT_TESTS

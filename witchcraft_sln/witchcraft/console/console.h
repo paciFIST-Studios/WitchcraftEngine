@@ -28,7 +28,7 @@ enum EConsoleState : unsigned char
 	// 0x80
 };
 
-class Console : public qEngineObject
+class Console : public EngineObjectBase
 {
 private:
 protected:
@@ -175,14 +175,14 @@ protected:
 
 public:
 	Console() 
-		: qEngineObject()
+		: EngineObjectBase()
 	{
 		add_default_commands();
 		current_console_state = EConsoleState::CONSTRUCTED;
 	}
 
 	Console(MessageBus * mb) 
-		: qEngineObject()
+		: EngineObjectBase()
 		, message_bus(mb)
 	{
 		add_default_commands();

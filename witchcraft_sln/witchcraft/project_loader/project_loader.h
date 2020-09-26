@@ -26,7 +26,7 @@ struct ProjectSettings
 
 #define PL ProjectLoader
 
-class ProjectLoader : public qEngineObject
+class ProjectLoader : public EngineObjectBase
 {
 protected:
 	std::string const COMMENT_MARK = "//";

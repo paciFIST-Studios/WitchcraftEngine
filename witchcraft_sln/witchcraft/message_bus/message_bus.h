@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <map>
+#include <vector>
 
 #include "../engine/engine_object.h"
 
@@ -67,7 +68,7 @@ struct Message
 	void * data;
 };
 
-class MessageBus : public qEngineObject 
+class MessageBus : public EngineObjectBase 
 {
 public:
 	typedef std::function<void(Message m)> CallbackType;

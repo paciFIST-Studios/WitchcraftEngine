@@ -84,7 +84,7 @@ struct OpenGLTexture
 	unsigned int texture_id;
 };
 
-class RenderManager : public qEngineObject
+class RenderManager : public EngineObjectBase
 {
 public:
 	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;

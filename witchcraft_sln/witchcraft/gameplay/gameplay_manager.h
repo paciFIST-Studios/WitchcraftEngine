@@ -4,7 +4,7 @@
 #include "../engine/engine_object.h"
 #include "../message_bus/message_bus.h"
 
-class GameplayManager : public qEngineObject
+class GameplayManager : public EngineObjectBase
 {
 private:
 protected:

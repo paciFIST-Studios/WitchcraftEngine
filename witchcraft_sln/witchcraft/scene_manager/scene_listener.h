@@ -7,7 +7,7 @@ typedef enum {SE_TIMER_EXPIRED=0}SCENE_EVENT_TYPE;
 
 class SceneManager2D;
 
-class qSceneListener : public qEngineObject
+class qSceneListener : public EngineObjectBase
 {
 public:
 	SCENE_EVENT_TYPE listening_for;

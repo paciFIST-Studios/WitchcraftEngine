@@ -16,7 +16,7 @@
 // 2D render object; each instance represents a unique renderable item
 // in a 2d scene. It contains position, scale, & rotation, and these
 // characteristics will allow the render manager to perform culling.
-class RenderObject2D : public qEngineObject
+class RenderObject2D : public EngineObjectBase
 {
 private:
 protected:

@@ -52,7 +52,7 @@ struct EngineInitializer
 	std::string project_file_path;
 };
 
-class Engine : public qEngineObject
+class Engine : public EngineObjectBase
 {
 private:
 	std::string string_buffer;
@@ -106,13 +106,13 @@ public:
 	EEngineState const get_current_state() const { return current_engine_state; }
 
 	Engine() 
-		: qEngineObject()
+		: EngineObjectBase()
 		, test_mode({ false })
 		, current_engine_state(EEngineState::CONSTRUCTED) 
 	{}
 
 	Engine(EngineInitializer init) 
-		: qEngineObject()
+		: EngineObjectBase()
 		, test_mode(init.test_mode)
 		, project_file_path(init.project_file_path)
 		, current_engine_state(EEngineState::CONSTRUCTED)

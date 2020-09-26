@@ -16,7 +16,7 @@ struct Layer2DInitializer
 	std::string name;
 };
 
-class Layer2D : public qEngineObject
+class Layer2D : public EngineObjectBase
 {
 private:
 protected:
@@ -34,7 +34,7 @@ protected:
 public:
 
 	Layer2D()
-		: qEngineObject()
+		: EngineObjectBase()
 		, name{ std::string(uninit::CSTRING) }
 		, z_order(uninit::UINT)
 		, visible(uninit::BOOL)
@@ -43,7 +43,7 @@ public:
 	{}
 
 	Layer2D(Layer2DInitializer init)
-		: qEngineObject()
+		: EngineObjectBase()
 		, z_order(init.zOrder)
 		, visible(init.is_visible)
 		, pos_x(init.x)

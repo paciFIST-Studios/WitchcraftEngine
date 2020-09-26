@@ -6,7 +6,7 @@
 
 #include "../engine/engine_object.h"
 
-class OpenGlShaderProgram : public qEngineObject
+class OpenGlShaderProgram : public EngineObjectBase
 {
 private:
 	// not copyable

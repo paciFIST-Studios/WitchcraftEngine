@@ -14,7 +14,7 @@ void SDLRenderResource::attempt_load(std::string const & file_name)
 		PLOGW << "\t\tfile_name: " << file_name;
 	}
 
-	//texture = IMG_LoadTexture(renderer, file_name.c_str());
+	//texture = IMG_LoadTexture(renderer, FILE.c_str());
 
 	// this requires the c_str
 	surface = IMG_Load(file_name.c_str());

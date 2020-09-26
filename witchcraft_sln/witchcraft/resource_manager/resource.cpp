@@ -2,12 +2,12 @@
 
 unsigned int qResource::get_resource_id() const
 {
-	return _resource_id;
+	return _uuid;
 }
 
 unsigned int qResource::get_scope_id() const
 {
-	return _scope_id;
+	return _scope;
 }
 
 std::string qResource::get_file_name() const
@@ -23,8 +23,8 @@ EResourceType qResource::get_resource_type() const
 qResource::qResource()
 	// no args
 	// initializer list
-	: _resource_id(uninit::UCHAR)
-	, _scope_id(uninit::UINT)
+	: _uuid(uninit::UCHAR)
+	, _scope(uninit::UINT)
 	, _file_name(std::string(uninit::CSTRING))
 	, _type(EResourceType::RESOURCE_NULL)
 {}
@@ -36,8 +36,8 @@ qResource::qResource(
 	, std::string const & FileName
 	, EResourceType ResourceType)
 	// initializer list
-	: _resource_id(ID)
-	, _scope_id(Scope)
+	: _uuid(ID)
+	, _scope(Scope)
 	, _file_name(FileName)
 	, _type(ResourceType)
 {}

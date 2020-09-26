@@ -28,8 +28,8 @@ class qResource : public qEngineObject
 {
 private:
 protected:
-	unsigned int _resource_id;
-	unsigned int _scope_id;
+	unsigned int _uuid;
+	unsigned int _scope;
 	std::string _file_name;
 	EResourceType _type;
 
@@ -47,21 +47,21 @@ public:
 	virtual ~qResource()
 	{ 
 		PLOGV 
-			<< "resource id: " << _resource_id 
+			<< "resource id: " << _uuid 
 			<< "  file: " << _file_name 
 			<< "  qResource::~qResource()";
 	}
 	virtual void load()   
 	{ 
 		PLOGV 
-			<< "resource id: " << _resource_id 
+			<< "resource id: " << _uuid 
 			<< "  file: " << _file_name 
 			<< "  qResource::load()";
 	}
 	virtual void unload() 
 	{ 
 		PLOGV
-			<< "resource id: " << _resource_id
+			<< "resource id: " << _uuid
 			<< "  file: " << _file_name
 			<< "  qResource::unload()";
 	}

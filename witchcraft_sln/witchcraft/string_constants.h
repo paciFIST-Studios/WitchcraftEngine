@@ -11,12 +11,12 @@ namespace witchcraft
 		static char const * resource_list = "resources";
 		static char const * resource = "resource";
 
-		static char const * uuid = "UUID";
-		static char const * resource_type = "type";
-		static char const * resource_name = "name";
+		static char const * UUID = "UUID";
+		static char const * TYPE = "type";
+		static char const * NAME = "name";
 
-		static char const * file_name = "file";
-		static char const * resource_scope = "scope";
+		static char const * FILE = "file";
+		static char const * SCOPE = "scope";
 
 		// NOTE: valid data for sprite atlas is: "int width, int height";
 		// these refer to the standard width and height of tiles in this atlas
@@ -27,6 +27,8 @@ namespace witchcraft
 		static char const * animation_2d_type = "animation_2d";
 		static char const * animation_2d_ms_per_frame = "ms_per_frame";
 		static char const * animation_2d_sequence = "sequence";
+
+		static char const * SHADER_TYPE = "SHADER_TYPE";
 	}
 
 	namespace configuration

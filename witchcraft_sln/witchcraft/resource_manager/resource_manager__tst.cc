@@ -25,12 +25,9 @@
 
 			// starts w/ global scope
 			REQUIRE(rm.get_current_scope() == witchcraft::configuration::global_resource_scope);
-			
-			// find by id does not throw error, even before anthing is loaded
-			REQUIRE_NOTHROW(rm.find_resource_by_id(0));
 
 			// find by id returns nullptr, if no match is found
-			REQUIRE(rm.find_resource_by_id(0) == nullptr);
+			REQUIRE(rm.find_resource(1, 1) == nullptr);
 
 			// empty_cache does not throw, even before anything is loaded
 			REQUIRE_NOTHROW(rm.empty_cache());

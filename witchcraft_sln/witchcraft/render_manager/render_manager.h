@@ -24,10 +24,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// image loader lib
-#define STB_IMAGE_IMPLEMENTATION
-//#define STBI_FAILURE_USERMSG
-#include "../stb_image.h"
 
 
 // rapidxml
@@ -98,6 +94,25 @@ private:
 	};
 
 	char const * open_gl_version = "#version 330 core";
+
+	char const * basic_vertex_src =
+		"#version 330 core\n"
+		"layout(location=0) in vec3 _pos;\n"
+		"layout(locaiton=1) in vec2 _uv;\n"
+		"out vec2 uv;\n"
+		"void main(){\n"
+		"gl_Position = vec4(_pos, 1.0f);\n"
+		"uv = _uv;\n}"
+		;
+
+	char const * basic_fragment_src =
+		"#version 330 core\n"
+		"out vec4 color;\n"
+		"in vec2 uv;\n"
+		"uniform sampler2D _texture;\n"
+		"void main(){\n"
+		"color = texture(_texture, uv);\n}"
+		;
 
 
 	char const * basic_perspective_vertex_shader_src =

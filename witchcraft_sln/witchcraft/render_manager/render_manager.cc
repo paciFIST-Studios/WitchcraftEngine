@@ -1,5 +1,11 @@
 #include "render_manager.h"
 
+// image loader lib
+#define STBI_FAILURE_USERMSG
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+
 bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
@@ -193,23 +199,23 @@ void RenderManager::init_get_debug_console()
 
 bool RenderManager::init_shaders()
 {
-	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
-	//shaders["basic"]->compile(basic_vertex_shader_src, basic_fragment_shader_src);
+	shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["basic"]->compile(basic_vertex_src, basic_fragment_src);
 
 	//shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
 	//shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
 	   
-	shaders["basic_perspective"] = std::make_unique<OpenGlShaderProgram>();
-	shaders["basic_perspective"]->compile(basic_perspective_vertex_shader_src, basic_perspective_fragment_shader_src);
+	//shaders["basic_perspective"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["basic_perspective"]->compile(basic_perspective_vertex_shader_src, basic_perspective_fragment_shader_src);
 
 	// wireframe shader <-- is a render mode, not a shader
 	// heatmap shader
 	// greybox shader
 	// toon shader
 
-	active_shader_program_id = shaders["basic_perspective"]->get_shader_program_id();
+	//active_shader_program_id = shaders["basic_perspective"]->get_shader_program_id();
 	//active_shader_program_id = shaders["sprite"]->get_shader_program_id();
-	//active_shader_program_id = shaders["basic"]->get_shader_program_id();
+	active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
 
@@ -354,6 +360,7 @@ bool RenderManager::init_geometry()
 
 
 		glGenTextures(1, &sprite_texture.id);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, sprite_texture.id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -361,7 +368,8 @@ bool RenderManager::init_geometry()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		int w, h, chan;
-		unsigned char * data = stbi_load("assets/buddha.png", &w, &h, &chan, 0);
+		stbi_set_flip_vertically_on_load(true);
+		unsigned char * data = stbi_load("asset/buddha.png", &w, &h, &chan, 0);
 		sprite_texture.width = w;
 		sprite_texture.height = h;
 		sprite_texture.color_channels = chan;
@@ -383,6 +391,8 @@ bool RenderManager::init_geometry()
 		}
 		stbi_image_free(data);
 
+		glUseProgram(shaders["basic"]->get_shader_program_id());
+		glUniform1i(glGetUniformLocation(shaders["basic"]->get_shader_program_id(), "_texture"), 0);
 
 		// ------------------------------------------------------------------
 		// matricies
@@ -411,21 +421,21 @@ bool RenderManager::init_geometry()
 		// start with identity matrix
 		model_matrix = glm::mat4(1.0f);
 		// rotate by -55 degrees around x+ axis
-		model_matrix = glm::rotate(model_matrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model_matrix = glm::rotate(model_matrix, glm::radians(-0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		// view matrix moves camera back
 		view_matrix = glm::mat4(1.0f);
 		view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
 
 
-		int shader_id = shaders["basic_perspective"]->get_shader_program_id();
+		int shader_id = active_shader_program_id;
 		int model_loc = glGetUniformLocation(shader_id, "model");
 		int view_loc = glGetUniformLocation(shader_id, "view");
 		int proj_loc = glGetUniformLocation(shader_id, "projection");
 
 		glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
 		glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix[0][0]);
-		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(orthographic_projection_matrix));
 	}
 
 	return true;
@@ -507,7 +517,13 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(active_shader_program_id);
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, sprite_texture.id);
+
+	glUseProgram(active_shader_program_id);	
+	glBindVertexArray(unified_sprite_quad_vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();
@@ -527,22 +543,18 @@ bool RenderManager::update()
 
 		
 	// draw triangle
-	if (draw_triangle_not_quad)
-	{
-		glBindVertexArray(triangle_vao);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-	}
-	else
-	{
-		//glBindVertexArray(sprite_quad_vao);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		//glBindVertexArray(0); // unset
-
-		glBindTexture(GL_TEXTURE_2D, sprite_texture.id);
-		glBindVertexArray(unified_sprite_quad_vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	}
+	//if (draw_triangle_not_quad)
+	//{
+	//	glBindVertexArray(triangle_vao);
+	//	glDrawArrays(GL_TRIANGLES, 0, 3);
+	//	glBindVertexArray(0);
+	//}
+	//else
+	//{
+	//	glBindVertexArray(sprite_quad_vao);
+	//	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	//	glBindVertexArray(0); // unset
+	//}
 
 	//render_visible_sprites_back_to_front();
 

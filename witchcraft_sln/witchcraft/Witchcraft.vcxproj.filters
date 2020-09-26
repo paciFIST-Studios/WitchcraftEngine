@@ -43,6 +43,9 @@
     <Filter Include="Source Files\project_loader">
       <UniqueIdentifier>{195da37c-2847-4597-81d5-40d2606fe9ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\render_manager\opengl">
+      <UniqueIdentifier>{09cfa2f2-7eca-45d0-b534-1f408db39ebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -150,12 +153,6 @@
     <ClCompile Include="console\console__tst.cc">
       <Filter>Source Files\console</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\opengl_shader__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\opengl_shader.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\sld_render_resource.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -170,6 +167,12 @@
     </ClCompile>
     <ClCompile Include="resource_manager\engine_resource_base__tst.cc">
       <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader.cc">
+      <Filter>Source Files\render_manager\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\opengl_shader__tst.cc">
+      <Filter>Source Files\render_manager\opengl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,13 +269,7 @@
     <ClInclude Include="console\console.h">
       <Filter>Source Files\console</Filter>
     </ClInclude>
-    <ClInclude Include="render_manager\opengl_shader.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\sdl_render_resource.h">
-      <Filter>Source Files\render_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\opengl_texture.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
@@ -295,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="resource_manager\engine_resource_base.h">
       <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\opengl_shader.h">
+      <Filter>Source Files\render_manager\opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\opengl_texture.h">
+      <Filter>Source Files\render_manager\opengl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

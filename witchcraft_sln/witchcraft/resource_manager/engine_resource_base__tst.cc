@@ -7,16 +7,16 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 		
-		#include "resource.h"
+		#include "engine_resource_base.h"
 		
-		TEST_CASE(" EngineResource::ctor(args)  When given arguments, ctor constructs object with those values")
+		TEST_CASE(" EngineResourceBase::ctor(args)  When given arguments, ctor constructs object with those values")
 		{
 			std::string		name	 = "fake_asset";
 			std::string		filepath = "asset/game/testing/fake_asset.png";
 			EResourceType	type	 = EResourceType::IMAGE;
 			unsigned int	scope	 = 10;
 
-			auto resource = EngineResource(name, filepath, type, scope);
+			auto resource = EngineResourceBase(name, filepath, type, scope);
 			REQUIRE(resource.id > 0);
 			REQUIRE(resource.name		== name);
 			REQUIRE(resource.filepath	== filepath);
@@ -24,10 +24,10 @@
 			REQUIRE(resource.scope		== scope);
 		}
 
-		TEST_CASE(" EngineResource::EngineResource()  Produces correct default object")
+		TEST_CASE(" EngineResourceBase::EngineResourceBase()  Produces correct default object")
 		{
 			// default object 
-			auto r = &EngineResource();
+			auto r = &EngineResourceBase();
 			REQUIRE(r != nullptr);
 
 			// name

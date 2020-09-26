@@ -9,12 +9,12 @@
 
 // witchcraft
 #include "../utility/utility.h"
-#include "../resource_manager/resource.h"
+#include "../resource_manager/engine_resource_base.h"
 #include "../render_manager/sprite_animation_2d.h"
 
 
 // Render == "Graphical" == "Graphics"
-class SDLRenderResource : public EngineResource
+class SDLRenderResource : public EngineResourceBase
 {
 private:
 protected:
@@ -32,7 +32,7 @@ public:
 	SDL_Surface * surface = nullptr;
 	SDL_Texture * sdl_texture = nullptr;
 
-	// provided by EngineResource
+	// provided by EngineResourceBase
 	~SDLRenderResource() override;
 	void load() override;
 	void unload() override;

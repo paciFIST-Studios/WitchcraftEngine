@@ -8,7 +8,7 @@
 #include "../../lib/rapidxml/rapidxml_utils.hpp"
 #define XML rapidxml
 
-#include "resource.h"
+#include "engine_resource_base.h"
 
 #include "../message_bus/message_bus.h"
 
@@ -19,7 +19,7 @@
 
 // TODO: Create memory budgets for different scenes, systems, and data 
 
-///
+/// @file	resource_manager.h
 class ResourceManager : public EngineObjectBase
 {
 private:
@@ -31,10 +31,10 @@ protected:
 	// total resources managed
 	unsigned int resource_count = 0;
 
-	std::map<int, std::vector<std::unique_ptr<EngineResource>>> resource_map;
+	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
-	std::unique_ptr<EngineResource> build_render_resource_from_xml(XML::xml_node<> const & xml);
-	std::unique_ptr<EngineResource> build_shader_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
 	//ResourcePtr load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
@@ -48,12 +48,12 @@ public:
 
 
 	// find resource by id.  return nullptr if not found
-	EngineResource * find_resource_by_id(unsigned int UID);
+	EngineResourceBase * find_resource_by_id(unsigned int UID);
 
 	// clears all resources and scopes
 	void empty_cache();
 
-	EngineResource * load_from_xml_file(std::string const & file);
+	EngineResourceBase * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

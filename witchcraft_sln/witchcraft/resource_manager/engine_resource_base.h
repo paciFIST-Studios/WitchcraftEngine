@@ -1,5 +1,5 @@
-#ifndef RESOURCE_H
-#define RESOURCE_H
+#ifndef ENGINE_RESOURCE_BASE_H
+#define ENGINE_RESOURCE_BASE_H
 
 #include <string>
 
@@ -21,11 +21,11 @@ enum class EResourceType
 
 
 ///	@file	resource.h
-///	@brief	EngineResource represents an engine resource, which can be loaded or unloaded
-///	@note	all EngineResource objects are owned by ResourceManager
+///	@brief	EngineResourceBase represents an engine resource, which can be loaded or unloaded
+///	@note	all EngineResourceBase objects are owned by ResourceManager
 ///	@author	Ellie Barrett
 ///	@data	20200925
-class EngineResource : public EngineObjectBase
+class EngineResourceBase : public EngineObjectBase
 {
 private:
 protected:
@@ -38,19 +38,19 @@ public:
 	
 
 	// these are working in the fashion of an IResource interface
-	virtual ~EngineResource() {}
+	virtual ~EngineResourceBase() {}
 	virtual void load()  {}
 	virtual void unload(){}
 
 
-	EngineResource()
+	EngineResourceBase()
 		: name("uninit")
 		, filepath("uninit")
 		, type(EResourceType::UNINITIALIZED)
 		, scope(-1)
 	{}
 
-	EngineResource(
+	EngineResourceBase(
 		  std::string const & name
 		, std::string const & filepath
 		, EResourceType type
@@ -63,4 +63,4 @@ public:
 	{}
 };
 
-#endif // !RESOURCE_H
+#endif // !ENGINE_RESOURCE_BASE_H

@@ -69,9 +69,6 @@
     <ClCompile Include="utility\tests_utility.cc">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager\resource__tst.cc">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager\resource_manager__tst.cc">
       <Filter>Source Files\resource_manager</Filter>
     </ClCompile>
@@ -171,6 +168,9 @@
     <ClCompile Include="render_manager\shader_resource__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
+    <ClCompile Include="resource_manager\engine_resource_base__tst.cc">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -186,9 +186,6 @@
       <Filter>Source Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager\resource_manager.h">
-      <Filter>Source Files\resource_manager</Filter>
-    </ClInclude>
-    <ClInclude Include="resource_manager\resource.h">
       <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
     <ClInclude Include="string_constants.h">
@@ -295,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="render_manager\shader_resource.h">
       <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="resource_manager\engine_resource_base.h">
+      <Filter>Source Files\resource_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

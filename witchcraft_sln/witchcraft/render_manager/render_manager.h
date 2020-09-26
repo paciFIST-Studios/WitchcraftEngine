@@ -46,7 +46,7 @@
 
 #include "../message_bus/message_bus.h"
 
-#include "../resource_manager/resource.h"
+#include "../resource_manager/engine_resource_base.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
 #include "render_object_2d.h"

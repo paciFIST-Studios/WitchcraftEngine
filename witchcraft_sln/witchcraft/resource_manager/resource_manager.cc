@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-std::unique_ptr<EngineResource> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
 	unsigned int	uuid			= 0;
@@ -53,8 +53,8 @@ std::unique_ptr<EngineResource> ResourceManager::build_render_resource_from_xml(
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << file_name;
 
-	// note: we're going to make something derived from EngineResource
-	std::unique_ptr<EngineResource> resource;
+	// note: we're going to make something derived from EngineResourceBase
+	std::unique_ptr<EngineResourceBase> resource;
 
 	if (is_sprite_atlas)
 	{
@@ -87,7 +87,7 @@ std::unique_ptr<EngineResource> ResourceManager::build_render_resource_from_xml(
 	return std::move(resource);
 }
 
-std::unique_ptr<EngineResource> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
+std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
 {
 	unsigned int uuid  = 0;
 	unsigned int scope = 0;
@@ -135,7 +135,7 @@ std::unique_ptr<EngineResource> ResourceManager::build_shader_resource_from_xml(
 		resource->shader_files[type] = path;
 	}
 
-	std::unique_ptr<EngineResource> shader_resource = std::move(resource);
+	std::unique_ptr<EngineResourceBase> shader_resource = std::move(resource);
 	return std::move(shader_resource);
 }
 
@@ -191,7 +191,7 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 
 
 // returns a NON-OWNING ptr
-EngineResource * ResourceManager::find_resource_by_id(unsigned int id)
+EngineResourceBase * ResourceManager::find_resource_by_id(unsigned int id)
 {
 	if (resource_count == 0){ return nullptr; }
 
@@ -239,7 +239,7 @@ void ResourceManager::empty_cache()
 	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-EngineResource * ResourceManager::load_from_xml_file(std::string const & file)
+EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
 	{
@@ -259,7 +259,7 @@ EngineResource * ResourceManager::load_from_xml_file(std::string const & file)
 		// enumerate objects
 		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
 		{
-			std::unique_ptr<EngineResource> resource = nullptr;
+			std::unique_ptr<EngineResourceBase> resource = nullptr;
 
 			// for each object, enumerate the attributes it contains
 			for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
@@ -271,9 +271,9 @@ EngineResource * ResourceManager::load_from_xml_file(std::string const & file)
 				if (_name == witchcraft::xml::TYPE)
 				{
 					// We will allow/force resource managers to implement their own derived
-					// versions of EngineResource.  Those managers will create the resource,
-					// and then give us a unique_ptr<EngineResource> pointer back, and this 
-					// scope will need to add the EngineResource pointer to the resource list.
+					// versions of EngineResourceBase.  Those managers will create the resource,
+					// and then give us a unique_ptr<EngineResourceBase> pointer back, and this 
+					// scope will need to add the EngineResourceBase pointer to the resource list.
 					if (_value == "graphic")
 					{
 						resource = build_render_resource_from_xml(*child);

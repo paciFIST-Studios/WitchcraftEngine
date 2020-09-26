@@ -153,9 +153,9 @@
     <ClCompile Include="render_manager\sprite_animation_2d__tst.cc" />
     <ClCompile Include="render_manager\sprite_object_2d.cc" />
     <ClCompile Include="render_manager\sprite_object_2d__tst.cc" />
+    <ClCompile Include="resource_manager\engine_resource_base__tst.cc" />
     <ClCompile Include="resource_manager\resource_manager.cc" />
     <ClCompile Include="resource_manager\resource_manager__tst.cc" />
-    <ClCompile Include="resource_manager\resource__tst.cc" />
     <ClCompile Include="scene_manager\layer_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_listener__tst.cc" />
     <ClCompile Include="scene_manager\scene_manager_2d.cpp" />
@@ -196,7 +196,7 @@
     <ClInclude Include="render_manager\sprite_atlas_resource.h" />
     <ClInclude Include="render_manager\sprite_animation_2d.h" />
     <ClInclude Include="render_manager\sprite_object_2d.h" />
-    <ClInclude Include="resource_manager\resource.h" />
+    <ClInclude Include="resource_manager\engine_resource_base.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
     <ClInclude Include="scene_manager\layer_2d.h" />
     <ClInclude Include="scene_manager\scene_listener.h" />

@@ -326,25 +326,26 @@ void RenderManager::handle_message(Message m)
 						, GL_STATIC_DRAW
 					);
 
-					// basic shader uses vec3(location=0)
-					// , and v2(location=1) inputs
+					// basic shader 					
+					// (location 0) vec3 pos
+					// (location=1) vec2 ts
 					glVertexAttribPointer(
 						  0		// location 0
-						, 2
+						, 3		// vec3
 						, GL_FLOAT
 						, GL_FALSE
-						, vrp->vertex_stride
-						, (void*)vrp->vertex_offset
+						, vrp->beam_size * sizeof(float)
+						, (void*)(vrp->vertex_offset * sizeof(float))
 					);
 					glEnableVertexAttribArray(0);
 
 					glVertexAttribPointer(
-						  1
-						, 2
+						  1		// location 1
+						, 2		// vec2
 						, GL_FLOAT
 						, GL_FALSE
-						, vrp->texture_stride
-						, (void*)vrp->texture_offset
+						, vrp->beam_size * sizeof(float)
+						, (void*)(vrp->texture_offset * sizeof(float))
 					);
 					glEnableVertexAttribArray(1);
 

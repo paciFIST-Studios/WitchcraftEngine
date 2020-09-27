@@ -91,11 +91,16 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 	std::vector<float> verts;
 	std::vector<int> indicies;
 
-	// TODO: make this generic
-	int vertex_stride = 4 * sizeof(float);
-	int vertex_offset = 0;
-	int texture_stride = 4 * sizeof(float);
-	int texture_offset = 2 * sizeof(float);
+	bool record_vertex  = false;
+	bool record_texture = false;
+	bool record_color   = false;
+
+	int vertex_stride  = 0;
+	int vertex_offset  = 0;
+	int texture_stride = 0;
+	int texture_offset = 0;
+	int color_stride   = 0;
+	int color_offset   = 0;
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
@@ -109,6 +114,25 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		else if (_name == witchcraft::xml::SCOPE)
 		{
 			scope = std::stoi(_value);
+		}
+		else if(_name == "contents")
+		{ 
+			auto contents = utility::tokenize_string(_value, ",");
+			for (auto&& c : contents)
+			{
+				if (c.find("vertex"))
+				{
+					record_vertex = true;
+				}
+				else if (c.find("texture"))
+				{
+					record_texture = true;
+				}
+				else if (c.find("color"))
+				{
+					record_color = true;
+				}
+			}
 		}
 		else if (_name == "float_list")
 		{
@@ -126,21 +150,45 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 				indicies.push_back(std::stoi(i));
 			}
 		}
+
+		if (record_vertex)
+		{
+			if(_name == "vertex_stride")
+			{ 
+				vertex_stride = std::stoi(_value);
+			}
+			else if(_name == "vertex_offset")
+			{ 
+				vertex_offset = std::stoi(_value);
+			}
+		}
+
+		if (record_texture)
+		{
+			if(_name == "texture_stride")
+			{
+				texture_stride = std::stoi(_value);
+			}
+			else if(_name == "texture_offset")
+			{ 
+				texture_offset = std::stoi(_value);
+			}
+		}
+
+		if (record_color)
+		{
+			if(_name == "color_stride")
+			{
+				color_stride = std::stoi(_value);
+			}
+			else if(_name == "color_offset")
+			{
+				color_offset = std::stoi(_value);
+			}
+		}
 	}
 
 	PLOGV << witchcraft::log_strings::resource_manager_meta_load << "VertexResource";
-		//<< "\nVertexResource{"
-		//<< "\n\tname: " << name
-		//<< "\n\ttype: " << "EResourceType::VERTEX_LIST"
-		//<< "\n\tscope: " << scope
-		//<< "\n\tvertex count: " << verts.size()
-		//<< "\n\tindex count: " << indicies.size()
-		//<< "\n\tvertex stride: " << vertex_stride
-		//<< "\n\tvertex offset: " << vertex_offset
-		//<< "\n\ttexture stride: " << texture_stride
-		//<< "\n\ttexture offset: " << texture_offset
-		//<< "};"
-		//;
 
 	// note: we're going to make something derived from EngineResourceBase
 	std::unique_ptr<EngineResourceBase> resource;
@@ -155,8 +203,9 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		, vertex_offset		// 
 		, texture_stride	// 
 		, texture_offset	// 
+		, color_stride		//
+		, color_offset		//
 		);
-
 
 	return std::move(resource);
 }

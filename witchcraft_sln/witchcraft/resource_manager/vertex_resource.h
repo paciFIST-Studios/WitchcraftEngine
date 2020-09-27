@@ -19,6 +19,10 @@ public:
 	int const vertex_offset;
 	int const texture_stride;
 	int const texture_offset;
+	int const color_stride;
+	int const color_offset;
+
+	int const beam_size;
 
 	VertexResource() 
 		: EngineResourceBase()
@@ -26,6 +30,9 @@ public:
 		, vertex_offset(0)
 		, texture_stride(0)
 		, texture_offset(0)
+		, color_stride(0)
+		, color_offset(0)
+		, beam_size(0)
 	{}
 
 	VertexResource(
@@ -39,6 +46,8 @@ public:
 		, int vert_offset
 		, int tex_stride
 		, int tex_offset
+		, int col_stride
+		, int col_offset
 	)
 		: EngineResourceBase(name, file, type, scope)
 		, vertex_list(vertex_array)
@@ -47,6 +56,9 @@ public:
 		, vertex_offset(vert_offset)
 		, texture_stride(tex_stride)
 		, texture_offset(tex_offset)
+		, color_stride(col_stride)
+		, color_offset(col_offset)
+		, beam_size(vertex_stride + texture_stride + color_stride)
 	{}
 
 	~VertexResource() override {}

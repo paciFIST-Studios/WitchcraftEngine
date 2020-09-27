@@ -312,8 +312,8 @@ void RenderManager::handle_message(Message m)
 					glBindBuffer(GL_ARRAY_BUFFER, vbo);
 					glBufferData(
 						GL_ARRAY_BUFFER
-						, sizeof(vrp->vertex_list.size())
-						, &vrp->vertex_list[0]
+						, sizeof(vrp->vertex_list)
+						, vrp->vertex_list.data()
 						, GL_STATIC_DRAW
 					);
 
@@ -322,7 +322,7 @@ void RenderManager::handle_message(Message m)
 					glBufferData(
 						GL_ELEMENT_ARRAY_BUFFER
 						, sizeof(vrp->index_list)
-						, &vrp->index_list[0]
+						, vrp->index_list.data()
 						, GL_STATIC_DRAW
 					);
 
@@ -348,9 +348,6 @@ void RenderManager::handle_message(Message m)
 						, (void*)(vrp->texture_offset * sizeof(float))
 					);
 					glEnableVertexAttribArray(1);
-
-					shaders["basic"]->use_program();
-					shaders["basic"]->setInt("_texture", 0);
 				}
 			}
 		}
@@ -416,12 +413,9 @@ bool RenderManager::update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, sprite_texture.get_texture_id());
+	sprite_texture.bind();
 	shaders["basic"]->use_program();
 	
-
-
 	glBindVertexArray(sprite_quad.vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -432,14 +426,14 @@ bool RenderManager::update()
 	// imgui; note: they have to be in this order
 
 
-	if (use_wireframe_rendering)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
+	//if (use_wireframe_rendering)
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//}
+	//else
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//}
 
 	paint_imgui_main_menu_bar();
 

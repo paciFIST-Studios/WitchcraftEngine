@@ -36,6 +36,7 @@
 #include "../imgui/imgui_impl_sdl.h"
 #include "../imgui/imgui_impl_opengl3.h"
 
+#include "../stb_image.h"
 
 // witchcraft
 #include "../engine/engine_object.h"
@@ -52,6 +53,7 @@
 #include "../scene_manager/scene_object.h"
 
 #include "opengl_shader.h"
+#include "opengl_texture.h"
 
 #include "../console/console.h"
 
@@ -62,7 +64,7 @@ class Console;
 
 enum class ERendererState : unsigned char
 {
-	  UNINITIALIZED		= 0x01
+	  UNINITIALIZED	= 0x01
 	, CONSTRUCTED	= 0x02
 	, SDL_INIT_OK	= 0x04
 	, OPENGL_INIT_OK= 0x08
@@ -72,7 +74,7 @@ enum class ERendererState : unsigned char
 	, SHUTDOWN_OK	= 0x80
 };
 
-struct OpenGLTexture
+struct OpenGLTextureStruct
 {
 	int width;
 	int height;
@@ -155,7 +157,8 @@ private:
 		"void main(){"
 		"color = texture(tex, uv);\n}\n";
 
-	OpenGLTexture sprite_texture;
+	OpenGLTexture * sprite_tex;
+	OpenGLTextureStruct sprite_texture;
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
 	glm::mat4 orthographic_projection_matrix;
@@ -167,19 +170,7 @@ private:
 		, 0.5f, -0.5f, 0.0f		// 1
 		, 0.0f,  0.5f, 0.0f		// 2
 	};
-
-	// this is two triangles
-	//GLfloat const sprite_verticies[24] = {
-	//	// pos			// texture
-	//	  0.0f, 1.0f	, 0.0f, 1.0f
-	//	, 1.0f, 0.0f	, 1.0f, 0.0f
-	//	, 0.0f, 0.0f	, 0.0f, 0.0f
-	//
-	//	, 0.0f, 1.0f	, 0.0f, 1.0f
-	//	, 1.0f, 1.0f	, 1.0f, 1.0f
-	//	, 1.0f, 0.0f	, 1.0f, 0.0f
-	//};
-
+	
 	GLfloat const sprite_verticies[12] = {
 		   0.5f,  0.5f, 0.0f // top right
 		,  0.5f, -0.5f, 0.0f // bottom right
@@ -220,6 +211,8 @@ private:
 	bool draw_imgui_debug_window = false;
 
 	void paint_imgui_main_menu_bar();
+
+	void paint_debug_windows();
 
 protected:
 
@@ -281,7 +274,6 @@ protected:
 
 	unsigned int engine_channel_id = 0;
 	unsigned int render_channel_id = 0;
-
 
 
 public:
@@ -348,68 +340,6 @@ namespace witchcraft
 		int constexpr OPENGL_MINOR_VERSION = 3;
 
 		SDL_GLprofile constexpr OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
-
-	
-
-		//static OpenGLTexture get_opengl_texture(char const & filepath)
-		//{
-		//	struct OpenGLTexture result { -1, -1, -1, 0 };
-		//
-		//	if (!utility::file_exists(&filepath)) {
-		//		return result;
-		//	}
-		//
-		//	//unsigned char * data = stbi_load(
-		//	//	&filepath
-		//	//	, &result.width
-		//	//	, &result.height
-		//	//	, &result.color_channels
-		//	//	, 0
-		//	//);
-		//	//
-		//	//if (data != nullptr)
-		//	//{
-		//	//	glGenTextures(1, &result.texture_id);
-		//	//	glBindTexture(GL_TEXTURE_2D, result.texture_id);
-		//	//
-		//	//	// todo: set wrapping options in fn call
-		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//	//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		//	//
-		//	//	glTexImage2D(
-		//	//		GL_TEXTURE_2D		// 1d and 3d textures also exist
-		//	//		, 0					// mipmap level (default=0)
-		//	//		, GL_RGB			// storage format
-		//	//		, result.width		// image width
-		//	//		, result.height		// image height
-		//	//		, 0					// legacy-unused
-		//	//		, GL_RGB			// source format
-		//	//		, GL_UNSIGNED_BYTE  // source format
-		//	//		, data				//
-		//	//	);
-		//	//	glGenerateMipmap(GL_TEXTURE_2D);
-		//	//
-		//	//	PLOGV << "Texture Loaded: " << filepath
-		//	//		<< "\n\t width: " << result.width
-		//	//		<< "\t height: " << result.height
-		//	//		<< "\n\t size: " << sizeof(data)
-		//	//		;
-		//	//
-		//	//	stbi_image_free(data);
-		//	//}
-		//	//else
-		//	//{
-		//	//	// record as error (ploge), not as fatal (plogf)
-		//	//	PLOGE << "FAILURE!: Texture not loaded"
-		//	//		<< "\n\tfilepath: " << filepath
-		//	//		<< "\n\terror: " << stbi_failure_reason()
-		//	//		;
-		//	//}
-		//
-		//	return result;
-		//}
 
 	}  // ! namespace rendering
 }  // ! namespace witchcraft

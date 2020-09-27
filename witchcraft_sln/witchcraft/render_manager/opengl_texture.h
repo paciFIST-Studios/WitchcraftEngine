@@ -1,8 +1,6 @@
 #ifndef OPENGL_TEXTURE_H
 #define OPENGL_TEXTURE_H
 
-#include <tuple>
-
 #include <SDL.h>
 #include "GL/glew.h"
 
@@ -21,23 +19,17 @@ protected:					// uninit values
 
 	unsigned char * data = nullptr;
 public:
-	OpenGLTexture(){}
-	~OpenGLTexture() { glDeleteTextures(1, &texture_id); }
+	OpenGLTexture(): EngineResourceBase() {}
+	~OpenGLTexture() override { glDeleteTextures(1, &texture_id); }
 
-	OpenGLTexture(const char * filepath)
+	void load() override 
 	{
-		// get id w/ video card
-		glGenTextures(1, &texture_id);
+		unload();
+
 		glBindTexture(GL_TEXTURE_2D, texture_id);
-		
-		// wrapping
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
-		// file load
-		data = stbi_load(filepath, &width, &height, &color_channels, 0);
+
+		stbi_set_flip_vertically_on_load(true);
+		data = stbi_load(filepath.c_str(), &width, &height, &color_channels, 0);
 		if (data != nullptr)
 		{
 			glTexImage2D(
@@ -52,16 +44,44 @@ public:
 				, data				//
 			);
 			glGenerateMipmap(GL_TEXTURE_2D);
-			PLOGV << "Texture Loaded: " << *filepath << "\n\twidth: " << width
-				<< "\theight: " << height << " \tdata size: " << sizeof(data);
+			PLOGV << "Texture Loaded: " << filepath;
 		}
 		else
 		{
-			PLOGE << "'FAILURE! Texture Not Loaded: " << *filepath << "\n\t" << stbi_failure_reason();
+			PLOGE << "'FAILURE! Texture Not Loaded: " << filepath << "\n\t" << stbi_failure_reason();
 		}
 
 		// free loaded texture from ram (is still on video card)
 		stbi_image_free(data);
+	}
+	   
+	void unload() override 
+	{
+		if (data) { stbi_image_free(data); }
+	}
+
+	void reserve_id()
+	{
+		// get id w/ video card
+		glGenTextures(1, &texture_id);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+
+		// wrapping
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
+
+	OpenGLTexture(const char * name, const char * filepath, int scope=0)
+		: EngineResourceBase(
+			  name
+			, filepath
+			, EResourceType::OPENGL_TEXTURE
+			, scope
+	)
+	{
+		reserve_id();
 	}
 
 	unsigned int bind()
@@ -70,12 +90,10 @@ public:
 		return texture_id;
 	}
 
-	// width, height, color channels
-	std::tuple<int, int, int> get_info()
-	{
-		return std::make_tuple(width, height, color_channels);
-	}
-
+	int get_width() const { return width; }
+	int get_height() const { return height; }
+	int get_channels() const { return color_channels; }
+	unsigned int get_texture_id() const { return texture_id; }
 };
 
 #endif // !OPENGL_TEXTURE_H

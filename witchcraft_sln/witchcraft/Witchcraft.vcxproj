@@ -199,6 +199,7 @@
     <ClInclude Include="render_manager\sprite_object_2d.h" />
     <ClInclude Include="resource_manager\engine_resource_base.h" />
     <ClInclude Include="resource_manager\resource_manager.h" />
+    <ClInclude Include="resource_manager\vertex_resource.h" />
     <ClInclude Include="scene_manager\layer_2d.h" />
     <ClInclude Include="scene_manager\scene_listener.h" />
     <ClInclude Include="scene_manager\scene_manager_2d.h" />

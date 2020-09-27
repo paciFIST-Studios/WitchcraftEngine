@@ -308,5 +308,8 @@
     <ClInclude Include="stb_image.h">
       <Filter>Source Files\vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="resource_manager\vertex_resource.h">
+      <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -69,6 +69,13 @@ enum class ERendererState : unsigned char
 	, SHUTDOWN_OK	= 0x80
 };
 
+struct OpenGLSpriteQuad
+{
+	GLuint vao;
+	GLuint vbo;
+	GLuint ebo;
+};
+
 class RenderManager : public EngineObjectBase
 {
 public:
@@ -97,18 +104,6 @@ private:
 		"void main(){\n"
 		"color = texture(_texture, ts);\n}"
 		;
-
-	//	vao
-	//	vbo
-	//	ebo
-	//  texture
-	std::vector<GLuint> sprite_quad;
-
-	GLuint sprite_quad_vao;
-	GLuint sprite_quad_vbo;
-	GLuint sprite_quad_ebo;
-
-	OpenGLTexture sprite_texture;
 	
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
@@ -147,6 +142,9 @@ protected:
 	Console * debug_console			= nullptr;
 
 	MessageBus * message_bus		= nullptr;
+
+	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	OpenGLSpriteQuad sprite_quad;
 
 	SDL_RendererInfo renderer_info;
 
@@ -197,7 +195,7 @@ public:
 		// cache these locally, b/c we're likely to use them very often
 		render_channel_id = message_bus->channel_lookup("render");
 		engine_channel_id = message_bus->channel_lookup("engine");
-		resource_channel_id = message_bus->channel_lookup("resource");
+		resource_channel_id = message_bus->channel_lookup("resource");	
 	}
 
 	bool init_system(

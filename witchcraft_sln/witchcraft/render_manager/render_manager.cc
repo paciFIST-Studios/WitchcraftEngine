@@ -125,6 +125,9 @@ bool RenderManager::init_opengl()
 	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
 
+	// our built in billboard
+	sprite_texture.load();
+
 	renderer_state = ERendererState::OPENGL_INIT_OK;
 
 	return true;
@@ -298,9 +301,9 @@ void RenderManager::handle_message(Message m)
 					glGenBuffers(1, &vbo);
 					glGenBuffers(1, &ebo);
 
-					sprite_quad.push_back(vao);
-					sprite_quad.push_back(vbo);
-					sprite_quad.push_back(ebo);
+					sprite_quad.vao = vao;
+					sprite_quad.vbo = vbo;
+					sprite_quad.ebo = ebo;
 
 					// start work
 					glBindVertexArray(vao);
@@ -336,7 +339,7 @@ void RenderManager::handle_message(Message m)
 					glEnableVertexAttribArray(0);
 
 					glVertexAttribPointer(
-						1
+						  1
 						, 2
 						, GL_FLOAT
 						, GL_FALSE
@@ -345,38 +348,8 @@ void RenderManager::handle_message(Message m)
 					);
 					glEnableVertexAttribArray(1);
 
-					// reserve texture id
-					GLuint texture;
-					glGenTextures(1, &texture);
-
-					sprite_quad.push_back(texture);
-
-					// start work on that id
-					glBindTexture(GL_TEXTURE_2D, texture);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-					{
-						int w, h, chan;
-						stbi_set_flip_vertically_on_load(true);
-						unsigned char * data = stbi_load("asset/buddha.png", &w, &h, &chan, 4);
-						if (data != nullptr)
-						{
-							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA8, GL_UNSIGNED_BYTE, data);
-							glGenerateMipmap(GL_TEXTURE_2D);
-							stbi_image_free(data);
-						}
-					}
-					//auto shader_id = shaders["basic"]->get_shader_program_id();
-					//glUseProgram(shader_id);
-					//glUniform1i(glGetUniformLocation(shader_id, "_texture"), 0);
-
-					//glBindTexture(GL_TEXTURE_2D, 0);
-
-
-					// build texture on gpu here
+					shaders["basic"]->use_program();
+					shaders["basic"]->setInt("_texture", 0);
 				}
 			}
 		}
@@ -441,13 +414,15 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 
 	glActiveTexture(GL_TEXTURE0);
-	glUseProgram(active_shader_program_id);	
-	//glBindVertexArray(sprite_quad[0]);
-	//glBindTexture(GL_TEXTURE_2D, sprite_quad[3]);
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, sprite_texture.get_texture_id());
+	shaders["basic"]->use_program();
+	
+
+
+	glBindVertexArray(sprite_quad.vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();

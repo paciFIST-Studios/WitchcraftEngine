@@ -54,7 +54,6 @@ void Engine::init_gameplay(ProjectSettings ps)
 	{
 		resource->load_from_xml_file(path);
 	}
-
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -342,7 +341,6 @@ void Engine::handle_message(Message m)
 			, console.get()
 		);
 	}
-
 }
 
 

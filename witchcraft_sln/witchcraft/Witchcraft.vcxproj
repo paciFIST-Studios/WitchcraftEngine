@@ -162,6 +162,7 @@
     <ClCompile Include="scene_manager\scene_manager_2d__tst.cc" />
     <ClCompile Include="scene_manager\scene_object__tst.cc" />
     <ClCompile Include="scene_manager\timer__tst.cc" />
+    <ClCompile Include="stb_image.cc" />
     <ClCompile Include="test.cc" />
     <ClCompile Include="tests_exception.cc" />
     <ClCompile Include="utility\get_latest_log_str__tst.cc" />

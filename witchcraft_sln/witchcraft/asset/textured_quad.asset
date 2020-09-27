@@ -1,4 +1,7 @@
 <resources>
   <!-- {x, y, s, t} for each corner of the quad, supplied as floats -->
-  <vertex_list type="vertex_list" name="textured_quad" scope="0" float_list="0.5,0.5,1.0,1.0,0.5,-0.5,1.0,0.0,-0.5,-0.5,0.0,0.0,-0.5,0.5,0.0,1.0" index_list="0,1,3,1,2,3"/>
+  <!-- contents needs to be listed before strides and offsets -->
+  <vertex_list type="vertex_list" name="textured_quad" scope="0" contents="vertex,texture"
+  float_list="0.5,0.5,0.0,1.0,1.0,0.5,-0.5,0.0,1.0,0.0,-0.5,-0.5,0.0,0.0,0.0,-0.5,0.5,0.0,0.0,1.0" index_list="0,1,3,1,2,3"
+  vertex_stride="3" vertex_offset="0" texture_stride="2" texture_offset="3" color_stride="0" color_offset="0"/>
 </resources>

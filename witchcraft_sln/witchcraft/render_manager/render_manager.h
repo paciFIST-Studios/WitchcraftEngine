@@ -92,7 +92,7 @@ private:
 		"layout(location=1) in vec2 _ts;\n"
 		"out vec2 ts;\n"
 		"void main(){\n"
-		"gl_Position = vec4(_pos.x, _pos.y, 0.0f, 1.0f);\n"
+		"gl_Position = vec4(_pos, 1.0f);\n"
 		"ts = _ts;\n}"
 		;
 
@@ -126,8 +126,6 @@ protected:
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
 	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
-
-	GLuint active_shader_program_id = NULL;
 
 	SDL_Window * program_window		= nullptr;
 

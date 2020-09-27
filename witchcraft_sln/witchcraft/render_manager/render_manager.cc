@@ -183,12 +183,12 @@ bool RenderManager::init_shaders()
 {
 	shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["basic"]->compile(basic_vertex_src, basic_fragment_src);
+	shaders["basic"]->use_program();
 
 	// heatmap shader
 	// greybox shader
 	// toon shader
 
-	active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
 
@@ -310,21 +310,11 @@ void RenderManager::handle_message(Message m)
 
 					// vertex buffer
 					glBindBuffer(GL_ARRAY_BUFFER, vbo);
-					glBufferData(
-						GL_ARRAY_BUFFER
-						, sizeof(vrp->vertex_list)
-						, vrp->vertex_list.data()
-						, GL_STATIC_DRAW
-					);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(vrp->vertex_list), vrp->vertex_list.data(), GL_STATIC_DRAW);
 
 					// index buffer
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-					glBufferData(
-						GL_ELEMENT_ARRAY_BUFFER
-						, sizeof(vrp->index_list)
-						, vrp->index_list.data()
-						, GL_STATIC_DRAW
-					);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vrp->index_list), vrp->index_list.data(), GL_STATIC_DRAW);
 
 					// basic shader 					
 					// (location 0) vec3 pos
@@ -413,8 +403,8 @@ bool RenderManager::update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	sprite_texture.bind();
-	shaders["basic"]->use_program();
+	//sprite_texture.bind();
+	//shaders["basic"]->use_program();
 	
 	glBindVertexArray(sprite_quad.vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -425,15 +415,6 @@ bool RenderManager::update()
 	ImGui::NewFrame();
 	// imgui; note: they have to be in this order
 
-
-	//if (use_wireframe_rendering)
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//}
-	//else
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//}
 
 	paint_imgui_main_menu_bar();
 

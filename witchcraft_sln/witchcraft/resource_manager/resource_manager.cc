@@ -128,8 +128,8 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		}
 	}
 
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load
-		<< "\nVertexResource{"
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << "VertexResource";
+		//<< "\nVertexResource{"
 		//<< "\n\tname: " << name
 		//<< "\n\ttype: " << "EResourceType::VERTEX_LIST"
 		//<< "\n\tscope: " << scope
@@ -140,7 +140,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		//<< "\n\ttexture stride: " << texture_stride
 		//<< "\n\ttexture offset: " << texture_offset
 		//<< "};"
-		;
+		//;
 
 	// note: we're going to make something derived from EngineResourceBase
 	std::unique_ptr<EngineResourceBase> resource;

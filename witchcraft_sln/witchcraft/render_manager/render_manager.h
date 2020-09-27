@@ -88,7 +88,7 @@ private:
 
 	char const * basic_vertex_src =
 		"#version 330 core\n"
-		"layout(location=0) in vec2 _pos;\n"
+		"layout(location=0) in vec3 _pos;\n"
 		"layout(location=1) in vec2 _ts;\n"
 		"out vec2 ts;\n"
 		"void main(){\n"

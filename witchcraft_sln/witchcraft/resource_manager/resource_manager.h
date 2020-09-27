@@ -9,6 +9,7 @@
 #define XML rapidxml
 
 #include "engine_resource_base.h"
+#include "vertex_resource.h"
 
 #include "../message_bus/message_bus.h"
 
@@ -34,6 +35,7 @@ protected:
 	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
+	std::unique_ptr<EngineResourceBase> build_vertex_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
 	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
@@ -42,6 +44,9 @@ protected:
 
 	MessageBus * message_bus = nullptr;
 	void handle_message(Message m);
+	unsigned int resource_channel_id = 0;
+	unsigned int render_channel_id   = 0;
+	unsigned int engine_channel_id   = 0;
 
 public:
 
@@ -64,7 +69,7 @@ public:
 	unsigned int get_resource_count() const;
 };
 
-// static void create_config_files()
+
 namespace witchcraft
 {
 	namespace configuration

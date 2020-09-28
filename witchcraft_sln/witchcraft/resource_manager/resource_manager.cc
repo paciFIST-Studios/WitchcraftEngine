@@ -120,17 +120,17 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 			auto contents = utility::tokenize_string(_value, ",");
 			for (auto&& c : contents)
 			{
-				if (c.find("vertex"))
+				if (c == "vertex")
 				{
 					record_vertex = true;
 				}
-				else if (c.find("texture"))
-				{
-					record_texture = true;
-				}
-				else if (c.find("color"))
+				else if (c == "color")
 				{
 					record_color = true;
+				}
+				else if (c == "texture")
+				{
+					record_texture = true;
 				}
 			}
 		}

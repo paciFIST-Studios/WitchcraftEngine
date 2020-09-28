@@ -6,7 +6,7 @@
 #include "engine_resource_base.h"
 
 // NOTE: this is only configured for: 
-// {x, y, u, v} for each corner of the quad
+// {x,y,z,  r,g,b,   u,v} for each corner of the quad
 // , supplied as floats
 class VertexResource : public EngineResourceBase
 {
@@ -28,10 +28,10 @@ public:
 		: EngineResourceBase()
 		, vertex_stride(0)
 		, vertex_offset(0)
-		, texture_stride(0)
-		, texture_offset(0)
 		, color_stride(0)
 		, color_offset(0)
+		, texture_stride(0)
+		, texture_offset(0)
 		, beam_size(0)
 	{}
 
@@ -44,21 +44,21 @@ public:
 		, std::vector<int> & index_array
 		, int vert_stride
 		, int vert_offset
-		, int tex_stride
-		, int tex_offset
 		, int col_stride
 		, int col_offset
+		, int tex_stride
+		, int tex_offset
 	)
 		: EngineResourceBase(name, file, type, scope)
 		, vertex_list(vertex_array)
 		, index_list(index_array)
 		, vertex_stride(vert_stride)
 		, vertex_offset(vert_offset)
-		, texture_stride(tex_stride)
-		, texture_offset(tex_offset)
 		, color_stride(col_stride)
 		, color_offset(col_offset)
-		, beam_size(vertex_stride + texture_stride + color_stride)
+		, texture_stride(tex_stride)
+		, texture_offset(tex_offset)
+		, beam_size(vertex_stride + color_stride + texture_stride)
 	{}
 
 	~VertexResource() override {}

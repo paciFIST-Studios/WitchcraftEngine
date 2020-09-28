@@ -6,8 +6,8 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 
 	if ( ! init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
 	{return false;}
-
-	if ( ! init_sdl_image()){ return false; }
+	//if ( ! init_sdl_image()){ return false; }
+	
 	if ( ! init_opengl())	{ return false; }
 
 	// NOTE: this initialization has to come AFTER the opengl init
@@ -117,34 +117,22 @@ bool RenderManager::init_opengl()
 
 	scc = ImVec4(0.2f, 0.3f, 0.3f, 1.0f);
 
+	// blending fn for showing transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	//SDL_GL_SetSwapInterval(1);	// use VSYNC
 	glEnable(GL_DEPTH_TEST);	// only draw closest pixel to screen
 	glDepthFunc(GL_LESS);		// for depth test, smaller == closer
+
+	// our built in billboard
+	sprite_texture.load();
 
 	renderer_state = ERendererState::OPENGL_INIT_OK;
 
 	return true;
 }
 
-bool RenderManager::init_sdl_image()
-{
-	int flags = 0;
-	flags = flags | IMG_INIT_JPG;
-	flags = flags | IMG_INIT_PNG;
-
-	// not sure what this returns, actually
-	int icode = IMG_Init(flags);
-	if ((icode & flags) != flags)
-	{
-		// failed to init
-		PLOGF << witchcraft::log_strings::sdl_init_failure
-			<< "\nError: Could not initialize PNG + JPG support!\n"
-			<< IMG_GetError();
-		return false;
-	}
-
-	return true;
-}
 
 bool RenderManager::init_imgui()
 {
@@ -193,119 +181,152 @@ void RenderManager::init_get_debug_console()
 
 bool RenderManager::init_shaders()
 {
-	//shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
-	//shaders["basic"]->compile(basic_vertex_shader_src, basic_fragment_shader_src);
+	shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["basic"]->compile(basic_vertex_src, basic_fragment_src);
+	shaders["basic"]->use_program();
 
-	shaders["sprite"] = std::make_unique<OpenGlShaderProgram>();
-	shaders["sprite"]->compile(sprite_vertex_shader_src, sprite_fragment_shader_src);
-	   
-	// wireframe shader <-- is a render mode, not a shader
+
+	//shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
+	//shaders["textureless"]->use_program();
 	// heatmap shader
 	// greybox shader
 	// toon shader
 
-	active_shader_program_id = shaders["sprite"]->get_shader_program_id();
-	//active_shader_program_id = shaders["basic"]->get_shader_program_id();
 	return true;
 }
 
 bool RenderManager::init_geometry()
 {
-	// setup the quad used to display sprites
-	{	
-		// handles
-		glGenVertexArrays(1, &sprite_quad_vao);
-		glGenBuffers(1, &sprite_quad_vbo);
-		glGenBuffers(1, &sprite_quad_ebo);
+	std::string s = "textured_quad";
+	Message m
+	{
+		  resource_channel_id
+		, render_channel_id
+		, MessageType::REQUEST__RESOURCE
+		, (void*)s.c_str()
+	};
+	message_bus->send_direct_message(m);
+	
+	// build triangle w/ raw verts
+	{
+		glGenVertexArrays(1, &tri_vao);
+		glGenBuffers(1, &tri_vbo);
 
-		// start work on sprite quad
-		glBindVertexArray(sprite_quad_vao);
+		glBindVertexArray(tri_vao);
+		glBindBuffer(GL_ARRAY_BUFFER, tri_vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_verticies), triangle_verticies, GL_STATIC_DRAW);
 
-		// send data
-		glBindBuffer(GL_ARRAY_BUFFER, sprite_quad_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER
-			, sizeof(sprite_verticies)
-			, &sprite_verticies[0]
-			, GL_STATIC_DRAW
-		);
-
-		// send data
-		// ebo == element buffer object
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad_ebo);
-		glBufferData(
-			GL_ELEMENT_ARRAY_BUFFER
-			, sizeof(sprite_indicies)
-			, &sprite_indicies[0]
-			, GL_STATIC_DRAW
-		);
-
-		// configure for use in shader
-		glVertexAttribPointer(
-			  0					// attribute index
-			, 3					// size
-			, GL_FLOAT			// datatype of elements
-			, GL_FALSE			// normalized
-			, 3 * sizeof(float) // data row breadth: aka: stride
-			, (void*) 0			// start at offset
-		);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
-		glBindVertexArray(0);				// unbind vao
-		// note: do not unbind the ebo while vao is active
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
 	}
 
-	// setup the triangle
+	// build quad w/ ebo
 	{
-		// handles
-		glGenVertexArrays(1, &triangle_vao);
-		glGenBuffers(1, &triangle_vbo);
+		glGenVertexArrays(1, &quad_vao);
+		glGenBuffers(1, &quad_vbo);
+		glGenBuffers(1, &quad_ebo);
 
-		// start work on triangle
-		glBindVertexArray(triangle_vao);
+		glBindVertexArray(quad_vao);
 
-		// send data
-		glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo);
-		glBufferData(
-			GL_ARRAY_BUFFER
-			, sizeof(triangle_verticies)
-			, &triangle_verticies[0]
-			, GL_STATIC_DRAW
-		);
+		// vbo
+		glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quad_verticies), quad_verticies, GL_STATIC_DRAW);
+		// ebo
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indicies), quad_indicies, GL_STATIC_DRAW);
 
-		// configure for use in shader
-		glVertexAttribPointer(
-			  0					// attribute index
-			, 3					// size
-			, GL_FLOAT			// element datatype
-			, GL_FALSE			// is normalized
-			, 3 * sizeof(float)	// stride
-			, (void*)0			// offset
-		);
+		// ptrs
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+	
+		glBindVertexArray(0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);	// unbind vbo
-		glBindVertexArray(0);				// unbind vao
+		// local texture
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			glGenTextures(1, &quad_tex);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, quad_tex);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			
+			int w, h, chan;
+			stbi_set_flip_vertically_on_load(true);
+			auto data = stbi_load("asset/person.png", &w, &h, &chan, 0);
+			if (data)
+			{
+				if (chan == 4)
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+				}
+				glGenerateMipmap(GL_TEXTURE_2D);
+				stbi_image_free(data);
+			}
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
+		PLOGE << glGetError();
+
 	}
 
-	// render a 2d sprite on the quad
-	{
-		int w = 0;
-		int h = 0;
-		SDL_GetWindowSize(program_window, &w, &h);
 
-		// orthagraphic viewing frustum
-		glm::mat4 projection = glm::ortho(
-			  0.0f
-			, (float)w
-			, (float)h
-			, 0.0f
-			,-1.0f
-			, 1.0f
-		);
-	}
-
+	// ------------------------------------------------------------------
+	// matricies
+	//
+	//w = 0;
+	//h = 0;
+	//SDL_GetWindowSize(program_window, &w, &h);
+	//
+	//
+	//orthographic_projection_matrix = glm::ortho(
+	//	  0.0f			//	left
+	//	, (float)w		//	right
+	//	, (float)h		//	bottom
+	//	, 0.0f			//	top
+	//	,-1.0f			//	near
+	//	, 1.0f			//	far
+	//);
+	//
+	//perspective_projection_matrix = glm::perspective(
+	//	  glm::radians(45.0f)	// fov
+	//	, (float)w / (float)h	// aspect ratio
+	//	, 0.1f					// near
+	//	, 100.f					// far
+	//);
+	//
+	//// start with identity matrix
+	//model_matrix = glm::mat4(1.0f);
+	//// rotate by -55 degrees around x+ axis
+	//model_matrix = glm::rotate(model_matrix, glm::radians(-0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//
+	//// view matrix moves camera back
+	//view_matrix = glm::mat4(1.0f);
+	//view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
+	//
+	//
+	//shader_id = active_shader_program_id;
+	//int model_loc = glGetUniformLocation(shader_id, "model");
+	//int view_loc = glGetUniformLocation(shader_id, "view");
+	//int proj_loc = glGetUniformLocation(shader_id, "projection");
+	//
+	//glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
+	//glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix[0][0]);
+	//glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(orthographic_projection_matrix));
+	
 	return true;
 }
 
@@ -313,11 +334,9 @@ void RenderManager::handle_message(Message m)
 {
 	if (m.type == MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER)
 	{
-		message_bus->log_message(m);
 		debug_console = static_cast<Console*>(m.data);
 		return;
 	}
-	// else if()
 	else if (m.type == MessageType::INVOKE__RENDER_COMMAND)
 	{
 		auto command_str = static_cast<std::string*>(m.data);
@@ -341,6 +360,57 @@ void RenderManager::handle_message(Message m)
 			if (contains_term(command_str, "toggle"))
 			{
 				draw_triangle_not_quad = !draw_triangle_not_quad;
+			}
+		}
+	}
+	else if (m.type == MessageType::SUPPLY__RESOURCE)
+	{
+		if (m.data == nullptr) { return; }
+		auto erbp = static_cast<EngineResourceBase*>(m.data);
+		
+		if (erbp != nullptr) 
+		{
+			if (erbp->type == EResourceType::VERTEX_LIST)
+			{
+				auto vrp = static_cast<VertexResource*>(m.data);
+				if (vrp != nullptr)
+				{
+					GLuint vao, vbo, ebo;
+					glGenVertexArrays(1, &vao);
+					glGenBuffers(1, &vbo);
+					glGenBuffers(1, &ebo);
+
+					sprite_quad.vao = vao;
+					sprite_quad.vbo = vbo;
+					sprite_quad.ebo = ebo;
+
+					// start work
+					glBindVertexArray(vao);
+
+					// vertex buffer
+					glBindBuffer(GL_ARRAY_BUFFER, vbo);
+					glBufferData(GL_ARRAY_BUFFER, sizeof(vrp->vertex_list), &vrp->vertex_list[0], GL_STATIC_DRAW);
+
+					// index buffer
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vrp->index_list), &vrp->index_list[0], GL_STATIC_DRAW);
+
+					// basic shader 					
+					// (location=0) vec3 pos
+					// (location=1) vec3 color
+					// (location=2) vec2 uv
+					//             location, #, datatype, normalized,  stride				 	  , offset
+					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset  * sizeof(float)));
+					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset   * sizeof(float)));
+					glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset * sizeof(float)));
+					
+					glEnableVertexAttribArray(0);
+					glEnableVertexAttribArray(1);
+					glEnableVertexAttribArray(2);
+
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					glBindVertexArray(0);
+				}
 			}
 		}
 	}
@@ -374,6 +444,25 @@ void RenderManager::paint_imgui_main_menu_bar()
 	ImGui::EndMainMenuBar();
 }
 
+void RenderManager::paint_debug_windows()
+{
+	// we call this every time, and debug console itself is responsible
+	// for perfoming an early-out, if it's not visible
+	if (debug_console != nullptr)
+	{
+		debug_console->draw("Debug Console");
+	}
+	
+	// debug window
+	if (draw_imgui_debug_window)
+	{
+		// draw imgui, after drawing the rest of the program for this frame
+		ImGui::Begin("Debug Menu");
+		ImGui::ColorEdit3("bg color", (float*)&scc);
+		ImGui::End();
+	}
+}
+
 bool RenderManager::update()
 {
 	// base background color
@@ -385,7 +474,27 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(active_shader_program_id);
+
+	//shaders["textureless"]->use_program();
+	//glBindVertexArray(tri_vao);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glBindVertexArray(0);
+
+
+	shaders["basic"]->use_program();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, quad_tex);
+	shaders["basic"]->setInt("_texture", 0);
+
+	glBindVertexArray(quad_vao);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	//sprite_texture.bind();
+	//shaders["basic"]->use_program();
+	//
+	//glBindVertexArray(sprite_quad.vao);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();
@@ -394,52 +503,9 @@ bool RenderManager::update()
 	// imgui; note: they have to be in this order
 
 
-	if (use_wireframe_rendering)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	else
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-
-		
-	// draw triangle
-	if (draw_triangle_not_quad)
-	{
-		glBindVertexArray(triangle_vao);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-	}
-	else
-	{
-		glBindVertexArray(sprite_quad_vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0); // unset
-	}
-
-	//render_visible_sprites_back_to_front();
-
-	   
 	paint_imgui_main_menu_bar();
-	
-	// we call this every time, and debug console itself is responsible
-	// for perfoming an early-out, if it's not visible
-	if (debug_console != nullptr)
-	{
-		debug_console->draw("Debug Console");
-	}
 
-
-	// debug window
-	if (draw_imgui_debug_window)
-	{
-		// draw imgui, after drawing the rest of the program for this frame
-		ImGui::Begin("Debug Menu");
-		ImGui::ColorEdit3("bg color", (float*)&scc);
-		ImGui::End();
-	}
-
+	paint_debug_windows();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -502,8 +568,6 @@ void RenderManager::render_visible_sprites_back_to_front()
 		}
 	}
 }
-
-
 
 void RenderManager::render_visible_scene_back_to_front()
 {

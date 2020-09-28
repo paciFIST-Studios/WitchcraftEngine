@@ -3,6 +3,7 @@
 
 #include <SDL.h>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 #include "../engine/engine_object.h"
 
@@ -38,9 +39,16 @@ public:
 
 	unsigned int get_shader_program_id() { return shader_program_id; }
 
-	OpenGlShaderProgram & set_active();
+	void use_program();
 
 	void compile(char const * vertex_src, char const * fragment_src, char const * geometry_src = nullptr);
+
+	void setInt( char const * name, int value) const;
+	void setVec2(char const * name, glm::vec2 const & value) const;
+	void setVec3(char const * name, glm::vec3 const & value) const;
+	void setVec4(char const * name, glm::vec4 const & value) const;
+
+	void setMat4(char const * name, glm::mat4 const & value) const;
 };
 
 #endif // !OPENGL_SHADER_H

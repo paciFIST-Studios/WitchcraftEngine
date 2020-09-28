@@ -10,6 +10,8 @@ enum class EResourceType
 {
 	  UNINITIALIZED		
 	, IMAGE
+	, VERTEX_LIST
+	, OPENGL_TEXTURE
 	, SPRITE_ATLAS
 	, SHADER
 	, ANIMATION

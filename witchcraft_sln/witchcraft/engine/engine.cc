@@ -22,6 +22,10 @@ void Engine::startup()
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
+	{
+		// for now, this is a default engine resource
+		resource->load_from_xml_file("asset/textured_quad.asset");
+	}
 
 	PLOGI << witchcraft::log_strings::debug_console;
 	console = std::make_unique<Console>(message.get());
@@ -54,7 +58,6 @@ void Engine::init_gameplay(ProjectSettings ps)
 	{
 		resource->load_from_xml_file(path);
 	}
-
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -332,8 +335,6 @@ void Engine::handle_message(Message m)
 {
 	if (m.type == MessageType::REQUEST__CONSOLE_PTR_NON_OWNER)
 	{
-		message->log_message(m);
-
 		// to, from, type, data
 		send_message(
 			  m.sender
@@ -342,7 +343,6 @@ void Engine::handle_message(Message m)
 			, console.get()
 		);
 	}
-
 }
 
 
@@ -392,7 +392,6 @@ void Engine::run()
 	// when gameplay finishes, system begins shutdown
 	// since asset objects are owned by resource manager, they get torn down
 	//		when resource manager is deconstructed
-
 
 	//int buddha_resource_id;
 	//qSceneObject * buddha_scene_object = nullptr;

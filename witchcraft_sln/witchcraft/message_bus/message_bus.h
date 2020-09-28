@@ -14,6 +14,10 @@ enum MessageType
 
 	, REQUEST__LOAD_RESOURCE
 	, REQUEST__UNLOAD_RESOURCE
+
+	// requests a resource from the resource manager
+	, REQUEST__RESOURCE
+	// resoruce manager returns a non-owning pointer to resource
 	, SUPPLY__RESOURCE
 
 	// Console is given a <char const *>, containing a command
@@ -47,6 +51,7 @@ static std::map<MessageType, char const *> const message_type_enum_to_string {
 	, { MessageType::TESTING					, "TESTING"						}
 	, { MessageType::REQUEST__LOAD_RESOURCE		, "REQUEST__LOAD_RESOURCE"		}
 	, { MessageType::REQUEST__UNLOAD_RESOURCE	, "REQUEST__UNLOAD_RESOURCE"	}
+	, { MessageType::REQUEST__RESOURCE			, "REQUEST__RESOURCE"			}
 	, { MessageType::SUPPLY__RESOURCE			, "SUPPLY__RESOURCE"			}
 	, { MessageType::INVOKE__CONSOLE_COMMAND	, "INVOKE__CONSOLE_COMMAND"		}
 	, { MessageType::INVOKE__RENDER_COMMAND		, "INVOKE__RENDER_COMMAND"		}
@@ -118,8 +123,7 @@ public:
 		, registered_callbacks({})
 	{}
 
-	~MessageBus()
-	{}
+	~MessageBus(){}
 
 	unsigned int channel_lookup(char const * channel_name)
 	{
@@ -290,11 +294,8 @@ public:
 			ss << "\n\tdata: { " << m.data << " }";
 			ss << "\n};";
 
-
 			PLOGV << ss.str();
 	}
-
-
 };
 
 #endif // !MESSAGE_BUS_H

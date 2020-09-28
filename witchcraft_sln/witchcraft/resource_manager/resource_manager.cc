@@ -82,6 +82,134 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 	return std::move(resource);
 }
 
+std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_xml(XML::xml_node<> const & xml)
+{
+	std::string		name		= "";
+	std::string		filepath	= "";
+	EResourceType	type		= EResourceType::VERTEX_LIST;
+	unsigned int	scope		= 0;
+	std::vector<float> verts;
+	std::vector<int> indicies;
+
+	bool record_vertex  = false;
+	bool record_texture = false;
+	bool record_color   = false;
+
+	int vertex_stride  = 0;
+	int vertex_offset  = 0;
+	int texture_stride = 0;
+	int texture_offset = 0;
+	int color_stride   = 0;
+	int color_offset   = 0;
+
+	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
+	{
+		std::string _name = attr->name();
+		std::string _value = attr->value();
+
+		if (_name == witchcraft::xml::NAME)
+		{
+			name = _value;
+		}
+		else if (_name == witchcraft::xml::SCOPE)
+		{
+			scope = std::stoi(_value);
+		}
+		else if(_name == "contents")
+		{ 
+			auto contents = utility::tokenize_string(_value, ",");
+			for (auto&& c : contents)
+			{
+				if (c == "vertex")
+				{
+					record_vertex = true;
+				}
+				else if (c == "color")
+				{
+					record_color = true;
+				}
+				else if (c == "texture")
+				{
+					record_texture = true;
+				}
+			}
+		}
+		else if (_name == "float_list")
+		{
+			auto s_vec = utility::tokenize_string(_value, ",");
+			for (auto&& s : s_vec)
+			{
+				verts.push_back(std::stof(s));
+			}
+		}
+		else if (_name == "index_list")
+		{
+			auto i_vec = utility::tokenize_string(_value, ",");
+			for (auto&& i : i_vec)
+			{
+				indicies.push_back(std::stoi(i));
+			}
+		}
+
+		if (record_vertex)
+		{
+			if(_name == "vertex_stride")
+			{ 
+				vertex_stride = std::stoi(_value);
+			}
+			else if(_name == "vertex_offset")
+			{ 
+				vertex_offset = std::stoi(_value);
+			}
+		}
+
+		if (record_texture)
+		{
+			if(_name == "texture_stride")
+			{
+				texture_stride = std::stoi(_value);
+			}
+			else if(_name == "texture_offset")
+			{ 
+				texture_offset = std::stoi(_value);
+			}
+		}
+
+		if (record_color)
+		{
+			if(_name == "color_stride")
+			{
+				color_stride = std::stoi(_value);
+			}
+			else if(_name == "color_offset")
+			{
+				color_offset = std::stoi(_value);
+			}
+		}
+	}
+
+	PLOGV << witchcraft::log_strings::resource_manager_meta_load << "VertexResource";
+
+	// note: we're going to make something derived from EngineResourceBase
+	std::unique_ptr<EngineResourceBase> resource;
+	resource = std::make_unique<VertexResource>(
+		  name				// 
+		, filepath			// 
+		, type				// 
+		, scope				// 
+		, verts				//
+		, indicies			//
+		, vertex_stride		// 
+		, vertex_offset		// 
+		, texture_stride	// 
+		, texture_offset	// 
+		, color_stride		//
+		, color_offset		//
+		);
+
+	return std::move(resource);
+}
+
 std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
 {
 	unsigned int uuid  = 0;
@@ -103,8 +231,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 			scope = std::stoi(_value);
 		}
 	}
-
-
+	
 	auto resource = std::make_unique<ShaderResource>("shader", scope);
 
 	for (XML::xml_node<>* child = xml.first_node(); child; child =child->next_sibling())
@@ -284,6 +411,11 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 						resource = build_render_resource_from_xml(*child);
 						break;
 					}
+					else if (_value == "vertex_list")
+					{
+						resource = build_vertex_resource_from_xml(*child);
+						break;
+					}
 					else if (_value == "shader")
 					{
 						resource = build_shader_resource_from_xml(*child);
@@ -329,8 +461,7 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 bool ResourceManager::set_current_scope(unsigned int Scope)
 {
 	// You cannot change scope, until a global resource is loaded
-	if (resource_count == 0)
-		return false;
+	if (resource_count == 0) { return false; }
 	
 	// unload old scope, but not global
 	if (current_scope != 0)
@@ -365,11 +496,33 @@ ResourceManager::ResourceManager(MessageBus * mb)
 {
 	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_message, this, std::placeholders::_1);
 	mb->subscribe("resource", cb);
+	resource_channel_id = mb->channel_lookup("resource");
+	render_channel_id = mb->channel_lookup("render");
+	engine_channel_id = mb->channel_lookup("engine");
 }
 
 void ResourceManager::handle_message(Message m)
 {
-	message_bus->log_message(m);
+	// request resource by name, supplied as <char*>
+	if (m.type == MessageType::REQUEST__RESOURCE)
+	{
+		if (m.data == nullptr){return;}
+
+		auto cptr = static_cast<char*>(m.data);
+		auto rptr = this->find_resource(cptr, 0);
+
+		if (rptr != nullptr)
+		{
+			Message reply
+			{
+				  m.sender
+				, m.recipient
+				, MessageType::SUPPLY__RESOURCE
+				, rptr
+			};
+			message_bus->send_direct_message(reply);
+		}
+	}
 }
 
 int ResourceManager::get_current_scope() const

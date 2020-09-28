@@ -1,9 +1,8 @@
 #include "opengl_shader.h"
 
-OpenGlShaderProgram & OpenGlShaderProgram::set_active()
+void OpenGlShaderProgram::use_program()
 {
 	glUseProgram(this->shader_program_id);
-	return *this;
 }
 
 GLuint OpenGlShaderProgram::compile_vertex_shader(char const * src)
@@ -100,7 +99,7 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 			PLOGV << "SUCCESS: shader compile: [" << type << "]";
 		}
 	}
-	// else if (type == witchcraft::shader::compute)
+	// else if (type == COMPUTE)
 	else if (type == PROGRAM)
 	{
 		glGetProgramiv(obj, GL_LINK_STATUS, &success);
@@ -123,4 +122,29 @@ bool OpenGlShaderProgram::check_compile_errors(unsigned int obj, char const * ty
 
 	// returns true if no compile error
 	return true;
+}
+
+void OpenGlShaderProgram::setInt(char const * name, int value) const
+{
+	glUniform1i(glGetUniformLocation(shader_program_id, name), value);
+}
+
+void OpenGlShaderProgram::setVec2(char const * name, glm::vec2 const & value) const
+{
+	glUniform2fv(glGetUniformLocation(shader_program_id, name), 1, &value[0]);
+}
+
+void OpenGlShaderProgram::setVec3(char const * name, glm::vec3 const & value) const
+{
+	glUniform3fv(glGetUniformLocation(shader_program_id, name), 1, &value[0]);
+}
+
+void OpenGlShaderProgram::setVec4(char const * name, glm::vec4 const & value) const
+{
+	glUniform3fv(glGetUniformLocation(shader_program_id, name), 1, &value[0]);
+}
+
+void OpenGlShaderProgram::setMat4(char const * name, glm::mat4 const & value) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(shader_program_id, name), 1, GL_FALSE, &value[0][0]);
 }

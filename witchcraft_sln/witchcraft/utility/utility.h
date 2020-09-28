@@ -99,6 +99,11 @@
 			return result;
 		}
 
+		static inline bool is_token(std::string const & a, std::string const & b)
+		{
+			return a.compare(b) == 0;
+		}
+
 	}
 
 #endif

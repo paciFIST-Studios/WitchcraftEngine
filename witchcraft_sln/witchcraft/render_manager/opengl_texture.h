@@ -35,11 +35,11 @@ public:
 			glTexImage2D(
 				GL_TEXTURE_2D		//  can also make 1d or 3d textures
 				, 0					//	mipmap level (default=0)
-				, GL_RGB			//	storage format
+				, GL_RGBA8			//	storage format
 				, width				//	image width
 				, height			//	image height
 				, 0					//	legacy-unused
-				, GL_RGB			//	source format
+				, GL_RGBA8			//	source format
 				, GL_UNSIGNED_BYTE	//	source format
 				, data				//
 			);
@@ -71,6 +71,9 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
 	}
 
 	OpenGLTexture(const char * name, const char * filepath, int scope=0)
@@ -84,8 +87,9 @@ public:
 		reserve_id();
 	}
 
-	unsigned int bind()
+	unsigned int bind(unsigned int slot = 0)
 	{
+		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 		return texture_id;
 	}

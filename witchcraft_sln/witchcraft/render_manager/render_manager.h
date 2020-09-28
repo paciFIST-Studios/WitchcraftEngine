@@ -88,23 +88,67 @@ private:
 
 	char const * basic_vertex_src =
 		"#version 330 core\n"
-		"layout(location=0) in vec3 _pos;\n"
-		"layout(location=1) in vec2 _ts;\n"
-		"out vec2 ts;\n"
+		"layout(location=0) in vec3 aPos;\n"
+		"layout(location=1) in vec3 aColor;\n"
+		"layout(location=2) in vec2 aUV;\n"
+		"out vec3 _color;\n"
+		"out vec2 _uv;\n"
 		"void main(){\n"
-		"gl_Position = vec4(_pos, 1.0f);\n"
-		"ts = _ts;\n}"
+		"gl_Position = vec4(aPos, 1.0f);\n"
+		"_color = aColor;\n"
+		"_uv = aUV;\n"
+		"}"
 		;
 
 	char const * basic_fragment_src =
 		"#version 330 core\n"
-		"out vec4 color;\n"
-		"in vec2 ts;\n"
+		"out vec4 fColor;\n"
+		"in vec3 _color;\n"
+		"in vec2 _uv;\n"
 		"uniform sampler2D _texture;\n"
 		"void main(){\n"
-		"color = texture(_texture, ts);\n}"
+		"fColor = texture(_texture, _uv);\n"
+		"}"
 		;
 	
+	const char * textureless_vertex_src = 
+		"#version 330 core\n"
+		"layout(location=0) in vec3 pos;\n"
+		"void main() {\n"
+		"gl_Position = vec4(pos.x, pos.y, pos.z, 1.0f);\n}"
+		;
+
+	char const * textureless_fragment_src =
+		"#version 330 core\n"
+		"out vec4 color;\n"
+		"void main(){\n"
+		"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}"
+		;
+
+	GLuint tri_vao, tri_vbo;
+	GLfloat const triangle_verticies[9] =
+	{
+		 -0.5f, -0.5f, 0.0f
+		, 0.5f, -0.5f, 0.0f
+		, 0.0f,  0.5f, 0.0f
+	};
+
+
+	GLuint quad_vao, quad_vbo, quad_ebo, quad_tex;
+	GLfloat const quad_verticies[32] =
+	{
+		// pos					// color			// tex
+		  0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// tr
+		, 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// br
+		,-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bl
+		,-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f,	0.0f, 1.0f	// tl
+	};
+	GLuint const quad_indicies[6] =
+	{
+ 		  0, 1, 3
+		, 1, 2, 3
+	};
+
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
 	glm::mat4 orthographic_projection_matrix;

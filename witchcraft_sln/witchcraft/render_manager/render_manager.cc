@@ -111,7 +111,7 @@ bool RenderManager::init_opengl()
 	else
 	{
 		PLOGV << witchcraft::log_strings::opengl_glew_ok;
-		PLOGV << "gfx card info: " << glGetString(GL_RENDERER);
+		PLOGV << "gfx card info: "  << glGetString(GL_RENDERER);
 		PLOGV << "opengl version: " << glGetString(GL_VERSION);
 	}
 
@@ -181,10 +181,18 @@ void RenderManager::request_debug_console_ptr()
 
 bool RenderManager::init_shaders()
 {
-	shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
-	shaders["basic"]->compile(basic_vertex_src, basic_fragment_src);
-	shaders["basic"]->use_program();
-	active_shader = "basic";
+	// this is a default shader to load, regardless of the 
+	// project running in the engine
+	std::string const basic_shader = "basic_shader";
+
+	Message m {
+		  resource_channel_id
+		, render_channel_id
+		, MessageType::REQUEST__RESOURCE
+		, (void*)basic_shader.c_str()
+	};
+	message_bus->send_direct_message(m);
+	active_shader = basic_shader.c_str();
 
 	shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
@@ -200,8 +208,7 @@ bool RenderManager::init_shaders()
 bool RenderManager::init_geometry()
 {
 	std::string s = "textured_quad";
-	Message m
-	{
+	Message m {
 		  resource_channel_id
 		, render_channel_id
 		, MessageType::REQUEST__RESOURCE
@@ -209,62 +216,6 @@ bool RenderManager::init_geometry()
 	};
 	message_bus->send_direct_message(m);
 	
-
-	//// build quad w/ ebo
-	//{
-	//	glGenVertexArrays(1, &quad_vao);
-	//	glGenBuffers(1, &quad_vbo);
-	//	glGenBuffers(1, &quad_ebo);
-	//
-	//	glBindVertexArray(quad_vao);
-	//
-	//	// vbo
-	//	glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-	//	glBufferData(GL_ARRAY_BUFFER, sizeof(quad_verticies), quad_verticies, GL_STATIC_DRAW);
-	//	// ebo
-	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_ebo);
-	//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indicies), quad_indicies, GL_STATIC_DRAW);
-	//
-	//	// ptrs
-	//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
-	//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-	//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
-	//	glEnableVertexAttribArray(0);
-	//	glEnableVertexAttribArray(1);
-	//	glEnableVertexAttribArray(2);
-	//
-	//	glBindVertexArray(0);
-	//
-	//	// local texture
-	//	{
-	//		glEnable(GL_BLEND);
-	//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//
-	//		glGenTextures(1, &quad_tex);
-	//		glActiveTexture(GL_TEXTURE0);
-	//		glBindTexture(GL_TEXTURE_2D, quad_tex);
-	//
-	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//		
-	//		int w, h, chan;
-	//		stbi_set_flip_vertically_on_load(true);
-	//		auto data = stbi_load("rainbow.png", &w, &h, &chan, 0);
-	//		if (data)
-	//		{
-	//			if (chan == 4)
-	//			{
-	//				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	//			}
-	//			glGenerateMipmap(GL_TEXTURE_2D);
-	//			stbi_image_free(data);
-	//		}
-	//
-	//		glBindTexture(GL_TEXTURE_2D, 0);
-	//	}
-	//}
 
 
 	// ------------------------------------------------------------------
@@ -389,49 +340,37 @@ void RenderManager::handle_invoke_render_command(Message & m)
 void RenderManager::handle_supply_resource(Message & m)
 {
 	if (m.data == nullptr) { return; }
-	auto erbp = static_cast<EngineResourceBase*>(m.data);
 
-	if (erbp != nullptr)
+	auto data_ptr = static_cast<EngineResourceBase*>(m.data);
+	if (data_ptr == nullptr) 
 	{
-		if (erbp->type == EResourceType::VERTEX_LIST_QUAD)
-		{
-			auto vrp = static_cast<VertexResource*>(m.data);
-			if (vrp != nullptr)
-			{
-				sprite_quad = { 0, 0, 0 };
-				glGenVertexArrays(1, &sprite_quad.vao);
-				glGenBuffers(1, &sprite_quad.vbo);
-				glGenBuffers(1, &sprite_quad.ebo);
-
-				// start work
-				glBindVertexArray(sprite_quad.vao);
-
-				// vertex buffer
-				glBindBuffer(GL_ARRAY_BUFFER, sprite_quad.vbo);
-				glBufferData(GL_ARRAY_BUFFER, vrp->vertex_list.size()*sizeof(float), &vrp->vertex_list[0], GL_STATIC_DRAW);
-
-				// index buffer
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad.ebo);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, vrp->index_list.size()*sizeof(float), &vrp->index_list[0], GL_STATIC_DRAW);
-
-				// basic shader 					
-				// (location=0) vec3 pos
-				// (location=1) vec3 color
-				// (location=2) vec2 uv
-				//             location, #, datatype, normalized,  stride				 	  , offset
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset  * sizeof(float)));
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset   * sizeof(float)));
-				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset * sizeof(float)));
-
-				glEnableVertexAttribArray(0);
-				glEnableVertexAttribArray(1);
-				glEnableVertexAttribArray(2);
-
-				//glBindBuffer(GL_ARRAY_BUFFER, 0);
-				glBindVertexArray(0);
-			}
-		}
+		PLOGE << "ERROR! Supplied resource ptr is not castable to EngineResrouceBase!";
+		message_bus->log_message(m);
+		return; 
 	}
+
+
+	if (data_ptr->type == EResourceType::VERTEX_LIST_QUAD)
+	{
+		auto vert_ptr = static_cast<VertexResource*>(m.data);
+		if (vert_ptr == nullptr)
+		{
+			PLOGE << "ERROR! Supplied resource ptr is of type VERTEX_LIST_QUAD, and is not castable to VertexResource *";
+			message_bus->log_message(m);
+			return;
+		}
+
+		initialize_sprite_quad(vert_ptr, sprite_quad);
+	}
+	else if (data_ptr->type == EResourceType::SHADER)
+	{
+		auto shdr = static_cast<ShaderResource*>(m.data);
+		char const * name = shdr->name.c_str();
+		shaders[name] = std::make_unique<OpenGlShaderProgram>();
+		shaders[name]->compile(basic_vertex_src, basic_fragment_src);
+	}
+
+
 }
 
 
@@ -480,6 +419,41 @@ void RenderManager::paint_debug_windows()
 		ImGui::ColorEdit3("bg color", (float*)&scc);
 		ImGui::End();
 	}
+}
+
+void RenderManager::initialize_sprite_quad(VertexResource const * vrp, OpenGLSpriteQuad & quad)
+{
+	// this fn only works with the project-defined-datatype, found in
+	// the textured_quad.asset
+
+	quad = { 0, 0, 0 };
+	glGenVertexArrays(1, &sprite_quad.vao);
+	glGenBuffers(1, &sprite_quad.vbo);
+	glGenBuffers(1, &sprite_quad.ebo);
+
+	// start work
+	glBindVertexArray(sprite_quad.vao);
+
+	// vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, sprite_quad.vbo);
+	glBufferData(GL_ARRAY_BUFFER, vrp->vertex_list.size() * sizeof(float), &vrp->vertex_list[0], GL_STATIC_DRAW);
+
+	// index buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad.ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vrp->index_list.size() * sizeof(float), &vrp->index_list[0], GL_STATIC_DRAW);
+
+	// location, #, datatype, normalized,  stride(beam), offset
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset  * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset* sizeof(float)));
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	// I don't know what bind=0 on the buffer would do here
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 bool RenderManager::update()

@@ -25,6 +25,7 @@ void Engine::startup()
 	{
 		// for now, this is a default engine resource
 		resource->load_from_xml_file("asset/textured_quad.asset");
+		resource->load_from_xml_file("asset/basic_shader.asset");
 	}
 
 	PLOGI << witchcraft::log_strings::debug_console;
@@ -54,10 +55,8 @@ void Engine::init_gameplay(ProjectSettings ps)
 	PLOGI << witchcraft::log_strings::gameplay_manager_start;
 	gameplay = std::make_unique<GameplayManager>(message.get());
 
-	for (auto&& path : ps.file_paths)
-	{
-		resource->load_from_xml_file(path);
-	}
+	for (auto&& path : ps.file_paths){
+		resource->load_from_xml_file(path); }
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -126,11 +125,14 @@ void Engine::process_window_event(SDL_Event const & e)
 				send_render_command("use_texture_class=toggle");
 				break;
 			case SDLK_F6:
+				send_render_command("use_vertex_class_not_quad=toggle");
+			case SDLK_F7:
 				send_render_command("use_shader=basic");
 				break;
-			case SDLK_F7:
+			case SDLK_F8:
 				send_render_command("use_shader=textureless");
 				break;
+
 
 				// Numeric
 			case SDLK_1:

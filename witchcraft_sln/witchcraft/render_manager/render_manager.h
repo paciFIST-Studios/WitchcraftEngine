@@ -50,6 +50,7 @@
 
 #include "opengl_shader.h"
 #include "opengl_texture.h"
+#include "../render_manager/shader_resource.h"
 #include "../resource_manager/vertex_resource.h"
 
 #include "../console/console.h"
@@ -125,20 +126,6 @@ private:
 		"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}"
 		;
 	
-	//GLuint quad_vao, quad_vbo, quad_ebo, quad_tex;
-	//GLfloat const quad_verticies[32] =
-	//{
-	//	// pos					// color			// tex
-	//	  0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// tr
-	//	, 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// br
-	//	,-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bl
-	//	,-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f,	0.0f, 1.0f	// tl
-	//};
-	//GLuint const quad_indicies[6] =
-	//{
- 	//	  0, 1, 3
-	//	, 1, 2, 3
-	//};
 
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
@@ -156,7 +143,7 @@ private:
 
 	void paint_debug_windows();
 
-
+	void initialize_sprite_quad(VertexResource const * vert, OpenGLSpriteQuad & quad);
 
 protected:
 

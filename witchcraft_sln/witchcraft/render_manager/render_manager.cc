@@ -265,7 +265,7 @@ bool RenderManager::init_geometry()
 			
 			int w, h, chan;
 			stbi_set_flip_vertically_on_load(true);
-			auto data = stbi_load("asset/person.png", &w, &h, &chan, 0);
+			auto data = stbi_load("rainbow.png", &w, &h, &chan, 0);
 			if (data)
 			{
 				if (chan == 4)
@@ -278,9 +278,6 @@ bool RenderManager::init_geometry()
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-
-		PLOGE << glGetError();
-
 	}
 
 
@@ -334,87 +331,109 @@ void RenderManager::handle_message(Message m)
 {
 	if (m.type == MessageType::SUPPLY__CONSOLE_PTR_NON_OWNER)
 	{
-		debug_console = static_cast<Console*>(m.data);
-		return;
+		handle_supply_console_ptr_message(m);
 	}
 	else if (m.type == MessageType::INVOKE__RENDER_COMMAND)
 	{
-		auto command_str = static_cast<std::string*>(m.data);
-		if (contains_term(command_str, "render_wireframe="))
-		{
-			if (contains_term(command_str, "true"))
-			{
-				use_wireframe_rendering = true;
-			}
-			else if (contains_term(command_str, "false"))
-			{
-				use_wireframe_rendering = false;
-			}
-			else if (contains_term(command_str, "toggle"))
-			{
-				use_wireframe_rendering = !use_wireframe_rendering;
-			}
-		}
-		else if (contains_term(command_str, "triangle2quad"))
-		{
-			if (contains_term(command_str, "toggle"))
-			{
-				draw_triangle_not_quad = !draw_triangle_not_quad;
-			}
-		}
+		handle_invoke_render_command(m);
 	}
 	else if (m.type == MessageType::SUPPLY__RESOURCE)
 	{
-		if (m.data == nullptr) { return; }
-		auto erbp = static_cast<EngineResourceBase*>(m.data);
-		
-		if (erbp != nullptr) 
+		handle_supply_resource(m);
+	}
+}
+
+void RenderManager::handle_supply_console_ptr_message(Message & m)
+{
+	debug_console = static_cast<Console*>(m.data);
+}
+
+void RenderManager::handle_invoke_render_command(Message & m)
+{
+	auto cs = static_cast<std::string*>(m.data);
+	if (contains_term(cs, "render_wireframe="))
+	{
+		if (contains_term(cs, "true"))
 		{
-			if (erbp->type == EResourceType::VERTEX_LIST)
+			use_wireframe_rendering = true;
+		}
+		else if (contains_term(cs, "false"))
+		{
+			use_wireframe_rendering = false;
+		}
+		else if (contains_term(cs, "toggle"))
+		{
+			use_wireframe_rendering = !use_wireframe_rendering;
+		}
+	}
+	else if (contains_term(cs, "triangle2quad"))
+	{
+		if (contains_term(cs, "toggle"))
+		{
+			draw_triangle_not_quad = !draw_triangle_not_quad;
+		}
+	}
+	else if (contains_term(cs, "use_texture_class"))
+	{
+		if (contains_term(cs, "toggle"))
+		{
+			use_texture_class = !use_texture_class;
+		}
+	}
+}
+
+void RenderManager::handle_supply_resource(Message & m)
+{
+	if (m.data == nullptr) { return; }
+	auto erbp = static_cast<EngineResourceBase*>(m.data);
+
+	if (erbp != nullptr)
+	{
+		if (erbp->type == EResourceType::VERTEX_LIST_QUAD)
+		{
+			auto vrp = static_cast<VertexResource*>(m.data);
+			if (vrp != nullptr)
 			{
-				auto vrp = static_cast<VertexResource*>(m.data);
-				if (vrp != nullptr)
-				{
-					GLuint vao, vbo, ebo;
-					glGenVertexArrays(1, &vao);
-					glGenBuffers(1, &vbo);
-					glGenBuffers(1, &ebo);
+				GLuint vao, vbo, ebo;
+				glGenVertexArrays(1, &vao);
+				glGenBuffers(1, &vbo);
+				glGenBuffers(1, &ebo);
 
-					sprite_quad.vao = vao;
-					sprite_quad.vbo = vbo;
-					sprite_quad.ebo = ebo;
+				sprite_quad.vao = vao;
+				sprite_quad.vbo = vbo;
+				sprite_quad.ebo = ebo;
 
-					// start work
-					glBindVertexArray(vao);
+				// start work
+				glBindVertexArray(vao);
 
-					// vertex buffer
-					glBindBuffer(GL_ARRAY_BUFFER, vbo);
-					glBufferData(GL_ARRAY_BUFFER, sizeof(vrp->vertex_list), &vrp->vertex_list[0], GL_STATIC_DRAW);
+				// vertex buffer
+				glBindBuffer(GL_ARRAY_BUFFER, vbo);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(vrp->vertex_list), &vrp->vertex_list[0], GL_STATIC_DRAW);
 
-					// index buffer
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vrp->index_list), &vrp->index_list[0], GL_STATIC_DRAW);
+				// index buffer
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vrp->index_list), &vrp->index_list[0], GL_STATIC_DRAW);
 
-					// basic shader 					
-					// (location=0) vec3 pos
-					// (location=1) vec3 color
-					// (location=2) vec2 uv
-					//             location, #, datatype, normalized,  stride				 	  , offset
-					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset  * sizeof(float)));
-					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset   * sizeof(float)));
-					glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset * sizeof(float)));
-					
-					glEnableVertexAttribArray(0);
-					glEnableVertexAttribArray(1);
-					glEnableVertexAttribArray(2);
+				// basic shader 					
+				// (location=0) vec3 pos
+				// (location=1) vec3 color
+				// (location=2) vec2 uv
+				//             location, #, datatype, normalized,  stride				 	  , offset
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset * sizeof(float)));
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset * sizeof(float)));
+				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset * sizeof(float)));
 
-					glBindBuffer(GL_ARRAY_BUFFER, 0);
-					glBindVertexArray(0);
-				}
+				glEnableVertexAttribArray(0);
+				glEnableVertexAttribArray(1);
+				glEnableVertexAttribArray(2);
+
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glBindVertexArray(0);
 			}
 		}
 	}
 }
+
 
 void RenderManager::paint_imgui_main_menu_bar()
 {
@@ -467,7 +486,7 @@ bool RenderManager::update()
 {
 	// base background color
 	glClearColor(
-		(GLclampf)scc.x
+		  (GLclampf)scc.x
 		, (GLclampf)scc.y
 		, (GLclampf)scc.z
 		, (GLclampf)scc.w
@@ -482,8 +501,15 @@ bool RenderManager::update()
 
 
 	shaders["basic"]->use_program();
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, quad_tex);
+	if (use_texture_class)
+	{
+		sprite_texture.bind(0);
+	}
+	else
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, quad_tex);
+	}
 	shaders["basic"]->setInt("_texture", 0);
 
 	glBindVertexArray(quad_vao);
@@ -501,7 +527,6 @@ bool RenderManager::update()
 	ImGui_ImplSDL2_NewFrame(program_window);
 	ImGui::NewFrame();
 	// imgui; note: they have to be in this order
-
 
 	paint_imgui_main_menu_bar();
 

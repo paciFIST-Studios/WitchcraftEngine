@@ -18,7 +18,7 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	if ( ! init_geometry())	{ return false; }
 
 	// sends a message to engine, asking for ptr to console
-	init_get_debug_console();
+	request_debug_console_ptr();
 
 	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
 	
@@ -158,11 +158,11 @@ bool RenderManager::init_imgui()
 	return true;
 }
 
-void RenderManager::init_get_debug_console()
+void RenderManager::request_debug_console_ptr()
 {
 	if (message_bus == nullptr)
 	{
-		PLOGF << "error RenderManager::init_get_debug_console()";
+		PLOGF << "error RenderManager::request_debug_console_ptr()";
 		return;
 	}
 

@@ -201,10 +201,10 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		, indicies			//
 		, vertex_stride		// 
 		, vertex_offset		// 
-		, texture_stride	// 
-		, texture_offset	// 
 		, color_stride		//
 		, color_offset		//
+		, texture_stride	// 
+		, texture_offset	// 
 		);
 
 	return std::move(resource);

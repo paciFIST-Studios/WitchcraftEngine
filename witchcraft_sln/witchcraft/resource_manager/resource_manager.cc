@@ -212,7 +212,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 
 std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
 {
-	unsigned int uuid  = 0;
+	std::string resource_name = "";
 	unsigned int scope = 0;
 
 	std::map<std::string, std::string> shader_files;
@@ -222,9 +222,9 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 		std::string _name = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::UUID)
+		if (_name == witchcraft::xml::NAME)
 		{
-			uuid = std::stoi(_value);
+			resource_name = _value;
 		}
 		else if (_name == witchcraft::xml::SCOPE)
 		{
@@ -232,9 +232,9 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 		}
 	}
 	
-	auto resource = std::make_unique<ShaderResource>("shader", scope);
+	auto resource = std::make_unique<ShaderResource>(resource_name, scope);
 
-	for (XML::xml_node<>* child = xml.first_node(); child; child =child->next_sibling())
+	for (XML::xml_node<>* child = xml.first_node(); child; child = child->next_sibling())
 	{
 		std::string type = "";
 		std::string path = "";
@@ -522,6 +522,32 @@ void ResourceManager::handle_message(Message m)
 			};
 			message_bus->send_direct_message(reply);
 		}
+	}
+	else if (m.type == MessageType::REQUEST__LOAD_RESOURCE)
+	{
+		if (m.data == nullptr) 
+		{ 
+			PLOGE << "ERROR! Cannot load resource, no path given!";
+			message_bus->log_message(m);
+			return; 
+		}
+		auto cptr = static_cast<char*>(m.data);
+
+		if (cptr == nullptr)
+		{
+			PLOGE << "ERROR! Cannot load resource!  Data ptr not castable to char *";
+			message_bus->log_message(m);
+			return;
+		}
+
+		auto resource = load_from_xml_file(cptr);
+		Message reply = {
+			  m.sender
+			, m.recipient
+			, SUPPLY__RESOURCE
+			, (void*) resource
+		};
+		message_bus->send_direct_message(reply);
 	}
 }
 

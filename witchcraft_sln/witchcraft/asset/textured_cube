@@ -1,0 +1,8 @@
+<resources>
+  <!-- {x, y, z,   r, g, b,   u, v} for each corner of the cube, supplied as floats -->
+  <!-- contents needs to be listed before strides and offsets -->
+  <vertex_list type="vertex_list" name="textured_cube" scope="0" contents="vertex,color,texture"
+  float_list=""
+  index_list=""
+  vertex_stride="" vertex_offset="" color_stride="" color_offset="" texture_stride="" texture_offset="" />
+</resources>

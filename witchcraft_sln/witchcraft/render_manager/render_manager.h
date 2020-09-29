@@ -171,6 +171,12 @@ protected:
 
 	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
 
+	std::map<char const *, std::unique_ptr<OpenGLTexture>> textures;
+
+	bool use_texture_class = false;
+	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
+
+
 	SDL_Window * program_window		= nullptr;
 
 	SDL_GLContext opengl_context	= nullptr;
@@ -185,7 +191,6 @@ protected:
 
 	MessageBus * message_bus		= nullptr;
 
-	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
 	OpenGLSpriteQuad sprite_quad;
 
 	SDL_RendererInfo renderer_info;
@@ -213,12 +218,15 @@ protected:
 	{
 		return source->find(search) != std::string::npos;
 	}
-
-
+	
 	void handle_message(Message m);
 
-	unsigned int engine_channel_id = 0;
-	unsigned int render_channel_id = 0;
+	void handle_supply_console_ptr_message(Message & m);
+	void handle_invoke_render_command(Message & m);
+	void handle_supply_resource(Message & m);
+
+	unsigned int engine_channel_id   = 0;
+	unsigned int render_channel_id   = 0;
 	unsigned int resource_channel_id = 0;
 
 

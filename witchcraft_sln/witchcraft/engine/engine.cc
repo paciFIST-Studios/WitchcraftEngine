@@ -122,6 +122,9 @@ void Engine::process_window_event(SDL_Event const & e)
 			case SDLK_F4:
 				send_render_command("triangle2quad=toggle");
 				break;
+			case SDLK_F5:
+				send_render_command("use_texture_class=toggle");
+				break;
 
 				// Numeric
 			case SDLK_1:

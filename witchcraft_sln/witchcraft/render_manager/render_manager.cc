@@ -209,77 +209,62 @@ bool RenderManager::init_geometry()
 	};
 	message_bus->send_direct_message(m);
 	
-	// build triangle w/ raw verts
-	{
-		glGenVertexArrays(1, &tri_vao);
-		glGenBuffers(1, &tri_vbo);
 
-		glBindVertexArray(tri_vao);
-		glBindBuffer(GL_ARRAY_BUFFER, tri_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_verticies), triangle_verticies, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-	}
-
-	// build quad w/ ebo
-	{
-		glGenVertexArrays(1, &quad_vao);
-		glGenBuffers(1, &quad_vbo);
-		glGenBuffers(1, &quad_ebo);
-
-		glBindVertexArray(quad_vao);
-
-		// vbo
-		glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(quad_verticies), quad_verticies, GL_STATIC_DRAW);
-		// ebo
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indicies), quad_indicies, GL_STATIC_DRAW);
-
-		// ptrs
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-	
-		glBindVertexArray(0);
-
-		// local texture
-		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-			glGenTextures(1, &quad_tex);
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, quad_tex);
-
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			
-			int w, h, chan;
-			stbi_set_flip_vertically_on_load(true);
-			auto data = stbi_load("rainbow.png", &w, &h, &chan, 0);
-			if (data)
-			{
-				if (chan == 4)
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-				}
-				glGenerateMipmap(GL_TEXTURE_2D);
-				stbi_image_free(data);
-			}
-
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-	}
+	//// build quad w/ ebo
+	//{
+	//	glGenVertexArrays(1, &quad_vao);
+	//	glGenBuffers(1, &quad_vbo);
+	//	glGenBuffers(1, &quad_ebo);
+	//
+	//	glBindVertexArray(quad_vao);
+	//
+	//	// vbo
+	//	glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
+	//	glBufferData(GL_ARRAY_BUFFER, sizeof(quad_verticies), quad_verticies, GL_STATIC_DRAW);
+	//	// ebo
+	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_ebo);
+	//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indicies), quad_indicies, GL_STATIC_DRAW);
+	//
+	//	// ptrs
+	//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
+	//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(float)));
+	//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(float)));
+	//	glEnableVertexAttribArray(0);
+	//	glEnableVertexAttribArray(1);
+	//	glEnableVertexAttribArray(2);
+	//
+	//	glBindVertexArray(0);
+	//
+	//	// local texture
+	//	{
+	//		glEnable(GL_BLEND);
+	//		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//
+	//		glGenTextures(1, &quad_tex);
+	//		glActiveTexture(GL_TEXTURE0);
+	//		glBindTexture(GL_TEXTURE_2D, quad_tex);
+	//
+	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//		
+	//		int w, h, chan;
+	//		stbi_set_flip_vertically_on_load(true);
+	//		auto data = stbi_load("rainbow.png", &w, &h, &chan, 0);
+	//		if (data)
+	//		{
+	//			if (chan == 4)
+	//			{
+	//				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	//			}
+	//			glGenerateMipmap(GL_TEXTURE_2D);
+	//			stbi_image_free(data);
+	//		}
+	//
+	//		glBindTexture(GL_TEXTURE_2D, 0);
+	//	}
+	//}
 
 
 	// ------------------------------------------------------------------
@@ -392,6 +377,13 @@ void RenderManager::handle_invoke_render_command(Message & m)
 			active_shader = "textureless";
 		}
 	}
+	else if (contains_term(cs, "use_vertex_class_not_quad"))
+	{
+		if (contains_term(cs, "toggle"))
+		{
+			use_vertex_class_not_quad = !use_vertex_class_not_quad;
+		}
+	}
 }
 
 void RenderManager::handle_supply_resource(Message & m)
@@ -406,40 +398,36 @@ void RenderManager::handle_supply_resource(Message & m)
 			auto vrp = static_cast<VertexResource*>(m.data);
 			if (vrp != nullptr)
 			{
-				GLuint vao, vbo, ebo;
-				glGenVertexArrays(1, &vao);
-				glGenBuffers(1, &vbo);
-				glGenBuffers(1, &ebo);
-
-				sprite_quad.vao = vao;
-				sprite_quad.vbo = vbo;
-				sprite_quad.ebo = ebo;
+				sprite_quad = { 0, 0, 0 };
+				glGenVertexArrays(1, &sprite_quad.vao);
+				glGenBuffers(1, &sprite_quad.vbo);
+				glGenBuffers(1, &sprite_quad.ebo);
 
 				// start work
-				glBindVertexArray(vao);
+				glBindVertexArray(sprite_quad.vao);
 
 				// vertex buffer
-				glBindBuffer(GL_ARRAY_BUFFER, vbo);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(vrp->vertex_list), &vrp->vertex_list[0], GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, sprite_quad.vbo);
+				glBufferData(GL_ARRAY_BUFFER, vrp->vertex_list.size()*sizeof(float), &vrp->vertex_list[0], GL_STATIC_DRAW);
 
 				// index buffer
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vrp->index_list), &vrp->index_list[0], GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_quad.ebo);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, vrp->index_list.size()*sizeof(float), &vrp->index_list[0], GL_STATIC_DRAW);
 
 				// basic shader 					
 				// (location=0) vec3 pos
 				// (location=1) vec3 color
 				// (location=2) vec2 uv
 				//             location, #, datatype, normalized,  stride				 	  , offset
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset * sizeof(float)));
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset * sizeof(float)));
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->vertex_offset  * sizeof(float)));
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->color_offset   * sizeof(float)));
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vrp->beam_size * sizeof(float), (void*)(vrp->texture_offset * sizeof(float)));
 
 				glEnableVertexAttribArray(0);
 				glEnableVertexAttribArray(1);
 				glEnableVertexAttribArray(2);
 
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				//glBindBuffer(GL_ARRAY_BUFFER, 0);
 				glBindVertexArray(0);
 			}
 		}
@@ -505,34 +493,14 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//shaders["textureless"]->use_program();
-	//glBindVertexArray(tri_vao);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//glBindVertexArray(0);
-
-
+	
 	shaders[active_shader]->use_program();
-	if (use_texture_class)
-	{
-		sprite_texture.bind(0);
-	}
-	else
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, quad_tex);
-	}
+	sprite_texture.bind(0); 
 	shaders[active_shader]->setInt("_texture", 0);
-
-	glBindVertexArray(quad_vao);
+	glBindVertexArray(sprite_quad.vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	//sprite_texture.bind();
-	//shaders["basic"]->use_program();
-	//
-	//glBindVertexArray(sprite_quad.vao);
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();

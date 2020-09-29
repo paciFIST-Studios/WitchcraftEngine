@@ -124,37 +124,28 @@ private:
 		"void main(){\n"
 		"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}"
 		;
-
-	GLuint tri_vao, tri_vbo;
-	GLfloat const triangle_verticies[9] =
-	{
-		 -0.5f, -0.5f, 0.0f
-		, 0.5f, -0.5f, 0.0f
-		, 0.0f,  0.5f, 0.0f
-	};
-
-
-	GLuint quad_vao, quad_vbo, quad_ebo, quad_tex;
-	GLfloat const quad_verticies[32] =
-	{
-		// pos					// color			// tex
-		  0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// tr
-		, 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// br
-		,-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bl
-		,-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f,	0.0f, 1.0f	// tl
-	};
-	GLuint const quad_indicies[6] =
-	{
- 		  0, 1, 3
-		, 1, 2, 3
-	};
+	
+	//GLuint quad_vao, quad_vbo, quad_ebo, quad_tex;
+	//GLfloat const quad_verticies[32] =
+	//{
+	//	// pos					// color			// tex
+	//	  0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// tr
+	//	, 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// br
+	//	,-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bl
+	//	,-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f,	0.0f, 1.0f	// tl
+	//};
+	//GLuint const quad_indicies[6] =
+	//{
+ 	//	  0, 1, 3
+	//	, 1, 2, 3
+	//};
 
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
 	glm::mat4 orthographic_projection_matrix;
 	glm::mat4 perspective_projection_matrix;
 
-
+	bool use_vertex_class_not_quad = false;
 	bool use_wireframe_rendering = false;
 	bool draw_triangle_not_quad = false;
 	bool draw_imgui_main_menu_bar = true;
@@ -164,6 +155,8 @@ private:
 	void paint_imgui_main_menu_bar();
 
 	void paint_debug_windows();
+
+
 
 protected:
 
@@ -176,6 +169,7 @@ protected:
 
 	bool use_texture_class = false;
 	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	OpenGLSpriteQuad sprite_quad;
 
 
 	SDL_Window * program_window		= nullptr;
@@ -192,7 +186,6 @@ protected:
 
 	MessageBus * message_bus		= nullptr;
 
-	OpenGLSpriteQuad sprite_quad;
 
 	SDL_RendererInfo renderer_info;
 

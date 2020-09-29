@@ -169,6 +169,7 @@ protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
+	char const * active_shader = "";
 	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
 
 	std::map<char const *, std::unique_ptr<OpenGLTexture>> textures;
@@ -211,7 +212,7 @@ protected:
 
 	bool init_imgui();
 
-	void init_get_debug_console();
+	void request_debug_console_ptr();
 
 
 	inline bool contains_term(std::string const * source, char const * search)

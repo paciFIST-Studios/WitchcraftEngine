@@ -125,6 +125,12 @@ void Engine::process_window_event(SDL_Event const & e)
 			case SDLK_F5:
 				send_render_command("use_texture_class=toggle");
 				break;
+			case SDLK_F6:
+				send_render_command("use_shader=basic");
+				break;
+			case SDLK_F7:
+				send_render_command("use_shader=textureless");
+				break;
 
 				// Numeric
 			case SDLK_1:

@@ -184,11 +184,12 @@ bool RenderManager::init_shaders()
 	shaders["basic"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["basic"]->compile(basic_vertex_src, basic_fragment_src);
 	shaders["basic"]->use_program();
+	active_shader = "basic";
 
-
-	//shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
-	//shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
+	shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
+	shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
 	//shaders["textureless"]->use_program();
+	
 	// heatmap shader
 	// greybox shader
 	// toon shader
@@ -380,6 +381,17 @@ void RenderManager::handle_invoke_render_command(Message & m)
 			use_texture_class = !use_texture_class;
 		}
 	}
+	else if (contains_term(cs, "use_shader"))
+	{
+		if (contains_term(cs, "basic"))
+		{
+			active_shader = "basic";
+		}
+		else if (contains_term(cs, "textureless"))
+		{
+			active_shader = "textureless";
+		}
+	}
 }
 
 void RenderManager::handle_supply_resource(Message & m)
@@ -500,7 +512,7 @@ bool RenderManager::update()
 	//glBindVertexArray(0);
 
 
-	shaders["basic"]->use_program();
+	shaders[active_shader]->use_program();
 	if (use_texture_class)
 	{
 		sprite_texture.bind(0);
@@ -510,7 +522,7 @@ bool RenderManager::update()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, quad_tex);
 	}
-	shaders["basic"]->setInt("_texture", 0);
+	shaders[active_shader]->setInt("_texture", 0);
 
 	glBindVertexArray(quad_vao);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

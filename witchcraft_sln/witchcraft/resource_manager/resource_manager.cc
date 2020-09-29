@@ -86,7 +86,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 {
 	std::string		name		= "";
 	std::string		filepath	= "";
-	EResourceType	type		= EResourceType::VERTEX_LIST;
+	EResourceType	type		= EResourceType::VERTEX_LIST_QUAD;
 	unsigned int	scope		= 0;
 	std::vector<float> verts;
 	std::vector<int> indicies;

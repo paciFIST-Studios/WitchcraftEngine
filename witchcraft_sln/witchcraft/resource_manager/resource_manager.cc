@@ -1,6 +1,6 @@
 #include "resource_manager.h"
 
-std::string ResourceManager::determine_version(XML::xml_node<> const & xml) const
+char * ResourceManager::determine_version(XML::xml_node<> const & xml) const
 {
 	std::string const doctype(witchcraft::xml::WITCHCRAFT);
 	std::string const version(witchcraft::xml::VERSION);
@@ -8,14 +8,14 @@ std::string ResourceManager::determine_version(XML::xml_node<> const & xml) cons
 	if (doctype.compare(xml.name()) != 0)
 	{
 		PLOGE << "ERROR! File format is incorrect.  Not a witchcraft file.";
-		return "";
+		return nullptr;
 	}
 
 	auto attr = xml.first_attribute(version.c_str());
 	if (attr == nullptr)
 	{
 		PLOGE << "ERROR! No version information provided with file!";
-		return "";
+		return nullptr;
 	}
 
 	return attr->value();
@@ -25,6 +25,7 @@ std::string ResourceManager::determine_version(XML::xml_node<> const & xml) cons
 
 EngineResourceBase * ResourceManager::parse_file_version__unknown(XML::xml_node<> const & node)
 {
+	PLOGE << "Parsing unknown version files is not supported!  Resource will not be loaded";
 	return nullptr;
 }
 
@@ -366,7 +367,6 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 }
 
 
-
 EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & file)
 {
 	if (false == utility::file_exists(file))
@@ -391,8 +391,8 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 	// ver 0.1  == int 10
 	// ver 1.21 == int 121
 	// ver 3.14 == int 314
-	std::string ver = determine_version(*top_node);
-	int version = (ver.compare("") == 0) ? 0 : int(std::stof(ver) * 100);
+	char * ver = determine_version(*top_node);
+	int version = (ver) ? int(std::stof(ver) * 100) : 0;
 
 	if (version == 0)
 	{
@@ -412,20 +412,39 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 
 
 // returns a NON-OWNING ptr
-EngineResourceBase * ResourceManager::find_resource(unsigned int id, int scope)
+EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
 {
 	if (resource_count == 0){ return nullptr; }
 
-	// iterate through all of the scene ids
-	for (auto&& resource : resource_map[scope])
+	for (auto&& resource : resource_map[scope]){
+		if (resource->id == id) {
+			return resource.get();}
+	}
+
+	// exit if we just looked through global scope
+	if (scope == 0) { return nullptr; }
+
+	// otherwise, check global scope to see if the resource is there
+	for (auto&& global : resource_map[0]){
+		if (global->id == id){ 
+			return global.get();}
+	}
+
+	// finally, check every other scope, except for [scope] and global
+	for (auto&& kvp : resource_map)
 	{
-		if (resource->id == id)
-		{
-			return resource.get();
+		unsigned int key = kvp.first;
+		if (key == 0 || key == scope) { continue; }
+
+		for (auto&& known : resource_map[key]) {
+			if (known->id == id) {
+				return known.get();
+			}
 		}
 	}
-	
-	// we went through all existing resource without finding a match
+
+	PLOGE << "WARNING! Searched for unknown resource! id: \"" << id << "\"  scope: " << scope  
+		<< "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
 	return nullptr;
 }
 
@@ -434,14 +453,34 @@ EngineResourceBase * ResourceManager::find_resource(char const * name, int scope
 {
 	if (name == nullptr) { return nullptr; }
 
-	for (auto&& resource : resource_map[scope])
-	{
-		if (resource->name.find(name) != std::string::npos)
-		{
-			return resource.get();
-		}
+	for (auto&& resource : resource_map[scope]){
+		if (resource->name.compare(name) == 0){
+			return resource.get();}
 	}
 
+	// exit if we just looked through global scope
+	if (scope == 0) { return nullptr; }
+
+	// otherwise, check global scope to see if the resource is there
+	for (auto&& global : resource_map[0]){
+		if (global->name.compare(name) == 0){
+			return global.get();}
+	}
+
+	// finally, check every other scope, except for [scope] and global
+	for (auto&& kvp : resource_map)
+	{
+		unsigned int key = kvp.first;
+		if (key == 0 || key == scope) { continue; }
+
+		for (auto&& known : resource_map[key]){
+			if (known->name.compare(name) == 0){
+				return known.get();}
+		}
+	}
+	
+	PLOGE << "WARNING! Searched for unknown resource! name: \"" << name << "\"  scope: " << scope
+		  << "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
 	return nullptr;
 }
 
@@ -524,7 +563,7 @@ void ResourceManager::handle_message(Message m)
 		if (m.data == nullptr){return;}
 
 		auto cptr = static_cast<char*>(m.data);
-		auto rptr = this->find_resource(cptr, 0);
+		auto rptr = this->find_resource(cptr, current_scope);
 
 		if (rptr != nullptr)
 		{

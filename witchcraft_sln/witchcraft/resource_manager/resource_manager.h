@@ -32,10 +32,11 @@ protected:
 	int current_scope = 0;
 	unsigned int resource_count = 0;
 
-	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
+	// consider using EASTL::invasive vector, instead of regular vector here
+	std::map<unsigned, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
 	/// brief: parses the top node of an xml file for version information
-	std::string determine_version(XML::xml_node<> const & xml) const;
+	char * determine_version(XML::xml_node<> const & xml) const;
 
 	/// brief: parses xml file, where version information is unknown
 	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
@@ -58,9 +59,12 @@ protected:
 	unsigned int engine_channel_id   = 0;
 
 public:
+
 	EngineResourceBase * load_from_xml_file(std::string const & file);
 
-	EngineResourceBase * find_resource(unsigned int ID, int scope);
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
+	EngineResourceBase * find_resource(unsigned ID, int scope);
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
 	EngineResourceBase * find_resource(char const * name, int scope);
 
 	// clears all resources and scopes

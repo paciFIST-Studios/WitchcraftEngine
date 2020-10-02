@@ -183,16 +183,16 @@ bool RenderManager::init_shaders()
 {
 	// this is a default shader to load, regardless of the 
 	// project running in the engine
-	std::string const basic_shader = "basic_shader";
+	char const * basic_shader = "basic_shader";
 
 	Message m {
 		  resource_channel_id
 		, render_channel_id
 		, MessageType::REQUEST__RESOURCE
-		, (void*)basic_shader.c_str()
+		, (void*)basic_shader
 	};
 	message_bus->send_direct_message(m);
-	active_shader = basic_shader.c_str();
+	active_shader = basic_shader;
 
 	shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
 	shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
@@ -372,7 +372,6 @@ void RenderManager::handle_supply_resource(Message & m)
 
 
 }
-
 
 void RenderManager::paint_imgui_main_menu_bar()
 {

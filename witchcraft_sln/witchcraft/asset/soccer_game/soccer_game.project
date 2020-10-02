@@ -22,7 +22,7 @@ use_vsync: false
 path: asset/soccer_game/dialogue/cambodia_sadness.asset
 
 // graphics
-path: asset/soccer_game/images/basic_shader.asset
+path: asset/basic_shader.asset
 
 path: asset/soccer_game/images/ball.asset
 path: asset/soccer_game/images/ball_shadow.asset

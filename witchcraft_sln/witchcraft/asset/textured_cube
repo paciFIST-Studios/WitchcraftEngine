@@ -1,8 +1,40 @@
-<resources>
-  <!-- {x, y, z,   r, g, b,   u, v} for each corner of the cube, supplied as floats -->
+<witchcraft version="0.1">
+  <!-- {x, y, z,   r, g, b,   {normal: x, y, z}} for each corner of the cube, supplied as floats -->
   <!-- contents needs to be listed before strides and offsets -->
   <vertex_list type="vertex_list" name="textured_cube" scope="0" contents="vertex,color,texture"
-  float_list=""
-  index_list=""
-  vertex_stride="" vertex_offset="" color_stride="" color_offset="" texture_stride="" texture_offset="" />
-</resources>
+
+  float_list="
+  -1.0,-1.0,1.0,     1.0,0.0,0.0,    -1.0,-1.0,-1.0,
+   1.0,-1.0,1.0,     0.0,1.0,0.0,     1.0,-1.0,-1.0,
+   1.0, 1.0,1.0,     0.0,0.0,1.0,     1.0, 1.0,-1.0,
+  -1.0, 1.0,1.0,     1.0,1.0,1.0,    -1.0, 1.0,-1.0,
+
+  -1.0,-1.0,-1.0,    1.0,0.0,0.0,    -1.0,-1.0,1.0,
+   1.0,-1.0,-1.0,    0.0,1.0,0.0,     1.0,-1.0,1.0,
+   1.0, 1.0,-1.0f,   0.0,0.0,1.0,     1.0, 1.0,1.0,
+  -1.0, 1.0,-1.0,    1.0,1.0,1.0,    -1.0, 1.0,1.0,
+  "
+
+  <!--   -->
+  index_list="
+  0,1,2,
+  2,3,0,
+
+  1,5,6,
+  6,2,1,
+
+  7,6,5,
+  5,4,7,
+
+  4,0,3,
+  3,7,4,
+
+  4,5,1,
+  1,0,4,
+
+  3,2,6,
+  6,7,3
+
+  "
+  vertex_stride="3" vertex_offset="" color_stride="3" color_offset="3" texture_stride="" texture_offset="" />
+</witchcraft>

@@ -34,6 +34,15 @@ protected:
 
 	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
+	/// brief: parses the top node of an xml file for version information
+	std::string determine_version(XML::xml_node<> const & xml) const;
+
+	/// brief: parses xml file, where version information is unknown
+	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
+
+	/// brief: parses first generation witchcraft xml file
+	EngineResourceBase * parse_file_version__010(XML::xml_node<> const & node);
+
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_vertex_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
@@ -49,6 +58,7 @@ protected:
 	unsigned int engine_channel_id   = 0;
 
 public:
+	EngineResourceBase * load_from_xml_file(std::string const & file);
 
 	EngineResourceBase * find_resource(unsigned int ID, int scope);
 	EngineResourceBase * find_resource(char const * name, int scope);
@@ -56,7 +66,6 @@ public:
 	// clears all resources and scopes
 	void empty_cache();
 
-	EngineResourceBase * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

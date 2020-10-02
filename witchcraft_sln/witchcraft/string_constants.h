@@ -17,6 +17,8 @@ namespace witchcraft
 
 		static char const * FILEPATH = "filepath";
 		static char const * SCOPE = "scope";
+		static char const * VERSION = "version";
+		static char const * WITCHCRAFT = "witchcraft";
 
 		// NOTE: valid data for sprite atlas is: "int width, int height";
 		// these refer to the standard width and height of tiles in this atlas

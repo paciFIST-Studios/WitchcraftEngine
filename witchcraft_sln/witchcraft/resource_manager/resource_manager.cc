@@ -414,20 +414,25 @@ EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & fil
 // returns a NON-OWNING ptr
 EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
 {
-	if (resource_count == 0){ return nullptr; }
+	if (resource_count == 0)
+	{ 
+		PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
+		return nullptr; 
+	}
 
+	// check given scope
 	for (auto&& resource : resource_map[scope]){
 		if (resource->id == id) {
 			return resource.get();}
 	}
 
-	// exit if we just looked through global scope
-	if (scope == 0) { return nullptr; }
-
-	// otherwise, check global scope to see if the resource is there
-	for (auto&& global : resource_map[0]){
-		if (global->id == id){ 
-			return global.get();}
+	// check global scope if we didn't already
+	if (scope != 0) {
+		for (auto&& global : resource_map[0]) {
+			if (global->id == id) {
+				return global.get();
+			}
+		}
 	}
 
 	// finally, check every other scope, except for [scope] and global
@@ -451,20 +456,31 @@ EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
 // returns a NON-OWNING ptr
 EngineResourceBase * ResourceManager::find_resource(char const * name, int scope)
 {
-	if (name == nullptr) { return nullptr; }
+	if (name == nullptr) 
+	{ 
+		PLOGE << "ERROR! Resource was requested, but no name found!";
+		return nullptr; 
+	}
 
+	if (resource_count == 0)
+	{
+		PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
+		return nullptr;
+	}
+
+	// search given scope
 	for (auto&& resource : resource_map[scope]){
 		if (resource->name.compare(name) == 0){
 			return resource.get();}
 	}
 
-	// exit if we just looked through global scope
-	if (scope == 0) { return nullptr; }
-
-	// otherwise, check global scope to see if the resource is there
-	for (auto&& global : resource_map[0]){
-		if (global->name.compare(name) == 0){
-			return global.get();}
+	// check global scope if we didn't already
+	if (scope != 0){
+		for (auto&& global : resource_map[0]) {
+			if (global->name.compare(name) == 0) {
+				return global.get();
+			}
+		}
 	}
 
 	// finally, check every other scope, except for [scope] and global
@@ -551,8 +567,8 @@ ResourceManager::ResourceManager(MessageBus * mb)
 	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_message, this, std::placeholders::_1);
 	mb->subscribe("resource", cb);
 	resource_channel_id = mb->channel_lookup("resource");
-	render_channel_id = mb->channel_lookup("render");
-	engine_channel_id = mb->channel_lookup("engine");
+	render_channel_id   = mb->channel_lookup("render"  );
+	engine_channel_id   = mb->channel_lookup("engine"  );
 }
 
 void ResourceManager::handle_message(Message m)
@@ -560,22 +576,31 @@ void ResourceManager::handle_message(Message m)
 	// request resource by name, supplied as <char*>
 	if (m.type == MessageType::REQUEST__RESOURCE)
 	{
-		if (m.data == nullptr){return;}
+		if (m.data == nullptr)
+		{
+			PLOGE << "ERROR! REQUEST__RESOURCE message was sent, but no resource was specified!";
+			message_bus->log_message(m);
+			return;
+		}
 
-		auto cptr = static_cast<char*>(m.data);
+		auto cptr = static_cast<char const *>(m.data);
 		auto rptr = this->find_resource(cptr, current_scope);
 
-		if (rptr != nullptr)
+		if (rptr == nullptr)
 		{
-			Message reply
-			{
-				  m.sender
-				, m.recipient
-				, MessageType::SUPPLY__RESOURCE
-				, rptr
-			};
-			message_bus->send_direct_message(reply);
+			PLOGE << "ERROR!  Could not find resource!";
+			message_bus->log_message(m);
+			return;
 		}
+
+		Message reply
+		{
+			  m.sender
+			, m.recipient
+			, MessageType::SUPPLY__RESOURCE
+			, rptr
+		};
+		message_bus->send_direct_message(reply);
 	}
 	else if (m.type == MessageType::REQUEST__LOAD_RESOURCE)
 	{
@@ -585,7 +610,7 @@ void ResourceManager::handle_message(Message m)
 			message_bus->log_message(m);
 			return; 
 		}
-		auto cptr = static_cast<char*>(m.data);
+		auto cptr = static_cast<char const *>(m.data);
 
 		if (cptr == nullptr)
 		{

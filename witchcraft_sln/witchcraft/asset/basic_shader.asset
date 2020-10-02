@@ -1,6 +1,6 @@
-<resources>
-  <resource name="basic_shader" type="shader" scope="1">
-    <type="vector" filepath="asset/basic.vs.glsl"/>
-    <type="fragment" filepath="asset/basic.fs.glsl"/>
-  </resource>
-</resources>
+<witchcraft version="0.1">
+  <shader name="basic_shader" scope="1">
+    <vector filepath="asset/basic.vs.glsl"/>
+    <fragment filepath="asset/basic.fs.glsl"/>
+  </shader>
+</witchcraft>

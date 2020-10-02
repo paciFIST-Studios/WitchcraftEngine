@@ -1,3 +1,3 @@
-<resources>
-  <resource name="player_shadow" type="image" file="asset/soccer_game/images/player_shadow.png" scope="1"/>
-</resources>
+<witchcraft version="0.1">
+  <image name="player_shadow" file="asset/soccer_game/images/player_shadow.png" scope="1"/>
+</witchcraft>

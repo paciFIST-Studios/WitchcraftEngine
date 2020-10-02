@@ -379,7 +379,7 @@ void RenderManager::handle_supply_resource(Message & m)
 		char const * name = shdr->name.c_str();
 		shaders[name] = std::make_unique<OpenGlShaderProgram>();
 		shaders[name]->compile(
-			  shdr->shader_files["vector"].c_str()
+			  shdr->shader_files["vertex"].c_str()
 			, shdr->shader_files["fragment"].c_str()
 		);
 	}
@@ -479,12 +479,12 @@ bool RenderManager::update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	shaders[active_shader]->use_program();
-	sprite_texture.bind(0); 
-	shaders[active_shader]->setInt("_texture", 0);
-	glBindVertexArray(sprite_quad.vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	//shaders[active_shader]->use_program();
+	//sprite_texture.bind(0); 
+	//shaders[active_shader]->setInt("_texture", 0);
+	//glBindVertexArray(sprite_quad.vao);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	//glBindVertexArray(0);
 
 
 	// imgui; prepare for draw 

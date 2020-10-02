@@ -339,7 +339,12 @@ void RenderManager::handle_invoke_render_command(Message & m)
 
 void RenderManager::handle_supply_resource(Message & m)
 {
-	if (m.data == nullptr) { return; }
+	if (m.data == nullptr) 
+	{ 
+		PLOGE << "ERROR! No resource ptr supplied with SUPPLY__RESOURCE message!";
+		message_bus->log_message(m);
+		return; 
+	}
 
 	auto data_ptr = static_cast<EngineResourceBase*>(m.data);
 	if (data_ptr == nullptr) 
@@ -348,8 +353,7 @@ void RenderManager::handle_supply_resource(Message & m)
 		message_bus->log_message(m);
 		return; 
 	}
-
-
+	
 	if (data_ptr->type == EResourceType::VERTEX_LIST_QUAD)
 	{
 		auto vert_ptr = static_cast<VertexResource*>(m.data);
@@ -365,12 +369,20 @@ void RenderManager::handle_supply_resource(Message & m)
 	else if (data_ptr->type == EResourceType::SHADER)
 	{
 		auto shdr = static_cast<ShaderResource*>(m.data);
+		if (shdr == nullptr)
+		{
+			PLOGE << "ERROR! Supplied resource ptr is of type SHADER, and is not castable to ShaderResource *";
+			message_bus->log_message(m);
+			return;
+		}
+
 		char const * name = shdr->name.c_str();
 		shaders[name] = std::make_unique<OpenGlShaderProgram>();
-		shaders[name]->compile(basic_vertex_src, basic_fragment_src);
+		shaders[name]->compile(
+			  shdr->shader_files["vector"].c_str()
+			, shdr->shader_files["fragment"].c_str()
+		);
 	}
-
-
 }
 
 void RenderManager::paint_imgui_main_menu_bar()

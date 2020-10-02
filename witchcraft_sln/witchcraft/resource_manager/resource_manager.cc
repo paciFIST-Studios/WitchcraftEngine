@@ -308,7 +308,23 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 		}
 		else
 		{
-			resource->shader_files[type] = path;
+			if (!utility::file_exists(path))
+			{
+				PLOGE << "ERROR! File does not exist! path: \"" << path << "\"";
+				return nullptr;
+			}
+
+			// we need to store the contents of the file, not the path
+			std::ifstream infile(path, std::ios::in);
+			if (infile.is_open())
+			{
+				resource->shader_files[type] = std::string();
+				resource->shader_files[type].assign(
+					  std::istreambuf_iterator<char>(infile)
+					, std::istreambuf_iterator<char>()
+				);
+				infile.close();
+			}
 		}
 	}
 

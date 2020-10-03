@@ -1,5 +1,19 @@
 #include "resource_manager.h"
 
+EngineResourceBase * ResourceManager::register_resource(std::unique_ptr<EngineResourceBase> & resource)
+{
+	auto ptr = find_resource(resource->id, resource->scope);
+	if (ptr != nullptr)
+	{
+		return ptr;
+	}
+
+	auto scope = resource->scope;
+	resource_map[scope].push_back(std::move(resource));
+	resource_count++;
+	return resource_map[scope].back().get();
+}
+
 char * ResourceManager::determine_version(XML::xml_node<> const & xml) const
 {
 	std::string const doctype(witchcraft::xml::WITCHCRAFT);
@@ -37,51 +51,116 @@ EngineResourceBase *  ResourceManager::parse_file_version__010(XML::xml_node<> c
 
 	// We just got the top node, now, we'll parse the child nodes for engine resources
 	// we'll return a ptr to the last one parsed
-	std::unique_ptr<EngineResourceBase> resource = nullptr;
+	//std::unique_ptr<EngineResourceBase> resource = nullptr;
 	std::string type = node.first_node()->name();
 
 	if (type.compare("image") == STRCMP_TRUE)
 	{
-		resource = build_render_resource_from_xml(*node.first_node());
+		auto resource = build_render_resource_from_xml(*node.first_node());
+		return register_resource(resource);
 	}
 	else if (type.compare("vertex_list") == STRCMP_TRUE)
 	{
-		resource = build_vertex_resource_from_xml(*node.first_node());
+		auto resource = build_vertex_resource_from_xml(*node.first_node());
+		return register_resource(resource);
 	}
 	else if (type.compare("shader") == STRCMP_TRUE)
 	{
-		resource = build_shader_resource_from_xml(*node.first_node());
+		auto resource = build_shader_resource_from_xml(*node.first_node());
+		return register_resource(resource);
 	}
 	else if (type.compare("audio") == STRCMP_TRUE)
 	{
-		// resource = _audio_manager->load_resource_from_xml(node.first_node());
+		process_xml_audio_block(*node.first_node());
 	}
 	else if (type.compare("dialogue") == STRCMP_TRUE)
 	{
-		// resource = build_dialogue_resource_from_xml(*node.first_node());
+		//auto resource = build_dialogue_resource_from_xml(*node.first_node());
+		//return register_resource(resource);
 	}
 	else if (type.compare("text") == STRCMP_TRUE)
 	{
-		// resource = _config_manager->load_resource_from_xml(*node.first_node());
+		//auto resource = _config_manager->load_resource_from_xml(*node.first_node());
+		//return register_resource(resource);
 	}
 
+	
 	// ResourceManager owns all of the files, so it will keep the unique_ptrs.
 	// we do plan to emit a non-owning, raw-ptr, to the resource we just loaded
-	if (resource)
-	{
-		// do not add duplicates of the same file
-		if (find_resource(resource->id, resource->scope)) {
-			return resource.get();}
-
-		auto scope = resource->scope;
-		resource_map[scope].push_back(std::move(resource));
-		resource_count++;
-		return resource_map[scope].back().get();
-	}
+	//if (resource)
+	//{
+	//
+	//
+	//	// do not add duplicates of the same file
+	//	if (find_resource(resource->id, resource->scope)) {
+	//		return resource.get();}
+	//
+	//	auto scope = resource->scope;
+	//	resource_map[scope].push_back(std::move(resource));
+	//	resource_count++;
+	//	return resource_map[scope].back().get();
+	//}
 
 	PLOGE << "ERROR! Could not load resource from XML! type: " << type;
 	return nullptr;
 }
+
+void ResourceManager::process_xml_audio_block(XML::xml_node<> const & audio)
+{
+	// each child of an audio block is its own resource
+	for (XML::xml_node<> * child = audio.first_node(); child; child = child->next_sibling())
+	{
+		auto sr = build_sound_resource_from_xml(*child);
+		register_resource(sr);
+	}
+}
+
+std::unique_ptr<EngineResourceBase> ResourceManager::build_sound_resource_from_xml(XML::xml_node<> const & node)
+{
+	int constexpr STRCMP_TRUE = 0;
+	auto designation = std::string(node.name());
+	
+	// each child of an audio block is it's own audio resource
+	EResourceType type;
+	std::string name = "";
+	std::string path = "";
+	unsigned    scope = 0;
+	
+	// type
+	if (designation.compare("sfx") == STRCMP_TRUE)
+	{
+		type = EResourceType::AUDIO_SFX;
+	}
+	else if (designation.compare("bgm") == STRCMP_TRUE)
+	{
+		type = EResourceType::AUDIO_BGM;
+	}
+	
+	// name, path, scope
+	for (XML::xml_attribute<> * attr = node.first_attribute(); attr; attr = attr->next_attribute())
+	{
+		std::string _token = attr->name();
+		std::string _value = attr->value();
+
+		if (_token == witchcraft::xml::NAME)
+		{
+			name = _value;
+		}
+		else if (_token == witchcraft::xml::FILEPATH)
+		{
+			path = _value;
+		}
+		else if (_token == witchcraft::xml::SCOPE)
+		{
+			scope = std::stoi(_value);
+		}
+	}
+
+	auto ar = std::make_unique<AudioResource>(name, path, type, scope);
+	std::unique_ptr<EngineResourceBase> resource = std::move(ar);
+	return std::move(resource);
+}
+
 
 std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
@@ -96,24 +175,24 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string _name  = attr->name();
+		std::string _token  = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::NAME)
+		if (_token == witchcraft::xml::NAME)
 		{
 			// stoi stands for string-to-integer, and is used for
 			// parsing a string to an int
 			name = _value;
 		}
-		else if (_name == witchcraft::xml::FILEPATH)
+		else if (_token == witchcraft::xml::FILEPATH)
 		{
 			filepath = _value;
 		}
-		else if (_name == witchcraft::xml::SCOPE)
+		else if (_token == witchcraft::xml::SCOPE)
 		{
 			scope = std::stoi(_value);
 		}
-		else if (_name == witchcraft::xml::sprite_atlas)
+		else if (_token == witchcraft::xml::sprite_atlas)
 		{
 			// NOTE: format is: sprite_atlas="w,h"
 			// if we find this string, and it's formatted correctly, then:
@@ -183,18 +262,18 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string _name = attr->name();
+		std::string _token = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::NAME)
+		if (_token == witchcraft::xml::NAME)
 		{
 			name = _value;
 		}
-		else if (_name == witchcraft::xml::SCOPE)
+		else if (_token == witchcraft::xml::SCOPE)
 		{
 			scope = std::stoi(_value);
 		}
-		else if (_name == "float_list")
+		else if (_token == "float_list")
 		{
 			auto s_vec = utility::tokenize_string(_value, ",");
 			for (auto&& s : s_vec)
@@ -202,7 +281,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 				verts.push_back(std::stof(s));
 			}
 		}
-		else if (_name == "index_list")
+		else if (_token == "index_list")
 		{
 			auto i_vec = utility::tokenize_string(_value, ",");
 			for (auto&& i : i_vec)
@@ -210,27 +289,27 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 				indicies.push_back(std::stoi(i));
 			}
 		}
-		else if(_name == "vertex_stride")
+		else if(_token == "vertex_stride")
 		{ 
 			vertex_stride = std::stoi(_value);
 		}
-		else if(_name == "vertex_offset")
+		else if(_token == "vertex_offset")
 		{ 
 			vertex_offset = std::stoi(_value);
 		}
-		else if(_name == "texture_stride")
+		else if(_token == "texture_stride")
 		{
 			texture_stride = std::stoi(_value);
 		}
-		else if(_name == "texture_offset")
+		else if(_token == "texture_offset")
 		{ 
 			texture_offset = std::stoi(_value);
 		}
-		else if(_name == "color_stride")
+		else if(_token == "color_stride")
 		{
 			color_stride = std::stoi(_value);
 		}
-		else if(_name == "color_offset")
+		else if(_token == "color_offset")
 		{
 			color_offset = std::stoi(_value);
 		}
@@ -263,14 +342,14 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string _name = attr->name();
+		std::string _token = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::NAME)
+		if (_token == witchcraft::xml::NAME)
 		{
 			resource_name = _value;
 		}
-		else if (_name == witchcraft::xml::SCOPE)
+		else if (_token == witchcraft::xml::SCOPE)
 		{
 			scope = std::stoi(_value);
 		}
@@ -285,10 +364,10 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 
 		for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
 		{
-			std::string _name = attr->name();
+			std::string _token = attr->name();
 			std::string _value = attr->value();
 
-			if (_name == witchcraft::xml::FILEPATH)
+			if (_token == witchcraft::xml::FILEPATH)
 			{
 				path = _value;
 			}
@@ -332,7 +411,6 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 	return std::move(shader_resource);
 }
 
-
 std::vector<Animation2D> ResourceManager::parse_embedded_sprite_animations(XML::xml_node<> const & xml)
 {
 	std::vector<Animation2D> result;
@@ -354,18 +432,18 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string _name = attr->name();
+		std::string _token = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::NAME)
+		if (_token == witchcraft::xml::NAME)
 		{
 			animation_name = _value;
 		}
-		else if (_name == witchcraft::xml::animation_2d_ms_per_frame)
+		else if (_token == witchcraft::xml::animation_2d_ms_per_frame)
 		{
 			animation_ms_per_frame = std::stoi(_value);
 		}
-		else if (_name == witchcraft::xml::animation_2d_sequence)
+		else if (_token == witchcraft::xml::animation_2d_sequence)
 		{
 			auto sv = utility::tokenize_string(_value, witchcraft::xml::delimiter);
 			for (auto element : sv)

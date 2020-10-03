@@ -1,0 +1,6 @@
+<witchcraft version="0.1">
+  <shader name="basic_shader" scope="1">
+    <vertex filepath="asset/basic.vs.glsl"/>
+    <fragment filepath="asset/basic.fs.glsl"/>
+  </shader>
+</witchcraft>

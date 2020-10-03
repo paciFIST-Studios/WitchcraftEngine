@@ -1,5 +1,5 @@
-<resources>
-	<resource UUID="200" type="dialogue" scope="2">
+<witchcraft version="0.1">
+	<dialogue UUID="200" scope="2">
 		<conversation>
 			<!-- people who will be in this conversation -->
 			<speaker name="a" portrait="example.png"/>
@@ -53,5 +53,5 @@
 			</choose_start>
 
 		</conversation>
-	</resource>
-</resources>
+	</dialogue>
+</witchcraft>

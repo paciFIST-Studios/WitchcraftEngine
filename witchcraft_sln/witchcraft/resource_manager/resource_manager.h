@@ -32,7 +32,17 @@ protected:
 	int current_scope = 0;
 	unsigned int resource_count = 0;
 
-	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
+	// consider using EASTL::invasive vector, instead of regular vector here
+	std::map<unsigned, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
+
+	/// brief: parses the top node of an xml file for version information
+	char * determine_version(XML::xml_node<> const & xml) const;
+
+	/// brief: parses xml file, where version information is unknown
+	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
+
+	/// brief: parses first generation witchcraft xml file
+	EngineResourceBase * parse_file_version__010(XML::xml_node<> const & node);
 
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_vertex_resource_from_xml(XML::xml_node<> const & xml);
@@ -50,13 +60,16 @@ protected:
 
 public:
 
-	EngineResourceBase * find_resource(unsigned int ID, int scope);
+	EngineResourceBase * load_from_xml_file(std::string const & file);
+
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
+	EngineResourceBase * find_resource(unsigned ID, int scope);
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
 	EngineResourceBase * find_resource(char const * name, int scope);
 
 	// clears all resources and scopes
 	void empty_cache();
 
-	EngineResourceBase * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

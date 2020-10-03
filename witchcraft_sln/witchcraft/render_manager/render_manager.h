@@ -50,6 +50,7 @@
 
 #include "opengl_shader.h"
 #include "opengl_texture.h"
+#include "../render_manager/shader_resource.h"
 #include "../resource_manager/vertex_resource.h"
 
 #include "../console/console.h"
@@ -124,37 +125,14 @@ private:
 		"void main(){\n"
 		"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n}"
 		;
-
-	GLuint tri_vao, tri_vbo;
-	GLfloat const triangle_verticies[9] =
-	{
-		 -0.5f, -0.5f, 0.0f
-		, 0.5f, -0.5f, 0.0f
-		, 0.0f,  0.5f, 0.0f
-	};
-
-
-	GLuint quad_vao, quad_vbo, quad_ebo, quad_tex;
-	GLfloat const quad_verticies[32] =
-	{
-		// pos					// color			// tex
-		  0.5f,  0.5f, 0.0f,	1.0f, 0.0f, 0.0f,	1.0f, 1.0f	// tr
-		, 0.5f, -0.5f, 0.0f,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f	// br
-		,-0.5f, -0.5f, 0.0f,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f	// bl
-		,-0.5f,  0.5f, 0.0f,	1.0f, 1.0f, 1.0f,	0.0f, 1.0f	// tl
-	};
-	GLuint const quad_indicies[6] =
-	{
- 		  0, 1, 3
-		, 1, 2, 3
-	};
+	
 
 	glm::mat4 model_matrix;
 	glm::mat4 view_matrix;
 	glm::mat4 orthographic_projection_matrix;
 	glm::mat4 perspective_projection_matrix;
 
-
+	bool use_vertex_class_not_quad = false;
 	bool use_wireframe_rendering = false;
 	bool draw_triangle_not_quad = false;
 	bool draw_imgui_main_menu_bar = true;
@@ -165,11 +143,24 @@ private:
 
 	void paint_debug_windows();
 
+	void initialize_sprite_quad(VertexResource const * vert, OpenGLSpriteQuad & quad);
+
 protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
+	unsigned int active_shader_idx = 0;
+	std::vector<std::unique_ptr<OpenGlShaderProgram>> shader;
+
+	char const * active_shader = "";
 	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
+
+	std::map<char const *, std::unique_ptr<OpenGLTexture>> textures;
+
+	bool use_texture_class = false;
+	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	OpenGLSpriteQuad sprite_quad;
+
 
 	SDL_Window * program_window		= nullptr;
 
@@ -185,8 +176,6 @@ protected:
 
 	MessageBus * message_bus		= nullptr;
 
-	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
-	OpenGLSpriteQuad sprite_quad;
 
 	SDL_RendererInfo renderer_info;
 
@@ -206,19 +195,22 @@ protected:
 
 	bool init_imgui();
 
-	void init_get_debug_console();
+	void request_debug_console_ptr();
 
 
 	inline bool contains_term(std::string const * source, char const * search)
 	{
 		return source->find(search) != std::string::npos;
 	}
-
-
+	
 	void handle_message(Message m);
 
-	unsigned int engine_channel_id = 0;
-	unsigned int render_channel_id = 0;
+	void handle_supply_console_ptr_message(Message & m);
+	void handle_invoke_render_command(Message & m);
+	void handle_supply_resource(Message & m);
+
+	unsigned int engine_channel_id   = 0;
+	unsigned int render_channel_id   = 0;
 	unsigned int resource_channel_id = 0;
 
 

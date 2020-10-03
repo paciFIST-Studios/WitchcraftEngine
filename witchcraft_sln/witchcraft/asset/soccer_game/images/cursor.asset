@@ -1,3 +1,3 @@
-<resources>
-  <resource name="cursor" type="image" file="asset/soccer_game/images/cursor.png" scope="1"/>
-</resources>
+<witchcraft version="0.1">
+  <image name="cursor" file="asset/soccer_game/images/cursor.png" scope="1"/>
+</witchcraft>

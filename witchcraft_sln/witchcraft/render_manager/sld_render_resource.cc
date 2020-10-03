@@ -4,14 +4,12 @@ void SDLRenderResource::attempt_load(std::string const & file_name)
 {
 	if (false == utility::file_exists(file_name))
 	{
-		PLOGE << "WARNING: FILE DOES NOT EXIST";
-		PLOGE << "\t\tfile_name: " << file_name;
+		PLOGE << "WARNING: FILE DOES NOT EXIST\tfile: \"" << file_name << "\"";
 	}
 
 	if (renderer == nullptr)
 	{
-		PLOGW << "WARNING: Loading texture with a null renderer.  This image will not be shown: ";
-		PLOGW << "\t\tfile_name: " << file_name;
+		PLOGW << "WARNING: Loading texture with a null renderer.  Cannot show file: \"" << file_name << "\"";
 	}
 
 	//texture = IMG_LoadTexture(renderer, FILE.c_str());

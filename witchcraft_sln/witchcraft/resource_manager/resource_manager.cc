@@ -1,5 +1,88 @@
 #include "resource_manager.h"
 
+char * ResourceManager::determine_version(XML::xml_node<> const & xml) const
+{
+	std::string const doctype(witchcraft::xml::WITCHCRAFT);
+	std::string const version(witchcraft::xml::VERSION);
+
+	if (doctype.compare(xml.name()) != 0)
+	{
+		PLOGE << "ERROR! File format is incorrect.  Not a witchcraft file.";
+		return nullptr;
+	}
+
+	auto attr = xml.first_attribute(version.c_str());
+	if (attr == nullptr)
+	{
+		PLOGE << "ERROR! No version information provided with file!";
+		return nullptr;
+	}
+
+	return attr->value();
+}
+
+
+
+EngineResourceBase * ResourceManager::parse_file_version__unknown(XML::xml_node<> const & node)
+{
+	PLOGE << "Parsing unknown version files is not supported!  Resource will not be loaded";
+	return nullptr;
+}
+
+
+EngineResourceBase *  ResourceManager::parse_file_version__010(XML::xml_node<> const & node)
+{
+	// when using string::compare(str), it returns 0 on exact match
+	int constexpr STRCMP_TRUE = 0;
+
+	// We just got the top node, now, we'll parse the child nodes for engine resources
+	// we'll return a ptr to the last one parsed
+	std::unique_ptr<EngineResourceBase> resource = nullptr;
+	std::string type = node.first_node()->name();
+
+	if (type.compare("image") == STRCMP_TRUE)
+	{
+		resource = build_render_resource_from_xml(*node.first_node());
+	}
+	else if (type.compare("vertex_list") == STRCMP_TRUE)
+	{
+		resource = build_vertex_resource_from_xml(*node.first_node());
+	}
+	else if (type.compare("shader") == STRCMP_TRUE)
+	{
+		resource = build_shader_resource_from_xml(*node.first_node());
+	}
+	else if (type.compare("audio") == STRCMP_TRUE)
+	{
+		// resource = _audio_manager->load_resource_from_xml(node.first_node());
+	}
+	else if (type.compare("dialogue") == STRCMP_TRUE)
+	{
+		// resource = build_dialogue_resource_from_xml(*node.first_node());
+	}
+	else if (type.compare("text") == STRCMP_TRUE)
+	{
+		// resource = _config_manager->load_resource_from_xml(*node.first_node());
+	}
+
+	// ResourceManager owns all of the files, so it will keep the unique_ptrs.
+	// we do plan to emit a non-owning, raw-ptr, to the resource we just loaded
+	if (resource)
+	{
+		// do not add duplicates of the same file
+		if (find_resource(resource->id, resource->scope)) {
+			return resource.get();}
+
+		auto scope = resource->scope;
+		resource_map[scope].push_back(std::move(resource));
+		resource_count++;
+		return resource_map[scope].back().get();
+	}
+
+	PLOGE << "ERROR! Could not load resource from XML! type: " << type;
+	return nullptr;
+}
+
 std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_xml(XML::xml_node<> const & xml)
 {
 	// some default values
@@ -86,14 +169,10 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 {
 	std::string		name		= "";
 	std::string		filepath	= "";
-	EResourceType	type		= EResourceType::VERTEX_LIST;
+	EResourceType	type		= EResourceType::VERTEX_LIST_QUAD;
 	unsigned int	scope		= 0;
 	std::vector<float> verts;
 	std::vector<int> indicies;
-
-	bool record_vertex  = false;
-	bool record_texture = false;
-	bool record_color   = false;
 
 	int vertex_stride  = 0;
 	int vertex_offset  = 0;
@@ -115,25 +194,6 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		{
 			scope = std::stoi(_value);
 		}
-		else if(_name == "contents")
-		{ 
-			auto contents = utility::tokenize_string(_value, ",");
-			for (auto&& c : contents)
-			{
-				if (c == "vertex")
-				{
-					record_vertex = true;
-				}
-				else if (c == "color")
-				{
-					record_color = true;
-				}
-				else if (c == "texture")
-				{
-					record_texture = true;
-				}
-			}
-		}
 		else if (_name == "float_list")
 		{
 			auto s_vec = utility::tokenize_string(_value, ",");
@@ -150,45 +210,31 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 				indicies.push_back(std::stoi(i));
 			}
 		}
-
-		if (record_vertex)
-		{
-			if(_name == "vertex_stride")
-			{ 
-				vertex_stride = std::stoi(_value);
-			}
-			else if(_name == "vertex_offset")
-			{ 
-				vertex_offset = std::stoi(_value);
-			}
+		else if(_name == "vertex_stride")
+		{ 
+			vertex_stride = std::stoi(_value);
 		}
-
-		if (record_texture)
-		{
-			if(_name == "texture_stride")
-			{
-				texture_stride = std::stoi(_value);
-			}
-			else if(_name == "texture_offset")
-			{ 
-				texture_offset = std::stoi(_value);
-			}
+		else if(_name == "vertex_offset")
+		{ 
+			vertex_offset = std::stoi(_value);
 		}
-
-		if (record_color)
+		else if(_name == "texture_stride")
 		{
-			if(_name == "color_stride")
-			{
-				color_stride = std::stoi(_value);
-			}
-			else if(_name == "color_offset")
-			{
-				color_offset = std::stoi(_value);
-			}
+			texture_stride = std::stoi(_value);
+		}
+		else if(_name == "texture_offset")
+		{ 
+			texture_offset = std::stoi(_value);
+		}
+		else if(_name == "color_stride")
+		{
+			color_stride = std::stoi(_value);
+		}
+		else if(_name == "color_offset")
+		{
+			color_offset = std::stoi(_value);
 		}
 	}
-
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load << "VertexResource";
 
 	// note: we're going to make something derived from EngineResourceBase
 	std::unique_ptr<EngineResourceBase> resource;
@@ -201,10 +247,10 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 		, indicies			//
 		, vertex_stride		// 
 		, vertex_offset		// 
-		, texture_stride	// 
-		, texture_offset	// 
 		, color_stride		//
 		, color_offset		//
+		, texture_stride	// 
+		, texture_offset	// 
 		);
 
 	return std::move(resource);
@@ -212,19 +258,17 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_vertex_resource_from_
 
 std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_xml(XML::xml_node<> const & xml)
 {
-	unsigned int uuid  = 0;
+	std::string resource_name = "";
 	unsigned int scope = 0;
-
-	std::map<std::string, std::string> shader_files;
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
 		std::string _name = attr->name();
 		std::string _value = attr->value();
 
-		if (_name == witchcraft::xml::UUID)
+		if (_name == witchcraft::xml::NAME)
 		{
-			uuid = std::stoi(_value);
+			resource_name = _value;
 		}
 		else if (_name == witchcraft::xml::SCOPE)
 		{
@@ -232,11 +276,11 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 		}
 	}
 	
-	auto resource = std::make_unique<ShaderResource>("shader", scope);
+	auto resource = std::make_unique<ShaderResource>(resource_name, scope);
 
-	for (XML::xml_node<>* child = xml.first_node(); child; child =child->next_sibling())
+	for (XML::xml_node<>* child = xml.first_node(); child; child = child->next_sibling())
 	{
-		std::string type = "";
+		std::string type = child->name();
 		std::string path = "";
 
 		for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
@@ -244,17 +288,44 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 			std::string _name = attr->name();
 			std::string _value = attr->value();
 
-			if (_name == witchcraft::xml::TYPE)
-			{
-				type = _value;
-			}
-			else if (_name == witchcraft::xml::FILEPATH)
+			if (_name == witchcraft::xml::FILEPATH)
 			{
 				path = _value;
 			}
 		}
 
-		resource->shader_files[type] = path;
+		if (path == "")
+		{
+			PLOGE << "ERROR! Cannot deserialize file! {"
+				<< "\n\tresource name: " << resource_name
+				<< "\n\tscope: " << scope
+				<< "\n\ttype: \"" << type << "\""
+				<< "\n\tpath: \"" << path << "\""
+				<< "\n};"
+				;
+			// NOTE: returning here to avoid keep resource
+			return nullptr;
+		}
+		else
+		{
+			if (!utility::file_exists(path))
+			{
+				PLOGE << "ERROR! File does not exist! path: \"" << path << "\"";
+				return nullptr;
+			}
+
+			// we need to store the contents of the file, not the path
+			std::ifstream infile(path, std::ios::in);
+			if (infile.is_open())
+			{
+				resource->shader_files[type] = std::string();
+				resource->shader_files[type].assign(
+					  std::istreambuf_iterator<char>(infile)
+					, std::istreambuf_iterator<char>()
+				);
+				infile.close();
+			}
+		}
 	}
 
 	std::unique_ptr<EngineResourceBase> shader_resource = std::move(resource);
@@ -312,36 +383,136 @@ Animation2D ResourceManager::parse_one_embedded_sprite_animation(XML::xml_node<>
 }
 
 
-// returns a NON-OWNING ptr
-EngineResourceBase * ResourceManager::find_resource(unsigned int id, int scope)
+EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & file)
 {
-	if (resource_count == 0){ return nullptr; }
-
-	// iterate through all of the scene ids
-	for (auto&& resource : resource_map[scope])
+	if (false == utility::file_exists(file))
 	{
-		if (resource->id == id)
-		{
-			return resource.get();
-		}
+		PLOGE << "ERROR: FILE DOES NOT EXIST; path: \"" << file << "\"";
+		return nullptr;
 	}
-	
-	// we went through all existing resource without finding a match
+
+	XML::file<> config_file(file.c_str());
+	XML::xml_document<> doc;
+	doc.parse<0>(config_file.data());
+
+	// Top node is also called the "resource tree"	
+	XML::xml_node<> * top_node = doc.first_node(witchcraft::xml::WITCHCRAFT);
+
+	if (top_node == nullptr)
+	{
+		PLOGE << "ERROR! Not a witchcraft formatted file!; path: " << file;
+		return nullptr;
+	}
+
+	// ver 0.1  == int 10
+	// ver 1.21 == int 121
+	// ver 3.14 == int 314
+	char * ver = determine_version(*top_node);
+	int version = (ver) ? int(std::stof(ver) * 100) : 0;
+
+	if (version == 0)
+	{
+		PLOGE << "ERROR! No version information given for witchcraft file! path: " << file;
+		return parse_file_version__unknown(*top_node);
+	}
+	else if (version == 10)
+	{
+		return parse_file_version__010(*top_node);
+	}
+	// else if (version == 11)
+	// etc
+
+	PLOGE << "UNKNOWN ERROR!  Error while parsing file: " << file;
 	return nullptr;
 }
 
-EngineResourceBase * ResourceManager::find_resource(char const * name, int scope)
-{
-	if (name == nullptr) { return nullptr; }
 
-	for (auto&& resource : resource_map[scope])
-	{
-		if (resource->name.find(name) != std::string::npos)
-		{
-			return resource.get();
+// returns a NON-OWNING ptr
+EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
+{
+	if (resource_count == 0)
+	{ 
+		PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
+		return nullptr; 
+	}
+
+	// check given scope
+	for (auto&& resource : resource_map[scope]){
+		if (resource->id == id) {
+			return resource.get();}
+	}
+
+	// check global scope if we didn't already
+	if (scope != 0) {
+		for (auto&& global : resource_map[0]) {
+			if (global->id == id) {
+				return global.get();
+			}
 		}
 	}
 
+	// finally, check every other scope, except for [scope] and global
+	for (auto&& kvp : resource_map)
+	{
+		unsigned int key = kvp.first;
+		if (key == 0 || key == scope) { continue; }
+
+		for (auto&& known : resource_map[key]) {
+			if (known->id == id) {
+				return known.get();
+			}
+		}
+	}
+
+	PLOGE << "WARNING! Searched for unknown resource! id: \"" << id << "\"  scope: " << scope  
+		<< "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
+	return nullptr;
+}
+
+// returns a NON-OWNING ptr
+EngineResourceBase * ResourceManager::find_resource(char const * name, int scope)
+{
+	if (name == nullptr) 
+	{ 
+		PLOGE << "ERROR! Resource was requested, but no name found!";
+		return nullptr; 
+	}
+
+	if (resource_count == 0)
+	{
+		PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
+		return nullptr;
+	}
+
+	// search given scope
+	for (auto&& resource : resource_map[scope]){
+		if (resource->name.compare(name) == 0){
+			return resource.get();}
+	}
+
+	// check global scope if we didn't already
+	if (scope != 0){
+		for (auto&& global : resource_map[0]) {
+			if (global->name.compare(name) == 0) {
+				return global.get();
+			}
+		}
+	}
+
+	// finally, check every other scope, except for [scope] and global
+	for (auto&& kvp : resource_map)
+	{
+		unsigned int key = kvp.first;
+		if (key == 0 || key == scope) { continue; }
+
+		for (auto&& known : resource_map[key]){
+			if (known->name.compare(name) == 0){
+				return known.get();}
+		}
+	}
+	
+	PLOGE << "WARNING! Searched for unknown resource! name: \"" << name << "\"  scope: " << scope
+		  << "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
 	return nullptr;
 }
 
@@ -371,91 +542,6 @@ void ResourceManager::empty_cache()
 	current_scope = witchcraft::configuration::global_resource_scope;
 }
 
-EngineResourceBase * ResourceManager::load_from_xml_file(std::string const & file)
-{
-	if (false == utility::file_exists(file))
-	{
-		PLOGE << "ERROR: FILE DOES NOT EXIST; path: \"" << file << "\"";
-		return nullptr;
-	}
-
-	XML::file<> config_file(file.c_str());
-	XML::xml_document<> doc;
-	doc.parse<0>(config_file.data());
-
-	// Top node is also called the "resource tree"
-	XML::xml_node<> * top_node = doc.first_node(witchcraft::xml::resource_list);
-
-	if (top_node)
-	{
-		// enumerate objects
-		for (XML::xml_node<> * child = top_node->first_node(); child; child = child->next_sibling())
-		{
-			std::unique_ptr<EngineResourceBase> resource = nullptr;
-
-			// for each object, enumerate the attributes it contains
-			for (XML::xml_attribute<> * attr = child->first_attribute(); attr; attr = attr->next_attribute())
-			{
-				std::string _name = attr->name();
-				std::string _value = attr->value();
-
-				// check resource type
-				if (_name == witchcraft::xml::TYPE)
-				{
-					// We will allow/force resource managers to implement their own derived
-					// versions of EngineResourceBase.  Those managers will create the resource,
-					// and then give us a unique_ptr<EngineResourceBase> pointer back, and this 
-					// scope will need to add the EngineResourceBase pointer to the resource list.
-					if (_value == "image")
-					{
-						resource = build_render_resource_from_xml(*child);
-						break;
-					}
-					else if (_value == "vertex_list")
-					{
-						resource = build_vertex_resource_from_xml(*child);
-						break;
-					}
-					else if (_value == "shader")
-					{
-						resource = build_shader_resource_from_xml(*child);
-						break;
-					}
-					else if (_value == "audio")
-					{
-						// resource = _audio_manager->load_resource_from_xml(child);
-						// break;
-					}
-					else if (_value == "dialogue")
-					{
-						// resource = build_dialogue_resource_from_xml(*child);
-						// break;
-					}
-					else if (_value == "text")
-					{
-						// resource = _config_manager->load_resource_from_xml(child);
-						// break;
-					}
-				}
-			}
-
-			if (resource)
-			{	
-				// do not add duplicates of the same file
-				if (find_resource(resource->id, resource->scope)) {
-					return resource.get(); }
-
-				auto scope = resource->scope;
-				// we must use std::move to change ownership of the unique_ptr
-				resource_map[scope].push_back(std::move(resource));
-				resource_count++;
-				return resource_map[scope].back().get();
-			}
-		}
-	}
-	
-	return nullptr;
-}
 
 // WARN: Must be called for each scene change
 bool ResourceManager::set_current_scope(unsigned int Scope)
@@ -497,8 +583,8 @@ ResourceManager::ResourceManager(MessageBus * mb)
 	std::function<void(Message)> cb = std::bind(&ResourceManager::handle_message, this, std::placeholders::_1);
 	mb->subscribe("resource", cb);
 	resource_channel_id = mb->channel_lookup("resource");
-	render_channel_id = mb->channel_lookup("render");
-	engine_channel_id = mb->channel_lookup("engine");
+	render_channel_id   = mb->channel_lookup("render"  );
+	engine_channel_id   = mb->channel_lookup("engine"  );
 }
 
 void ResourceManager::handle_message(Message m)
@@ -506,22 +592,57 @@ void ResourceManager::handle_message(Message m)
 	// request resource by name, supplied as <char*>
 	if (m.type == MessageType::REQUEST__RESOURCE)
 	{
-		if (m.data == nullptr){return;}
-
-		auto cptr = static_cast<char*>(m.data);
-		auto rptr = this->find_resource(cptr, 0);
-
-		if (rptr != nullptr)
+		if (m.data == nullptr)
 		{
-			Message reply
-			{
-				  m.sender
-				, m.recipient
-				, MessageType::SUPPLY__RESOURCE
-				, rptr
-			};
-			message_bus->send_direct_message(reply);
+			PLOGE << "ERROR! REQUEST__RESOURCE message was sent, but no resource was specified!";
+			message_bus->log_message(m);
+			return;
 		}
+
+		auto cptr = static_cast<char const *>(m.data);
+		auto rptr = this->find_resource(cptr, current_scope);
+
+		if (rptr == nullptr)
+		{
+			PLOGE << "ERROR!  Could not find resource!";
+			message_bus->log_message(m);
+			return;
+		}
+
+		Message reply
+		{
+			  m.sender
+			, m.recipient
+			, MessageType::SUPPLY__RESOURCE
+			, rptr
+		};
+		message_bus->send_direct_message(reply);
+	}
+	else if (m.type == MessageType::REQUEST__LOAD_RESOURCE)
+	{
+		if (m.data == nullptr) 
+		{ 
+			PLOGE << "ERROR! Cannot load resource, no path given!";
+			message_bus->log_message(m);
+			return; 
+		}
+		auto cptr = static_cast<char const *>(m.data);
+
+		if (cptr == nullptr)
+		{
+			PLOGE << "ERROR! Cannot load resource!  Data ptr not castable to char *";
+			message_bus->log_message(m);
+			return;
+		}
+
+		auto resource = load_from_xml_file(cptr);
+		Message reply = {
+			  m.sender
+			, m.recipient
+			, SUPPLY__RESOURCE
+			, (void*) resource
+		};
+		message_bus->send_direct_message(reply);
 	}
 }
 

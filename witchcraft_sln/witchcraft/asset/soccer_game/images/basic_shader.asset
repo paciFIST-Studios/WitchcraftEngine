@@ -1,6 +1,0 @@
-<resources>
-  <resource name="basic_shader" type="shader" scope="1">
-    <type="vector" file="asset/soccer_game/images/basic.vs.glsl"/>
-    <type="fragment" file="asset/soccer_game/images/basic.fs.glsl"/>
-  </resource>
-</resources>

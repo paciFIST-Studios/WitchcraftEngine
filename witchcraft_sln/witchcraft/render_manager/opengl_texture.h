@@ -19,8 +19,18 @@ protected:					// uninit values
 
 	unsigned char * data = nullptr;
 public:
-	OpenGLTexture(): EngineResourceBase() {}
 	~OpenGLTexture() override { glDeleteTextures(1, &texture_id); }
+	OpenGLTexture(): EngineResourceBase() {}
+	OpenGLTexture(const char * name, const char * filepath, int scope=0)
+		: EngineResourceBase(
+			  name
+			, filepath
+			, EResourceType::OPENGL_TEXTURE
+			, scope
+	)
+	{
+		reserve_id();
+	}
 
 	void load() override 
 	{
@@ -32,27 +42,19 @@ public:
 		data = stbi_load(filepath.c_str(), &width, &height, &color_channels, 0);
 		if (data != nullptr)
 		{
-			glTexImage2D(
-				GL_TEXTURE_2D		//  can also make 1d or 3d textures
-				, 0					//	mipmap level (default=0)
-				, GL_RGBA8			//	storage format
-				, width				//	image width
-				, height			//	image height
-				, 0					//	legacy-unused
-				, GL_RGBA8			//	source format
-				, GL_UNSIGNED_BYTE	//	source format
-				, data				//
-			);
+			if (color_channels == 4)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			}
 			glGenerateMipmap(GL_TEXTURE_2D);
-			PLOGV << "Texture Loaded: " << filepath;
+			// free loaded texture from ram (is still on video card)
+			stbi_image_free(data);
+			PLOGV << "Texture Loaded: " << filepath << "\tsize: " << width * height * sizeof(float);
 		}
 		else
 		{
 			PLOGE << "'FAILURE! Texture Not Loaded: " << filepath << "\n\t" << stbi_failure_reason();
 		}
-
-		// free loaded texture from ram (is still on video card)
-		stbi_image_free(data);
 	}
 	   
 	void unload() override 
@@ -62,8 +64,12 @@ public:
 
 	void reserve_id()
 	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		// get id w/ video card
 		glGenTextures(1, &texture_id);
+		//glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture_id);
 
 		// wrapping
@@ -71,21 +77,8 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);
 	}
 
-	OpenGLTexture(const char * name, const char * filepath, int scope=0)
-		: EngineResourceBase(
-			  name
-			, filepath
-			, EResourceType::OPENGL_TEXTURE
-			, scope
-	)
-	{
-		reserve_id();
-	}
 
 	unsigned int bind(unsigned int slot = 0)
 	{

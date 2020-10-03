@@ -22,7 +22,12 @@ use_vsync: false
 path: asset/soccer_game/dialogue/cambodia_sadness.asset
 
 // graphics
-path: asset/soccer_game/images/basic_shader.asset
+// right now, we're loading basic_shader when when init the ResourceManager,
+// so it will be available when the RenderManager comes online.  This config
+// file is parsed after the engine init is finished, but before the game loop
+// starts.  Not sure it matters where it gets loaded, but we are for-sure,
+// loading it somewhere else for the time being
+//path: asset/basic_shader.asset
 
 path: asset/soccer_game/images/ball.asset
 path: asset/soccer_game/images/ball_shadow.asset

@@ -28,6 +28,9 @@ void Engine::startup()
 		resource->load_from_xml_file("asset/basic_shader.asset");
 	}
 
+	PLOGI << witchcraft::log_strings::audio_manager_start;
+	audio = std::make_unique<AudioManager>(message.get());
+
 	PLOGI << witchcraft::log_strings::debug_console;
 	console = std::make_unique<Console>(message.get());
 

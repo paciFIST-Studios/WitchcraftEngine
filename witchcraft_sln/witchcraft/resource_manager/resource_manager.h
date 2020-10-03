@@ -36,11 +36,11 @@ protected:
 	// consider using EASTL::invasive vector, instead of regular vector here
 	std::map<unsigned, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
-	/// brief: places a successfully parsed xml resource inside the resource map, if it isn't already there
-	EngineResourceBase * register_resource(std::unique_ptr<EngineResourceBase> & resource);
-
 	/// brief: parses the top node of an xml file for version information
 	char * determine_version(XML::xml_node<> const & xml) const;
+
+	/// brief: places a successfully parsed xml resource inside the resource map, if it isn't already there
+	EngineResourceBase * register_resource(std::unique_ptr<EngineResourceBase> & resource);
 
 	/// brief: parses xml file, where version information is unknown
 	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
@@ -50,6 +50,7 @@ protected:
 
 	/// brief: parse block for resources, and register each resource
 	void process_xml_audio_block(XML::xml_node<> const & audio);
+	/// brief: builds a single audio resource
 	std::unique_ptr<EngineResourceBase> build_sound_resource_from_xml(XML::xml_node<> const & node);
 
 	// these parse a thing and emit one file
@@ -78,7 +79,7 @@ public:
 	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
 	EngineResourceBase * find_resource(char const * name, int scope);
 
-	// clears all resources and scopes
+	/// brief: empties all resources from all scopes in resource manager
 	void empty_cache();
 
 	

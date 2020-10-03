@@ -1,18 +1,5 @@
 #include "resource_manager.h"
 
-EngineResourceBase * ResourceManager::register_resource(std::unique_ptr<EngineResourceBase> & resource)
-{
-	auto ptr = find_resource(resource->id, resource->scope);
-	if (ptr != nullptr)
-	{
-		return ptr;
-	}
-
-	auto scope = resource->scope;
-	resource_map[scope].push_back(std::move(resource));
-	resource_count++;
-	return resource_map[scope].back().get();
-}
 
 char * ResourceManager::determine_version(XML::xml_node<> const & xml) const
 {
@@ -35,6 +22,19 @@ char * ResourceManager::determine_version(XML::xml_node<> const & xml) const
 	return attr->value();
 }
 
+EngineResourceBase * ResourceManager::register_resource(std::unique_ptr<EngineResourceBase> & resource)
+{
+	auto ptr = find_resource(resource->id, resource->scope);
+	if (ptr != nullptr)
+	{
+		return ptr;
+	}
+
+	auto scope = resource->scope;
+	resource_map[scope].push_back(std::move(resource));
+	resource_count++;
+	return resource_map[scope].back().get();
+}
 
 
 EngineResourceBase * ResourceManager::parse_file_version__unknown(XML::xml_node<> const & node)

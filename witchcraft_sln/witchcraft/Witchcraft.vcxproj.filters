@@ -329,5 +329,8 @@
     <ClInclude Include="miniaudio.h">
       <Filter>Source Files\vendor\miniaudio</Filter>
     </ClInclude>
+    <ClInclude Include="audio_manager\audio_resource.h">
+      <Filter>Source Files\audio_manager</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

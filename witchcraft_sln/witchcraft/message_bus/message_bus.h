@@ -91,11 +91,11 @@ protected:
 	std::map<char const *, unsigned int> name_to_channel_number {
 	//	  { "ai"		, 1  }
 	//	, { "animation"	, 2  }
-	//	, { "audio"		, 3  }
+		  { "audio"		, 3  }
 	//	, { "camera"	, 4  }
 	//	, { "cinematic"	, 5  }		
 	//	, { "collision"	, 6  }
-		  { "console"	, 7  }
+		, { "console"	, 7  }
 	//	, { "debug"		, 8  }
 		, { "engine"	, 9  }
 	//	, { "input"		, 10 }

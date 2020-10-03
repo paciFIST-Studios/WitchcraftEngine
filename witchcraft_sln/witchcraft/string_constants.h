@@ -67,6 +67,9 @@ namespace witchcraft
 
 	namespace log_strings
 	{
+		static char const * audio_manager_start = "audio manager start";
+		static char const * audio_manager_stop = "audio_manager_stop";
+
 		static char const * debug_console = "debug console start";
 
 		static char const * engine_startup = "witchcraft engine startup";

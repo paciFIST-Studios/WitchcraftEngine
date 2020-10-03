@@ -149,6 +149,9 @@ protected:
 
 	static std::unique_ptr<RenderManager> SDL2_render_manager;
 
+	unsigned int active_shader_idx = 0;
+	std::vector<std::unique_ptr<OpenGlShaderProgram>> shader;
+
 	char const * active_shader = "";
 	std::map<char const *, std::unique_ptr<OpenGlShaderProgram>> shaders;
 

@@ -2,7 +2,7 @@
 
 void OpenGlShaderProgram::use_program()
 {
-	glUseProgram(this->shader_program_id);
+	glUseProgram(shader_program_id);
 }
 
 GLuint OpenGlShaderProgram::compile_vertex_shader(char const * src)

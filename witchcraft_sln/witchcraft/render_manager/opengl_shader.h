@@ -10,10 +10,10 @@
 class OpenGlShaderProgram : public EngineObjectBase
 {
 private:
-	// not copyable
-	OpenGlShaderProgram(OpenGlShaderProgram const &) = delete;
-	// not assignable
-	OpenGlShaderProgram& operator=(OpenGlShaderProgram const &) = delete;
+	//// not copyable
+	//OpenGlShaderProgram(OpenGlShaderProgram const &) = delete;
+	//// not assignable
+	//OpenGlShaderProgram& operator=(OpenGlShaderProgram const &) = delete;
 
 protected:
 	// constants used for messaging state inside the class
@@ -33,7 +33,6 @@ protected:
 	GLuint link_program(GLuint vert, GLuint frag, GLuint geo = NULL);
 
 public:
-
 	OpenGlShaderProgram(){}
 	~OpenGlShaderProgram() { if(this->shader_program_id != 0) glDeleteProgram(this->shader_program_id); }
 

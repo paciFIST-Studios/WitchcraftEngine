@@ -3,15 +3,14 @@
 
 #include <functional>
 
-#include "../engine/engine_object.h"
-
-#include "../project_loader/project_loader.h"
-#include "../message_bus/message_bus.h"
-#include "../resource_manager/resource_manager.h"
-#include "../render_manager/render_manager.h"
+#include "../audio_manager/audio_manager.h"
 #include "../console/console.h"
-
+#include "../engine/engine_object.h"
 #include "../gameplay/gameplay_manager.h"
+#include "../message_bus/message_bus.h"
+#include "../project_loader/project_loader.h"
+#include "../render_manager/render_manager.h"
+#include "../resource_manager/resource_manager.h"
 
 
 struct TestMode
@@ -68,11 +67,12 @@ protected:
 	unsigned int console_channel_id		= 0;
 
 	// manager ptrs
-	std::unique_ptr<ResourceManager>	resource	= nullptr;
-	std::unique_ptr<RenderManager>		render		= nullptr;
-	std::unique_ptr<SceneManager2D>		scene		= nullptr;
+	std::unique_ptr<AudioManager>		audio		= nullptr;
 	std::unique_ptr<Console>			console		= nullptr;
 	std::unique_ptr<GameplayManager>	gameplay	= nullptr;
+	std::unique_ptr<RenderManager>		render		= nullptr;
+	std::unique_ptr<ResourceManager>	resource	= nullptr;
+	std::unique_ptr<SceneManager2D>		scene		= nullptr;
 
 	EEngineState current_engine_state = EEngineState::UNINITIALIZED;
 	TestMode test_mode;

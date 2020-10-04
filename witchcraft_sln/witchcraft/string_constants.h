@@ -62,13 +62,15 @@ namespace witchcraft
 	namespace banners
 	{
 		// I want there to be ascii art in the logs, that goes here
-		static char const * unit_test_banner = "";
+		static char const * unit_test_banner = "\n\n               )  (                       (           (     \n            ( /(  )\\ )  *   )  *   )      )\\ )  *   ) )\\ )  \n        (   )\\())(()/(` )  /(` )  /( (   (()/(` )  /((()/(  \n        )\\ ((_)\\  /(_))( )(_))( )(_)))\\   /(_))( )(_))/(_)) \n     _ ((_) _((_)(_)) (_(_())(_(_())((_) (_)) (_(_())(_))   \n    | | | || \\| ||_ _||_   _||_   _|| __|/ __||_   _|/ __|  \n    | |_| || .` | | |   | |    | |  | _| \\__ \\  | |  \\__ \\  \n     \\___/ |_|\\_||___|  |_|    |_|  |___||___/  |_|  |___/\n\tthis is fine...\n\n\nNote: The Unit Test block of the log is expected to contain errors and warnings,\nin order to demonstrate that these happen when they should.  Errors and warnings\nin the Engine block of the log, are not okay\n";	
 	}
 
 	namespace log_strings
 	{
 		static char const * audio_manager_start = "audio manager start";
-		static char const * audio_manager_stop = "audio_manager_stop";
+		static char const * audio_manager_stop = "audio manager stop";
+		static char const * audio_device_init = "audio device init";
+		static char const * audio_device_okay = "audio device okay";
 
 		static char const * debug_console = "debug console start";
 

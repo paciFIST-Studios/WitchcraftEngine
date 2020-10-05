@@ -96,7 +96,7 @@ protected:
 
 public:
 	
-	void startup();
+	void init_system();
 	void run();
 	void shutdown();
 

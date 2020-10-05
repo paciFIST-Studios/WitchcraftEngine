@@ -156,7 +156,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_sound_resource_from_x
 		}
 	}
 
-	auto ar = std::make_unique<AudioResource>(name, path, type, scope);
+	auto ar = std::make_unique<AudioResource>(name, path, type, scope, message_bus);
 	std::unique_ptr<EngineResourceBase> resource = std::move(ar);
 	return std::move(resource);
 }
@@ -377,7 +377,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_shader_resource_from_
 		{
 			PLOGE << "ERROR! Cannot deserialize file! {"
 				<< "\n\tresource name: " << resource_name
-				<< "\n\tscope: " << scope
+				<< "\n\tscope: "  << scope
 				<< "\n\ttype: \"" << type << "\""
 				<< "\n\tpath: \"" << path << "\""
 				<< "\n};"
@@ -510,7 +510,7 @@ EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
 {
 	if (resource_count == 0)
 	{ 
-		PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
+		//PLOGE << "ERROR! Resource was requested, but no resources are being tracked!";
 		return nullptr; 
 	}
 
@@ -542,8 +542,8 @@ EngineResourceBase * ResourceManager::find_resource(unsigned id, int scope)
 		}
 	}
 
-	PLOGE << "WARNING! Searched for unknown resource! id: \"" << id << "\"  scope: " << scope  
-		<< "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
+	//PLOGE << "WARNING! Searched for unknown resource! id: \"" << id << "\"  scope: " << scope  
+	//	<< "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
 	return nullptr;
 }
 
@@ -589,8 +589,8 @@ EngineResourceBase * ResourceManager::find_resource(char const * name, int scope
 		}
 	}
 	
-	PLOGE << "WARNING! Searched for unknown resource! name: \"" << name << "\"  scope: " << scope
-		  << "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
+	//PLOGE << "WARNING! Searched for unknown resource! name: \"" << name << "\"  scope: " << scope
+	//	  << "\n\tSearching for an unknown resource can be VERY time consuming.  Please fix this now.";
 	return nullptr;
 }
 

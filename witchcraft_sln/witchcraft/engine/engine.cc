@@ -1,7 +1,7 @@
 #include "engine.h"
 
 
-void Engine::startup()
+void Engine::init_system()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
 	current_engine_state = EEngineState::STARTUP;
@@ -19,6 +19,7 @@ void Engine::startup()
 		scene_channel_id	= message->channel_lookup("scene"	);
 		console_channel_id	= message->channel_lookup("console"	);
 	}
+	PLOGI << "message bus ok";
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
@@ -27,18 +28,23 @@ void Engine::startup()
 		resource->load_from_xml_file("asset/textured_quad.asset");
 		resource->load_from_xml_file("asset/basic_shader.asset");
 	}
+	PLOGI << "resource manager ok";
 
 	PLOGI << witchcraft::log_strings::audio_manager_start;
 	audio = std::make_unique<AudioManager>(message.get());
+	PLOGI << "audio manager ok";
 
 	PLOGI << witchcraft::log_strings::debug_console;
 	console = std::make_unique<Console>(message.get());
+	PLOGI << "debug console ok";
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
+	PLOGI << "render manager ok";
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());
+	PLOGI << "scene manager ok";
 
 	// game components ------------------------------------------------------------------------------------------
 
@@ -49,8 +55,11 @@ void Engine::startup()
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();
+	PLOGI << "project loader ok";
 
 	init_gameplay(project_settings);
+
+	PLOGI << "engine ok";
 }
 
 void Engine::init_gameplay(ProjectSettings ps)

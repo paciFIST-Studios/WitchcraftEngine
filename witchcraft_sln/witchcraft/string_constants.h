@@ -70,11 +70,11 @@ namespace witchcraft
 		static char const * audio_manager_start = "audio manager start";
 		static char const * audio_manager_stop = "audio manager stop";
 		static char const * audio_device_init = "audio device init";
-		static char const * audio_device_okay = "audio device okay";
+		static char const * audio_device_ok = "audio device ok";
 
 		static char const * debug_console = "debug console start";
 
-		static char const * engine_startup = "witchcraft engine startup";
+		static char const * engine_startup = "witchcraft engine init_system";
 		static char const * engine_running = "witchcraft engine running";
 		static char const * engine_shutdown = "witchcraft engine shutdown";					  
 

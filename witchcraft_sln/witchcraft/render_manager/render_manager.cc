@@ -20,8 +20,9 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	// sends a message to engine, asking for ptr to console
 	request_debug_console_ptr();
 
-	PLOGV << witchcraft::log_strings::render_manager_system_init_end;
-	
+	PLOGI << witchcraft::log_strings::render_manager_system_init_end;
+	PLOGI << "render manager ok";
+
 	renderer_state = ERendererState::UPDATE_OK;
 	return true;
 }

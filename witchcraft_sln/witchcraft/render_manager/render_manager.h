@@ -229,7 +229,7 @@ public:
 		// cache these locally, b/c we're likely to use them very often
 		render_channel_id = message_bus->channel_lookup("render");
 		engine_channel_id = message_bus->channel_lookup("engine");
-		resource_channel_id = message_bus->channel_lookup("resource");	
+		resource_channel_id = message_bus->channel_lookup("resource");
 	}
 
 	bool init_system(

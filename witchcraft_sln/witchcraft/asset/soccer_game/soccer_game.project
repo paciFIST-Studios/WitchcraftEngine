@@ -40,6 +40,6 @@ path: asset/soccer_game/images/player_a.asset
 
 
 // sfx
-path: asset/soccer_game/sounds/music.asset
-path: asset/soccer_game/sounds/players.asset
-path: asset/soccer_game/sounds/sfx.asset
+path: asset/soccer_game/music.asset
+path: asset/soccer_game/players.asset
+path: asset/soccer_game/sfx.asset

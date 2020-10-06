@@ -208,7 +208,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 		}
 	}
 
-	PLOGV << witchcraft::log_strings::resource_manager_meta_load << filepath;
+	PLOGI << witchcraft::log_strings::resource_manager_meta_load << filepath;
 
 	// note: we're going to make something derived from EngineResourceBase
 	std::unique_ptr<EngineResourceBase> resource;
@@ -227,8 +227,8 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 		for (auto&& anim : embedded_animations)
 		{
 			sar->add_animation(anim.name, anim);
-			PLOGV << witchcraft::log_strings::resource_manager_meta_load 
-				<< "{ atlas=\"" << filepath << "\"  anim=\"" << anim.name << "\" }";
+			//PLOGV << witchcraft::log_strings::resource_manager_meta_load 
+			//	<< "{ atlas=\"" << filepath << "\"  anim=\"" << anim.name << "\" }";
 				// NOTE: in CPP20 we can do the following, with a more python style
 				// << std::format("atlas=\"{0}\}    anim=\"{1}\"", friendly_name, anim.name);
 		}

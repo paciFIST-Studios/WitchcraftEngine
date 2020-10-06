@@ -15,17 +15,17 @@ enum MessageType
 	, REQUEST__LOAD_RESOURCE
 	, REQUEST__UNLOAD_RESOURCE
 
+
 	/// requests for the audio manager to load file from the attached path
 	, REQUEST__AUDIO_LOAD
-	/// requests for the audio manager to unload file from the attached path
-	, REQUEST__AUDIO_UNLOAD
-
+	/// requests for a sound to be loaded, and immediately being playing
+	, REQUEST__AUDIO_LOAD_AND_PLAY
 	/// requests for audio manager to play file with attached name
-	, REQUEST__AUDIO_START
+	, REQUEST__AUDIO_PLAY
 	/// like requrest start, but plays on loop
-	, REQUEST__AUDIO_START_LOOP
+	, REQUEST__AUDIO_PLAY_LOOP
 	/// requests for audio manager to stop file with attached name
-	, REQUEST__AUDIO_STOP
+	, REQUEST__AUDIO_STOP_PLAY
 
 	/// requests a resource from the resource manager
 	, REQUEST__RESOURCE
@@ -63,6 +63,11 @@ static std::map<MessageType, char const *> const message_type_enum_to_string {
 	, { MessageType::TESTING					, "TESTING"						}
 	, { MessageType::REQUEST__LOAD_RESOURCE		, "REQUEST__LOAD_RESOURCE"		}
 	, { MessageType::REQUEST__UNLOAD_RESOURCE	, "REQUEST__UNLOAD_RESOURCE"	}
+	, { MessageType::REQUEST__AUDIO_LOAD		, "REQUEST__AUDIO_LOAD"			}
+	, { MessageType::REQUEST__AUDIO_LOAD_AND_PLAY,"REQUEST__AUDIO_LOAD_AND_PLAY"}
+	, { MessageType::REQUEST__AUDIO_PLAY		, "REQUEST__AUDIO_PLAY"			}
+	, { MessageType::REQUEST__AUDIO_PLAY_LOOP	, "REQUEST__AUDIO_PLAY_LOOP"	}
+	, { MessageType::REQUEST__AUDIO_STOP_PLAY	, "REQUEST__AUDIO_STOP_PLAY"	}
 	, { MessageType::REQUEST__RESOURCE			, "REQUEST__RESOURCE"			}
 	, { MessageType::SUPPLY__RESOURCE			, "SUPPLY__RESOURCE"			}
 	, { MessageType::INVOKE__CONSOLE_COMMAND	, "INVOKE__CONSOLE_COMMAND"		}

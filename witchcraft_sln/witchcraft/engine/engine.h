@@ -60,11 +60,12 @@ protected:
 	std::unique_ptr<ProjectLoader> project_loader;
 
 	std::unique_ptr<MessageBus> message;
-	unsigned int engine_channel_id		= 0;
-	unsigned int resource_channel_id	= 0;
-	unsigned int render_channel_id		= 0;
-	unsigned int scene_channel_id		= 0;
+	unsigned int audio_channel_id		= 0;
 	unsigned int console_channel_id		= 0;
+	unsigned int engine_channel_id		= 0;
+	unsigned int render_channel_id		= 0;
+	unsigned int resource_channel_id	= 0;
+	unsigned int scene_channel_id		= 0;
 
 	// manager ptrs
 	std::unique_ptr<AudioManager>		audio		= nullptr;
@@ -89,6 +90,7 @@ protected:
 	// sends a command over the message bus.
 	void send_console_command(char const * command, bool send_direct = true);
 	void send_render_command(char const * command, bool send_direct = true);
+	void send_audio_message(char const * path, MessageType type, bool send_direct = true);
 
 	void send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void* data, bool send_direct=true);
 

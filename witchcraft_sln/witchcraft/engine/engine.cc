@@ -13,11 +13,12 @@ void Engine::init_system()
 	{
 		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
 		message->subscribe("engine", cb);
-		engine_channel_id	= message->channel_lookup("engine"	);
-		resource_channel_id = message->channel_lookup("resource");
-		render_channel_id	= message->channel_lookup("render"	);
-		scene_channel_id	= message->channel_lookup("scene"	);
+		audio_channel_id	= message->channel_lookup("audio"	);
 		console_channel_id	= message->channel_lookup("console"	);
+		engine_channel_id	= message->channel_lookup("engine"	);
+		render_channel_id	= message->channel_lookup("render"	);
+		resource_channel_id = message->channel_lookup("resource");
+		scene_channel_id	= message->channel_lookup("scene"	);
 	}
 	PLOGI << "message bus ok";
 
@@ -146,20 +147,16 @@ void Engine::process_window_event(SDL_Event const & e)
 				break;
 
 
-				// Numeric
+			// Numeric
 			case SDLK_1:
-				//debug.emit_frame_length = !debug.emit_frame_length;
+				send_audio_message("asset/soccer_game/sounds/jump_p1.mp3", MessageType::REQUEST__AUDIO_LOAD);
 				break;
-				//case SDLK_2:
-				//	buddha_scene_object->set_position(100.f, 100.f);
-				//	buddha_layer->set_offset(0.0f, 0.0f);
-				//	break;
+			case SDLK_2:
+				send_audio_message("asset/soccer_game/sounds/jump_p1.mp3", MessageType::REQUEST__AUDIO_PLAY);
+				break;
 			case SDLK_3:
-				//debug.emit_controller_count = true;
-				gameController = witchcraft::engine::get_controller(0);
 				break;
 			case SDLK_4:
-				//debug.emit_controller_state = !debug.emit_controller_state;
 				break;
 			case SDLK_5:
 				break;
@@ -340,6 +337,20 @@ void Engine::send_render_command(char const * command, bool send_direct)
 		, send_direct
 	);
 }
+
+void Engine::send_audio_message(char const * path, MessageType type, bool send_direct)
+{
+	string_buffer = std::string(path);
+	send_message(
+		  audio_channel_id
+		, engine_channel_id
+		, type
+		, static_cast<void*>(&string_buffer)
+		, send_direct
+	);
+}
+
+
 
 void Engine::send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void * data, bool send_direct)
 {

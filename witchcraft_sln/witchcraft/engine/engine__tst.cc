@@ -37,12 +37,12 @@
 			REQUIRE(engine.get_project_file_path() == test_path);
 		}
 
-		TEST_CASE(" Engine::startup()")
+		TEST_CASE(" Engine::init_system()")
 		{
 			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
-			engine.startup();
+			engine.init_system();
 			REQUIRE(engine.get_current_state() == EEngineState::STARTUP);
 		}
 
@@ -51,7 +51,7 @@
 			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
-			engine.startup();
+			engine.init_system();
 			engine.run();
 			REQUIRE(engine.get_current_state() == EEngineState::RUNNING);
 		}
@@ -61,7 +61,7 @@
 			auto init = EngineInitializer{ true };
 			auto engine = Engine(init);
 
-			engine.startup();
+			engine.init_system();
 			engine.run();
 			engine.shutdown();
 			REQUIRE(engine.get_current_state() == EEngineState::SHUTDOWN);

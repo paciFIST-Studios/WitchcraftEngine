@@ -1,0 +1,24 @@
+<witchcraft version="0.1">
+  <audio>
+      <!-- player 1 -->
+      <sfx name="p1_jump" filepath="asset/soccer_game/sounds/jump_p1.mp3" scope="1"/>
+      <sfx name="p1_menu" filepath="asset/soccer_game/sounds/menu_p1.mp3" scope="1"/>
+      <sfx name="p1_kick" filepath="asset/soccer_game/sounds/kick_a.mp3"  scope="1"/>
+
+      <!-- player 2 -->
+      <sfx name="p2_jump" filepath="asset/soccer_game/sounds/jump_p2.mp3" scope="1"/>
+      <sfx name="p2_menu" filepath="asset/soccer_game/sounds/menu_p2.mp3" scope="1"/>
+      <sfx name="p2_kick" filepath="asset/soccer_game/sounds/kick_b.mp3"  scope="1"/>
+
+      <!-- player 3 -->
+      <sfx name="p3_jump" filepath="asset/soccer_game/sounds/jump_p2.mp3" scope="1"/>
+      <sfx name="p3_menu" filepath="asset/soccer_game/sounds/menu_p2.mp3" scope="1"/>
+      <sfx name="p3_kick" filepath=""  scope="1"/>
+
+      <!-- player 4 -->
+      <sfx name="p4_jump" filepath="asset/soccer_game/sounds/jump_p2.mp3" scope="1"/>
+      <sfx name="p4_menu" filepath="asset/soccer_game/sounds/menu_p2.mp3" scope="1"/>
+      <sfx name="p4_kick" filepath=""  scope="1"/>
+
+  </audio>
+</witchcraft>

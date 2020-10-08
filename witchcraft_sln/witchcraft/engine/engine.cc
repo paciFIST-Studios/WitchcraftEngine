@@ -149,10 +149,10 @@ void Engine::process_window_event(SDL_Event const & e)
 
 			// Numeric
 			case SDLK_1:
-				send_audio_message("asset/soccer_game/sounds/jump_p1.mp3", MessageType::REQUEST__AUDIO_LOAD);
+				send_audio_message("asset/soccer_game/sounds/Cakeflaps - Quinklette.wav", MessageType::REQUEST__AUDIO_LOAD);
 				break;
 			case SDLK_2:
-				send_audio_message("asset/soccer_game/sounds/jump_p1.mp3", MessageType::REQUEST__AUDIO_PLAY);
+				send_audio_message("asset/soccer_game/sounds/Cakeflaps - Quinklette.wav", MessageType::REQUEST__AUDIO_PLAY);
 				break;
 			case SDLK_3:
 				break;
@@ -316,36 +316,36 @@ void Engine::process_window_event(SDL_Event const & e)
 
 void Engine::send_console_command(char const * command, bool send_direct)
 {
-	string_buffer = std::string(command);
+	direct_message_string_buffer = std::string(command);
 	send_message(
 		  console_channel_id
 		, engine_channel_id
 		, MessageType::INVOKE__CONSOLE_COMMAND
-		, static_cast<void*>(&string_buffer) 
+		, static_cast<void*>(&direct_message_string_buffer) 
 		, send_direct
 	);
 }
 
 void Engine::send_render_command(char const * command, bool send_direct)
 {
-	string_buffer = std::string(command);
+	direct_message_string_buffer = std::string(command);
 	send_message(
 		  render_channel_id
 		, engine_channel_id
 		, MessageType::INVOKE__RENDER_COMMAND
-		, static_cast<void*>(&string_buffer)
+		, static_cast<void*>(&direct_message_string_buffer)
 		, send_direct
 	);
 }
 
 void Engine::send_audio_message(char const * path, MessageType type, bool send_direct)
 {
-	string_buffer = std::string(path);
+	direct_message_string_buffer = std::string(path);
 	send_message(
 		  audio_channel_id
 		, engine_channel_id
 		, type
-		, static_cast<void*>(&string_buffer)
+		, static_cast<void*>(&direct_message_string_buffer)
 		, send_direct
 	);
 }

@@ -41,13 +41,13 @@ public:
 
 	void unload() override 
 	{
-		Message request{
-			audio_channel_id
-			, this->id
-			, MessageType::REQUEST__AUDIO_UNLOAD
-			, (void*) filepath.c_str()
-		};
-		message_bus->send_direct_message(request);
+		//Message request{
+		//	audio_channel_id
+		//	, this->id
+		//	, MessageType::REQUEST__AUDIO_UNLOAD
+		//	, (void*) filepath.c_str()
+		//};
+		//message_bus->send_direct_message(request);
 	}
 
 };

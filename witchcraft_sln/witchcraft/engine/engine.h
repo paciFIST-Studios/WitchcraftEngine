@@ -51,7 +51,10 @@ struct EngineInitializer
 class Engine : public EngineObjectBase
 {
 private:
-	std::string string_buffer;
+	/// this is only to be used for a direct message, not a regular message
+	/// that way, we can be sure it will actually contain our data when the
+	/// message is read
+	std::string direct_message_string_buffer;
 
 protected:
 	std::string project_file_path;

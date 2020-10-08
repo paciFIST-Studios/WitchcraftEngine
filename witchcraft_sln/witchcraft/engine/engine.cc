@@ -1,11 +1,20 @@
 #include "engine.h"
 
 
-void Engine::startup()
+void Engine::init_system()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
 	current_engine_state = EEngineState::STARTUP;
 	if (test_mode.early_exit) return;
+
+	// initialize sdl ----------------------------------------------------------------------------------
+	PLOGI << witchcraft::log_strings::sdl_start;
+	/* -1 == error, 0 == success */
+	if (init_sdl() < 0) { 
+		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError(); 
+		return;
+	}
+	PLOGV << witchcraft::log_strings::sdl_ok;
 
 	// engine components ------------------------------------------------------------------------------------------
 	PLOGI << witchcraft::log_strings::message_bus_start;
@@ -13,28 +22,39 @@ void Engine::startup()
 	{
 		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
 		message->subscribe("engine", cb);
-		engine_channel_id	= message->channel_lookup("engine"	);
-		resource_channel_id = message->channel_lookup("resource");
-		render_channel_id	= message->channel_lookup("render"	);
-		scene_channel_id	= message->channel_lookup("scene"	);
+		audio_channel_id	= message->channel_lookup("audio"	);
 		console_channel_id	= message->channel_lookup("console"	);
+		engine_channel_id	= message->channel_lookup("engine"	);
+		render_channel_id	= message->channel_lookup("render"	);
+		resource_channel_id = message->channel_lookup("resource");
+		scene_channel_id	= message->channel_lookup("scene"	);
 	}
+	PLOGI << witchcraft::log_strings::message_bus_ok;
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
 	{
 		// for now, this is a default engine resource
 		resource->load_from_xml_file("asset/textured_quad.asset");
+		resource->load_from_xml_file("asset/basic_shader.asset" );
 	}
+	PLOGI << witchcraft::log_strings::resource_manager_ok;
 
-	PLOGI << witchcraft::log_strings::debug_console;
+	PLOGI << witchcraft::log_strings::audio_manager_start;
+	audio = std::make_unique<AudioManager>(message.get());
+	PLOGI << witchcraft::log_strings::audio_manager_ok;
+
+	PLOGI << witchcraft::log_strings::debug_console_start;
 	console = std::make_unique<Console>(message.get());
+	PLOGI << witchcraft::log_strings::debug_console_ok;
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
+	PLOGI << witchcraft::log_strings::render_manager_ok;
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());
+	PLOGI << witchcraft::log_strings::scene_manager_ok;
 
 	// game components ------------------------------------------------------------------------------------------
 
@@ -45,8 +65,24 @@ void Engine::startup()
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();
+	PLOGI << witchcraft::log_strings::project_loader_ok;
 
 	init_gameplay(project_settings);
+
+	PLOGI << witchcraft::log_strings::engine_ok;
+}
+
+int Engine::init_sdl()
+{
+	// SDL_INIT_EVENTS, is initialized by joystick, and video
+	// 
+
+	return SDL_Init(
+		  SDL_INIT_AUDIO
+		| SDL_INIT_VIDEO
+		//| SDL_INIT_HAPTIC
+		//| SDL_INIT_GAMECONTROLLER
+	);
 }
 
 void Engine::init_gameplay(ProjectSettings ps)
@@ -54,10 +90,8 @@ void Engine::init_gameplay(ProjectSettings ps)
 	PLOGI << witchcraft::log_strings::gameplay_manager_start;
 	gameplay = std::make_unique<GameplayManager>(message.get());
 
-	for (auto&& path : ps.file_paths)
-	{
-		resource->load_from_xml_file(path);
-	}
+	for (auto&& path : ps.file_paths){
+		resource->load_from_xml_file(path); }
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -122,21 +156,29 @@ void Engine::process_window_event(SDL_Event const & e)
 			case SDLK_F4:
 				send_render_command("triangle2quad=toggle");
 				break;
-
-				// Numeric
-			case SDLK_1:
-				//debug.emit_frame_length = !debug.emit_frame_length;
+			case SDLK_F5:
+				send_render_command("use_texture_class=toggle");
 				break;
-				//case SDLK_2:
-				//	buddha_scene_object->set_position(100.f, 100.f);
-				//	buddha_layer->set_offset(0.0f, 0.0f);
-				//	break;
+			case SDLK_F6:
+				send_render_command("use_vertex_class_not_quad=toggle");
+			case SDLK_F7:
+				send_render_command("use_shader=basic");
+				break;
+			case SDLK_F8:
+				send_render_command("use_shader=textureless");
+				break;
+
+
+			// Numeric
+			case SDLK_1:
+				send_audio_message("asset/soccer_game/sounds/cakeflaps_quinklette__16bit.wav", MessageType::REQUEST__AUDIO_LOAD);
+				break;
+			case SDLK_2:
+				send_audio_message("asset/soccer_game/sounds/cakeflaps_quinklette__16bit.wav", MessageType::REQUEST__AUDIO_PLAY);
+				break;
 			case SDLK_3:
-				//debug.emit_controller_count = true;
-				gameController = witchcraft::engine::get_controller(0);
 				break;
 			case SDLK_4:
-				//debug.emit_controller_state = !debug.emit_controller_state;
 				break;
 			case SDLK_5:
 				break;
@@ -296,24 +338,36 @@ void Engine::process_window_event(SDL_Event const & e)
 
 void Engine::send_console_command(char const * command, bool send_direct)
 {
-	string_buffer = std::string(command);
+	direct_message_string_buffer = std::string(command);
 	send_message(
 		  console_channel_id
 		, engine_channel_id
 		, MessageType::INVOKE__CONSOLE_COMMAND
-		, static_cast<void*>(&string_buffer) 
+		, static_cast<void*>(&direct_message_string_buffer) 
 		, send_direct
 	);
 }
 
 void Engine::send_render_command(char const * command, bool send_direct)
 {
-	string_buffer = std::string(command);
+	direct_message_string_buffer = std::string(command);
 	send_message(
 		  render_channel_id
 		, engine_channel_id
 		, MessageType::INVOKE__RENDER_COMMAND
-		, static_cast<void*>(&string_buffer)
+		, static_cast<void*>(&direct_message_string_buffer)
+		, send_direct
+	);
+}
+
+void Engine::send_audio_message(char const * path, MessageType type, bool send_direct)
+{
+	direct_message_string_buffer = std::string(path);
+	send_message(
+		  audio_channel_id
+		, engine_channel_id
+		, type
+		, static_cast<void*>(&direct_message_string_buffer)
 		, send_direct
 	);
 }
@@ -601,6 +655,9 @@ void Engine::shutdown()
 	// have to be closed by then
 	SDL_GameControllerClose(gameController);
 	gameController = nullptr;
+
+	audio->shutdown();
+	PLOGI << witchcraft::log_strings::audio_manager_stop;
 
 	render->shutdown();
 	PLOGI << witchcraft::log_strings::render_manager_stop;

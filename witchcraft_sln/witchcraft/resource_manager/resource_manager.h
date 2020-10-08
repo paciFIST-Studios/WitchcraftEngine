@@ -13,6 +13,7 @@
 
 #include "../message_bus/message_bus.h"
 
+#include "../audio_manager/audio_resource.h"
 #include "../render_manager/shader_resource.h"
 #include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager.h"
@@ -32,13 +33,34 @@ protected:
 	int current_scope = 0;
 	unsigned int resource_count = 0;
 
-	std::map<int, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
+	// consider using EASTL::invasive vector, instead of regular vector here
+	std::map<unsigned, std::vector<std::unique_ptr<EngineResourceBase>>> resource_map;
 
+	/// brief: parses the top node of an xml file for version information
+	char * determine_version(XML::xml_node<> const & xml) const;
+
+	/// brief: places a successfully parsed xml resource inside the resource map, if it isn't already there
+	EngineResourceBase * register_resource(std::unique_ptr<EngineResourceBase> & resource);
+
+	/// brief: parses xml file, where version information is unknown
+	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
+
+	/// brief: parses first generation witchcraft xml file
+	EngineResourceBase * parse_file_version__010(XML::xml_node<> const & node);
+
+	/// brief: parse block for resources, and register each resource
+	void process_xml_audio_block(XML::xml_node<> const & audio);
+	/// brief: builds a single audio resource
+	std::unique_ptr<EngineResourceBase> build_sound_resource_from_xml(XML::xml_node<> const & node);
+
+	// these parse a thing and emit one file
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_vertex_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
-	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
+
+	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
 	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
@@ -50,13 +72,16 @@ protected:
 
 public:
 
-	EngineResourceBase * find_resource(unsigned int ID, int scope);
+	EngineResourceBase * load_from_xml_file(std::string const & file);
+
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
+	EngineResourceBase * find_resource(unsigned ID, int scope);
+	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
 	EngineResourceBase * find_resource(char const * name, int scope);
 
-	// clears all resources and scopes
+	/// brief: empties all resources from all scopes in resource manager
 	void empty_cache();
 
-	EngineResourceBase * load_from_xml_file(std::string const & file);
 	
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);

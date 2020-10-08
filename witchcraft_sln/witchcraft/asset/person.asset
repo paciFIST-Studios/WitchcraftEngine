@@ -1,4 +1,5 @@
-<resources>
-	<resource name="person" type="image" filepath="asset/person.png" scope="2"/>
-	<resource name="person.idle" type="2d_animation" name="idle" timing_ms="250" sequence="1 2 3 1 2 3 1 2 3 3 3 4 4"/>
-</resources>
+<witchcraft version="0.1">
+	<image name="person" filepath="asset/person.png" scope="2">
+		<anim2d name="person.idle" name="idle" timing_ms="250" sequence="1 2 3 1 2 3 1 2 3 3 3 4 4"/>
+	</image>
+</witchcraft>

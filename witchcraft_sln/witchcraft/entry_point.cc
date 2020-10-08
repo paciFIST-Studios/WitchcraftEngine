@@ -101,8 +101,10 @@ int main(int argc, char** argv[])
 	init.test_mode.early_exit = false;
 	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
 	auto engine = Engine(init);
-
-	engine.startup();
+	
+	PLOGI << "witchcraft engine start";
+	engine.init_system();
+	PLOGI << "witchcraft engine ready";
 	engine.run();
 	engine.shutdown();
 }

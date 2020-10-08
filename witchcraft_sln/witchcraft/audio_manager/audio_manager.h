@@ -1,6 +1,8 @@
 #ifndef AUDIO_MANAGER_H
 #define AUDIO_MANAGER_H
 
+#include "SDL.h"
+#include "SDL_mixer.h"
 
 #include "../message_bus/message_bus.h"
 #include "../resource_manager/engine_resource_base.h"
@@ -12,6 +14,9 @@ class AudioManager : public EngineObjectBase
 {
 private:
 protected:
+	int const CD_SAMPLE_RATE   = 44100;
+	int const GAME_SAMPLE_RATE = 22050;
+
 
 	MessageBus * message_bus = nullptr;
 
@@ -45,12 +50,28 @@ protected:
 	unsigned int engine_channel_id = 0;
 	unsigned int resource_channel_id = 0;
 
+	//void init_mix_audio() 
+	//{
+	//	auto err = Mix_Init(MIX_INIT_MP3);
+	//	if (err != 0)
+	//	{
+	//		// log error
+	//	}
+	//	err = Mix_OpenAudio(GAME_SAMPLE_RATE, AUDIO_S16SYS, 2, 1024);
+	//	if (err != 0)
+	//	{
+	//		// log error
+	//	}
+	//
+	//	PLOGV << "Audio driver name: " << SDL_GetCurrentAudioDriver();
+	//}
 
 public:
 
 	AudioManager() {}
 	~AudioManager() 
 	{
+		//Mix_Quit();
 	}
 
 	AudioManager(MessageBus * mb)
@@ -63,6 +84,7 @@ public:
 		engine_channel_id = message_bus->channel_lookup("engine");
 		resource_channel_id = message_bus->channel_lookup("resource");
 
+		//init_mix_audio();
 	}
 }; // !AudioManager
 

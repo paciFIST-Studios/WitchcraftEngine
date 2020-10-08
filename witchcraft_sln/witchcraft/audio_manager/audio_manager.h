@@ -14,8 +14,13 @@ class AudioManager : public EngineObjectBase
 {
 private:
 protected:
+	std::map<char const *, Mix_Music *> tracks;
+
 	int const CD_SAMPLE_RATE   = 44100;
 	int const GAME_SAMPLE_RATE = 22050;
+	int const OUTPUT_CHANNELS = 2;
+	int const CHUNK_SIZE = 1024;
+
 
 
 	MessageBus * message_bus = nullptr;
@@ -31,6 +36,8 @@ protected:
 		else if (m.type == MessageType::REQUEST__AUDIO_PLAY)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
+
+			Mix_PlayMusic(tracks[path], 0);
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_PLAY_LOOP)
 		{
@@ -39,6 +46,17 @@ protected:
 		else if (m.type == MessageType::REQUEST__AUDIO_LOAD)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
+			auto t = Mix_LoadMUS(path);
+			if (!t)
+			{
+				PLOGE << "Error! Could not load music file!"
+					<< "\n\ttrack {"
+					<< "\npath: " << path
+					<< "\nerror: " << Mix_GetError()
+					<< "\n};"
+					;
+			}
+			tracks[path] = t;
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_LOAD_AND_PLAY)
 		{
@@ -50,29 +68,34 @@ protected:
 	unsigned int engine_channel_id = 0;
 	unsigned int resource_channel_id = 0;
 
-	//void init_mix_audio() 
-	//{
-	//	auto err = Mix_Init(MIX_INIT_MP3);
-	//	if (err != 0)
-	//	{
-	//		// log error
-	//	}
-	//	err = Mix_OpenAudio(GAME_SAMPLE_RATE, AUDIO_S16SYS, 2, 1024);
-	//	if (err != 0)
-	//	{
-	//		// log error
-	//	}
-	//
-	//	PLOGV << "Audio driver name: " << SDL_GetCurrentAudioDriver();
-	//}
+	void init_mix_audio() 
+	{
+		auto err = Mix_OpenAudio(
+			  GAME_SAMPLE_RATE
+			, AUDIO_S16SYS
+			, OUTPUT_CHANNELS
+			, CHUNK_SIZE
+		);
+		if (err != 0)
+		{
+			PLOGE << "Error! Could not initialize Mixer API!\n"
+				  << Mix_GetError();
+		}
+
+		err = Mix_Init(MIX_INIT_MP3);
+		if (err != MIX_INIT_MP3)
+		{
+			PLOGE << "Error! Could not initialie MP3 support!\n" 
+				  << Mix_GetError();
+		}
+		PLOGI << "SDL_mixer ok";
+		PLOGI << "Audio driver name: " << SDL_GetCurrentAudioDriver();
+	}
 
 public:
 
 	AudioManager() {}
-	~AudioManager() 
-	{
-		//Mix_Quit();
-	}
+	~AudioManager() {}
 
 	AudioManager(MessageBus * mb)
 		: message_bus(mb)
@@ -84,7 +107,12 @@ public:
 		engine_channel_id = message_bus->channel_lookup("engine");
 		resource_channel_id = message_bus->channel_lookup("resource");
 
-		//init_mix_audio();
+		init_mix_audio();
+	}
+
+	void shutdown()
+	{
+		Mix_CloseAudio();
 	}
 }; // !AudioManager
 

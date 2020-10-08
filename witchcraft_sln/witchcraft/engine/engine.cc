@@ -171,10 +171,10 @@ void Engine::process_window_event(SDL_Event const & e)
 
 			// Numeric
 			case SDLK_1:
-				send_audio_message("asset/soccer_game/sounds/Cakeflaps - Quinklette.wav", MessageType::REQUEST__AUDIO_LOAD);
+				send_audio_message("asset/soccer_game/sounds/cakeflaps_quinklette__16bit.wav", MessageType::REQUEST__AUDIO_LOAD);
 				break;
 			case SDLK_2:
-				send_audio_message("asset/soccer_game/sounds/Cakeflaps - Quinklette.wav", MessageType::REQUEST__AUDIO_PLAY);
+				send_audio_message("asset/soccer_game/sounds/cakeflaps_quinklette__16bit.wav", MessageType::REQUEST__AUDIO_PLAY);
 				break;
 			case SDLK_3:
 				break;
@@ -657,6 +657,9 @@ void Engine::shutdown()
 	// have to be closed by then
 	SDL_GameControllerClose(gameController);
 	gameController = nullptr;
+
+	audio->shutdown();
+	PLOGI << "audio manager stop";
 
 	render->shutdown();
 	PLOGI << witchcraft::log_strings::render_manager_stop;

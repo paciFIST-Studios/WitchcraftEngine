@@ -7,6 +7,15 @@ void Engine::init_system()
 	current_engine_state = EEngineState::STARTUP;
 	if (test_mode.early_exit) return;
 
+	// initialize sdl ----------------------------------------------------------------------------------
+	PLOGI << witchcraft::log_strings::sdl_start;
+	if (init_sdl() < 0) /* -1 == error, 0 == success */
+	{ 
+		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError(); 
+		return;
+	}
+	PLOGV << witchcraft::log_strings::sdl_ok;
+
 	// engine components ------------------------------------------------------------------------------------------
 	PLOGI << witchcraft::log_strings::message_bus_start;
 	message = std::make_unique<MessageBus>();
@@ -61,6 +70,19 @@ void Engine::init_system()
 	init_gameplay(project_settings);
 
 	PLOGI << "engine ok";
+}
+
+int Engine::init_sdl()
+{
+	// SDL_INIT_EVENTS, is initialized by joystick, and video
+	// 
+
+	return SDL_Init(
+		  SDL_INIT_AUDIO
+		| SDL_INIT_VIDEO
+		//| SDL_INIT_HAPTIC
+		//| SDL_INIT_GAMECONTROLLER
+	);
 }
 
 void Engine::init_gameplay(ProjectSettings ps)

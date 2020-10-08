@@ -4,7 +4,7 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
 
-	if ( ! init_sdl(xOffset, yOffset, Width, Height, WindowTitle))
+	if ( ! init_sdl_window(xOffset, yOffset, Width, Height, WindowTitle))
 	{return false;}
 	//if ( ! init_sdl_image()){ return false; }
 	
@@ -27,21 +27,8 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	return true;
 }
 
-bool RenderManager::init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle)
+bool RenderManager::init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle)
 {
-	PLOGI << witchcraft::log_strings::sdl_start;
-
-	// -1 == error, 0 == success
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
-		return false;
-	}
-	else
-	{
-		PLOGV << witchcraft::log_strings::sdl_ok;
-	}
-
 	PLOGV << witchcraft::log_strings::sdl_window_create;
 	program_window = SDL_CreateWindow(
 		  WindowTitle
@@ -56,13 +43,9 @@ bool RenderManager::init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width,
 		PLOGF << witchcraft::log_strings::sdl_window_fail;
 		return false;
 	}
-	else
-	{
-		PLOGV << witchcraft::log_strings::sdl_window_ok;
-	}
 
+	PLOGV << witchcraft::log_strings::sdl_window_ok;	
 	renderer_state = ERendererState::SDL_INIT_OK;
-
 	return true;
 }
 
@@ -167,7 +150,7 @@ void RenderManager::request_debug_console_ptr()
 		return;
 	}
 
-	Message m{
+	Message m {
 		  engine_channel_id
 		, render_channel_id
 		, MessageType::REQUEST__CONSOLE_PTR_NON_OWNER

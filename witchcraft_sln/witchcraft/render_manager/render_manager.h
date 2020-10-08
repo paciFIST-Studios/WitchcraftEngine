@@ -187,7 +187,7 @@ protected:
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
 
-	bool init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
+	bool init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
 	bool init_opengl();
 
 	bool init_shaders();

@@ -32,22 +32,26 @@ protected:
 		if (m.type == MessageType::REQUEST__AUDIO_STOP_PLAY)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
+			PLOGI << "Handling message: REQUEST__AUDIO_STOP_PLAY";
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_PLAY)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
-
+			PLOGI << "Handling message: REQUEST__AUDIO_PLAY";
 			Mix_PlayMusic(tracks[path], 0);
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_PLAY_LOOP)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
+			PLOGI << "Handling message: REQUEST__AUDIO_PLAY_LOOP";
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_LOAD)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
-			auto t = Mix_LoadMUS(path);
-			if (!t)
+			PLOGI << "Handling message: REQUEST__AUDIO_LOAD";
+
+			auto track = Mix_LoadMUS(path);
+			if (!track)
 			{
 				PLOGE << "Error! Could not load music file!"
 					<< "\n\ttrack {"
@@ -56,11 +60,12 @@ protected:
 					<< "\n};"
 					;
 			}
-			tracks[path] = t;
+			tracks[path] = track;
 		}
 		else if (m.type == MessageType::REQUEST__AUDIO_LOAD_AND_PLAY)
 		{
 			auto path = static_cast<std::string *>(m.data)->c_str();
+			PLOGI << "Handling message: REQUEST__AUDIO_LOAD_AND_PLAY";
 		}
 	}
 

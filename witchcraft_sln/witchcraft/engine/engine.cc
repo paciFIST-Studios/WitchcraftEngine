@@ -9,8 +9,8 @@ void Engine::init_system()
 
 	// initialize sdl ----------------------------------------------------------------------------------
 	PLOGI << witchcraft::log_strings::sdl_start;
-	if (init_sdl() < 0) /* -1 == error, 0 == success */
-	{ 
+	/* -1 == error, 0 == success */
+	if (init_sdl() < 0) { 
 		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError(); 
 		return;
 	}
@@ -29,32 +29,32 @@ void Engine::init_system()
 		resource_channel_id = message->channel_lookup("resource");
 		scene_channel_id	= message->channel_lookup("scene"	);
 	}
-	PLOGI << "message bus ok";
+	PLOGI << witchcraft::log_strings::message_bus_ok;
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
 	{
 		// for now, this is a default engine resource
 		resource->load_from_xml_file("asset/textured_quad.asset");
-		resource->load_from_xml_file("asset/basic_shader.asset");
+		resource->load_from_xml_file("asset/basic_shader.asset" );
 	}
-	PLOGI << "resource manager ok";
+	PLOGI << witchcraft::log_strings::resource_manager_ok;
 
 	PLOGI << witchcraft::log_strings::audio_manager_start;
 	audio = std::make_unique<AudioManager>(message.get());
-	PLOGI << "audio manager ok";
+	PLOGI << witchcraft::log_strings::audio_manager_ok;
 
-	PLOGI << witchcraft::log_strings::debug_console;
+	PLOGI << witchcraft::log_strings::debug_console_start;
 	console = std::make_unique<Console>(message.get());
-	PLOGI << "debug console ok";
+	PLOGI << witchcraft::log_strings::debug_console_ok;
 
 	PLOGI << witchcraft::log_strings::render_manager_start;
 	render = std::make_unique<RenderManager>(message.get());
-	PLOGI << "render manager ok";
+	PLOGI << witchcraft::log_strings::render_manager_ok;
 
 	PLOGI << witchcraft::log_strings::scene_manager_start;
 	scene = std::make_unique<SceneManager2D>(message.get());
-	PLOGI << "scene manager ok";
+	PLOGI << witchcraft::log_strings::scene_manager_ok;
 
 	// game components ------------------------------------------------------------------------------------------
 
@@ -65,11 +65,11 @@ void Engine::init_system()
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
 	project_loader->parse_project_file();
 	project_settings = project_loader->get_project_settings();
-	PLOGI << "project loader ok";
+	PLOGI << witchcraft::log_strings::project_loader_ok;
 
 	init_gameplay(project_settings);
 
-	PLOGI << "engine ok";
+	PLOGI << witchcraft::log_strings::engine_ok;
 }
 
 int Engine::init_sdl()
@@ -372,8 +372,6 @@ void Engine::send_audio_message(char const * path, MessageType type, bool send_d
 	);
 }
 
-
-
 void Engine::send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void * data, bool send_direct)
 {
 	Message m { sendTo, sendFrom, type, data };
@@ -659,7 +657,7 @@ void Engine::shutdown()
 	gameController = nullptr;
 
 	audio->shutdown();
-	PLOGI << "audio manager stop";
+	PLOGI << witchcraft::log_strings::audio_manager_stop;
 
 	render->shutdown();
 	PLOGI << witchcraft::log_strings::render_manager_stop;

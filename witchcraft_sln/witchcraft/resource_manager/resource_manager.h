@@ -60,15 +60,15 @@ protected:
 
 
 	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
-	
+
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
 	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
 	MessageBus * message_bus = nullptr;
 	void handle_message(Message m);
 	unsigned int resource_channel_id = 0;
-	unsigned int render_channel_id   = 0;
-	unsigned int engine_channel_id   = 0;
+	unsigned int render_channel_id = 0;
+	unsigned int engine_channel_id = 0;
 
 public:
 
@@ -82,12 +82,17 @@ public:
 	/// brief: empties all resources from all scopes in resource manager
 	void empty_cache();
 
-	
+
 	// sets which scene scope is considered "active"
 	bool set_current_scope(unsigned int scope);
 
 	ResourceManager();
 	ResourceManager(MessageBus * mb);
+
+	void init_component()
+	{
+		// load a list of things here?
+	}
 
 	// Simple getters
 	int get_current_scope() const;

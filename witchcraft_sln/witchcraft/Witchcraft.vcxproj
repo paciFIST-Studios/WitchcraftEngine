@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="audio_manager\audio_manager__tst.cc" />
+    <ClCompile Include="console\console.cc" />
     <ClCompile Include="console\console__tst.cc" />
     <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />

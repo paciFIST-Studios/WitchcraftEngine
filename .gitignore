@@ -65,3 +65,5 @@ witchcraft_sln/witchcraft/asset/Carl Metropolitan Builders grid.png
 witchcraft_sln/witchcraft/asset/grid02.jpg
 witchcraft_sln/witchcraft/asset/UV_Grid_Sm.jpg
 witchcraft_sln/witchcraft/asset/soccer_game/custom/*
+witchcraft_sln/lib/miniaudio/*
+witchcraft_sln/lib/portaudio/*

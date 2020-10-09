@@ -52,6 +52,12 @@
     <Filter Include="Source Files\vendor\stb_image">
       <UniqueIdentifier>{5d66136d-5e1a-4e90-a7c8-22ea5eaa9023}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\audio_manager">
+      <UniqueIdentifier>{8f75f1c1-371f-4a23-9ce3-414c3c830904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\vendor\miniaudio">
+      <UniqueIdentifier>{6e8461b5-0ee6-4436-8ecb-72dfc3cd8044}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -183,6 +189,12 @@
     <ClCompile Include="stb_image.cc">
       <Filter>Source Files\vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="audio_manager\audio_manager__tst.cc">
+      <Filter>Source Files\audio_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="miniaudio.cc">
+      <Filter>Source Files\vendor\miniaudio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -310,6 +322,15 @@
     </ClInclude>
     <ClInclude Include="resource_manager\vertex_resource.h">
       <Filter>Source Files\resource_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_manager\audio_manager.h">
+      <Filter>Source Files\audio_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="miniaudio.h">
+      <Filter>Source Files\vendor\miniaudio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_manager\audio_resource.h">
+      <Filter>Source Files\audio_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

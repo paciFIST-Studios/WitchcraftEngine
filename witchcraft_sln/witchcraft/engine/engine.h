@@ -3,15 +3,14 @@
 
 #include <functional>
 
-#include "../engine/engine_object.h"
-
-#include "../project_loader/project_loader.h"
-#include "../message_bus/message_bus.h"
-#include "../resource_manager/resource_manager.h"
-#include "../render_manager/render_manager.h"
+#include "../audio_manager/audio_manager.h"
 #include "../console/console.h"
-
+#include "../engine/engine_object.h"
 #include "../gameplay/gameplay_manager.h"
+#include "../message_bus/message_bus.h"
+#include "../project_loader/project_loader.h"
+#include "../render_manager/render_manager.h"
+#include "../resource_manager/resource_manager.h"
 
 
 struct TestMode
@@ -52,7 +51,10 @@ struct EngineInitializer
 class Engine : public EngineObjectBase
 {
 private:
-	std::string string_buffer;
+	/// this is only to be used for a direct message, not a regular message
+	/// that way, we can be sure it will actually contain our data when the
+	/// message is read
+	std::string direct_message_string_buffer;
 
 protected:
 	std::string project_file_path;
@@ -61,18 +63,20 @@ protected:
 	std::unique_ptr<ProjectLoader> project_loader;
 
 	std::unique_ptr<MessageBus> message;
-	unsigned int engine_channel_id		= 0;
-	unsigned int resource_channel_id	= 0;
-	unsigned int render_channel_id		= 0;
-	unsigned int scene_channel_id		= 0;
+	unsigned int audio_channel_id		= 0;
 	unsigned int console_channel_id		= 0;
+	unsigned int engine_channel_id		= 0;
+	unsigned int render_channel_id		= 0;
+	unsigned int resource_channel_id	= 0;
+	unsigned int scene_channel_id		= 0;
 
 	// manager ptrs
-	std::unique_ptr<ResourceManager>	resource	= nullptr;
-	std::unique_ptr<RenderManager>		render		= nullptr;
-	std::unique_ptr<SceneManager2D>		scene		= nullptr;
+	std::unique_ptr<AudioManager>		audio		= nullptr;
 	std::unique_ptr<Console>			console		= nullptr;
 	std::unique_ptr<GameplayManager>	gameplay	= nullptr;
+	std::unique_ptr<RenderManager>		render		= nullptr;
+	std::unique_ptr<ResourceManager>	resource	= nullptr;
+	std::unique_ptr<SceneManager2D>		scene		= nullptr;
 
 	EEngineState current_engine_state = EEngineState::UNINITIALIZED;
 	TestMode test_mode;
@@ -82,6 +86,7 @@ protected:
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
 
+	int init_sdl();
 	void init_gameplay(ProjectSettings ps);
 
 	void final_engine_component_initialization();
@@ -92,6 +97,7 @@ protected:
 	// sends a command over the message bus.
 	void send_console_command(char const * command, bool send_direct = true);
 	void send_render_command(char const * command, bool send_direct = true);
+	void send_audio_message(char const * path, MessageType type, bool send_direct = true);
 
 	void send_message(unsigned int sendTo, unsigned int sendFrom, MessageType type, void* data, bool send_direct=true);
 
@@ -99,7 +105,7 @@ protected:
 
 public:
 	
-	void startup();
+	void init_system();
 	void run();
 	void shutdown();
 

@@ -187,7 +187,7 @@ protected:
 	unsigned int screen_width = 0;
 	unsigned int screen_height = 0;
 
-	bool init_sdl(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
+	bool init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	
 	bool init_opengl();
 
 	bool init_shaders();
@@ -229,7 +229,7 @@ public:
 		// cache these locally, b/c we're likely to use them very often
 		render_channel_id = message_bus->channel_lookup("render");
 		engine_channel_id = message_bus->channel_lookup("engine");
-		resource_channel_id = message_bus->channel_lookup("resource");	
+		resource_channel_id = message_bus->channel_lookup("resource");
 	}
 
 	bool init_system(

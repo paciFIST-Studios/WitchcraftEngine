@@ -1,0 +1,7 @@
+<witchcraft version="0.1">
+  <audio>
+    <bgm name="credits" filepath="asset/soccer_game/sounds/Viktor Kraus - Blueberries.mp3" scope="1"/>
+    <bgm name="startup" filepath="asset/soccer_game/sounds/Cakeflaps - Quinklette.mp3"     scope="1"/>
+    <bgm name="scary"   filepath="asset/soccer_game/sounds/Orchestrated Piece 1.mp3"       scope="1"/>
+  </audio>
+</witchcraft>

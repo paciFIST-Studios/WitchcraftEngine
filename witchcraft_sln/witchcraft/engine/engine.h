@@ -77,11 +77,14 @@ protected:
 	EEngineState current_engine_state = EEngineState::UNINITIALIZED;
 	TestMode test_mode;
 
+	ProjectSettings current_project;
 
 	int const JOYSTICK_DEAD_ZONE = 8000;
 	SDL_GameController * gameController = nullptr;
 
 	void init_gameplay(ProjectSettings ps);
+
+	void final_engine_component_initialization();
 
 	bool continue_gameplay_loop(SDL_Event const & e);
 	void process_window_event(SDL_Event const & e);

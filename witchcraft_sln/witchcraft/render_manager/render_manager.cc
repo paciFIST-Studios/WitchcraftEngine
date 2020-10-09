@@ -200,8 +200,6 @@ bool RenderManager::init_geometry()
 	};
 	message_bus->send_direct_message(m);
 	
-
-
 	// ------------------------------------------------------------------
 	// matricies
 	//
@@ -475,15 +473,17 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	shader[active_shader_idx]->use_program();
-	//shaders[active_shader]->use_program();
-	//shaders[active_shader]->setInt("_texture", 0);
-	sprite_texture.bind(0); 
-	shader[active_shader_idx]->setInt("_texture", 0);
-	glBindVertexArray(sprite_quad.vao);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	if(false)
+	{
+		shader[active_shader_idx]->use_program();
+		//shaders[active_shader]->use_program();
+		//shaders[active_shader]->setInt("_texture", 0);
+		sprite_texture.bind(0); 
+		shader[active_shader_idx]->setInt("_texture", 0);
+		glBindVertexArray(sprite_quad.vao);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
+	}
 
 
 	// imgui; prepare for draw 

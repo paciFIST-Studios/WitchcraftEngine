@@ -1,6 +1,5 @@
 #include "engine.h"
 
-
 void Engine::init_system()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
@@ -22,22 +21,11 @@ void Engine::init_system()
 	{
 		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
 		message->subscribe("engine", cb);
-		audio_channel_id	= message->channel_lookup("audio"	);
-		console_channel_id	= message->channel_lookup("console"	);
-		engine_channel_id	= message->channel_lookup("engine"	);
-		render_channel_id	= message->channel_lookup("render"	);
-		resource_channel_id = message->channel_lookup("resource");
-		scene_channel_id	= message->channel_lookup("scene"	);
 	}
 	PLOGI << witchcraft::log_strings::message_bus_ok;
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
-	{
-		// for now, this is a default engine resource
-		resource->load_from_xml_file("asset/textured_quad.asset");
-		resource->load_from_xml_file("asset/basic_shader.asset" );
-	}
 	PLOGI << witchcraft::log_strings::resource_manager_ok;
 
 	PLOGI << witchcraft::log_strings::audio_manager_start;
@@ -88,17 +76,33 @@ int Engine::init_sdl()
 
 void Engine::final_engine_component_initialization()
 {
+	{
+		audio_channel_id    = message->channel_lookup("audio"   );
+		console_channel_id  = message->channel_lookup("console" );
+		engine_channel_id   = message->channel_lookup("engine"  );
+		render_channel_id   = message->channel_lookup("render"  );
+		resource_channel_id = message->channel_lookup("resource");
+		scene_channel_id    = message->channel_lookup("scene"   );
+	}
+
+	{
+		// for now, this is a default engine resource
+		resource->load_from_xml_file("asset/textured_quad.asset");
+		resource->load_from_xml_file("asset/basic_shader.asset");
+	}
+
+
 	project_loader->parse_project_file();
 	current_project = project_loader->get_project_settings();
 
-	// resource->init();
-	// audio->init();
-	// console->init();
-	// render->init();
-	// scene->init();
-	// project_loader->init();
-	// gameplay->init();
+	resource->init_component();
+	audio->init_component();
+	console->init_component();
+	// scene->init_component();
+	project_loader->init_component();
+	gameplay->init_component();
 
+	// render->init_component();
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)

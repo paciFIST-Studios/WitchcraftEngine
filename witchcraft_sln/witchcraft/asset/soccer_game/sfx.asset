@@ -1,0 +1,22 @@
+<witchcraft version="0.1">
+  <audio>
+    <!-- item interaction -->
+    <sfx name="collect" filepath="assets/soccer_game/sounds/collect.mp3" scope="1"/>
+    <sfx name="pickup"  filepath="assets/soccer_game/sounds/pickup.mp3"  scope="1"/>
+    <sfx name="phone"   filepath="assets/soccer_game/sounds/phone.mp3"   scope="1"/>
+    <sfx name="open_00" filepath="assets/soccer_game/sounds/open_00.mp3" scope="1"/>
+    <sfx name="open_01" filepath="assets/soccer_game/sounds/open_01.mp3" scope="1"/>
+
+    <!-- game interaction -->
+    <sfx name="achievement" filepath="asset/soccer_game/sounds/JingleAchievement_01.mp3" scope="1"/>
+    <sfx name="success" filepath="asset/soccer_game/sounds/success.mp3"        scope="1"/>
+    <sfx name="lose_0"  filepath="asset/soccer_game/sounds/jingle_lose_00.mp3" scope="1"/>
+    <sfx name="lose_1"  filepath="asset/soccer_game/sounds/jingle_lose_01.mp3" scope="1"/>
+    <sfx name="win_0"   filepath="asset/soccer_game/sounds/win.mp3"            scope="1"/>
+    <sfx name="win_1"   filepath="asset/soccer_game/sounds/jingle_win_01.mp3"  scope="1"/>
+
+    <!-- ui interaction -->
+    <sfx name="menu_click" filepath="asset/soccer_game/sounds/menu_selection_click" scope="1"/>
+    </audio>
+
+</witchcraft>

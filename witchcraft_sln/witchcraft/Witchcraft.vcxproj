@@ -76,11 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glm;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glm;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\plog\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\include;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_mixer-2.0.4\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\lib\Release\Win32;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;opengl32.lib;glew32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\glew-2.1.0\lib\Release\Win32;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_image-2.0.5\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2-2.0.10\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_ttf-2.0.15\lib\x86;K:\_Git\witchcraft_engine\witchcraft_sln\lib\SDL2\SDL2_mixer-2.0.4\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio_manager\audio_manager__tst.cc" />
     <ClCompile Include="console\console__tst.cc" />
     <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />
@@ -139,6 +140,7 @@
     <ClCompile Include="logging\error_log_manager.cc" />
     <ClCompile Include="logging\tests_error_log_manager.cc" />
     <ClCompile Include="message_bus\message_bus__tst.cc" />
+    <ClCompile Include="miniaudio.cc" />
     <ClCompile Include="project_loader\project_loader__tst.cc" />
     <ClCompile Include="render_manager\opengl_shader.cc" />
     <ClCompile Include="render_manager\opengl_shader__tst.cc" />
@@ -169,6 +171,8 @@
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio_manager\audio_manager.h" />
+    <ClInclude Include="audio_manager\audio_resource.h" />
     <ClInclude Include="console\console.h" />
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\engine_id.h" />
@@ -186,6 +190,7 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="logging\error_log_manager.h" />
     <ClInclude Include="message_bus\message_bus.h" />
+    <ClInclude Include="miniaudio.h" />
     <ClInclude Include="project_loader\project_loader.h" />
     <ClInclude Include="render_manager\opengl_shader.h" />
     <ClInclude Include="render_manager\opengl_texture.h" />

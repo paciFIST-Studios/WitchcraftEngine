@@ -15,27 +15,39 @@ enum MessageType
 	, REQUEST__LOAD_RESOURCE
 	, REQUEST__UNLOAD_RESOURCE
 
-	// requests a resource from the resource manager
+
+	/// requests for the audio manager to load file from the attached path
+	, REQUEST__AUDIO_LOAD
+	/// requests for a sound to be loaded, and immediately being playing
+	, REQUEST__AUDIO_LOAD_AND_PLAY
+	/// requests for audio manager to play file with attached name
+	, REQUEST__AUDIO_PLAY
+	/// like requrest start, but plays on loop
+	, REQUEST__AUDIO_PLAY_LOOP
+	/// requests for audio manager to stop file with attached name
+	, REQUEST__AUDIO_STOP_PLAY
+
+	/// requests a resource from the resource manager
 	, REQUEST__RESOURCE
-	// resoruce manager returns a non-owning pointer to resource
+	/// resoruce manager returns a non-owning pointer to resource
 	, SUPPLY__RESOURCE
 
-	// Console is given a <char const *>, containing a command
+	/// Console is given a <char const *>, containing a command
 	, INVOKE__CONSOLE_COMMAND
 	
-	// remderer is given a <char const *>, containing a command
+	/// remderer is given a <char const *>, containing a command
 	, INVOKE__RENDER_COMMAND
 
-	// requests engine to return a non-owning pointer to the debug console
+	/// requests engine to return a non-owning pointer to the debug console
 	, REQUEST__CONSOLE_PTR_NON_OWNER
 
-	// engine supplies a non-owning pointer to the debug console
+	/// engine supplies a non-owning pointer to the debug console
 	, SUPPLY__CONSOLE_PTR_NON_OWNER
 
-	// requests message bus to send a ping back w/ {data = nullptr;}
+	/// requests message bus to send a ping back w/ {data = nullptr;}
 	, REQUEST__PING_ME_BACK
 
-	// -- this is always the last one
+	/// -- this is always the last one
 	, ENUM_LENGTH
 };
 
@@ -51,6 +63,11 @@ static std::map<MessageType, char const *> const message_type_enum_to_string {
 	, { MessageType::TESTING					, "TESTING"						}
 	, { MessageType::REQUEST__LOAD_RESOURCE		, "REQUEST__LOAD_RESOURCE"		}
 	, { MessageType::REQUEST__UNLOAD_RESOURCE	, "REQUEST__UNLOAD_RESOURCE"	}
+	, { MessageType::REQUEST__AUDIO_LOAD		, "REQUEST__AUDIO_LOAD"			}
+	, { MessageType::REQUEST__AUDIO_LOAD_AND_PLAY,"REQUEST__AUDIO_LOAD_AND_PLAY"}
+	, { MessageType::REQUEST__AUDIO_PLAY		, "REQUEST__AUDIO_PLAY"			}
+	, { MessageType::REQUEST__AUDIO_PLAY_LOOP	, "REQUEST__AUDIO_PLAY_LOOP"	}
+	, { MessageType::REQUEST__AUDIO_STOP_PLAY	, "REQUEST__AUDIO_STOP_PLAY"	}
 	, { MessageType::REQUEST__RESOURCE			, "REQUEST__RESOURCE"			}
 	, { MessageType::SUPPLY__RESOURCE			, "SUPPLY__RESOURCE"			}
 	, { MessageType::INVOKE__CONSOLE_COMMAND	, "INVOKE__CONSOLE_COMMAND"		}
@@ -91,11 +108,11 @@ protected:
 	std::map<char const *, unsigned int> name_to_channel_number {
 	//	  { "ai"		, 1  }
 	//	, { "animation"	, 2  }
-	//	, { "audio"		, 3  }
+		  { "audio"		, 3  }
 	//	, { "camera"	, 4  }
 	//	, { "cinematic"	, 5  }		
 	//	, { "collision"	, 6  }
-		  { "console"	, 7  }
+		, { "console"	, 7  }
 	//	, { "debug"		, 8  }
 		, { "engine"	, 9  }
 	//	, { "input"		, 10 }

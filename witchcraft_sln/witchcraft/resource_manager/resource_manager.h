@@ -13,6 +13,7 @@
 
 #include "../message_bus/message_bus.h"
 
+#include "../audio_manager/audio_resource.h"
 #include "../render_manager/shader_resource.h"
 #include "../render_manager/sprite_atlas_resource.h"
 #include "../render_manager/render_manager.h"
@@ -38,17 +39,28 @@ protected:
 	/// brief: parses the top node of an xml file for version information
 	char * determine_version(XML::xml_node<> const & xml) const;
 
+	/// brief: places a successfully parsed xml resource inside the resource map, if it isn't already there
+	EngineResourceBase * register_resource(std::unique_ptr<EngineResourceBase> & resource);
+
 	/// brief: parses xml file, where version information is unknown
 	EngineResourceBase * parse_file_version__unknown(XML::xml_node<> const & node);
 
 	/// brief: parses first generation witchcraft xml file
 	EngineResourceBase * parse_file_version__010(XML::xml_node<> const & node);
 
+	/// brief: parse block for resources, and register each resource
+	void process_xml_audio_block(XML::xml_node<> const & audio);
+	/// brief: builds a single audio resource
+	std::unique_ptr<EngineResourceBase> build_sound_resource_from_xml(XML::xml_node<> const & node);
+
+	// these parse a thing and emit one file
 	std::unique_ptr<EngineResourceBase> build_render_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_vertex_resource_from_xml(XML::xml_node<> const & xml);
 	std::unique_ptr<EngineResourceBase> build_shader_resource_from_xml(XML::xml_node<> const & xml);
-	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
 
+
+	//std::unique_ptr<EngineResourceBase> load_animation_resource_from_xml(XML::xml_node<> const & xml);
+	
 	std::vector<Animation2D> parse_embedded_sprite_animations(XML::xml_node<> const & xml);
 	Animation2D parse_one_embedded_sprite_animation(XML::xml_node<> const & xml);
 
@@ -67,7 +79,7 @@ public:
 	/// brief: returns a non-owning pointer to resource; searches local scope, then global	/// brief: returns a non-owning pointer to resource; searches local scope, then global
 	EngineResourceBase * find_resource(char const * name, int scope);
 
-	// clears all resources and scopes
+	/// brief: empties all resources from all scopes in resource manager
 	void empty_cache();
 
 	

@@ -16,7 +16,8 @@ enum class EResourceType
 	, SHADER
 	, ANIMATION
 	, MOVIE	
-	, AUDIO	
+	, AUDIO_BGM
+	, AUDIO_SFX
 	, TEXT		
 	, DIALOGUE
 };

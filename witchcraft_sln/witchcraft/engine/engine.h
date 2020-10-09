@@ -87,7 +87,6 @@ protected:
 	SDL_GameController * gameController = nullptr;
 
 	int init_sdl();
-	void init_gameplay(ProjectSettings ps);
 
 	void final_engine_component_initialization();
 

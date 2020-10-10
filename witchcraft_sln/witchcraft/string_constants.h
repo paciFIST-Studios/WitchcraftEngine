@@ -76,6 +76,8 @@ namespace witchcraft
 		static char const * debug_console_start = "debug console start";
 		static char const * debug_console_ok	= "debug console ok";
 
+		static char const * engine_start	= "engine start";
+		static char const * engine_ready	= "engine ready";
 		static char const * engine_startup  = "engine init_system";
 		static char const * engine_running  = "engine running";
 		static char const * engine_shutdown = "engine shutdown";					  

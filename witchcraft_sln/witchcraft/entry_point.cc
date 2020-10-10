@@ -102,9 +102,9 @@ int main(int argc, char** argv[])
 	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
 	auto engine = Engine(init);
 	
-	PLOGI << "witchcraft engine start";
+	PLOGI << witchcraft::log_strings::engine_start;
 	engine.init_system();
-	PLOGI << "witchcraft engine ready";
+	PLOGI << witchcraft::log_strings::engine_ready;
 	engine.run();
 	engine.shutdown();
 }

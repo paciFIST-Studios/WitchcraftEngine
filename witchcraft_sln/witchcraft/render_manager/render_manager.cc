@@ -34,7 +34,7 @@ bool RenderManager::init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned
 		  WindowTitle
 		, xOffset
 		, yOffset
-		, Width
+		, Width	
 		, Height
 		, SDL_WINDOW_OPENGL
 	);
@@ -172,14 +172,14 @@ bool RenderManager::init_shaders()
 	Message m {
 		  resource_channel_id
 		, render_channel_id
-		, MessageType::REQUEST__RESOURCE
+		, MessageType::REQUEST__LOAD_RESOURCE
 		, (void*)basic_shader
 	};
 	message_bus->send_direct_message(m);
 	active_shader = basic_shader;
 
-	shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
-	shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
+	//shaders["textureless"] = std::make_unique<OpenGlShaderProgram>();
+	//shaders["textureless"]->compile(textureless_vertex_src, textureless_fragment_src);
 	//shaders["textureless"]->use_program();
 	
 	// heatmap shader

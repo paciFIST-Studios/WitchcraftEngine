@@ -70,6 +70,15 @@ enum class ERendererState : unsigned char
 	, SHUTDOWN_OK	= 0x80
 };
 
+struct WindowStats
+{
+	int x;
+	int y;
+	int w;
+	int h;
+	Uint32 flags;
+};
+
 struct OpenGLSpriteQuad
 {
 	GLuint vao;
@@ -244,6 +253,15 @@ public:
 	bool update();
 
 	void shutdown();
+
+	WindowStats get_window_stats() const 
+	{ 
+		WindowStats stats;
+		SDL_GetWindowSize(program_window, &stats.w, &stats.h);
+		SDL_GetWindowPosition(program_window, &stats.x, &stats.y);
+		stats.flags = SDL_GetWindowFlags(program_window);
+		return stats;
+	}
 
 	SDL_Renderer * get_active_renderer() { return active_renderer; }
 

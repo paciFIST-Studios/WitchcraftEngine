@@ -21,6 +21,7 @@ struct ProjectSettings
 	bool capture_mouse;
 	bool use_vsync;
 
+	std::string window_title;
 	std::vector<std::string> file_paths;
 };
 
@@ -29,17 +30,18 @@ struct ProjectSettings
 class ProjectLoader : public EngineObjectBase
 {
 protected:
-	std::string const COMMENT_MARK = "//";
-	std::string const DELIMITER = ":";
-	std::string const COMMA = ",";
-	std::string const WHITESPACE = "";
+	std::string const COMMENT_MARK	= "//";
+	std::string const DELIMITER		= ":";
+	std::string const COMMA			= ",";
+	std::string const WHITESPACE	= "";
 
-	std::string const WINDOW_POS = "window_pos:";
-	std::string const WINDOW_WH = "window_wh:";
-	std::string const WINDOW_FULLSCREEN = "window_fullscreen:";
-	std::string const WINDOW_CAPTURE_MOUSE = "window_capture_mouse:";
-	std::string const USE_VSYNC = "use_vsync:";
-	std::string const PATH = "path:";
+	std::string const WINDOW_POS			= "window_pos:";
+	std::string const WINDOW_WH				= "window_wh:";
+	std::string const WINDOW_FULLSCREEN		= "window_fullscreen:";
+	std::string const WINDOW_CAPTURE_MOUSE	= "window_capture_mouse:";
+	std::string const WINDOW_TITLE			= "window_title:";
+	std::string const USE_VSYNC				= "use_vsync:";
+	std::string const PATH					= "path:";
 
 private:
 protected:
@@ -146,6 +148,11 @@ public:
 				{
 					project_settings.capture_mouse = parse_for_bool(PL::WINDOW_CAPTURE_MOUSE, line);
 				}
+				else if (has_tag(PL::WINDOW_TITLE, line))
+				{
+					auto pos = line.find(PL::WINDOW_TITLE) + PL::WINDOW_TITLE.size() + 1;
+					project_settings.window_title = line.substr(pos);
+				}
 				else if (has_tag(PL::USE_VSYNC, line))
 				{
 					project_settings.use_vsync = parse_for_bool(PL::USE_VSYNC, line);
@@ -164,6 +171,65 @@ public:
 			infile.close();
 		} // if infile open
 	}
+
+	void update_and_save(ProjectSettings const & ps)
+	{
+		std::vector<std::string> contents;
+
+		std::stringstream ss;
+		std::ifstream infile;
+		std::ofstream outfile;
+		infile.open(project_file);
+		if (infile.is_open())
+		{
+			std::string line;
+			while (getline(infile, line))
+			{
+				if (has_tag(PL::WINDOW_POS, line))
+				{
+					ss << PL::WINDOW_POS << " " << ps.window_x << ", " << ps.window_y << "\n";
+				}
+				else if (has_tag(PL::WINDOW_WH, line))
+				{
+					ss << PL::WINDOW_WH << " " << ps.window_w << ", " << ps.window_h << "\n";
+				}
+				else if (has_tag(PL::WINDOW_FULLSCREEN, line))
+				{
+					std::string b = (ps.use_fullscreen) ? "true" : "false";
+					ss << PL::WINDOW_FULLSCREEN << " " << b << "\n";
+				}
+				else if (has_tag(PL::WINDOW_CAPTURE_MOUSE, line))
+				{
+					std::string b = (ps.capture_mouse) ? "true" : "false";
+					ss << PL::WINDOW_CAPTURE_MOUSE << " " << b << "\n";
+				}
+				else if (has_tag(PL::WINDOW_TITLE, line))
+				{
+					ss << PL::WINDOW_TITLE << " " << ps.window_title << "\n";
+				}
+				else if (has_tag(PL::USE_VSYNC, line))
+				{
+					std::string b = (ps.use_vsync) ? "true" : "false";
+					ss << PL::USE_VSYNC << " " << b << "\n";
+				}
+				else
+				{
+					ss << line << "\n";
+				}
+			} // !while
+
+			infile.close();
+		} // if open
+
+		outfile.open(project_file);
+
+		if (outfile.is_open())
+		{
+			outfile.write(ss.str().c_str(), ss.str().size());
+			outfile.close();
+		}
+
+	} // update and save
 };
 
 #endif // !PROJECT_LOADER_H

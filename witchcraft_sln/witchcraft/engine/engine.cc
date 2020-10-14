@@ -95,6 +95,7 @@ void Engine::final_engine_component_initialization()
 	project_loader->parse_project_file();
 	current_project = project_loader->get_project_settings();
 
+
 	resource->init_component();
 	audio->init_component();
 	console->init_component();
@@ -102,7 +103,28 @@ void Engine::final_engine_component_initialization()
 	project_loader->init_component();
 	gameplay->init_component();
 
-	// render->init_component();
+
+	bool init_successful = render->init_system(
+		  current_project.window_x
+		, current_project.window_y
+		, current_project.window_w
+		, current_project.window_h
+		, current_project.use_fullscreen
+		, current_project.window_title.c_str()
+	);
+
+	if (init_successful == false)
+	{
+		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError();
+		render->shutdown();
+		PLOGV << witchcraft::log_strings::render_manager_stop;
+		return;
+	}
+	else
+	{
+		// the renderer initializes SDL, so this code MUST follow render init
+		gameController = SDL_GameControllerOpen(0);
+	}
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -139,7 +161,7 @@ void Engine::process_window_event(SDL_Event const & e)
 				//case SDLK_d:
 				//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
 				//	break;
-
+				//
 				//// Arrows
 				//case SDLK_UP:
 				//	witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
@@ -418,28 +440,8 @@ void Engine::run()
 	current_engine_state = EEngineState::RUNNING;
 	if (test_mode.early_exit) return;
 
-	bool init_successful = render->init_system(
-		  witchcraft::configuration::default_window_x_offset
-		, witchcraft::configuration::default_window_y_offset
-		, witchcraft::configuration::default_window_x_width
-		, witchcraft::configuration::default_window_y_height
-		, witchcraft::configuration::default_window_start_fullscreen
-		, witchcraft::configuration::witchcraft_program_title
-		);
-
-	if (init_successful == false)
-	{
-		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError();
-		render->shutdown();
-		PLOGV << witchcraft::log_strings::render_manager_stop;
-		return;
-	}
-	else
-	{
-		// the renderer initializes SDL, so this code MUST follow render init
-		gameController = SDL_GameControllerOpen(0);
-	}
-
+	
+	final_engine_component_initialization();
 
 
 	// - Load objects ---------------------------------------------------------------------------------
@@ -457,7 +459,7 @@ void Engine::run()
 	// when gameplay finishes, system begins shutdown
 	// since asset objects are owned by resource manager, they get torn down
 	//		when resource manager is deconstructed
-
+	//
 	//int buddha_resource_id;
 	//qSceneObject * buddha_scene_object = nullptr;
 	//// once the project loader exists, we can load files, based on what it says.
@@ -474,7 +476,7 @@ void Engine::run()
 	//	buddha_scene_object = render->register_render_object(render_resource);
 	//	buddha_resource_id = rr->id;
 	//}
-
+	//
 	//// pitch (field)
 	//int soccer_pitch_id;
 	//qSceneObject * soccer_pitch_scene_object = nullptr;
@@ -553,7 +555,6 @@ void Engine::run()
 	//	cursor_scene_object = render->register_render_object(render_resource);
 	//	cursor_id = id;
 	//}
-
 
 	// - Add objects to rendering layers -------------------------------------------------------------------------
 
@@ -661,6 +662,15 @@ void Engine::shutdown()
 	PLOGI << witchcraft::log_strings::engine_shutdown;
 	current_engine_state = EEngineState::SHUTDOWN;
 	if (test_mode.early_exit) return;
+
+	auto stats = render->get_window_stats();
+	current_project.window_x = stats.x;
+	current_project.window_y = stats.y;
+	current_project.window_h = stats.h;
+	current_project.window_w = stats.w;
+	current_project.use_fullscreen = (stats.flags & SDL_WINDOW_FULLSCREEN);
+	current_project.capture_mouse  = (stats.flags & SDL_WINDOW_MOUSE_CAPTURE);
+	project_loader->update_and_save(current_project);
 
 	// we're going to shut down SDL in the renderer, so all SDL components
 	// have to be closed by then

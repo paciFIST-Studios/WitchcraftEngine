@@ -15,6 +15,10 @@ public:
 	GameplayManager(MessageBus * mb) : message_bus(mb) {}
 	~GameplayManager() { message_bus = nullptr; }
 
+	void init_component()
+	{
+		// load gameplay
+	}
 };
 
 

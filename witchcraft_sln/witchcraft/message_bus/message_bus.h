@@ -115,7 +115,7 @@ protected:
 		, { "console"	, 7  }
 	//	, { "debug"		, 8  }
 		, { "engine"	, 9  }
-	//	, { "input"		, 10 }
+		, { "input"		, 10 }
 	//	, { "log"		, 11 }
 	//	, { "physics"	, 12 }
 	//	, { "player"	, 13 }

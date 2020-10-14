@@ -1,6 +1,5 @@
 #include "engine.h"
 
-
 void Engine::init_system()
 {
 	PLOGI << witchcraft::log_strings::engine_startup;
@@ -8,10 +7,10 @@ void Engine::init_system()
 	if (test_mode.early_exit) return;
 
 	// initialize sdl ----------------------------------------------------------------------------------
+	// the audio component and render component both use SDL, so basic init preceeds both
 	PLOGI << witchcraft::log_strings::sdl_start;
-	/* -1 == error, 0 == success */
-	if (init_sdl() < 0) { 
-		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError(); 
+	if (init_sdl() < 0) {
+		PLOGF << witchcraft::log_strings::sdl_init_failure << "\nError: " << SDL_GetError();
 		return;
 	}
 	PLOGV << witchcraft::log_strings::sdl_ok;
@@ -22,22 +21,11 @@ void Engine::init_system()
 	{
 		std::function<void(Message)> cb = std::bind(&Engine::handle_message, this, std::placeholders::_1);
 		message->subscribe("engine", cb);
-		audio_channel_id	= message->channel_lookup("audio"	);
-		console_channel_id	= message->channel_lookup("console"	);
-		engine_channel_id	= message->channel_lookup("engine"	);
-		render_channel_id	= message->channel_lookup("render"	);
-		resource_channel_id = message->channel_lookup("resource");
-		scene_channel_id	= message->channel_lookup("scene"	);
 	}
 	PLOGI << witchcraft::log_strings::message_bus_ok;
 
 	PLOGI << witchcraft::log_strings::resource_manager_start;
 	resource = std::make_unique<ResourceManager>(message.get());
-	{
-		// for now, this is a default engine resource
-		resource->load_from_xml_file("asset/textured_quad.asset");
-		resource->load_from_xml_file("asset/basic_shader.asset" );
-	}
 	PLOGI << witchcraft::log_strings::resource_manager_ok;
 
 	PLOGI << witchcraft::log_strings::audio_manager_start;
@@ -63,11 +51,11 @@ void Engine::init_system()
 	// we'll save that until some project requires it
 	PLOGI << witchcraft::log_strings::project_loader_start;
 	project_loader = std::make_unique<ProjectLoader>(project_file_path);
-	project_loader->parse_project_file();
-	project_settings = project_loader->get_project_settings();
 	PLOGI << witchcraft::log_strings::project_loader_ok;
 
-	init_gameplay(project_settings);
+	PLOGI << witchcraft::log_strings::gameplay_manager_start;
+	gameplay = std::make_unique<GameplayManager>(message.get());
+	PLOGI << "gameplay manager ok";
 
 	PLOGI << witchcraft::log_strings::engine_ok;
 }
@@ -75,8 +63,8 @@ void Engine::init_system()
 int Engine::init_sdl()
 {
 	// SDL_INIT_EVENTS, is initialized by joystick, and video
-	// 
 
+	/* -1 == error, 0 == success */
 	return SDL_Init(
 		  SDL_INIT_AUDIO
 		| SDL_INIT_VIDEO
@@ -85,13 +73,36 @@ int Engine::init_sdl()
 	);
 }
 
-void Engine::init_gameplay(ProjectSettings ps)
-{
-	PLOGI << witchcraft::log_strings::gameplay_manager_start;
-	gameplay = std::make_unique<GameplayManager>(message.get());
 
-	for (auto&& path : ps.file_paths){
-		resource->load_from_xml_file(path); }
+void Engine::final_engine_component_initialization()
+{
+	{
+		audio_channel_id    = message->channel_lookup("audio"   );
+		console_channel_id  = message->channel_lookup("console" );
+		engine_channel_id   = message->channel_lookup("engine"  );
+		render_channel_id   = message->channel_lookup("render"  );
+		resource_channel_id = message->channel_lookup("resource");
+		scene_channel_id    = message->channel_lookup("scene"   );
+	}
+
+	{
+		// for now, this is a default engine resource
+		resource->load_from_xml_file("asset/textured_quad.asset");
+		resource->load_from_xml_file("asset/basic_shader.asset");
+	}
+
+
+	project_loader->parse_project_file();
+	current_project = project_loader->get_project_settings();
+
+	resource->init_component();
+	audio->init_component();
+	console->init_component();
+	// scene->init_component();
+	project_loader->init_component();
+	gameplay->init_component();
+
+	// render->init_component();
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -343,7 +354,7 @@ void Engine::send_console_command(char const * command, bool send_direct)
 		  console_channel_id
 		, engine_channel_id
 		, MessageType::INVOKE__CONSOLE_COMMAND
-		, static_cast<void*>(&direct_message_string_buffer) 
+		, static_cast<void*>(&direct_message_string_buffer)
 		, send_direct
 	);
 }
@@ -415,10 +426,10 @@ void Engine::run()
 		, witchcraft::configuration::default_window_start_fullscreen
 		, witchcraft::configuration::witchcraft_program_title
 		);
-	
+
 	if (init_successful == false)
 	{
-		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError(); 
+		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError();
 		render->shutdown();
 		PLOGV << witchcraft::log_strings::render_manager_stop;
 		return;
@@ -557,7 +568,7 @@ void Engine::run()
 	//auto buddha_layer = scene->add_layer("buddha");
 	//buddha_layer->set_is_visible(true);
 	//buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
-	
+
 	//// player_a
 	//auto player_a_layer = scene->add_layer("player_a");
 	//player_a_layer->set_is_visible(true);
@@ -568,7 +579,7 @@ void Engine::run()
 	// - Debug stuff ---------------------------------------------------------------------------------
 
 	SDL_Color debug_text_color = { 0, 0, 0, 255 };
-	
+
 	std::stringstream debug_text_fps;
 
 	// - Game Loop ---------------------------------------------------------------------------------
@@ -608,7 +619,7 @@ void Engine::run()
 			ImGui_ImplSDL2_ProcessEvent(&window_event);
 			process_window_event(window_event);
 		}
-	
+
 		// - Physics Update ---------------------------------------------------------------------------------
 
 		//witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
@@ -641,7 +652,7 @@ void Engine::run()
 		//SDL_Delay(1);
 
 	} // !game_loop
-	
+
 	PLOGI << witchcraft::log_strings::game_loop_stop;
 }
 
@@ -661,9 +672,9 @@ void Engine::shutdown()
 
 	render->shutdown();
 	PLOGI << witchcraft::log_strings::render_manager_stop;
-	
+
 	resource->empty_cache();
 	PLOGI << witchcraft::log_strings::resource_manager_stop;
-	
+
 	PLOGI << witchcraft::log_strings::engine_shutdown;
 }

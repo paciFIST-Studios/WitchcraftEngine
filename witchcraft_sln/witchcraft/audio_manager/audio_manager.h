@@ -115,6 +115,11 @@ public:
 		init_mix_audio();
 	}
 
+	void init_component()
+	{
+		// load all of the files we're going to use
+	}
+
 	void shutdown()
 	{
 		Mix_CloseAudio();

@@ -88,6 +88,11 @@ public:
 		: project_file(filepath)
 	{}
 
+	void init_component()
+	{
+		// load the project here
+	}
+
 	void set_project(std::string filepath)
 	{
 		if (utility::file_exists(filepath))

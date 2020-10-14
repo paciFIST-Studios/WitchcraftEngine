@@ -1,0 +1,46 @@
+// this is a comment mark
+// comment marks ALL, MUST be on their own line
+// also, be sure to only use lower case for variable names or values
+// NOTE: anything that starts with "path:" has all whitespace cleared
+
+
+// configuration
+// holds general information used by the project
+window_pos: 30, 30
+window_wh: 800, 600
+window_fullscreen: true
+window_capture_mouse: false
+use_vsync: false
+window_title: witchcraft::soccer
+
+
+// project files
+// a list of asset files (not technically assets)
+// asset files contain information for how different assets
+// should be processed
+
+// a monologue about lying to a kid in cambodia
+path: asset/soccer_game/dialogue/cambodia_sadness.asset
+
+// graphics
+// right now, we're loading basic_shader when when init the ResourceManager,
+// so it will be available when the RenderManager comes online.  This config
+// file is parsed after the engine init is finished, but before the game loop
+// starts.  Not sure it matters where it gets loaded, but we are for-sure,
+// loading it somewhere else for the time being
+//path: asset/basic_shader.asset
+
+path: asset/soccer_game/images/ball.asset
+path: asset/soccer_game/images/ball_shadow.asset
+path: asset/soccer_game/images/cursor.asset
+path: asset/soccer_game/images/player_shadow.asset
+path: asset/soccer_game/images/stadium.asset
+
+// this file contains animations
+path: asset/soccer_game/images/player_a.asset
+
+
+// sfx
+path: asset/soccer_game/music.asset
+path: asset/soccer_game/players.asset
+path: asset/soccer_game/sfx.asset

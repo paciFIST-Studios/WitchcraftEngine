@@ -19,9 +19,6 @@ window_title: witchcraft::soccer
 // asset files contain information for how different assets
 // should be processed
 
-// a monologue about lying to a kid in cambodia
-path: asset/soccer_game/dialogue/cambodia_sadness.asset
-
 // graphics
 // right now, we're loading basic_shader when when init the ResourceManager,
 // so it will be available when the RenderManager comes online.  This config

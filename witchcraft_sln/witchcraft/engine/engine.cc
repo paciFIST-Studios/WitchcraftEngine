@@ -76,6 +76,7 @@ int Engine::init_sdl()
 
 void Engine::final_engine_component_initialization()
 {
+	// 
 	{
 		audio_channel_id    = message->channel_lookup("audio"   );
 		console_channel_id  = message->channel_lookup("console" );
@@ -85,10 +86,12 @@ void Engine::final_engine_component_initialization()
 		scene_channel_id    = message->channel_lookup("scene"   );
 	}
 
+	// default asset loading
 	{
 		// for now, this is a default engine resource
 		resource->load_from_xml_file("asset/textured_quad.asset");
 		resource->load_from_xml_file("asset/basic_shader.asset");
+		resource->load_from_xml_file("asset/buddha.asset");
 	}
 
 
@@ -102,9 +105,8 @@ void Engine::final_engine_component_initialization()
 	// scene->init_component();
 	project_loader->init_component();
 	gameplay->init_component();
-
-
-	bool init_successful = render->init_system(
+	
+	render->init_system(
 		  current_project.window_x
 		, current_project.window_y
 		, current_project.window_w
@@ -113,18 +115,9 @@ void Engine::final_engine_component_initialization()
 		, current_project.window_title.c_str()
 	);
 
-	if (init_successful == false)
-	{
-		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError();
-		render->shutdown();
-		PLOGV << witchcraft::log_strings::render_manager_stop;
-		return;
-	}
-	else
-	{
-		// the renderer initializes SDL, so this code MUST follow render init
-		gameController = SDL_GameControllerOpen(0);
-	}
+	// the renderer initializes SDL, so this code MUST follow render init
+	gameController = SDL_GameControllerOpen(0);
+	
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)

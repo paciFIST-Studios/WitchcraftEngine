@@ -6,9 +6,9 @@
 
 // configuration
 // holds general information used by the project
-window_pos: 30, 30
+window_pos: 187, 227
 window_wh: 800, 600
-window_fullscreen: true
+window_fullscreen: false
 window_capture_mouse: false
 use_vsync: false
 window_title: witchcraft::soccer

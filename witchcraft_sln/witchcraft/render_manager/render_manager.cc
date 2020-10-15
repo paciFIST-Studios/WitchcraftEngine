@@ -1,21 +1,31 @@
 #include "render_manager.h"
 
-bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, bool fullScreen, char const * WindowTitle)
+void RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, bool fullScreen, char const * WindowTitle)
 {
 	PLOGI << witchcraft::log_strings::render_manager_system_init_start;
 
+	bool abort = false;
+
 	if ( ! init_sdl_window(xOffset, yOffset, Width, Height, WindowTitle))
-	{return false;}
-	//if ( ! init_sdl_image()){ return false; }
+	{ abort = true; }
+	//if ( ! init_sdl_image()){ abort = true; }
 	
-	if ( ! init_opengl())	{ return false; }
+	if ( ! init_opengl())	{ abort = true; }
 
 	// NOTE: this initialization has to come AFTER the opengl init
-	if ( ! init_imgui())	{ return false; }
+	if ( ! init_imgui())	{ abort = true; }
 
 	// init shaders
-	if ( ! init_shaders())	{ return false; }
-	if ( ! init_geometry())	{ return false; }
+	if ( ! init_shaders())	{ abort = true; }
+	if ( ! init_geometry())	{ abort = true; }
+
+	if (abort)
+	{
+		PLOGF << witchcraft::log_strings::render_manager_init_failure << "\n" << SDL_GetError();
+		this->shutdown();
+		PLOGV << witchcraft::log_strings::render_manager_stop;
+		return;
+	}
 
 	// sends a message to engine, asking for ptr to console
 	request_debug_console_ptr();
@@ -24,7 +34,6 @@ bool RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 	PLOGI << "render manager ok";
 
 	renderer_state = ERendererState::UPDATE_OK;
-	return true;
 }
 
 bool RenderManager::init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle)
@@ -172,7 +181,7 @@ bool RenderManager::init_shaders()
 	Message m {
 		  resource_channel_id
 		, render_channel_id
-		, MessageType::REQUEST__LOAD_RESOURCE
+		, MessageType::REQUEST__RESOURCE
 		, (void*)basic_shader
 	};
 	message_bus->send_direct_message(m);
@@ -473,7 +482,7 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(false)
+	if(true)
 	{
 		shader[active_shader_idx]->use_program();
 		//shaders[active_shader]->use_program();

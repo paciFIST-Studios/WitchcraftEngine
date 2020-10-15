@@ -241,12 +241,12 @@ public:
 		resource_channel_id = message_bus->channel_lookup("resource");
 	}
 
-	bool init_system(
+	void init_system(
 		  unsigned xOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned yOffset = SDL_WINDOWPOS_UNDEFINED
 		, unsigned Width   = 0
 		, unsigned Height  = 0
-		, bool fullScreen	   = false
+		, bool fullScreen  = false
 		, char const * WindowTitle = 0
 	);
 

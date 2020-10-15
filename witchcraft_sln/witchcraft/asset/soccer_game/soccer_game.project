@@ -6,7 +6,7 @@
 
 // configuration
 // holds general information used by the project
-window_pos: 187, 227
+window_pos: 58, 111
 window_wh: 800, 600
 window_fullscreen: false
 window_capture_mouse: false
@@ -18,9 +18,6 @@ window_title: witchcraft::soccer
 // a list of asset files (not technically assets)
 // asset files contain information for how different assets
 // should be processed
-
-// a monologue about lying to a kid in cambodia
-path: asset/soccer_game/dialogue/cambodia_sadness.asset
 
 // graphics
 // right now, we're loading basic_shader when when init the ResourceManager,

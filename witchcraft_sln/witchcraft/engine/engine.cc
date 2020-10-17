@@ -568,8 +568,6 @@ void Engine::run()
 	//player_a_layer->set_is_visible(true);
 	//player_a_layer->add_scene_object(static_cast<qSceneObject*>(player_a_scene_object));
 
-
-
 	// - Debug stuff ---------------------------------------------------------------------------------
 
 	SDL_Color debug_text_color = { 0, 0, 0, 255 };

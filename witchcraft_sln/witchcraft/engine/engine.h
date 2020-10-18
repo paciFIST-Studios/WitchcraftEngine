@@ -129,16 +129,16 @@ namespace witchcraft
 {
 	namespace engine
 	{
-		static void move_object_by_vector(RenderObject2D * object, float x, float y)
+		static void move_object_by_vector(RenderObject * object, float x, float y)
 		{
-			auto pos = object->get_position();
-			auto _x = x + std::get<0>(pos);
-			auto _y = y + std::get<1>(pos);
-			// HACK: 20200802 - EB - clamp movement to visible screen area, 
-			_x = utility::clamp_to_range(_x, 0.0f, 768.f);
-			_y = utility::clamp_to_range(_y, 0.0f, 768.f);
-			// HACK: 20200802 - EB - clamp movement to visible screen area, 
-			object->set_position(_x, _y);
+			//auto pos = object->get_position();
+			//auto _x = x + std::get<0>(pos);
+			//auto _y = y + std::get<1>(pos);
+			//// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			//_x = utility::clamp_to_range(_x, 0.0f, 768.f);
+			//_y = utility::clamp_to_range(_y, 0.0f, 768.f);
+			//// HACK: 20200802 - EB - clamp movement to visible screen area, 
+			//object->set_position(_x, _y);
 		}
 
 		static void move_layer_by_vector(Layer2D * layer, float x, float y)

@@ -147,8 +147,8 @@
     <ClCompile Include="render_manager\opengl_shader__tst.cc" />
     <ClCompile Include="render_manager\render_manager.cc" />
     <ClCompile Include="render_manager\render_manager__tst.cc" />
-    <ClCompile Include="render_manager\render_object_2d.cc" />
-    <ClCompile Include="render_manager\render_object_2d__tst.cc" />
+    <ClCompile Include="render_manager\render_object.cc" />
+    <ClCompile Include="render_manager\render_object__tst.cc" />
     <ClCompile Include="render_manager\render_resource__tst.cc" />
     <ClCompile Include="render_manager\shader_resource__tst.cc" />
     <ClCompile Include="render_manager\sld_render_resource.cc" />
@@ -197,7 +197,7 @@
     <ClInclude Include="render_manager\opengl_texture.h" />
     <ClInclude Include="render_manager\render_manager.h" />
     <ClInclude Include="render_manager\render_manager_base.h" />
-    <ClInclude Include="render_manager\render_object_2d.h" />
+    <ClInclude Include="render_manager\render_object.h" />
     <ClInclude Include="render_manager\sdl_render_resource.h" />
     <ClInclude Include="render_manager\shader_resource.h" />
     <ClInclude Include="render_manager\sprite_atlas_resource.h" />

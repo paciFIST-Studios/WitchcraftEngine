@@ -111,12 +111,6 @@
     <ClCompile Include="utility\get_latest_log_str__tst.cc">
       <Filter>Source Files\utility</Filter>
     </ClCompile>
-    <ClCompile Include="render_manager\render_object_2d.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="render_manager\render_object_2d__tst.cc">
-      <Filter>Source Files\render_manager</Filter>
-    </ClCompile>
     <ClCompile Include="render_manager\sprite_animation_2d__tst.cc">
       <Filter>Source Files\render_manager</Filter>
     </ClCompile>
@@ -198,6 +192,12 @@
     <ClCompile Include="console\console.cc">
       <Filter>Source Files\console</Filter>
     </ClCompile>
+    <ClCompile Include="render_manager\render_object.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="render_manager\render_object__tst.cc">
+      <Filter>Source Files\render_manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\engine.h">
@@ -241,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="utility\get_latest_log_str.h">
       <Filter>Source Files\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\render_object_2d.h">
-      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="render_manager\sprite_animation_2d.h">
       <Filter>Source Files\render_manager</Filter>
@@ -334,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="audio_manager\audio_resource.h">
       <Filter>Source Files\audio_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="render_manager\render_object.h">
+      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

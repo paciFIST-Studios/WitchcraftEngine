@@ -22,8 +22,21 @@ protected:
 	OpenGLTexture * texture;
 
 public:
-	RenderObject();
+	 RenderObject();
 	~RenderObject();
+
+	RenderObject(
+		  OpenGLTexture * tex
+		, glm::f32vec3  * pos = nullptr
+		, glm::f32vec3  * roa = nullptr
+		, glm::f32vec3  * scl = nullptr
+	)
+		: texture(tex)
+	{
+		position = (pos) ? *pos : glm::f32vec3(0.0f,0.0f,0.0f);
+		rotation = (roa) ? *roa : glm::f32vec3(0.0f,0.0f,0.0f);
+		scale    = (scl) ? *scl : glm::f32vec3(0.0f,0.0f,0.0f);
+	}
 
 	OpenGLTexture const & get_texture_ref() const;
 	OpenGLTexture * get_texture() const;

@@ -18,28 +18,64 @@
 			REQUIRE_NOTHROW(ro.get_scale()   );
 
 			auto pos = ro.get_position();
+			auto roa = ro.get_rotation();
+			auto scl = ro.get_scale();
+		
 			REQUIRE(typeid(pos) == typeid(glm::f32vec3));
+			REQUIRE(typeid(roa) == typeid(glm::f32vec3));
+			REQUIRE(typeid(scl) == typeid(glm::f32vec3));
+			
 			REQUIRE(pos.x == 0.0f);
 			REQUIRE(pos.y == 0.0f);
 			REQUIRE(pos.z == 0.0f);
 
-			auto roa = ro.get_rotation();
-			REQUIRE(typeid(roa) == typeid(glm::f32vec3));
 			REQUIRE(roa.x == 0.0f);
 			REQUIRE(roa.y == 0.0f);
 			REQUIRE(roa.z == 0.0f);
 
-			auto scale = ro.get_scale();
-			REQUIRE(typeid(pos) == typeid(glm::f32vec3));
-			REQUIRE(scale.x == 0.0f);
-			REQUIRE(scale.y == 0.0f);
-			REQUIRE(scale.z == 0.0f);
+			REQUIRE(scl.x == 0.0f);
+			REQUIRE(scl.y == 0.0f);
+			REQUIRE(scl.z == 0.0f);
 
 			REQUIRE(ro.is_visible() == false);
 			REQUIRE_FALSE(ro.is_visible());
 
 			auto texture = ro.get_texture();
 			REQUIRE(texture == nullptr);
+		}
+
+		TEST_CASE(" RenderObject:: ctor  initializes position, rotation, and scale  correctly")
+		{
+			glm::f32vec3 p = glm::f32vec3(1.0f, 1.1f, 1.2f);
+			glm::f32vec3 r = glm::f32vec3(2.0f, 2.1f, 2.2f);
+			glm::f32vec3 s = glm::f32vec3(3.0f, 3.1f, 3.2f);
+
+			OpenGLTexture tex = OpenGLTexture("buddha", "asset/bussha.png");
+
+			auto ro = RenderObject(&tex, &p, &r, &s);
+
+			REQUIRE(ro.get_texture() != nullptr);
+			REQUIRE(ro.get_texture()->filepath == tex.filepath);
+
+			auto pos = ro.get_position();
+			auto roa = ro.get_rotation();
+			auto scl = ro.get_scale();
+
+			REQUIRE(typeid(pos) == typeid(glm::f32vec3));
+			REQUIRE(typeid(roa) == typeid(glm::f32vec3));
+			REQUIRE(typeid(scl) == typeid(glm::f32vec3));
+			
+			REQUIRE(pos.x == p.x);
+			REQUIRE(pos.y == p.y);
+			REQUIRE(pos.z == p.z);
+
+			REQUIRE(roa.x == r.x);
+			REQUIRE(roa.y == r.y);
+			REQUIRE(roa.z == r.z);
+
+			REQUIRE(scl.x == s.x);
+			REQUIRE(scl.y == s.y);
+			REQUIRE(scl.z == s.z);
 		}
 
 		TEST_CASE(" RenderObject:: get/set position()  gets/sets correctly")

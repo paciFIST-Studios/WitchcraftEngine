@@ -42,7 +42,7 @@
 #include "../resource_manager/engine_resource_base.h"
 #include "../string_constants.h"
 #include "../utility/utility.h"
-#include "render_object_2d.h"
+#include "render_object.h"
 #include "sdl_render_resource.h"
 
 #include "../scene_manager/scene_manager_2d.h"
@@ -89,7 +89,7 @@ struct OpenGLSpriteQuad
 class RenderManager : public EngineObjectBase
 {
 public:
-	typedef std::vector<std::unique_ptr<RenderObject2D>> RenderObjectsVector;
+	
 
 private:
 	ERendererState renderer_state = ERendererState::UNINITIALIZED;
@@ -156,7 +156,8 @@ private:
 
 protected:
 
-	static std::unique_ptr<RenderManager> SDL2_render_manager;
+	static std::unique_ptr<RenderManager> render_manager;
+	std::vector<std::unique_ptr<RenderObject>> render_objects;
 
 	unsigned int active_shader_idx = 0;
 	std::vector<std::unique_ptr<OpenGlShaderProgram>> shader;
@@ -187,8 +188,6 @@ protected:
 
 
 	SDL_RendererInfo renderer_info;
-
-	RenderObjectsVector render_objects;
 
 	// screen clear color
 	ImVec4 scc;  //{0.2f, 0.3f, 0.3f, 1.0f}
@@ -273,7 +272,7 @@ public:
 			
 	qSceneObject * register_render_object(SDLRenderResource * non_owner, bool is_visible = true);
 
-	RenderObject2D * get_render_object(int id);
+	RenderObject * get_render_object(int id);
 	
 	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 

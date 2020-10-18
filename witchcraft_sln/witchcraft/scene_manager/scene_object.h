@@ -3,7 +3,7 @@
 
 #include "../render_manager/render_object_2d.h"
 
-class qSceneObject : public RenderObject2D
+class qSceneObject : public RenderObject
 {
 private:
 protected:

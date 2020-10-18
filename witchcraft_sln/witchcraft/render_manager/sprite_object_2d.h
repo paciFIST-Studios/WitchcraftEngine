@@ -4,7 +4,7 @@
 #include <map>
 
 #include "../utility/utility.h"
-#include "render_object_2d.h"
+#include "render_object.h"
 
 #include "sprite_animation_2d.h"
 
@@ -23,7 +23,7 @@ struct c2DSpriteObjectInitializer
 	std::vector<Animation2D> animations;
 };
 
-class c2DSpriteObject : public RenderObject2D
+class c2DSpriteObject : public RenderObject
 {
 private:
 protected:

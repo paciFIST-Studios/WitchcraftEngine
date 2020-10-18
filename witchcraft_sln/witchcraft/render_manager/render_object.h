@@ -19,6 +19,9 @@ protected:
 
 	bool visible;
 
+	GLuint vertex_array_object;
+	unsigned vertex_elements;
+
 	OpenGLTexture * texture;
 
 public:
@@ -53,6 +56,23 @@ public:
 	
 	bool is_visible() const;
 	void set_is_visible(bool is);
+
+	void set_initialized_vao(unsigned const vao, unsigned const elements)
+	{
+		vertex_array_object = vao;
+		vertex_elements = elements;
+	}
+	
+	void draw()
+	{
+		if (texture)
+		{
+			texture->bind();
+			glBindVertexArray(vertex_array_object);
+			glDrawElements(GL_TRIANGLES, vertex_elements, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+		}
+	}
 };
 
 #endif // !RENDER_OBJECT_H

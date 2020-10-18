@@ -120,6 +120,7 @@ bool RenderManager::init_opengl()
 
 	// our built in billboard
 	sprite_texture.load();
+	billboard_object.set_texture(sprite_texture);
 
 	renderer_state = ERendererState::OPENGL_INIT_OK;
 
@@ -485,9 +486,11 @@ bool RenderManager::update()
 	if(true)
 	{
 		shader[active_shader_idx]->use_program();
+		
 		//shaders[active_shader]->use_program();
 		//shaders[active_shader]->setInt("_texture", 0);
-		sprite_texture.bind(0); 
+		//sprite_texture.bind(0); 
+		billboard_object.get_texture()->bind();
 		shader[active_shader_idx]->setInt("_texture", 0);
 		glBindVertexArray(sprite_quad.vao);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -594,7 +594,7 @@ void RenderManager::render_visible_scene_back_to_front()
 			// NOTE: we should move this out of the rendering area
 			//// is this where the tick for the object is called? Is that okay?
 			//obj->update();
-
+			//
 			//SDL_Rect dest_rect;
 			//SDL_Rect src_rect = obj->render_resource->get_renderable_rect();
 			//
@@ -607,7 +607,7 @@ void RenderManager::render_visible_scene_back_to_front()
 			//auto scale = obj->get_scale();
 			//dest_rect.w = int(src_rect.w * std::get<0>(scale));
 			//dest_rect.h = int(src_rect.h * std::get<1>(scale));
-
+			//
 			//SDL_RenderCopy(
 			//	  active_renderer
 			//	, obj->render_resource->texture

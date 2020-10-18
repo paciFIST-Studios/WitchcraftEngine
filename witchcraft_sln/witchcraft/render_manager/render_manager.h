@@ -167,10 +167,10 @@ protected:
 
 	std::map<char const *, std::unique_ptr<OpenGLTexture>> textures;
 
-	bool use_texture_class = false;
-	OpenGLTexture sprite_texture = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	OpenGLTexture sprite_texture    = OpenGLTexture("buddha_texture", "asset/buddha.png");
 	OpenGLSpriteQuad sprite_quad;
 
+	RenderObject billboard_object   = RenderObject();
 
 	SDL_Window * program_window		= nullptr;
 
@@ -192,7 +192,7 @@ protected:
 	// screen clear color
 	ImVec4 scc;  //{0.2f, 0.3f, 0.3f, 1.0f}
 
-	unsigned int screen_width = 0;
+	unsigned int screen_width  = 0;
 	unsigned int screen_height = 0;
 
 	bool init_sdl_window(unsigned xOffset, unsigned yOffset, unsigned Width, unsigned Height, char const * WindowTitle);	

@@ -302,13 +302,6 @@ void RenderManager::handle_invoke_render_command(Message & m)
 			draw_triangle_not_quad = !draw_triangle_not_quad;
 		}
 	}
-	else if (contains_term(cs, "use_texture_class"))
-	{
-		if (contains_term(cs, "toggle"))
-		{
-			use_texture_class = !use_texture_class;
-		}
-	}
 	else if (contains_term(cs, "use_shader"))
 	{
 		if (contains_term(cs, "basic"))
@@ -470,6 +463,11 @@ void RenderManager::initialize_sprite_quad(VertexResource const * vrp, OpenGLSpr
 	// I don't know what bind=0 on the buffer would do here
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	billboard_object.set_initialized_vao(
+		  sprite_quad.vao
+		, vrp->index_list.size()
+	);
 }
 
 bool RenderManager::update()
@@ -483,20 +481,10 @@ bool RenderManager::update()
 	);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(true)
-	{
-		shader[active_shader_idx]->use_program();
-		
-		//shaders[active_shader]->use_program();
-		//shaders[active_shader]->setInt("_texture", 0);
-		//sprite_texture.bind(0); 
-		billboard_object.get_texture()->bind();
-		shader[active_shader_idx]->setInt("_texture", 0);
-		glBindVertexArray(sprite_quad.vao);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-	}
 
+	shader[active_shader_idx]->use_program();
+	shader[active_shader_idx]->setInt("_texture", 0);
+	billboard_object.draw();
 
 	// imgui; prepare for draw 
 	ImGui_ImplOpenGL3_NewFrame();

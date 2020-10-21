@@ -1,21 +1,15 @@
 #include "render_object.h"
 
 RenderObject::RenderObject()
-	: position(0, 0, 0)
-	, rotation(0, 0, 0)
-	, scale(0, 0, 0)
+	: position(0.0f,0.0f,0.0f)
+	, rotation(0.0f,0.0f,0.0f)
+	, scale   (0.0f,0.0f,0.0f)
 	, visible(false)
 	, texture(nullptr)
 {}
 
 RenderObject::~RenderObject()
 {}
-
-OpenGLTexture const & RenderObject::get_texture_ref() const
-{
-	assert(texture);
-	return *texture;
-}
 
 OpenGLTexture * RenderObject::get_texture() const
 {

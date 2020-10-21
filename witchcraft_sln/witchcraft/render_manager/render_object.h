@@ -41,7 +41,6 @@ public:
 		scale    = (scl) ? *scl : glm::f32vec3(0.0f,0.0f,0.0f);
 	}
 
-	OpenGLTexture const & get_texture_ref() const;
 	OpenGLTexture * get_texture() const;
 	void set_texture(OpenGLTexture & texture);
 
@@ -56,6 +55,9 @@ public:
 	
 	bool is_visible() const;
 	void set_is_visible(bool is);
+	   
+
+	// - for rendering -----------------------------------------------------------------
 
 	void set_initialized_vao(unsigned const vao, unsigned const elements)
 	{

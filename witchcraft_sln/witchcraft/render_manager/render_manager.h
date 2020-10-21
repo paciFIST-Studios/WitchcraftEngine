@@ -141,11 +141,11 @@ private:
 	glm::mat4 orthographic_projection_matrix;
 	glm::mat4 perspective_projection_matrix;
 
-	bool use_vertex_class_not_quad = false;
-	bool use_wireframe_rendering = false;
-	bool draw_triangle_not_quad = false;
-	bool draw_imgui_main_menu_bar = true;
-	bool draw_imgui_debug_window = false;
+	bool use_vertex_class_not_quad	= false;
+	bool use_wireframe_rendering	= false;
+	bool draw_triangle_not_quad		= false;
+	bool draw_imgui_main_menu_bar	= true;
+	bool draw_imgui_debug_window	= false;
 
 
 	void paint_imgui_main_menu_bar();
@@ -167,7 +167,8 @@ protected:
 
 	std::map<char const *, std::unique_ptr<OpenGLTexture>> textures;
 
-	OpenGLTexture sprite_texture    = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	//OpenGLTexture sprite_texture    = OpenGLTexture("buddha_texture", "asset/buddha.png");
+	OpenGLTexture sprite_texture    = OpenGLTexture("soccer_pitch_texture", "asset/soccer_game/images/stadium.png");
 	OpenGLSpriteQuad sprite_quad;
 
 	RenderObject billboard_object   = RenderObject();

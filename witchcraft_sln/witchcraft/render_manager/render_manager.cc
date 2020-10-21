@@ -27,11 +27,10 @@ void RenderManager::init_system(unsigned xOffset, unsigned yOffset, unsigned Wid
 		return;
 	}
 
-	// sends a message to engine, asking for ptr to console
 	request_debug_console_ptr();
 
 	PLOGI << witchcraft::log_strings::render_manager_system_init_end;
-	PLOGI << "render manager ok";
+	PLOGI << witchcraft::log_strings::render_manager_ok;
 
 	renderer_state = ERendererState::UPDATE_OK;
 }
@@ -152,6 +151,7 @@ bool RenderManager::init_imgui()
 	return true;
 }
 
+// sends a message to engine, asking for ptr to console
 void RenderManager::request_debug_console_ptr()
 {
 	if (message_bus == nullptr)

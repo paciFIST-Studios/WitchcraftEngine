@@ -5,30 +5,30 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Witchcraft", "Witchcraft\Witchcraft.vcxproj", "{45131698-2B88-49A0-B3CE-643AFDB7AF85}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soccer_game", "soccer\soccer_game\soccer_game.vcxproj", "{E7BD5786-BD74-4B15-A46D-B17437D00BE3}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Debug|x64.ActiveCfg = Debug|x64
-		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Debug|x64.Build.0 = Debug|x64
 		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Debug|x86.ActiveCfg = Debug|Win32
 		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Debug|x86.Build.0 = Debug|Win32
-		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Release|x64.ActiveCfg = Release|x64
-		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Release|x64.Build.0 = Release|x64
 		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Release|x86.ActiveCfg = Release|Win32
 		{45131698-2B88-49A0-B3CE-643AFDB7AF85}.Release|x86.Build.0 = Release|Win32
+		{E7BD5786-BD74-4B15-A46D-B17437D00BE3}.Debug|x86.ActiveCfg = Debug|Win32
+		{E7BD5786-BD74-4B15-A46D-B17437D00BE3}.Debug|x86.Build.0 = Debug|Win32
+		{E7BD5786-BD74-4B15-A46D-B17437D00BE3}.Release|x86.ActiveCfg = Release|Win32
+		{E7BD5786-BD74-4B15-A46D-B17437D00BE3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80877564-9873-4D92-ACCE-948445ABF1DB}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

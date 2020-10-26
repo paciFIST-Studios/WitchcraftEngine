@@ -6,7 +6,7 @@
 #include "../audio_manager/audio_manager.h"
 #include "../console/console.h"
 #include "../engine/engine_object.h"
-#include "../gameplay/gameplay_manager.h"
+#include "../gameplay_manager/gameplay_manager.h"
 #include "../message_bus/message_bus.h"
 #include "../project_loader/project_loader.h"
 #include "../render_manager/render_manager.h"
@@ -47,6 +47,7 @@ struct EngineInitializer
 	TestMode test_mode;
 	std::string project_file_path;
 };
+
 
 class Engine : public EngineObjectBase
 {

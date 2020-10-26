@@ -16,7 +16,6 @@ namespace witchcraft
 		// offset witchcraft::configuration::engine_id_offset
 		static unsigned int get_engine_id()
 		{
-
 			static unsigned int id = engine_id_offset;
 			return ++id;
 		}

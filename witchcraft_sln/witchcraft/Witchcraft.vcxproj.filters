@@ -192,9 +192,6 @@
     <ClCompile Include="audio_manager\audio_manager__tst.cc">
       <Filter>Source Files\audio_manager</Filter>
     </ClCompile>
-    <ClCompile Include="miniaudio.cc">
-      <Filter>Source Files\vendor\miniaudio</Filter>
-    </ClCompile>
     <ClCompile Include="console\console.cc">
       <Filter>Source Files\console</Filter>
     </ClCompile>
@@ -338,9 +335,6 @@
     <ClInclude Include="render_manager\render_object.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
-    <ClInclude Include="gameplay\gameplay_manager.h">
-      <Filter>Source Files\gameplay_manager</Filter>
-    </ClInclude>
     <ClInclude Include="gameplay_manager\game.h">
       <Filter>Source Files\gameplay_manager</Filter>
     </ClInclude>
@@ -349,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="memory\linear_allocator.h">
       <Filter>Source Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay_manager\gameplay_manager.h">
+      <Filter>Source Files\gameplay_manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

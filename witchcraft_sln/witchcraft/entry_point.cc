@@ -20,6 +20,7 @@
 
 #include "engine/engine_id.h"
 #include "engine/engine.h"
+#include "memory/allocation_tracker.h"
 
 
 namespace witchcraft
@@ -31,7 +32,6 @@ namespace witchcraft
 		static unsigned int const log_file_max_logs = 4;
 	}
 }
-
 
 void init_logging()
 {
@@ -96,15 +96,21 @@ int main(int argc, char** argv[])
 
 	run_unit_tests();
 
+	{	
+		auto init = EngineInitializer();
+		init.test_mode.early_exit = false;
+		init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
+		auto engine = Engine(init);
+		
+		PLOGI << witchcraft::log_strings::engine_start;
+		engine.init_system();
+		PLOGI << witchcraft::log_strings::engine_ready;
+		engine.run();
+		engine.shutdown();
+	}
 
-	auto init = EngineInitializer();
-	init.test_mode.early_exit = false;
-	init.project_file_path = "K:/_Git/witchcraft_engine/witchcraft_sln/witchcraft/asset/soccer_game/soccer_game.project";
-	auto engine = Engine(init);
-	
-	PLOGI << witchcraft::log_strings::engine_start;
-	engine.init_system();
-	PLOGI << witchcraft::log_strings::engine_ready;
-	engine.run();
-	engine.shutdown();
+	PLOGI << "[memory] lifetime alloc: " << witchcraft::memory::allocation_tracker.total_allocated << " bytes";
+	PLOGI << "[memory] lifetime free: " << witchcraft::memory::allocation_tracker.total_freed << " bytes";
+	PLOGI << "[memory] total use after scope close: " << witchcraft::memory::allocation_tracker.current_usage() << " bytes";
+
 }

@@ -654,6 +654,10 @@ void Engine::shutdown()
 	current_engine_state = EEngineState::SHUTDOWN;
 	if (test_mode.early_exit) return;
 
+	PLOGI << "[memory] total alloc before shutdown: " << witchcraft::memory::allocation_tracker.total_allocated;
+	PLOGI << "[memory] total free before shutdown:  " << witchcraft::memory::allocation_tracker.total_freed;
+	PLOGI << "[memory] active use before shutdown:  " << witchcraft::memory::allocation_tracker.current_usage();
+
 	auto stats = render->get_window_stats();
 	current_project.window_x = stats.x;
 	current_project.window_y = stats.y;
@@ -677,5 +681,5 @@ void Engine::shutdown()
 	resource->empty_cache();
 	PLOGI << witchcraft::log_strings::resource_manager_stop;
 
-	PLOGI << witchcraft::log_strings::engine_shutdown;
+	PLOGI << witchcraft::log_strings::engine_shutdown;	
 }

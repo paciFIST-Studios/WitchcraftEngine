@@ -58,6 +58,12 @@
     <Filter Include="Source Files\vendor\miniaudio">
       <UniqueIdentifier>{6e8461b5-0ee6-4436-8ecb-72dfc3cd8044}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gameplay_manager">
+      <UniqueIdentifier>{e3dabee6-5b16-4351-972e-99d32337d37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\memory">
+      <UniqueIdentifier>{88fde8cf-5fd5-4ffd-ad31-5bb01528fdc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logging\error_log_manager.cc">
@@ -302,9 +308,6 @@
     <ClInclude Include="engine\enum_tools.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="gameplay\gameplay_manager.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="render_manager\shader_resource.h">
       <Filter>Source Files\render_manager</Filter>
     </ClInclude>
@@ -334,6 +337,18 @@
     </ClInclude>
     <ClInclude Include="render_manager\render_object.h">
       <Filter>Source Files\render_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay\gameplay_manager.h">
+      <Filter>Source Files\gameplay_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="gameplay_manager\game.h">
+      <Filter>Source Files\gameplay_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\allocation_tracker.h">
+      <Filter>Source Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\linear_allocator.h">
+      <Filter>Source Files\memory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

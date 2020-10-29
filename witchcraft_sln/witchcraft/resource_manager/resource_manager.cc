@@ -89,8 +89,6 @@ EngineResourceBase *  ResourceManager::parse_file_version__010(XML::xml_node<> c
 	// we do plan to emit a non-owning, raw-ptr, to the resource we just loaded
 	//if (resource)
 	//{
-	//
-	//
 	//	// do not add duplicates of the same file
 	//	if (find_resource(resource->id, resource->scope)) {
 	//		return resource.get();}

@@ -168,8 +168,6 @@ void RenderManager::request_debug_console_ptr()
 	};
 	
 	message_bus->send_direct_message(m);
-
-	return;
 }
 
 
@@ -325,9 +323,7 @@ void RenderManager::handle_supply_resource(Message & m)
 			  shdr->shader_files["vertex"].c_str()
 			, shdr->shader_files["fragment"].c_str()
 		);
-		active_shader_idx = shader.size() - 1;
-		
-		// -------------------------------------------------------------
+		active_shader_idx = shader.size() - 1;	
 	}
 }
 

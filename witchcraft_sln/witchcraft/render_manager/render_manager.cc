@@ -210,49 +210,6 @@ bool RenderManager::init_geometry()
 	};
 	message_bus->send_direct_message(m);
 	
-	// ------------------------------------------------------------------
-	// matricies
-	//
-	//w = 0;
-	//h = 0;
-	//SDL_GetWindowSize(program_window, &w, &h);
-	//
-	//
-	//orthographic_projection_matrix = glm::ortho(
-	//	  0.0f			//	left
-	//	, (float)w		//	right
-	//	, (float)h		//	bottom
-	//	, 0.0f			//	top
-	//	,-1.0f			//	near
-	//	, 1.0f			//	far
-	//);
-	//
-	//perspective_projection_matrix = glm::perspective(
-	//	  glm::radians(45.0f)	// fov
-	//	, (float)w / (float)h	// aspect ratio
-	//	, 0.1f					// near
-	//	, 100.f					// far
-	//);
-	//
-	//// start with identity matrix
-	//model_matrix = glm::mat4(1.0f);
-	//// rotate by -55 degrees around x+ axis
-	//model_matrix = glm::rotate(model_matrix, glm::radians(-0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//
-	//// view matrix moves camera back
-	//view_matrix = glm::mat4(1.0f);
-	//view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -3.0f));
-	//
-	//
-	//shader_id = active_shader_program_id;
-	//int model_loc = glGetUniformLocation(shader_id, "model");
-	//int view_loc = glGetUniformLocation(shader_id, "view");
-	//int proj_loc = glGetUniformLocation(shader_id, "projection");
-	//
-	//glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm::value_ptr(model_matrix));
-	//glUniformMatrix4fv(view_loc, 1, GL_FALSE, &view_matrix[0][0]);
-	//glUniformMatrix4fv(proj_loc, 1, GL_FALSE, glm::value_ptr(orthographic_projection_matrix));
-	
 	return true;
 }
 
@@ -369,16 +326,7 @@ void RenderManager::handle_supply_resource(Message & m)
 			, shdr->shader_files["fragment"].c_str()
 		);
 		active_shader_idx = shader.size() - 1;
-
-		// -------------------------------------------------------------
-
-		char const * name = shdr->name.c_str();
-		shaders[name] = std::make_unique<OpenGlShaderProgram>();
-		shaders[name]->compile(
-			  shdr->shader_files["vertex"].c_str()
-			, shdr->shader_files["fragment"].c_str()
-		);
-
+		
 		// -------------------------------------------------------------
 	}
 }
@@ -523,101 +471,6 @@ void RenderManager::shutdown()
 	renderer_state = ERendererState::SHUTDOWN_OK;
 }
 
-
-void RenderManager::render_visible_sprites_back_to_front()
-{
-	if (scene_manager == nullptr)
-	{
-		PLOGE << "ERROR:  No scene manager detected!";
-		return;
-	}
-
-	auto layers = scene_manager->get_layers_ptrs_vector();
-	for (auto&& layer : layers)
-	{
-		if (layer == nullptr)
-			continue;
-
-		if (layer->get_is_visible() == false)
-		{
-			continue;
-		}
-
-		auto objects = layer->get_layer_objects();
-
-		for (auto&& obj : objects)
-		{
-			if (obj == nullptr)
-				continue;
-
-			if (obj->is_visible() == false)
-				continue;
-
-			//draw_sprite(*obj);
-		}
-	}
-}
-
-void RenderManager::render_visible_scene_back_to_front()
-{
-	if (scene_manager == nullptr)
-		return; // error?
-
-	auto layers = scene_manager->get_layers_ptrs_vector();
-	for (auto&& layer : layers)
-	{
-		if (layer == nullptr)
-			continue;
-
-		if (layer->get_is_visible() == false)
-			continue;
-
-		auto objects = layer->get_layer_objects();
-
-		for (auto&& obj : objects)
-		{
-			if (obj == nullptr)
-				continue;
-
-			if (obj->is_visible() == false)
-				continue;
-
-			// NOTE: we should move this out of the rendering area
-			//// is this where the tick for the object is called? Is that okay?
-			//obj->update();
-			//
-			//SDL_Rect dest_rect;
-			//SDL_Rect src_rect = obj->render_resource->get_renderable_rect();
-			//
-			//auto layer_pos = layer->get_offset();
-			//auto obj_pos = obj->get_position();
-			//
-			//dest_rect.x = int(std::get<0>(layer_pos) + std::get<0>(obj_pos));
-			//dest_rect.y = int(std::get<1>(layer_pos) + std::get<1>(obj_pos));
-			//
-			//auto scale = obj->get_scale();
-			//dest_rect.w = int(src_rect.w * std::get<0>(scale));
-			//dest_rect.h = int(src_rect.h * std::get<1>(scale));
-			//
-			//SDL_RenderCopy(
-			//	  active_renderer
-			//	, obj->render_resource->texture
-			//	, &src_rect
-			//	, &dest_rect
-			//);
-		}
-	}
-}
-
-void RenderManager::set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect)
-{
-	r = utility::clamp_to_0_255(r);
-	g = utility::clamp_to_0_255(g);
-	b = utility::clamp_to_0_255(b);
-
-	SDL_FillRect(rendering_surface, rect, SDL_MapRGB(rendering_surface->format, r, g, b));
-	SDL_UpdateWindowSurface(program_window);
-}
 
 qSceneObject * RenderManager::register_render_object(SDLRenderResource * non_owner, bool is_visible)
 {

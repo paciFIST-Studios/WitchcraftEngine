@@ -265,16 +265,15 @@ public:
 
 	SDL_Renderer * get_active_renderer() { return active_renderer; }
 
-	void render_visible_sprites_back_to_front();
-
-	void render_visible_scene_back_to_front();
-
-	void set_surface_RGB(unsigned int r, unsigned int g, unsigned int b, SDL_Rect const * rect);
-			
 	qSceneObject * register_render_object(SDLRenderResource * non_owner, bool is_visible = true);
 
 	RenderObject * get_render_object(int id);
 	
+
+
+
+	// -----------------------------------------------------------------
+
 	void set_scene_manager(SceneManager2D * sm) { scene_manager = sm; }
 
 	ERendererState const get_renderer_state() const { return renderer_state; }

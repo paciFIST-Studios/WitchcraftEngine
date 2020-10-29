@@ -175,7 +175,7 @@ std::unique_ptr<EngineResourceBase> ResourceManager::build_render_resource_from_
 
 	for (XML::xml_attribute<> * attr = xml.first_attribute(); attr; attr = attr->next_attribute())
 	{
-		std::string _token  = attr->name();
+		std::string _token = attr->name();
 		std::string _value = attr->value();
 
 		if (_token == witchcraft::xml::NAME)

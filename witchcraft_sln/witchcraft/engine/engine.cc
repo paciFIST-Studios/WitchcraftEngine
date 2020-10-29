@@ -76,15 +76,13 @@ int Engine::init_sdl()
 
 void Engine::final_engine_component_initialization()
 {
-	// 
-	{
-		audio_channel_id    = message->channel_lookup("audio"   );
-		console_channel_id  = message->channel_lookup("console" );
-		engine_channel_id   = message->channel_lookup("engine"  );
-		render_channel_id   = message->channel_lookup("render"  );
-		resource_channel_id = message->channel_lookup("resource");
-		scene_channel_id    = message->channel_lookup("scene"   );
-	}
+	// frequently used channel ids
+	audio_channel_id    = message->channel_lookup("audio"   );
+	console_channel_id  = message->channel_lookup("console" );
+	engine_channel_id   = message->channel_lookup("engine"  );
+	render_channel_id   = message->channel_lookup("render"  );
+	resource_channel_id = message->channel_lookup("resource");
+	scene_channel_id    = message->channel_lookup("scene"   );
 
 	// default asset loading
 	{
@@ -93,11 +91,9 @@ void Engine::final_engine_component_initialization()
 		resource->load_from_xml_file("asset/basic_shader.asset");
 		resource->load_from_xml_file("asset/buddha.asset");
 	}
-
-
+	
 	project_loader->parse_project_file();
 	current_project = project_loader->get_project_settings();
-
 
 	resource->init_component();
 	audio->init_component();
@@ -117,7 +113,6 @@ void Engine::final_engine_component_initialization()
 
 	// the renderer initializes SDL, so this code MUST follow render init
 	gameController = SDL_GameControllerOpen(0);
-	
 }
 
 bool Engine::continue_gameplay_loop(SDL_Event const & e)
@@ -140,34 +135,6 @@ void Engine::process_window_event(SDL_Event const & e)
 		if (e.key.type == SDL_KEYDOWN)
 		{
 			switch (e.key.keysym.sym) {
-
-				// WASD
-				//case SDLK_w:
-				//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, -1.f);
-				//	break;
-				//case SDLK_s:
-				//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 0.0f, 1.f);
-				//	break;
-				//case SDLK_a:
-				//	witchcraft::engine::move_object_by_vector(buddha_scene_object, -1.f, 0.0f);
-				//	break;
-				//case SDLK_d:
-				//	witchcraft::engine::move_object_by_vector(buddha_scene_object, 1.f, 0.0f);
-				//	break;
-				//
-				//// Arrows
-				//case SDLK_UP:
-				//	witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, -1.f);
-				//	break;
-				//case SDLK_RIGHT:
-				//	witchcraft::engine::move_layer_by_vector(buddha_layer, 1.f, 0.0f);
-				//	break;
-				//case SDLK_DOWN:
-				//	witchcraft::engine::move_layer_by_vector(buddha_layer, 0.0f, 1.f);
-				//	break;
-				//case SDLK_LEFT:
-				//	witchcraft::engine::move_layer_by_vector(buddha_layer, -1.f, 0.0f);
-				//	break;
 
 			case SDLK_F1:
 				render->toggle_imgui_debug_window();
@@ -221,145 +188,7 @@ void Engine::process_window_event(SDL_Event const & e)
 			}
 		}
 	} // end keyboard events
-
-	// - Gamepad Events ------------------------------------------------------------------------
-	//else if (witchcraft::engine::is_gamepad_event(window_event))
-	//{
-	//	// gamepad start button -> quit
-	//	if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_START)
-	//	{
-	//		PLOGI << witchcraft::log_strings::sdl_break_event_polling;
-	//		gameplay_loop_is_running = false;
-	//	}
-	//	// gamepad button down
-	//	if (window_event.cbutton.type == SDL_CONTROLLERBUTTONDOWN)
-	//	{
-	//		if (window_event.caxis.which == controller_idx)
-	//		{
-	//			//// 'nintendo' buttons
-	//			//if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-	//			//{
-	//			//	std::cout << "controller: [A]\ttoggle_layer_visibility\n";
-	//			//	witchcraft::engine::toggle_layer_visibility(buddha_layer);
-	//			//}
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
-	//			//{
-	//			//	std::cout << "controller: [B]\ttoggle_layer_visibility\n";
-	//			//	witchcraft::engine::toggle_layer_visibility(soccer_pitch_layer);
-	//			//}
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
-	//			//{
-	//			//	std::cout << "controller: [X]\n";
-	//			//}
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_Y)
-	//			//{
-	//			//	std::cout << "controller: [Y]\n";
-	//			//}
-	//			//
-	//			//// shoulder bumpers
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
-	//			//{
-	//			//	auto scale = soccer_pitch_scene_object->get_scale();
-	//			//	auto x = std::get<0>(scale) * 1.1f;
-	//			//	auto y = std::get<1>(scale) * 1.1f;
-	//			//	soccer_pitch_scene_object->set_scale(x, y);
-	//			//}
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
-	//			//{
-	//			//	auto scale = soccer_pitch_scene_object->get_scale();
-	//			//	auto x = std::get<0>(scale) * 0.9f;
-	//			//	auto y = std::get<1>(scale) * 0.9f;
-	//			//	soccer_pitch_scene_object->set_scale(x, y);
-	//			//}
-	//			//
-	//			//// click sticks
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSTICK)
-	//			//{
-	//			//	soccer_pitch_scene_object->set_scale(1.f, 1.f);
-	//			//}
-	//			//else if (window_event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSTICK)
-	//			//{
-	//			//	buddha_scene_object->set_scale(1.f, 1.f);
-	//			//}
-	//		}
-	//	}
-	//	// gamepad axes
-	//	else if (window_event.caxis.which == controller_idx)
-	//	{
-	//		// left_stick x-axis
-	//		if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
-	//		{
-	//			// left of dead zone
-	//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-	//			{
-	//				player_0_x_input = -player_speed;
-	//			}
-	//			// right of deadzone
-	//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-	//			{
-	//				player_0_x_input = player_speed;
-	//			}
-	//			// deadzone
-	//			else
-	//			{
-	//				player_0_x_input = 0.0f;
-	//			}
-	//		}
-	//		// left_stick y-axis
-	//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
-	//		{
-	//			// below dead zone
-	//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-	//			{
-	//				player_0_y_input = -player_speed;
-	//			}
-	//			// above dead zone
-	//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-	//			{
-	//				player_0_y_input = player_speed;
-	//			}
-	//			// deadzone
-	//			else
-	//			{
-	//				player_0_y_input = 0.0f;
-	//			}
-	//		}
-	//		// right_stick x-axis
-	//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
-	//		{
-	//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-	//			{
-	//				layer_0_x_offset += -layer_speed;
-	//			}
-	//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-	//			{
-	//				layer_0_x_offset += layer_speed;
-	//			}
-	//			else
-	//			{
-	//				layer_0_x_offset = 0.0f;
-	//			}
-	//		}
-	//		// right_stick y-axis
-	//		else if (window_event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
-	//		{
-	//			if (window_event.caxis.value < -JOYSTICK_DEAD_ZONE)
-	//			{
-	//				layer_0_y_offset += -layer_speed;
-	//			}
-	//			else if (window_event.caxis.value > JOYSTICK_DEAD_ZONE)
-	//			{
-	//				layer_0_y_offset += layer_speed;
-	//			}
-	//			else
-	//			{
-	//				layer_0_y_offset = 0.0f;
-	//			}
-	//		}
-	//
-	//	} // end gamepad axis events
-	//} // end gamepad events
-
+	
 }
 
 void Engine::send_console_command(char const * command, bool send_direct)
@@ -426,7 +255,6 @@ void Engine::handle_message(Message m)
 }
 
 
-
 void Engine::run()
 {
 	PLOGI << witchcraft::log_strings::engine_running;
@@ -469,104 +297,16 @@ void Engine::run()
 	//	buddha_scene_object = render->register_render_object(render_resource);
 	//	buddha_resource_id = rr->id;
 	//}
-	//
-	//// pitch (field)
-	//int soccer_pitch_id;
-	//qSceneObject * soccer_pitch_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/stadium.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	soccer_pitch_scene_object = render->register_render_object(render_resource);
-	//	soccer_pitch_id = id;
-	//}
-	//
-	//// ball
-	//int ball_id;
-	//qSceneObject * ball_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/ball.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	ball_scene_object = render->register_render_object(render_resource);
-	//	ball_id = id;
-	//}
-	//
-	//// ball shadow
-	//int ball_shadow_id;
-	//qSceneObject * ball_shadow_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/ball_shadow.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	ball_shadow_scene_object = render->register_render_object(render_resource);
-	//	ball_shadow_id = id;
-	//}
-	//
-	//// player
-	//int player_id;
-	//qSceneObject * player_a_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/player_a.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto sar = static_cast<SpriteAtlasResource*>(rr);
-	//	sar->bind_renderer(render->active_renderer);
-	//	sar->load();
-	//	sar->set_current_animation("idle_blink");
-	//	player_a_scene_object = render->register_render_object(sar);
-	//	player_id = id;
-	//}
-	//
-	//// player shadow
-	//int player_shadow_id;
-	//qSceneObject * player_shadow_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/player_shadow.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	player_shadow_scene_object = render->register_render_object(render_resource);
-	//	player_shadow_id = id;
-	//}
-	//
-	//// cursor
-	//int cursor_id;
-	//qSceneObject * cursor_scene_object = nullptr;
-	//{
-	//	auto id = resource->load_from_xml_file("asset/soccer_game/images/cursor.asset");
-	//	auto rr = resource->find_resource_by_id(id);
-	//	auto render_resource = static_cast<SDLRenderResource*>(rr);
-	//	render_resource->bind_renderer(render->active_renderer);
-	//	render_resource->load();
-	//	cursor_scene_object = render->register_render_object(render_resource);
-	//	cursor_id = id;
-	//}
+	
 
 	// - Add objects to rendering layers -------------------------------------------------------------------------
 
 	// NOTE: this is back-to-front ordering
 
-	//// pitch (field)
-	//auto soccer_pitch_layer = scene->add_layer("soccer_pitch");
-	//soccer_pitch_layer->set_is_visible(true);
-	//soccer_pitch_layer->add_scene_object(static_cast<qSceneObject*>(soccer_pitch_scene_object));
-	//
 	// buddha
 	//auto buddha_layer = scene->add_layer("buddha");
 	//buddha_layer->set_is_visible(true);
 	//buddha_layer->add_scene_object(static_cast<qSceneObject*>(buddha_scene_object));
-
-	//// player_a
-	//auto player_a_layer = scene->add_layer("player_a");
-	//player_a_layer->set_is_visible(true);
-	//player_a_layer->add_scene_object(static_cast<qSceneObject*>(player_a_scene_object));
 
 	// - Debug stuff ---------------------------------------------------------------------------------
 
@@ -591,11 +331,11 @@ void Engine::run()
 
 	// owned by gameplay object
 	float const player_speed = 0.4f;
-	float const layer_speed = 0.05f;
-	float player_0_x_input = 0.0f;
-	float player_0_y_input = 0.0f;
-	float layer_0_x_offset = 0.0f;
-	float layer_0_y_offset = 0.0f;
+	float const layer_speed  = 0.05f;
+	float player_0_x_input   = 0.0f;
+	float player_0_y_input   = 0.0f;
+	float layer_0_x_offset   = 0.0f;
+	float layer_0_y_offset   = 0.0f;
 	// ! owned by gameplay object
 
 	PLOGI << witchcraft::log_strings::game_loop_start;
@@ -614,17 +354,10 @@ void Engine::run()
 
 		// - Physics Update ---------------------------------------------------------------------------------
 
-		//witchcraft::engine::move_object_by_vector(buddha_scene_object, player_0_x_input, player_0_y_input);
-		//witchcraft::engine::move_object_by_vector(player_a_scene_object, player_0_x_input, player_0_y_input);
-		//witchcraft::engine::move_layer_by_vector(soccer_pitch_layer, layer_0_x_offset, layer_0_y_offset);
-
 		// - Render Update ---------------------------------------------------------------------------------
-
 		render->update();
 
-
 		// - Sound Update ---------------------------------------------------------------------------------
-
 
 		// - Debug ---------------------------------------------------------------------------------
 
@@ -639,9 +372,6 @@ void Engine::run()
 		}
 
 		// yield for the rest of the frame
-		//auto yield_time = witchcraft::configuration::frame_length_ms - (current_frame_time - last_frame_time);
-		// HACK: only has 10ms resolution, so we're just going to use it as a 10ms sleep
-		//SDL_Delay(1);
 
 	} // !game_loop
 
@@ -652,7 +382,7 @@ void Engine::shutdown()
 {
 	PLOGI << witchcraft::log_strings::engine_shutdown;
 	current_engine_state = EEngineState::SHUTDOWN;
-	if (test_mode.early_exit) return;
+	if (test_mode.early_exit) { return; }
 
 	PLOGI << "[memory] total alloc before shutdown: " << witchcraft::memory::allocation_tracker.total_allocated;
 	PLOGI << "[memory] total free before shutdown:  " << witchcraft::memory::allocation_tracker.total_freed;

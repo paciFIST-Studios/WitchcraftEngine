@@ -16,9 +16,6 @@
     <Filter Include="Source Files\engine">
       <UniqueIdentifier>{54463763-f3f9-4886-a98b-2011dadefa80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\logging">
-      <UniqueIdentifier>{e63e3b38-fedf-4785-8c58-3dab96bd80b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utility">
       <UniqueIdentifier>{266fa35c-4ef9-47cc-b0a0-ecfa70dcfdab}</UniqueIdentifier>
     </Filter>
@@ -66,17 +63,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="logging\error_log_manager.cc">
-      <Filter>Source Files\logging</Filter>
-    </ClCompile>
     <ClCompile Include="entry_point.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="test.cc">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="logging\tests_error_log_manager.cc">
-      <Filter>Source Files\logging</Filter>
     </ClCompile>
     <ClCompile Include="resource_manager\resource_manager.cc">
       <Filter>Source Files\resource_manager</Filter>
@@ -200,9 +191,6 @@
     <ClInclude Include="engine\engine.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="logging\error_log_manager.h">
-      <Filter>Source Files\logging</Filter>
-    </ClInclude>
     <ClInclude Include="unit_testing_switch.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -211,9 +199,6 @@
     </ClInclude>
     <ClInclude Include="string_constants.h">
       <Filter>Source Files\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="render_manager\render_manager_base.h">
-      <Filter>Source Files\render_manager</Filter>
     </ClInclude>
     <ClInclude Include="scene_manager\scene_object.h">
       <Filter>Source Files\scene_manager</Filter>

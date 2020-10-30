@@ -9,8 +9,7 @@ GLuint OpenGlShaderProgram::compile_vertex_shader(char const * src)
 {
 	if (src == nullptr || src == "") { return NULL; }
 
-	GLuint vert;
-	vert = glCreateShader(GL_VERTEX_SHADER);
+	GLuint vert = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vert, 1, &src, NULL);
 	glCompileShader(vert);
 	check_compile_errors(vert, VERTEX);

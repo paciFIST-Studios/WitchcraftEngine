@@ -42,11 +42,14 @@ void Console::execute_command(char const * command)
 	ss << "# " << command << "\n";
 	contents.push_back(ss.str());
 
-	if (_stricmp(command, "CLEAR") == 0)
+	int constexpr STRCMP_TRUE = 0;
+	std::string cmd(command);
+
+	if (cmd.compare("CLEAR") == STRCMP_TRUE)
 	{
 		contents.clear();
 	}
-	else if (_stricmp(command, "HELP") == 0)
+	else if (cmd.compare("HELP") == STRCMP_TRUE)
 	{
 		contents.push_back("Commands: ");
 		for (auto cmd : commands)
@@ -56,11 +59,11 @@ void Console::execute_command(char const * command)
 			contents.push_back(ss.str());
 		}
 	}
-	else if (_stricmp(command, "HISTORY") == 0)
+	else if (cmd.compare("HISTORY") == STRCMP_TRUE)
 	{
 		// todo
 	}
-	else if (_stricmp(command, "CLOSE") == 0)
+	else if (cmd.compare("CLOSE") == STRCMP_TRUE)
 	{
 		draw_console = false;
 	}

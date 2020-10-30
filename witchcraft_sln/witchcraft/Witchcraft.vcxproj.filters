@@ -78,14 +78,8 @@
     <ClCompile Include="logging\tests_error_log_manager.cc">
       <Filter>Source Files\logging</Filter>
     </ClCompile>
-    <ClCompile Include="engine\exception.cc">
-      <Filter>Source Files\engine</Filter>
-    </ClCompile>
     <ClCompile Include="resource_manager\resource_manager.cc">
       <Filter>Source Files\resource_manager</Filter>
-    </ClCompile>
-    <ClCompile Include="tests_exception.cc">
-      <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="utility\tests_utility.cc">
       <Filter>Source Files\utility</Filter>
@@ -211,9 +205,6 @@
     </ClInclude>
     <ClInclude Include="unit_testing_switch.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\exception.h">
-      <Filter>Source Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="resource_manager\resource_manager.h">
       <Filter>Source Files\resource_manager</Filter>

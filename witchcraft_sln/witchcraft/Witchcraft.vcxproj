@@ -130,7 +130,6 @@
     <ClCompile Include="engine\engine.cc" />
     <ClCompile Include="engine\engine_object__tst.cc" />
     <ClCompile Include="engine\engine__tst.cc" />
-    <ClCompile Include="engine\exception.cc" />
     <ClCompile Include="entry_point.cc" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="scene_manager\timer__tst.cc" />
     <ClCompile Include="stb_image.cc" />
     <ClCompile Include="test.cc" />
-    <ClCompile Include="tests_exception.cc" />
     <ClCompile Include="utility\get_latest_log_str__tst.cc" />
     <ClCompile Include="utility\tests_utility.cc" />
   </ItemGroup>
@@ -178,7 +176,6 @@
     <ClInclude Include="engine\engine_id.h" />
     <ClInclude Include="engine\engine_object.h" />
     <ClInclude Include="engine\enum_tools.h" />
-    <ClInclude Include="engine\exception.h" />
     <ClInclude Include="gameplay_manager\gameplay_manager.h" />
     <ClInclude Include="gameplay_manager\game.h" />
     <ClInclude Include="imgui\imconfig.h" />

@@ -97,6 +97,9 @@ public:
 
 private:
 protected:
+	// note: each engine object has a "channel" dedicated to it,
+	// and collisions are avoided by simply starting the engine id
+	// at 100.  See engine_id.h for more info
 
 	// ID, vec<recipient's messages>
 	std::map <unsigned int, std::vector<Message>> waiting_messages;
@@ -147,7 +150,7 @@ public:
 		return name_to_channel_number[channel_name];
 	}
 	
-	std::string channel_lookup(unsigned int id)
+	std::string channel_lookup(unsigned int id) const
 	{
 		for (auto&& kvp : name_to_channel_number)
 		{

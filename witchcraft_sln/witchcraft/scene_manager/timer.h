@@ -4,6 +4,8 @@
 #include <time.h>
 #include <windows.h>
 
+#include "../uninitialized_values.h"
+#include "../engine/engine_object.h"
 
 class TickTimer : public EngineObjectBase
 {
@@ -39,13 +41,14 @@ public:
 	{
 		// todo: throw error if no wait time has been set
 
-		started_at_time = SDL_GetTicks();
+		//started_at_time = SDL_GetTicks();
 	}
 
 	bool time_elapsed() const
 	{
-		auto current_time = SDL_GetTicks();
-		return (current_time - started_at_time) > ticks_to_wait;
+		//auto current_time = SDL_GetTicks();
+		//return (current_time - started_at_time) > ticks_to_wait;
+		return true;
 	}
 
 };

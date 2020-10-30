@@ -7,6 +7,7 @@
 	#ifdef RUN_UNIT_TESTS	
 		#include "../catch.hpp"
 		
+		#include "../string_constants.h"
 		#include "sdl_render_resource.h"
 			
 		TEST_CASE(" SDLRenderResource::RenderResource()")

@@ -26,7 +26,7 @@ class SceneManager2D : public EngineObjectBase
 public:
 	typedef std::vector<std::unique_ptr<Layer2D>> LayerVectorType;
 	typedef std::vector<std::unique_ptr<TickTimer>> TickTimerType;
-	typedef std::vector<std::unique_ptr<qSceneListener>> SceneListenerType;
+	//typedef std::vector<std::unique_ptr<SceneListener>> SceneListenerType;
 
 private:
 protected:

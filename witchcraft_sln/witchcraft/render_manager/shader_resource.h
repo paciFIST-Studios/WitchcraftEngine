@@ -1,6 +1,8 @@
 #ifndef SHADER_RESOURCE_H
 #define SHADER_RESOURCE_H
 
+#include <map>
+
 #include "../resource_manager/engine_resource_base.h"
 
 /// @file	shader_resource.h
